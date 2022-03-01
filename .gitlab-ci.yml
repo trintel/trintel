@@ -1,0 +1,43 @@
+stages:
+  - build-gradle
+  - build-docker
+
+build-gradle:
+  stage: build-gradle
+  image: adoptopenjdk/openjdk11
+  
+  only: 
+    - main
+  
+  variables:
+     GRADLE_USER_HOME: '.gradle-cache'
+     GRADLE_OPTS: "-Dorg.gradle.daemon=false"
+     
+  cache:
+    key: "$CI_JOB_NAME"
+    paths:
+      - $GRADLE_USER_HOME
+     
+  script:
+    - chmod +x gradlew
+    - ./gradlew assemble
+    - mkdir -p target
+    - mv build/libs/demo-0.0.1-SNAPSHOT.jar target/app.jar
+
+  artifacts:
+    paths:
+      - target/app.jar
+      
+build-docker:
+  stage: build-docker
+  image: docker:19.03.1
+  
+  only: 
+    - deploy
+   
+  script:
+    - docker build -t soprodemo-spring .
+    - docker stop soprodemo-spring-container || true
+    - docker rm soprodemo-spring-container || true
+    - docker run -d -p 8080:8080 --name soprodemo-spring-container soprodemo-spring
+
