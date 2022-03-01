@@ -36,8 +36,8 @@ build-docker:
     - deploy
    
   script:
-    - docker build -t soprodemo-spring .
-    - docker stop soprodemo-spring-container || true
-    - docker rm soprodemo-spring-container || true
-    - docker run -d -p 8080:8080 --name soprodemo-spring-container soprodemo-spring
+    - docker build -t trintel .
+    - docker stop trintel-container || true
+    - docker rm trintel-container || true
+    - docker run -d -p 8080:8080 --name trintel-container trintel
 
