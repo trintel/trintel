@@ -22,7 +22,7 @@ build-gradle:
     - chmod +x gradlew
     - ./gradlew assemble
     - mkdir -p target
-    - mv build/libs/demo-0.0.1-SNAPSHOT.jar target/app.jar
+    - mv build/libs/trintel-0.0.1-SNAPSHOT.jar target/app.jar
 
   artifacts:
     paths:
