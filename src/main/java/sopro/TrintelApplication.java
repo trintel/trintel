@@ -5,10 +5,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.CommandLineRunner;
 
 @SpringBootApplication
-public class Main implements CommandLineRunner {
+public class TrintelApplication implements CommandLineRunner {
 
 	public static void main(String[] args) {
-		SpringApplication.run(Main.class, args);
+		SpringApplication.run(TrintelApplication.class, args);
 	}
 
 	@Override
