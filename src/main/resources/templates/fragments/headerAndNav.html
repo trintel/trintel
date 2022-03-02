@@ -1,0 +1,24 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:tiles="http://www.thymeleaf.org">
+    <head th:fragment="header">
+        <title tiles:fragment="title">Trintel</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous"/>
+    </head>
+    <body>
+        <nav class="navbar navbar-inverse" th:fragment="navbar">
+            <div class="container-fluid" >
+                <div class="navbar-inner" th:with="currentUser=${#httpServletRequest.userPrincipal?.name}">
+                    <a class="navbar-brand" th:href="@{/}">Home</a>
+                    <a class="navbar-brand" th:href="@{/console}">H2 Console</a>
+                    <div th:if="${currentUser != null}">
+                        <form class="navbar-form navbar-right" th:action="@{/logout}" method="post">
+                            <input type="submit" class="btn btn-primary" value="Logout" />
+                        </form>
+                        <p class="navbar-text navbar-right" th:text="${currentUser}">
+                            example_user
+                        </p>
+                    </div>
+                </div>
+            </div>`
+        </nav>
+    </body>
+</html>

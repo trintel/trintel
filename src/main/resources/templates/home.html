@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th = "http://www.thymeleaf.org">
    
-   <head>
-      <title>Home Page</title>
-   </head>
+   <head th:replace="fragments/headerAndNav :: header"/>
+
    <body>
-     <h1>Hallo Welt</h1> 
+      <div th:replace="fragments/headerAndNav :: navbar"/>
+      <div class="container">
+         <h1>Trintel Home Page</h1>
+      </div>
    </body>
    
 </html>
