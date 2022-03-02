@@ -45,7 +45,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.headers().frameOptions().disable();
 		http
 			.authorizeRequests()
-				.antMatchers("/", "/console/**", "/signup/**","/webjars/**", "/css/*").permitAll() // permit all to access those Mathes
+				.antMatchers("/", "/console/**", "/signup/**","/webjars/**", "/css/*", "/img/*").permitAll() // permit all to access those Mathes
 				// .antMatchers("/console").hasRole("ADMIN") // restrict to only ADMIN role is able to access /console
 				.anyRequest().authenticated()
 				.and()

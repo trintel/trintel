@@ -6,7 +6,7 @@ a.icon-link { margin-right: 1em; }
 
 a.icon-link:hover { text-decoration: none; }
 
-.form-login{
+.form-small {
   display: flex;
   flex-direction: column;
   justify-content: center;
