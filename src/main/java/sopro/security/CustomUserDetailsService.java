@@ -16,10 +16,11 @@ public class CustomUserDetailsService implements UserDetailsService {
     UserRepository userRepository;
 
     /**
-     * Ließt User aus Datenbank.
+     * Read username from database.
+     * In our case email equals username.
      * 
      * @param email
-     * @return UserDetails user Objekt
+     * @return a new Authenticated User as "MyPricipalUser"
      */
     @Override
     public UserDetails loadUserByUsername(String email) {
