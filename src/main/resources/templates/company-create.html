@@ -1,9 +1,15 @@
-<html>
-<head th:replace="fragments/headerAndNav :: header"/>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:include="layout :: page">
+
+<head>
+	<th:block th:fragment="title"><title>Create a new company - Trintel</title></th:block>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+
 <body>
-<div th:replace="fragments/headerAndNav :: navbar"/>
-<h1>Register a [187]company</h1>
-<div class="container">
+	<th:block th:fragment="content">
+<h1>Register a company</h1>
+
    <form action="#" th:action="@{/companies/save}" th:object="${company}" method="post">
     <div>
         <label>first</label>
@@ -11,6 +17,5 @@
     </div>
     <button type="submit">submit</button>
 </form>
-</div>
 </body>
 </html>

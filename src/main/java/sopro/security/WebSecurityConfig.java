@@ -45,12 +45,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.headers().frameOptions().disable();
 		http
 			.authorizeRequests()
-				.antMatchers("/", "/console/**", "/signup/**").permitAll() // permit all to access those Mathes
+				.antMatchers("/", "/console/**", "/signup/**","/webjars/**", "/css/*").permitAll() // permit all to access those Mathes
 				// .antMatchers("/console").hasRole("ADMIN") // restrict to only ADMIN role is able to access /console
 				.anyRequest().authenticated()
 				.and()
-			.formLogin().defaultSuccessUrl("/home", true)
-				// .loginPage("/login")
+			.formLogin()
+				.loginPage("/login").defaultSuccessUrl("/home", true)
 				.permitAll()
 				.and()
 			.logout()

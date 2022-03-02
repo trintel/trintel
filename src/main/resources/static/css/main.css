@@ -1,0 +1,36 @@
+/* General CSS rules for web frontend */
+
+div.container { margin-bottom: 2em; }
+
+a.icon-link { margin-right: 1em; }
+
+a.icon-link:hover { text-decoration: none; }
+
+.form-login{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  max-width: 350px;
+  padding: 15px;
+  margin: auto;
+}
+
+body{padding-top: 80px;}
+
+button {
+  border-radius: .8rem !important;
+}
+
+input {
+  border-radius: .8rem !important;
+}
+
+.alert {
+  border-radius: .8rem !important;
+}
+
+.list-group{
+  border-radius: .8rem !important;
+}
