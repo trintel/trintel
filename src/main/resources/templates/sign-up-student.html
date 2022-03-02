@@ -1,0 +1,24 @@
+<html>
+<body>
+<h1>Register a new Account</h1>
+<form action="#" th:action="@{/signup/student}" th:object="${user}" method="post">
+    <div>
+        <label>first</label>
+        <input th:field="*{forename}"/>
+    </div>
+    <div>
+        <label>last</label>
+        <input th:field="*{surname}"/>
+    </div>
+    <div>
+        <label>email</label>
+        <input type="email" th:field="*{email}"/>
+    </div>
+    <div>
+        <label>password</label>
+        <input type="password" th:field="*{password}"/>
+    </div>
+    <button type="submit">submit</button>
+</form>
+</body>
+</html>

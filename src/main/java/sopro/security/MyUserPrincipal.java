@@ -3,6 +3,7 @@ package sopro.security;
 import java.util.Collection;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import sopro.model.User;
@@ -17,7 +18,7 @@ public class MyUserPrincipal implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         // TODO Auto-generated method stub
-        return null;
+        return AuthorityUtils.createAuthorityList(user.getRole());
     }
 
     @Override

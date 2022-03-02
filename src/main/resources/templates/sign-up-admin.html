@@ -1,7 +1,7 @@
 <html>
 <body>
-<h1>form</h1>
-<form action="@{/signup}" th:object="${user}" method="post">
+<h1>Register a new Account</h1>
+<form action="#" th:action="@{/signup/admin}" th:object="${user}" method="post">
     <div>
         <label>first</label>
         <input th:field="*{forename}"/>

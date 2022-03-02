@@ -17,6 +17,7 @@ public class User {
 	@Getter @Setter @NotEmpty private String surname;
 	@Getter @Setter	@NotEmpty private String forename;
 	@Getter @Setter	@NotEmpty private String password;
+    @Getter @Setter	@NotEmpty private String role;
 
     public User(){}
 
