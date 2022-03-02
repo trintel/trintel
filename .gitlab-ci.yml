@@ -6,9 +6,6 @@ build-gradle:
   stage: build-gradle
   image: adoptopenjdk/openjdk11
   
-  only: 
-    - main
-  
   variables:
      GRADLE_USER_HOME: '.gradle-cache'
      GRADLE_OPTS: "-Dorg.gradle.daemon=false"
