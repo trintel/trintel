@@ -57,12 +57,23 @@ public class CompanyController {
     }
 
     @GetMapping("/companies/select/{id}")
-    public String joinCompany(@PathVariable Long id, @AuthenticationPrincipal UserDetails principal, Model model) {
+    public String joinCompany(@PathVariable Long id, Model model) {
+        
+        model.addAttribute("company", companyRepository.findById(id).get());
+
+        return "companies-view";
+
+        
+    }
+
+    @GetMapping("/companies/join/{id}")
+    public String joinCompany2(@PathVariable Long id, @AuthenticationPrincipal UserDetails principal, Model model) {
+
         User user = userRepository.findByEmail(principal.getUsername());    //find the current user in the database
 
-        //TODO schöner lösen
+        // //TODO schöner lösen
         if(user.getCompany() != null) { //falls Student bereits zugeordnet, soll das nicht möglich sein  (GET..)
-            return "redirect:/home";
+             return "redirect:/home";
         }
 
         user.setCompany(companyRepository.findById(id).get());  //set the company of that user.
@@ -70,6 +81,7 @@ public class CompanyController {
         userRepository.save(user);
 
         return "redirect:/home";
+
     }
 
 }
