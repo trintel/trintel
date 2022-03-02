@@ -16,12 +16,12 @@ import javax.validation.constraints.NotEmpty;
 public class Company {
     @Getter @Setter @Id @GeneratedValue(strategy = GenerationType.AUTO)	private Long id;
     @Getter @Setter @NotEmpty private String name;
-    @Getter @Setter	@JsonIgnore	@OneToMany(mappedBy = "company", cascade = CascadeType.ALL) private List<User> user;
+    @Getter @Setter	@JsonIgnore	@OneToMany(mappedBy = "company", cascade = CascadeType.ALL) private List<User> students;
 
     public Company(){}
     
     public Company(String name){
        this.name = name;
-       this.user = new ArrayList<User>();
+       this.students = new ArrayList<User>();
     }  
 }
