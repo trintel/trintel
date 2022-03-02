@@ -17,7 +17,7 @@ public class MyUserPrincipal extends User implements UserDetails {
 
 
     public MyUserPrincipal(User user) {
-        super(user.getSurname(), user.getForename(), user.getEmail(), user.getPassword());
+        super(user.getSurname(), user.getForename(), user.getEmail(), user.getPassword(), user.getCompany());
     }
 
     /**
