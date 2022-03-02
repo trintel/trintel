@@ -9,7 +9,9 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 
-
+/**
+  * Defines the class User with all needed entries for the Database
+  */
 @Entity
 public class User {
     @Getter @Setter @Id @GeneratedValue(strategy = GenerationType.AUTO)	private Long id;
