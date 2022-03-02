@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/headerAndNav :: header"/>
+
+<body>
+    <div th:replace="fragments/headerAndNav :: navbar"/>
+	<div class="container">
+            <h1>Company:<p th:text="${company.name}"></p></h1>
+            
+            <table th:unless="${company.getStudents().isEmpty()}">
+                <thead>
+                    <tr>
+                        <th>Students</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="student : ${company.getStudents()}">
+                        <td th:text="${student.forename}"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p th:if="${company.getStudents().isEmpty()}">No Members found.</p>
+
+            <a th:href="@{'/companies/join/' + *{id}}">
+                <button type="submit">Join Company</button>
+            </a>
+	</div>
+</body>
+</html>
