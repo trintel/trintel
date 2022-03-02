@@ -1,0 +1,16 @@
+<html>
+<head th:replace="fragments/headerAndNav :: header"/>
+<body>
+<div th:replace="fragments/headerAndNav :: navbar"/>
+<h1>Register a [187]company</h1>
+<div class="container">
+   <form action="#" th:action="@{/companies/save}" th:object="${company}" method="post">
+    <div>
+        <label>first</label>
+        <input th:field="*{name}"/>
+    </div>
+    <button type="submit">submit</button>
+</form>
+</div>
+</body>
+</html>
