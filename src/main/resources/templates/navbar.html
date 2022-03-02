@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org">
+
+<head>
+	<title>Navigation Bar</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<nav class="navbar navbar-inverse fixed-top" th:fragment="navbar">
+    <div class="container-fluid" >
+        <div class="navbar-inner" th:with="currentUser=${#httpServletRequest.userPrincipal?.name}">
+            <a class="navbar-brand" th:href="@{/}">Home</a>
+            <a class="navbar-brand" th:href="@{/companies}">Companies</a>
+            <a class="navbar-brand" th:href="@{/console}">H2 Console</a>
+            <div th:if="${currentUser != null}">
+                <form class="navbar-form navbar-right" th:action="@{/logout}" method="post">
+                    <input type="submit" class="btn btn-primary" value="Logout" />
+                </form>
+                <p class="navbar-text navbar-right" th:text="${currentUser}">
+                    example_user
+                </p>
+            </div>
+        </div>
+    </div>`
+</nav>
+</html>
