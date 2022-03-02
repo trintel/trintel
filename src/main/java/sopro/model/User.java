@@ -20,14 +20,16 @@ public class User {
     @Getter @Setter	@NotEmpty private String forename;
     @Getter @Setter	@NotEmpty private String password;
     @Getter @Setter	@NotEmpty private String role;
+    @Getter @Setter	@ManyToOne private Company company;
 
     public User(){}
 
-    public User(String surname,String forename, String email, String password){
+    public User(String surname,String forename, String email, String password, Company company){
        this.surname = surname;
        this.forename = forename;
        this.email = email;
        this.password = password;
+       this.company = company;
     }
 
 }
