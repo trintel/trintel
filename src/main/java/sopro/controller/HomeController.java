@@ -1,5 +1,6 @@
 package sopro.controller;
 
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -17,13 +18,5 @@ public class HomeController {
         return "home";
     }
 
-    /** 
-     * GET routing für Index.
-     * 
-     * @return page Home
-     */
-    @GetMapping("/home")
-    public String showHome2() {
-        return "home";
-    }
+  
 }

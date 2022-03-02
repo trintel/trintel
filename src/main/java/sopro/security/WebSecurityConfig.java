@@ -49,7 +49,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				// .antMatchers("/console").hasRole("ADMIN") // restrict to only ADMIN role is able to access /console
 				.anyRequest().authenticated()
 				.and()
-			.formLogin()
+			.formLogin().defaultSuccessUrl("/home", true)
 				// .loginPage("/login")
 				.permitAll()
 				.and()

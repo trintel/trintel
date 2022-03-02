@@ -3,6 +3,8 @@ package sopro.controller;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +24,23 @@ public class UserController {
 
     @Autowired
     PasswordEncoder passwordEncoder;
+
+
+    /** 
+     * GET routing für Index.
+     * 
+     * @return page Home
+     */
+    @GetMapping("/home")
+    public String showHome2(@AuthenticationPrincipal UserDetails principal) {
+        User user = userRepository.findByEmail(principal.getUsername());
+
+        if(user.getCompany() != null || user.getRole().equals("ADMIN")) {   //just go to the home page if a company is already selected or the user is admin
+            return "home";
+        }
+
+        return "redirect:/companies/select";    //have students select a company if non is selected
+    }
 
     /**
      * Returns signup page for students.
@@ -74,6 +93,8 @@ public class UserController {
 
         // saves the new user in userRepo
         userRepository.save(user);
+
         return "redirect:/login";
     }
+    
 }
