@@ -8,6 +8,7 @@ import org.springframework.boot.CommandLineRunner;
 public class TrintelApplication implements CommandLineRunner {
 
 	public static void main(String[] args) {
+		// System.setProperty("spring.devtools.restart.enabled", "true");
 		SpringApplication.run(TrintelApplication.class, args);
 	}
 

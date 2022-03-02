@@ -23,10 +23,8 @@ public class UserController {
     @Autowired
     PasswordEncoder passwordEncoder;
 
-    
-    
-    /** 
-     * Liefert Signup Seite für Schüler Signup
+    /**
+     * Returns signup page for students.
      *
      * @param model
      * @return page
@@ -38,10 +36,9 @@ public class UserController {
         return "sign-up-student";
     }
 
-    
     /**
-     * Liefert Signup Seite für Schüler Signup
-     *  
+     * Returns signup page for admins.
+     * 
      * @param model
      * @return page
      */
@@ -52,11 +49,10 @@ public class UserController {
         return "sign-up-admin";
     }
 
-    
-    /** 
-     * Nimmt POST Request von Signup Seiten entgegen
-     * Ließt Rolle aus Pfad (ADMIN | STUDENT)
-     * Checkt, ob alles valide und speichert dann den neuen User.
+    /**
+     * Receives POST requests from the signup pages.
+     * Extracts role form path.
+     * Validates inputs and saves when all good.
      * 
      * @param user
      * @param role
@@ -72,10 +68,12 @@ public class UserController {
             model.addAttribute("user", user);
             return "sign-up";
         }
+        // encode the new password for saving in the database
         String encPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encPassword);
 
+        // saves the new user in userRepo
         userRepository.save(user);
-        return "redirect:login";
+        return "redirect:/login";
     }
 }

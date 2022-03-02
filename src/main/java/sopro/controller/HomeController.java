@@ -15,6 +15,15 @@ public class HomeController {
     @GetMapping("/")
     public String showHome() {
         return "home";
+    }
 
+    /** 
+     * GET routing für Index.
+     * 
+     * @return page Home
+     */
+    @GetMapping("/home")
+    public String showHome2() {
+        return "home";
     }
 }
