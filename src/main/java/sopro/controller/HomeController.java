@@ -18,5 +18,14 @@ public class HomeController {
         return "home";
     }
 
+    /** 
+     * GET routing für Index.
+     * 
+     * @return page Home
+     */
+    @GetMapping("/login")
+    public String showLogin() {
+        return "login";
+    }
   
 }
