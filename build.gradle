@@ -31,6 +31,10 @@ implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.webjars.npm:bootstrap-icons:1.8.1'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'com.h2database:h2'
+	//JUnit Tests
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+	//
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
@@ -45,4 +49,8 @@ implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+test {
+    useJUnitPlatform()
 }
