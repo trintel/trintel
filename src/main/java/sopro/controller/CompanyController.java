@@ -26,6 +26,10 @@ public class CompanyController {
     @Autowired
     UserRepository userRepository;
     
+// #######################################################################################
+// ----------------------------------- ADMIN FUNCTIONS -----------------------------------
+// #######################################################################################
+
     @GetMapping("/companies")
     public String listCompanies(Model model) {
         model.addAttribute("companies", companyRepository.findAll()); //add a list of all companies to the model
@@ -50,23 +54,26 @@ public class CompanyController {
 
     }
 
-    @GetMapping("/companies/select")
+
+// #########################################################################################
+// ----------------------------------- STUDENT FUNCTIONS -----------------------------------
+// #########################################################################################
+
+    @GetMapping("/company/select")
     public String selectCompany(Model model) {
         model.addAttribute("companies", companyRepository.findAll());
         return "company-select";
     }
 
-    @GetMapping("/companies/select/{id}")
+    @GetMapping("/company/select/{id}")
     public String joinCompany(@PathVariable Long id, Model model) {
         
         model.addAttribute("company", companyRepository.findById(id).get());
 
-        return "companies-view";
-
-        
+        return "company-view";
     }
 
-    @GetMapping("/companies/join/{id}")
+    @GetMapping("/company/join/{id}")
     public String joinCompany2(@PathVariable Long id, @AuthenticationPrincipal UserDetails principal, Model model) {
 
         User user = userRepository.findByEmail(principal.getUsername());    //find the current user in the database
@@ -75,13 +82,45 @@ public class CompanyController {
         if(user.getCompany() != null) { //falls Student bereits zugeordnet, soll das nicht möglich sein  (GET..)
              return "redirect:/home";
         }
-
         user.setCompany(companyRepository.findById(id).get());  //set the company of that user.
         
         userRepository.save(user);
 
         return "redirect:/home";
+    }
 
+
+    @GetMapping("/company")
+    public String viewOwnCompany(Model model, @AuthenticationPrincipal UserDetails principal) {
+
+        User user = userRepository.findByEmail(principal.getUsername());    //find the current user in the database
+
+        model.addAttribute("company", companyRepository.findById(user.getCompany().getId()).get());
+
+        return "company-info";
+    }
+
+    @GetMapping("/company/edit")
+    public String editOwnCompany(Model model, @AuthenticationPrincipal UserDetails principal) {
+
+        User user = userRepository.findByEmail(principal.getUsername());    //find the current user in the database
+
+        model.addAttribute("company", companyRepository.findById(user.getCompany().getId()).get());
+
+        return "company-edit";
+    }
+
+    @PostMapping("/company/edit")
+    public String saveOwnCompany(@Valid Company company, BindingResult bindingResult, @AuthenticationPrincipal UserDetails principal, Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("company", company);
+			return "company-edit";
+		}
+        User user = userRepository.findByEmail(principal.getUsername());    //find the current user in the database
+        company.setId(user.getCompany().getId());                           //set the id of new Company-Object to the old id
+        companyRepository.save(company);                                    //old company get overwritten, since id is primary key
+
+        return "redirect:/company";
     }
 
 }

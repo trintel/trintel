@@ -39,7 +39,7 @@ public class UserController {
             return "home";
         }
 
-        return "redirect:/companies/select";    //have students select a company if non is selected
+        return "redirect:/company/select";    //have students select a company if non is selected
     }
 
     /**

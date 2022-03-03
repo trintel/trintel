@@ -1,6 +1,11 @@
 package sopro.security;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -29,7 +34,13 @@ public class CustomUserDetailsService implements UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException(email);
         }
-        return new MyUserPrincipal(user);
+
+        List<GrantedAuthority> grantedAuthorities = new ArrayList<GrantedAuthority>();
+
+        //authorities have to begin with "ROLE_", because Spring is stupid
+        grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_" + user.getRole()));
+        
+        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), grantedAuthorities);
     }
 
 }
