@@ -1,9 +1,10 @@
 stages:
-  - build-gradle
+  - build
+  - test
   - build-docker
 
-build-gradle:
-  stage: build-gradle
+build:
+  stage: build
   image: adoptopenjdk/openjdk11
   
   variables:
@@ -24,8 +25,30 @@ build-gradle:
   artifacts:
     paths:
       - target/app.jar
+
+test:
+  stage: test
+  image: adoptopenjdk/openjdk11
+
+  variables:
+     GRADLE_USER_HOME: '.gradle-cache'
+     GRADLE_OPTS: "-Dorg.gradle.daemon=false"
+     
+  cache:
+    key: "$CI_JOB_NAME"
+    paths:
+      - $GRADLE_USER_HOME
+
+  script:
+    - chmod +x gradlew
+    - ./gradlew test
+
+  artifacts:
+    when: always
+    reports:
+      junit: build/test-results/test/**/TEST-*.xml
       
-build-docker:
+deployment:
   stage: build-docker
   image: docker:19.03.1
   
