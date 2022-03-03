@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<title>Students</title>
+</head>
+
+<body>
+	<div>
+		<h2>Students</h2>
+		<p>Manage all students in the database. </p>
+
+		<table th:unless="${students.isEmpty()}">
+			<thead>
+				<tr>
+					<th>Forename</th>
+                    <th>Surname</th>
+					<th>Name of Company</th>
+					<th>Options</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="student : ${students}">
+					<td th:text="${student.forename}"></td>
+                    <td th:text="${student.surname}"></td>
+					<td th:text="${student.getCompany().getName()}"></td>
+					<td>
+						<a th:href="@{'/student/' + ${student.id} + '/reasign'}">
+							Reassign
+						</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<p th:if="${students.isEmpty()}">No students found.</p>
+
+	</div>
+</body>
+</html>

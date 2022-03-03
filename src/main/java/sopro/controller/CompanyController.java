@@ -10,8 +10,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import sopro.model.Company;
 import sopro.model.User;
@@ -51,10 +53,32 @@ public class CompanyController {
 		}
         companyRepository.save(company);    //saves the new Company
         return "redirect:/companies";
-
     }
 
+    @GetMapping("/students")
+    public String listAllStudents(Model model) {
+        model.addAttribute("students", userRepository.findByRole("STUDENT")); //list all students
+        return "students-list";
+    }
 
+    @GetMapping("/student/{id}/reasign")
+    public String editStudent(Model model, @PathVariable Long id) {
+        User student = userRepository.findById(id).get();
+        model.addAttribute("companies", companyRepository.findByIdNot(student.getCompany().getId())); //get all companies except for the current one
+        model.addAttribute("studentID", id);                  //add the student id to the model (for post-request navigation)
+        return "student-reasign";
+    }
+
+    @PostMapping("/student/{id}/reasign")
+    public String moveToCompany(String companyName, @PathVariable Long id, Model model) {
+        User user = userRepository.findById(id).get();      //find the student to be editet
+        Company company2 = companyRepository.findByName(companyName);   //find the new company
+        user.setCompany(company2);
+        userRepository.save(user);
+        return "redirect:/students";
+    }
+
+    
 // #########################################################################################
 // ----------------------------------- STUDENT FUNCTIONS -----------------------------------
 // #########################################################################################
@@ -122,5 +146,7 @@ public class CompanyController {
 
         return "redirect:/company";
     }
+
+    
 
 }
