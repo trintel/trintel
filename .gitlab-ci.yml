@@ -30,6 +30,10 @@ test:
   stage: test
   image: adoptopenjdk/openjdk11
 
+  only:
+    - main
+    - deploy
+
   variables:
      GRADLE_USER_HOME: '.gradle-cache'
      GRADLE_OPTS: "-Dorg.gradle.daemon=false"
