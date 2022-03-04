@@ -48,7 +48,7 @@ input {
   left: 0;
   z-index: 100; /* Behind the navbar */
   padding: 4rem 0 0; /* Height of navbar */
-  box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+  /*box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);*/
 }
 
 .sidebar-sticky {
@@ -62,11 +62,18 @@ input {
 
 .sidebar .nav-link {
   font-weight: 500;
-  color: rgb(108, 108, 108);
+  color: rgb(60, 60, 60);
+  display:flex;
+  align-items: center;
 }
 
 .sidebar .nav-link.active {
   color: #54617f;
+}
+
+.sidebar i {
+  font-size: 1.5rem;
+  margin-right: .8rem;
 }
 
 .sidebar .nav-link:hover .feather,
