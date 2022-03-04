@@ -5,10 +5,10 @@
             <ul class="nav flex-column">
               <li class="nav-item">
                 <a th:classappend="${#httpServletRequest.getRequestURI() == '/home' ? 'active':''}" class="nav-link" aria-current="page" th:href="@{/home}">
-                    <i class="bi bi-house"></i> Home
+                    <i th:class="${#httpServletRequest.getRequestURI() == '/home' ? 'bi bi-house-fill':'bi bi-house'}"></i> Home
                 </a>
                 <a th:classappend="${#httpServletRequest.getRequestURI() == '/companies' ? 'active':''}" class="nav-link" th:href="@{/companies}">
-                    <i class="bi bi-building"></i> Companies
+                    <i th:class="${#httpServletRequest.getRequestURI() == '/companies' ? 'bi bi-briefcase-fill':'bi bi-briefcase'}"></i> Companies
                 </a>
                 <a class="nav-link" th:href="@{/console}">
                     <i class="bi bi-terminal"></i> H2 Console
