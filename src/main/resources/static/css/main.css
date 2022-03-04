@@ -47,14 +47,8 @@ input {
   /* rtl:remove */
   left: 0;
   z-index: 100; /* Behind the navbar */
-  padding: 48px 0 0; /* Height of navbar */
+  padding: 4rem 0 0; /* Height of navbar */
   box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
-}
-
-@media (max-width: 767.98px) {
-  .sidebar {
-    top: 5rem;
-  }
 }
 
 .sidebar-sticky {
@@ -88,4 +82,28 @@ input {
 .sidebar-heading {
   font-size: .75rem;
   text-transform: uppercase;
+}
+
+.logout-side {
+  display:none;
+}
+
+@media (max-width: 768px) {
+  .logout-top {
+    display:none;
+  }
+  
+  .logout-side {
+    display:block;
+  }
+
+  .navbar {
+    justify-content: flex-start;
+    padding: 1rem !important;
+  }
+
+  .sidebar{
+    padding: 5rem 0 0;
+  }
+
 }
