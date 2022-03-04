@@ -1,10 +1,11 @@
 package sopro.controller;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import sopro.events.OnRegistrationCompleteEvent;
 import sopro.model.User;
 import sopro.repository.UserRepository;
 
@@ -25,8 +27,10 @@ public class UserController {
     @Autowired
     PasswordEncoder passwordEncoder;
 
+    @Autowired
+    ApplicationEventPublisher eventPublisher;
 
-    /** 
+    /**
      * GET routing für Index.
      * 
      * @return page Home
@@ -34,11 +38,12 @@ public class UserController {
     @GetMapping("/home")
     public String showHome2(@AuthenticationPrincipal User user) {
 
-        if(user.getCompany() != null || user.getRole().equals("ADMIN")) {   //just go to the home page if a company is already selected or the user is admin
+        if (user.getCompany() != null || user.getRole().equals("ADMIN")) { // just go to the home page if a company is
+                                                                           // already selected or the user is admin
             return "home";
         }
 
-        return "redirect:/company/select";    //have students select a company if non is selected
+        return "redirect:/company/select"; // have students select a company if non is selected
     }
 
     /**
@@ -79,9 +84,11 @@ public class UserController {
      * @return redirect:login
      */
     @PostMapping("/signup/{role}")
-    public String signedUp(@Valid User user, @PathVariable String role, BindingResult bindingResult, Model model) {
+    public String signedUp(@Valid User user, HttpServletRequest request, @PathVariable String role,
+            BindingResult bindingResult, Model model) {
+
+        // TODO check mail exists
         user.setRole(role.toUpperCase());
-        // TODO check if email exists
         if (bindingResult.hasErrors()) {
             model.addAttribute("user", user);
             return "sign-up";
@@ -93,7 +100,10 @@ public class UserController {
         // saves the new user in userRepo
         userRepository.save(user);
 
+        // Publish event for Mail validation.
+        eventPublisher.publishEvent(new OnRegistrationCompleteEvent(user,
+                request.getLocale(), request.getContextPath())); // context path leer?
         return "redirect:/login";
+
     }
-    
 }

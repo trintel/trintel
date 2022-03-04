@@ -29,6 +29,9 @@ public class User implements UserDetails {
     @Getter @Setter	@NotEmpty private String role;
     @Getter @Setter	@ManyToOne private Company company;
 
+    @Column(name = "enabled")
+    private boolean enabled;
+
     public User(){}
 
     public User(String surname,String forename, String email, String password, Company company){
@@ -37,6 +40,7 @@ public class User implements UserDetails {
        this.email = email;
        this.password = password;
        this.company = company;
+       this.enabled = false;
     }
 
     @Override
@@ -49,9 +53,15 @@ public class User implements UserDetails {
       return grantedAuthorities;
     }
 
-    @Override
+    @Override // TODO mach das anders!
     public String getUsername() {
       // TODO Auto-generated method stub
+      return this.email;
+    }
+
+    public String getEmail() {
+      // TODO Auto-generated method stub
+      System.out.println("User: "+this.email);
       return this.email;
     }
 
