@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:include="layout :: page">
+
+<head>
+	<th:block th:fragment="title"><title>Create a new company - Trintel</title></th:block>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+
+<body>
+	<th:block th:fragment="content">
+<h1>Edit your company</h1>
+
+   <form action="#" th:action="@{/company/edit}" th:object="${company}" method="post">
+    <div>
+        <label>Name</label>
+        <input th:field="*{name}"/>
+    </div>
+    <div>
+        <label>Description</label>
+        <input type="text" th:field="*{description}"/>
+    </div>
+    <button type="submit">submit</button>
+</form>
+</body>
+</html>

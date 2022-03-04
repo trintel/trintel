@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<title>Reassign student</title>
+</head>
+<body>
+    <form action="#" th:action="@{'/student/' + ${studentID} + '/reasign'}" method="POST">
+            <select name="companyName">
+                <option th:each="company : ${companies}" th:text="${company.name}">
+            </select>
+            <input type="submit" value="Reasign" />
+    </form>
+
+</body>
+</html>
