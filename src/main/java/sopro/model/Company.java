@@ -15,7 +15,8 @@ import javax.validation.constraints.NotEmpty;
 @Entity
 public class Company {
     @Getter @Setter @Id @GeneratedValue(strategy = GenerationType.AUTO)	private Long id;
-    @Getter @Setter @NotEmpty private String name;
+    @Getter @Setter @NotEmpty @Column(unique = true) private String name;
+    @Getter @Setter private String description;
     @Getter @Setter	@JsonIgnore	@OneToMany(mappedBy = "company", cascade = CascadeType.ALL) private List<User> students;
 
     public Company(){}
@@ -23,5 +24,6 @@ public class Company {
     public Company(String name){
        this.name = name;
        this.students = new ArrayList<User>();
+       this.description = "";
     }  
 }

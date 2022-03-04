@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:include="layout :: page">
+
+<head>
+	<th:block th:fragment="title"><title>Trintel</title></th:block>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+
+<body>
+	<th:block th:fragment="content">
+		<h1>Transactions</h1>
+		<p></p>
+		<table th:unless="${transactions.isEmpty()}">
+			<thead>
+				<tr>
+					<th>Buyer</th>
+                    <th>Seller</th>
+                    <th>Product</th>
+                    <th>Amount</th>
+                    <th>Price per Piece</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="transaction : ${transactions}">
+                    <td th:text="${transaction.buyer.name}"></td>
+					<td th:text="${transaction.seller.name}"></td>
+                    <td th:text="${transaction.product}"></td>
+                    <td th:text="${transaction.amount}"></td>
+                    <td th:text="${transaction.pricePerPiece}"></td>
+					<td>
+						<a th:href="@{'/transaction/' + ${transaction.id}}" class="icon-link">
+							<p>Show Details</p>
+						</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<p th:if="${transactions.isEmpty()}">No Transactions found.</p>
+	</th:block>
+</body>
+</html>

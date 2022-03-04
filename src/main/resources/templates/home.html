@@ -9,6 +9,14 @@
    <body>
       <th:block th:fragment="content">
          <h1>Trintel Home Page</h1>
+         <div sec:authorize="hasRole('ADMIN')">Text visible to user.</div>
+         <div sec:authorize="isAuthenticated()">
+            Text visible only to authenticated users.
+        </div>
+        Authenticated username:
+        <div sec:authentication="name"></div>
+        Authenticated user roles:
+        <div sec:authentication="principal.authorities"></div>
    </th:block>
    </body>
    

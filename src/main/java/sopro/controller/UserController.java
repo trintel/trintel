@@ -32,14 +32,13 @@ public class UserController {
      * @return page Home
      */
     @GetMapping("/home")
-    public String showHome2(@AuthenticationPrincipal UserDetails principal) {
-        User user = userRepository.findByEmail(principal.getUsername());
+    public String showHome2(@AuthenticationPrincipal User user) {
 
         if(user.getCompany() != null || user.getRole().equals("ADMIN")) {   //just go to the home page if a company is already selected or the user is admin
             return "home";
         }
 
-        return "redirect:/companies/select";    //have students select a company if non is selected
+        return "redirect:/company/select";    //have students select a company if non is selected
     }
 
     /**

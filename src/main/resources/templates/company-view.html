@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+	<div>
+        <h1>Company:<p name="companyName" th:text="${company.name}"></p></h1>
+        <form action="#" th:action="@{/company/join}" method="post">
+            <input type="hidden" th:value="${company.name}" th:attr="name='companyName'"/>
+            <table th:unless="${company.getStudents().isEmpty()}">
+                <thead>
+                    <tr>
+                        <th>Students</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="student : ${company.getStudents()}">
+                        <td th:text="${student.forename}"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p th:if="${company.getStudents().isEmpty()}">No Members found.</p>
+
+            <input type="submit" value="Join" />
+        </form>
+	</div>
+</body>
+</html>
