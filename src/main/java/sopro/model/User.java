@@ -53,15 +53,13 @@ public class User implements UserDetails {
       return grantedAuthorities;
     }
 
-    @Override // TODO mach das anders!
+    @Override // TODO mach das anders! Felix warum?!?!?!? 30 Minuten wasted! Ich will einen Döner von dir!
     public String getUsername() {
       // TODO Auto-generated method stub
       return this.email;
     }
 
     public String getEmail() {
-      // TODO Auto-generated method stub
-      System.out.println("User: "+this.email);
       return this.email;
     }
 

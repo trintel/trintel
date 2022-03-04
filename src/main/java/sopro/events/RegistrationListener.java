@@ -49,7 +49,6 @@ public class RegistrationListener implements
         email.setSubject(subject);
         email.setText(message + " \r\n" + confirmationUrl);
         email.setFrom("trintel@cau.zeppel.eu");
-        System.out.println(email.toString());
         return email;
     }
 }
