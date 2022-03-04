@@ -3,8 +3,9 @@
 
 <body>
 	<div>
-            <h1>Company:<p th:text="${company.name}"></p></h1>
-            
+        <h1>Company:<p name="companyName" th:text="${company.name}"></p></h1>
+        <form action="#" th:action="@{/company/join}" method="post">
+            <input type="hidden" th:value="${company.name}" th:attr="name='companyName'"/>
             <table th:unless="${company.getStudents().isEmpty()}">
                 <thead>
                     <tr>
@@ -20,9 +21,8 @@
 
             <p th:if="${company.getStudents().isEmpty()}">No Members found.</p>
 
-            <a th:href="@{'/company/join/' + *{id}}">
-                <button type="submit">Join Company</button>
-            </a>
+            <input type="submit" value="Join" />
+        </form>
 	</div>
 </body>
 </html>
