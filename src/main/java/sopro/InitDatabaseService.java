@@ -4,9 +4,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import sopro.model.Action;
+import sopro.model.ActionType;
 import sopro.model.Company;
+import sopro.model.Transaction;
 import sopro.model.User;
+import sopro.repository.ActionRepository;
+import sopro.repository.ActionTypeRepository;
 import sopro.repository.CompanyRepository;
+import sopro.repository.TransactionRepository;
 import sopro.repository.UserRepository;
 
 @Service
@@ -17,6 +23,16 @@ public class InitDatabaseService {
 
 	@Autowired
 	CompanyRepository companyRepository;
+
+    @Autowired
+	ActionTypeRepository actionTypeRepository;
+
+    @Autowired
+	ActionRepository actionRepository;
+
+    @Autowired
+	TransactionRepository transactionRepository;
+
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -57,6 +73,22 @@ public class InitDatabaseService {
             userRepository.save(student3);
             userRepository.save(student4);
 
+
+            //Create demo Action_types
+            ActionType request = new ActionType("Request", "Demo request text.");
+            ActionType offer = new ActionType("Offer", "Demo offer text.");
+
+            Transaction transaction1 = new Transaction(company1, company2);
+
+            Action trans1Request = new Action("Test message", request, transaction1);
+            transaction1.setProduct("Product 1");
+            transaction1.setAmount(10);
+            transaction1.setPricePerPiece(0.5);
+
+            actionTypeRepository.save(request);
+            actionTypeRepository.save(offer);
+            transactionRepository.save(transaction1);
+            actionRepository.save(trans1Request);
 
 		}
 	}
