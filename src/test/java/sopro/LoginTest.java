@@ -51,6 +51,8 @@ public class LoginTest {
 
     /**
      * Test if the Logout of the Admin works.
+     *
+     * @throcpti
      */
     @Test
     @AfterTestMethod
@@ -67,8 +69,7 @@ public class LoginTest {
      * @throws Exception
      */
     @Test
-    @WithMockUser(username = "student@student", roles = { "STUDENT" }) // Erstellt User ohne die Daternbank zu
-                                                                       // verwenden.
+    @WithMockUser(username = "student@student", roles = { "STUDENT" }) // Erstellt User ohne die Daternbank zu verwenden.
     public void studentCanNotSeeCompanies() throws Exception {
         mockMvc
                 .perform(get("/companies"))
@@ -98,17 +99,11 @@ public class LoginTest {
      */
     @Test
     public void testInvalidLoginDenied() throws Exception {
-        String loginErrorUrl = "/login?error";
         mockMvc
-                .perform(formLogin().password("invalid"))
+                .perform(formLogin().password("dasisteinpasswort"))  
                 .andExpect(status().isFound())
-                .andExpect(redirectedUrl(loginErrorUrl))
+                .andExpect(redirectedUrl("/login?error"))
                 .andExpect(unauthenticated());
-
-        mockMvc
-                .perform(get(loginErrorUrl))
-                .andExpect(content().string(containsString("Invalid username and password"))); // TODO überarbeiten.
-                                                                                               // !Language spezifisch!
     }
 
     /**
