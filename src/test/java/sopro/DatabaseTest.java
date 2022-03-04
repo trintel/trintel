@@ -32,6 +32,7 @@ public class DatabaseTest {
     String email = "email@email.com";
     String password = "password";
 
+
     /**
      * Creates a User and a Company in the database.
      * 
@@ -57,4 +58,15 @@ public class DatabaseTest {
     public void isUserInDatabase() throws Exception {
         assertEquals(user, userRepository.findById(user.getId()).get()); // .get(): optional<User> in User
     }
+    
+    /** 
+     * Checks if the craeted user is assigned to the right company.
+     */
+    @Test
+    public void isUserInCompany() throws Exception {
+        assertEquals(company,userRepository.findByEmail(email).getCompany());
+    }
+
+
+
 }
