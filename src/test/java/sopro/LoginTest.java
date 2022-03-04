@@ -73,8 +73,7 @@ public class LoginTest {
     public void studentCanNotSeeCompanies() throws Exception {
         mockMvc
                 .perform(get("/companies"))
-                .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/company/select"));
+                .andExpect(status().isForbidden());
     }
 
     /**
