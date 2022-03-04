@@ -5,15 +5,12 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import sopro.model.Company;
 import sopro.model.User;
@@ -97,10 +94,8 @@ public class CompanyController {
         return "company-view";
     }
 
-    @GetMapping("/company/join/{id}")
-    public String joinCompany2(@PathVariable Long id, @AuthenticationPrincipal UserDetails principal, Model model) {
-
-        User user = userRepository.findByEmail(principal.getUsername());    //find the current user in the database
+    @GetMapping("/company/join/{id}")       //TODO this is better as a post mapping
+    public String joinCompany2(@PathVariable Long id, @AuthenticationPrincipal User user, Model model) {
 
         // //TODO schöner lösen
         if(user.getCompany() != null) { //falls Student bereits zugeordnet, soll das nicht möglich sein  (GET..)
@@ -115,9 +110,7 @@ public class CompanyController {
 
 
     @GetMapping("/company")
-    public String viewOwnCompany(Model model, @AuthenticationPrincipal UserDetails principal) {
-
-        User user = userRepository.findByEmail(principal.getUsername());    //find the current user in the database
+    public String viewOwnCompany(Model model, @AuthenticationPrincipal User user) {
 
         model.addAttribute("company", companyRepository.findById(user.getCompany().getId()).get());
 
@@ -125,9 +118,7 @@ public class CompanyController {
     }
 
     @GetMapping("/company/edit")
-    public String editOwnCompany(Model model, @AuthenticationPrincipal UserDetails principal) {
-
-        User user = userRepository.findByEmail(principal.getUsername());    //find the current user in the database
+    public String editOwnCompany(Model model, @AuthenticationPrincipal User user) {
 
         model.addAttribute("company", companyRepository.findById(user.getCompany().getId()).get());
 
@@ -135,12 +126,11 @@ public class CompanyController {
     }
 
     @PostMapping("/company/edit")
-    public String saveOwnCompany(@Valid Company company, BindingResult bindingResult, @AuthenticationPrincipal UserDetails principal, Model model) {
+    public String saveOwnCompany(@Valid Company company, BindingResult bindingResult, @AuthenticationPrincipal User user, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("company", company);
 			return "company-edit";
 		}
-        User user = userRepository.findByEmail(principal.getUsername());    //find the current user in the database
         company.setId(user.getCompany().getId());                           //set the id of new Company-Object to the old id
         companyRepository.save(company);                                    //old company get overwritten, since id is primary key
 
