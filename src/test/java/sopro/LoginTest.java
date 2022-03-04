@@ -8,7 +8,6 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.event.annotation.AfterTestMethod;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.logout;
@@ -50,7 +49,7 @@ public class LoginTest {
     }
 
     /**
-     * Test if the Logout of the Admin works.
+     * Test if the Logout of the Admin works and if the admin is redirected to the login page
      *
      * @throcpti
      */
@@ -60,7 +59,7 @@ public class LoginTest {
         mockMvc
                 .perform(logout())
                 .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/login?logout"));
+                .andExpect(redirectedUrl("/login"));
     }
 
     /**
@@ -77,7 +76,7 @@ public class LoginTest {
     }
 
     /**
-     * Test if the Logout of the Student works.
+     * Test if the Logout of the Student works and he is redirected to the Login Page
      * 
      * @throws Exception
      */
@@ -87,7 +86,7 @@ public class LoginTest {
         mockMvc
                 .perform(logout())
                 .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/login?logout"));
+                .andExpect(redirectedUrl("/login"));
     }
 
     /**
@@ -144,4 +143,6 @@ public class LoginTest {
                 .perform(get("/signup/admin"))
                 .andExpect(status().isOk());
     }
+
+
 }
