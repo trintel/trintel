@@ -4,7 +4,7 @@
         <div class="position-sticky pt-3">
             <ul class="nav flex-column">
               <li class="nav-item">
-                <a th:classappend="${#httpServletRequest.getRequestURI() == '/' ? 'active':''}" class="nav-link" aria-current="page" th:href="@{/}">
+                <a th:classappend="${#httpServletRequest.getRequestURI() == '/home' ? 'active':''}" class="nav-link" aria-current="page" th:href="@{/home}">
                     <i class="bi bi-house"></i> Home
                 </a>
                 <a th:classappend="${#httpServletRequest.getRequestURI() == '/companies' ? 'active':''}" class="nav-link" th:href="@{/companies}">
@@ -15,23 +15,20 @@
                 </a>
               </li>
             </ul>
-    
             <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
               <span>Andere Links</span>
             </h6>
             <ul class="nav flex-column mb-2">
               <!-- hier können noch andere Links eingefügt werden, die nicht zur Nav gehören -->
             </ul>
-            <ul class="nav flex-column" th:with="currentUser=${#httpServletRequest.userPrincipal?.name}">
-                <div th:if="${currentUser != null}">
-                    <form class="navbar-form navbar-right" th:action="@{/logout}" method="post">
-                        <input type="submit" class="btn btn-primary" value="Logout" />
-                    </form>
-                    <p class="navbar-text navbar-right" th:text="${currentUser}">
-                        example_user
-                    </p>
-                </div>
-            </ul>
+            <ul class="logout-side" th:with="currentUser=${#httpServletRequest.userPrincipal?.name}">
+              <form class="navbar-form navbar-right" th:action="@{/logout}" method="post" th:if="${currentUser != null}">
+                  <p class="navbar-text navbar-right align-middle my-0 mx-2" th:text="${currentUser}">
+                      example_user
+                  </p>
+                  <input type="submit" class="btn btn-dark" value="Logout" />
+              </form>
+          </ul>
           </div>
     </nav>
 </html>

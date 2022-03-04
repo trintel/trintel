@@ -1,8 +1,20 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org">
 <header th:fragment="bar">
-    <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler d-md-none collapsed border-0" type="button" data-bs-toggle="collapse"
+        data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
+    <p class="text-white navbar-brand my-0">
+        Trintel
+    </p>
+    <ul class="logout-top my-0" th:with="currentUser=${#httpServletRequest.userPrincipal?.name}">
+        <form class="navbar-form navbar-right d-flex" th:action="@{/logout}" method="post" th:if="${currentUser != null}">
+            <p class="navbar-text navbar-right align-middle my-0 mx-2" th:text="${currentUser}">
+                example_user
+            </p>
+            <input type="submit" class="btn btn-light" value="Logout" />
+        </form>
+    </ul>
 </header>
 </html>
