@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:include="layout :: page">
+
+<head>
+	<th:block th:fragment="title"><title>Trintel</title></th:block>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+
+<body>
+	<th:block th:fragment="content">
+		<h1>Actions</h1>
+		<p></p>
+		<table th:unless="${actions.isEmpty()}">
+			<thead>
+				<tr>
+					<th>message</th>
+					<th>actiontype</th>
+					<th>date</th>
+					<th>time</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="action : ${actions}">
+                    <td th:text="${action.message}"></td>
+                    <td th:text="${action.actiontype.name}"></td>
+                    <td th:text="${action.date}"></td>
+                    <td th:text="${action.time}"></td>
+				</tr>
+			</tbody>
+		</table>
+		<p th:if="${actions.isEmpty()}">No Transactions found.</p>
+	</th:block>
+</body>
+</html>

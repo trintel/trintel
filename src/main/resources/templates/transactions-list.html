@@ -27,6 +27,11 @@
                     <td th:text="${transaction.product}"></td>
                     <td th:text="${transaction.amount}"></td>
                     <td th:text="${transaction.pricePerPiece}"></td>
+					<td>
+						<a th:href="@{'/transaction/' + ${transaction.id}}" class="icon-link">
+							<p>Show Details</p>
+						</a>
+					</td>
 				</tr>
 			</tbody>
 		</table>
