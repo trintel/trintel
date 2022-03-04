@@ -116,3 +116,8 @@ input {
 .dropdown-item {
   border-radius: .8rem !important;
 }
+
+.nav-logo {
+  height:2.5rem;
+  margin-right: 0.5rem;
+}
