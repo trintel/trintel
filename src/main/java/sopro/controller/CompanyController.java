@@ -55,6 +55,7 @@ public class CompanyController {
     @GetMapping("/students")
     public String listAllStudents(Model model) {
         model.addAttribute("students", userRepository.findByRole("STUDENT")); //list all students
+        //TODO deal with unassigned students (null-pointer Except. in template)
         return "students-list";
     }
 
@@ -94,14 +95,14 @@ public class CompanyController {
         return "company-view";
     }
 
-    @GetMapping("/company/join/{id}")       //TODO this is better as a post mapping
-    public String joinCompany2(@PathVariable Long id, @AuthenticationPrincipal User user, Model model) {
+    @PostMapping("/company/join") 
+    public String joinCompany2(String companyName, @AuthenticationPrincipal User user, Model model) {
 
-        // //TODO schöner lösen
-        if(user.getCompany() != null) { //falls Student bereits zugeordnet, soll das nicht möglich sein  (GET..)
-             return "redirect:/home";
-        }
-        user.setCompany(companyRepository.findById(id).get());  //set the company of that user.
+        // // //TODO schöner lösen
+        // if(user.getCompany() != null) { //falls Student bereits zugeordnet, soll das nicht möglich sein  (GET..)
+        //      return "redirect:/home";
+        // }
+        user.setCompany(companyRepository.findByName(companyName));  //set the company of that user.
         
         userRepository.save(user);
 
