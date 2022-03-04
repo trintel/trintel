@@ -1,20 +1,24 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org">
 <header th:fragment="bar">
-    <button class="navbar-toggler d-md-none collapsed border-0" type="button" data-bs-toggle="collapse"
-        data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <p class="text-white navbar-brand my-0">
-        Trintel
-    </p>
-    <ul class="logout-top my-0" th:with="currentUser=${#httpServletRequest.userPrincipal?.name}">
-        <form class="navbar-form navbar-right d-flex" th:action="@{/logout}" method="post" th:if="${currentUser != null}">
-            <p class="navbar-text navbar-right align-middle my-0 mx-2" th:text="${currentUser}">
-                example_user
-            </p>
-            <input type="submit" class="btn btn-light" value="Logout" />
-        </form>
-    </ul>
+    <div class="container-fluid">
+          <ul class="navbar-nav mb-sm-0 d-flex flex-row">
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="navbarsExample03" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+            <a class="navbar-brand">Trintel</a>
+          </ul>
+          <ul class="navbar-nav mx-1 mb-sm-0 logout-top" th:with="currentUser=${#httpServletRequest.userPrincipal?.name}">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="dropdown03" data-bs-toggle="dropdown" aria-expanded="false" th:text="${currentUser}" th:if="${currentUser != null}">User</a>
+              <ul class="dropdown-menu" aria-labelledby="dropdown03">
+                <li><a class="dropdown-item" href="#">Settings</a></li>
+                <form th:action="@{/logout}" method="post">
+                    <input type="submit" class="dropdown-item" value="Logout" />
+                </form>
+              </ul>
+            </li>
+          </ul>
+        </div>
 </header>
 </html>
