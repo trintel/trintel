@@ -1,11 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="fragments/headerAndNav :: header"/>
 
 <body>
-    <div th:replace="fragments/headerAndNav :: navbar"/>
-	<div class="container">
+	<div>
 		<h2>Companies</h2>
 		<p>Manage all companies in the database. Add new companies with the button at the bottom.</p>
 		<table th:unless="${companies.isEmpty()}">

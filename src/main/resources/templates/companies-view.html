@@ -1,11 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="fragments/headerAndNav :: header"/>
 
 <body>
-    <div th:replace="fragments/headerAndNav :: navbar"/>
-	<div class="container">
+	<div>
             <h1>Company:<p th:text="${company.name}"></p></h1>
             
             <table th:unless="${company.getStudents().isEmpty()}">
