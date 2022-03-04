@@ -4,7 +4,7 @@
         <div class="position-sticky pt-3">
             <ul class="nav flex-column">
               <li class="nav-item">
-                <a th:classappend="${#httpServletRequest.getRequestURI() == '/home' ? 'active':''}" class="nav-link" aria-current="page" th:href="@{/home}">
+                <a th:classappend="${#httpServletRequest.getRequestURI() == '/home' ? 'active':''}" class="nav-link" th:href="@{/home}">
                     <i th:class="${#httpServletRequest.getRequestURI() == '/home' ? 'bi bi-house-fill':'bi bi-house'}"></i> Home
                 </a>
                 <a th:classappend="${#httpServletRequest.getRequestURI() == '/companies' ? 'active':''}" class="nav-link" th:href="@{/companies}">
