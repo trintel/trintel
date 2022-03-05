@@ -47,7 +47,7 @@ input {
   /* rtl:remove */
   left: 0;
   z-index: 100; /* Behind the navbar */
-  padding: 4rem 0 0; /* Height of navbar */
+  padding: 3.5rem 0 0; /* Height of navbar */
   /*box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);*/
 }
 
@@ -65,10 +65,17 @@ input {
   color: rgb(60, 60, 60);
   display:flex;
   align-items: center;
+  border-radius: .8rem;
+  margin-bottom: .1rem;
+}
+
+.sidebar .nav-link:hover {
+  background-color:rgba(84, 97, 127, 0.117);
 }
 
 .sidebar .nav-link.active {
   color: #54617f;
+  background-color:rgba(84, 97, 127, 0.117);
 }
 
 .sidebar i {
@@ -131,4 +138,8 @@ input {
 .nav-logo {
   height:2.5rem;
   margin-right: 0.5rem;
+}
+
+main {
+  border-radius: 0.8rem;
 }
