@@ -66,7 +66,7 @@ input {
   display:flex;
   align-items: center;
   border-radius: .8rem;
-  margin-bottom: .1rem;
+  margin-bottom: .2rem;
 }
 
 .sidebar .nav-link:hover {
