@@ -24,19 +24,21 @@
               </a>
               </li>
             </ul>
-            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+            <!-- <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
               <span>Andere Links</span>
             </h6>
             <ul class="nav flex-column mb-2">
-              <!-- hier können noch andere Links eingefügt werden, die nicht zur Nav gehören -->
-            </ul>
-            <ul class="logout-side" th:with="currentUser=${#httpServletRequest.userPrincipal?.name}">
+              hier können noch andere Links eingefügt werden, die nicht zur Nav gehören
+            </ul> -->
+            <ul class="logout-side nav flex-column mb-2" th:with="currentUser=${#httpServletRequest.userPrincipal?.name}">
+              <li class="nav-item">
               <form class="navbar-form navbar-right" th:action="@{/logout}" method="post" th:if="${currentUser != null}">
-                  <p class="navbar-text navbar-right align-middle my-0 mx-2" th:text="${currentUser}">
+                  <p class="navbar-text navbar-right align-middle my-0" th:text="${currentUser}">
                       example_user
                   </p>
                   <input type="submit" class="btn btn-dark" value="Logout" />
               </form>
+            </li>
           </ul>
           </div>
     </nav>
