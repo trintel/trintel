@@ -10,7 +10,6 @@ import sopro.model.Company;
 import sopro.model.User;
 import sopro.repository.CompanyRepository;
 import sopro.repository.UserRepository;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -46,7 +45,6 @@ public class DatabaseTest {
         companyRepository.save(company);
         user.setCompany(company);
         userRepository.save(user);
-
     }
 
     /**
@@ -67,7 +65,8 @@ public class DatabaseTest {
         assertEquals(company,userRepository.findByEmail(email).getCompany());
     }
 
-
+    
+ 
 
 
 }
