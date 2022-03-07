@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" th:include="layout-fullscreen :: page">
 
 <head>
-    <title>TITEL</title>
+    <title th:text="#{registerStudent}"></title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 
@@ -19,26 +19,23 @@
                 </div>
                 <div class="form-floating mb-3">
                     <input type="text" class="form-control" id="floatingSurname" placeholder="surname" name="surname"
-                        required autofocus>
+                        required>
                     <label for="floatingInputSurname" th:text="#{surname}"></label>
                 </div>
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="floatingEmail" placeholder="email" name="email" required
-                        autofocus>
+                    <input type="text" class="form-control" id="floatingEmail" placeholder="email" name="email" required>
                     <label for="floatingEmail" th:text="#{email}"></label>
                 </div>
                 <div class="form-floating mb-3">
                     <input type="password" class="form-control" id="floatingPassword" placeholder="password"
-                        name="password" required autofocus>
+                        name="password" required>
                     <label for="floatingPassword" th:text="#{password}"></label>
                 </div>
                 <div class="form-group">
-                    <button type="submit" class="w-100 btn btn-lg btn-primary"><i class="bi bi-box-arrow-in-right"></i>
+                    <button type="submit" class="w-100 btn btn-lg btn-primary">
                         <a th:text=" #{register}"></a></button>
                 </div>
             </form>
-            <button class="w-100 btn btn-lg btn-light mt-3" onclick="history.back()"><i class="bi bi-arrow-left"></i> <a
-                    th:text=" #{back}"></a></button>
         </main>
     </th:block>
 </body>
