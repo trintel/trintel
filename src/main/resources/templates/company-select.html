@@ -1,8 +1,43 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" th:include="layout-fullscreen :: page">
 
+<head>
+	<th:block th:fragment="title"><title>Company Selection - Trintel</title></th:block>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
 
+<!-- Companies in List, click to mark as active and submit with big Join button under list. -->
+<!-- Order companies alphabetically. -->
 <body>
+	<th:block th:fragment="content">
+		<style th:replace="fragments/small-content :: content"></style>
+		<main class="form-small">
+			<h1 class="mb-4">Company Selection</h1>
+		<table th:unless="${companies.isEmpty()}">
+			<tbody>
+				<tr th:each="company : ${companies}">
+					 <td th:text="${company.name}"></td>
+                     <td>
+						<a th:href="@{'/company/select/' + ${company.id}}" class="icon-link">
+							<p>Join</p>
+						</a>
+					</td>
+
+				</tr>
+				<ul class="list-group" th:each="company : ${companies}">
+					<!-- <li class="list-group-item active" aria-current="true">An active item</li> -->
+					<li class="list-group-item" th:text="${company.name}"></li>
+				  </ul>
+			</tbody>
+		</table>
+		<p th:if="${companies.isEmpty()}">No Companies found.</p>
+	</th:block>
+</body>
+   
+</html>
+
+
+<!-- <body>
 	<div>
 		<h2>Companies</h2>
 		<p>Manage all companies in the database. Add new companies with the button at the bottom.</p>
@@ -28,4 +63,4 @@
 		<p th:if="${companies.isEmpty()}">No Companies found.</p>
 	</div>
 </body>
-</html>
+</html> -->
