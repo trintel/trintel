@@ -55,7 +55,6 @@ input {
   position: relative;
   top: 0;
   height: calc(100vh - 48px);
-  padding-top: .5rem;
   overflow-x: hidden;
   overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
 }
@@ -128,6 +127,10 @@ input {
 .dropdown-menu {
   border-radius: .8rem !important;
   right: 0;
+  left: auto;
+}
+
+.dropdown-menu[data-bs-popper]{
   left: auto;
 }
 
