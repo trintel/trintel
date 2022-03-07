@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org">
     <nav th:fragment="sidebar" id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
-        <div class="position-sticky px-3">
+        <div class="sidebar-sticky px-3">
             <ul class="nav flex-column">
               <li class="nav-item">
                 <a th:classappend="${#httpServletRequest.getRequestURI() == '/home' ? 'active':''}" class="nav-link" th:href="@{/home}">
