@@ -1,25 +1,26 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org">
 <header th:fragment="bar" class="navbar navbar-expand-md navbar-light bg-light p-2 sticky-top">
-    <div class="container-fluid">
-          <ul class="navbar-nav mb-sm-0 d-flex flex-row">
-            <button class="navbar-toggler border-0 ps-0" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="navbarsExample03" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-              <img class="nav-logo" th:src="@{/img/onlyicon.png}"/>
-            <a class="navbar-brand">Trintel</a>
-          </ul>
-          <ul class="navbar-nav mx-1 mb-sm-0 logout-top" th:with="currentUser=${#httpServletRequest.userPrincipal?.name}">
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="dropdown03" data-bs-toggle="dropdown" aria-expanded="false" th:text="${currentUser}" th:if="${currentUser != null}">User</a>
-              <ul class="dropdown-menu" aria-labelledby="dropdown03">
-                <li><a class="dropdown-item" href="#">Settings</a></li>
-                <form th:action="@{/logout}" method="post">
-                    <input type="submit" class="dropdown-item" value="Logout" />
-                </form>
-              </ul>
-            </li>
-          </ul>
-        </div>
+  <div class="container-fluid">
+    <ul class="navbar-nav mb-sm-0 d-flex flex-row">
+      <button class="navbar-toggler border-0 ps-0" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu"
+        aria-controls="navbarsExample03" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <img class="nav-logo" th:src="@{/img/onlyicon.png}" />
+      <a class="navbar-brand">Trintel</a>
+    </ul>
+    <ul class="navbar-nav mx-1 mb-sm-0 logout-top" th:with="currentUser=${#httpServletRequest.userPrincipal?.name}">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="dropdown03" data-bs-toggle="dropdown" aria-expanded="false" th:text="${currentUser}" th:if="${currentUser != null}">User</a>
+        <ul class="dropdown-menu" aria-labelledby="dropdown03">
+          <li><a class="dropdown-item" href="#" th:text="#{uSettings}"></a></li>
+            <form th:action="@{/logout}" method="post">
+              <input type="submit" class="dropdown-item" th:value="#{logout}" />
+            </form>
+        </ul>
+      </li>
+    </ul>
+  </div>
 </header>
 </html>

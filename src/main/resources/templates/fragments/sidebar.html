@@ -5,12 +5,14 @@
             <ul class="nav flex-column">
               <li class="nav-item">
                 <a th:classappend="${#httpServletRequest.getRequestURI() == '/home' ? 'active':''}" class="nav-link" th:href="@{/home}">
-                    <i th:class="${#httpServletRequest.getRequestURI() == '/home' ? 'bi bi-house-fill':'bi bi-house'}"></i> Home
+                    <i th:class="${#httpServletRequest.getRequestURI() == '/home' ? 'bi bi-house-fill':'bi bi-house'}"></i>
+                    <label th:text="#{home}"/>
                 </a>
               </li>
               <li class="nav-item">
                 <a th:classappend="${#httpServletRequest.getRequestURI() == '/companies' ? 'active':''}" class="nav-link" sec:authorize="hasRole('ADMIN')" th:href="@{/companies}">
-                  <i th:class="${#httpServletRequest.getRequestURI() == '/companies' ? 'bi bi-briefcase-fill':'bi bi-briefcase'}"></i> Companies
+                  <i th:class="${#httpServletRequest.getRequestURI() == '/companies' ? 'bi bi-briefcase-fill':'bi bi-briefcase'}"></i>
+                  <label th:text="#{companies}"/>
                 </a>
               </li>
               <li class="nav-item">
