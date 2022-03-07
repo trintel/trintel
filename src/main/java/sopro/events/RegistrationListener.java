@@ -65,7 +65,7 @@ public class RegistrationListener implements
         email.setTo(recipientAddress);
         email.setSubject(subject);
         email.setText(hello + " " + user.getForename() + ",\r\n\r\n" + message + "\r\n\r\n" + confirmationUrl + "\r\n\r\n" + greetings + " - The Trintel Team");
-        email.setFrom("Trintel");
+        email.setFrom("trintel@cau.zeppel.eu");
         return email;
     }
 }
