@@ -12,18 +12,21 @@
         <main class="form-small">
             <h1 class="mb-4" th:text="#{registerAdmin}"></h1>
             <form action="#" th:action="@{/signup/admin}" th:object="${user}" method="post">
-                <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="floatingForename" placeholder="forename" name="forename"
-                        required autofocus>
-                    <label for="floatingInputUsername" th:text="#{forename}"></label>
+                <div class="d-flex">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="floatingForename" placeholder="forename"
+                            name="forename" required autofocus>
+                        <label for="floatingInputUsername" th:text="#{forename}"></label>
+                    </div>
+                    <div class="form-floating mb-3 ms-3">
+                        <input type="text" class="form-control" id="floatingSurname" placeholder="surname"
+                            name="surname" required>
+                        <label for="floatingInputSurname" th:text="#{surname}"></label>
+                    </div>
                 </div>
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="floatingSurname" placeholder="surname" name="surname"
+                    <input type="text" class="form-control" id="floatingEmail" placeholder="email" name="email"
                         required>
-                    <label for="floatingInputSurname" th:text="#{surname}"></label>
-                </div>
-                <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="floatingEmail" placeholder="email" name="email" required>
                     <label for="floatingEmail" th:text="#{email}"></label>
                 </div>
                 <div class="form-floating mb-3">
