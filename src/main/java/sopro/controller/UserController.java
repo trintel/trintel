@@ -112,7 +112,7 @@ public class UserController {
         userRepository.save(user);
 
         // Publish event for Mail validation.
-        eventPublisher.publishEvent(new OnRegistrationCompleteEvent(user, request.getLocale(), request.getServerName() + request.getServerPort()));
+        eventPublisher.publishEvent(new OnRegistrationCompleteEvent(user, request.getLocale(), request.getServerName() + ":" + request.getServerPort()));
         return "verify-your-email";
     }
 
