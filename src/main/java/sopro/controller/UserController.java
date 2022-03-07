@@ -1,5 +1,7 @@
 package sopro.controller;
 
+import java.io.UnsupportedEncodingException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
@@ -9,14 +11,18 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import sopro.events.OnRegistrationCompleteEvent;
 import sopro.model.User;
 import sopro.repository.UserRepository;
+import sopro.service.UserInterface;
 
 @Controller
 public class UserController {
@@ -29,6 +35,9 @@ public class UserController {
 
     @Autowired
     ApplicationEventPublisher eventPublisher;
+
+    @Autowired
+    UserInterface userService;
 
     /**
      * GET routing für Index.
@@ -97,13 +106,33 @@ public class UserController {
         String encPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encPassword);
 
+        // TODO move the registerNewUser part to UserService.
+
         // saves the new user in userRepo
         userRepository.save(user);
 
         // Publish event for Mail validation.
-        eventPublisher.publishEvent(new OnRegistrationCompleteEvent(user,
-                request.getLocale(), request.getContextPath())); // context path leer?
-        return "redirect:/login";
-
+        eventPublisher.publishEvent(new OnRegistrationCompleteEvent(user, request.getLocale(), request.getServerName() + request.getServerPort()));
+        return "verify-your-email";
     }
+
+    /** 
+     * Handles the email registration link.
+     * 
+     * @param request
+     * @param model
+     * @param token
+     * @return ModelAndView
+     * @throws UnsupportedEncodingException
+     */
+    @GetMapping("/registrationConfirm")
+    public ModelAndView confirmRegistration(final HttpServletRequest request, final ModelMap model, @RequestParam("token") final String token) throws UnsupportedEncodingException {
+        final String result = userService.validateVerificationToken(token);
+        if (result.equals("valid"))
+            return new ModelAndView("redirect:/login", model); // Success you can now login. 
+        
+        model.addAttribute("invalidLogin", "Registration token expired.");
+        return new ModelAndView("redirect:/login?error", model); // Bad user, agelaufen.
+    }
+
 }
