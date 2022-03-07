@@ -1,15 +1,32 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" th:include="layout :: page">
+<html xmlns:th="http://www.thymeleaf.org" th:include="layout-fullscreen :: page">
 
 <head>
-	<th:block th:fragment="title"><title>Pls verify email</title></th:block>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+   <title th:fragment="verify" th:text="#{verify}"></title>
+   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 
-   <body>
-      <th:block th:fragment="content">
-         <h1>Pls verify email</h1>
+<body>
+   <th:block th:fragment="content">
+      <style th:replace="fragments/small-content :: content"></style>
+      <main class="form-small">
+
+         <div class="row mb-3 align-items-center">
+            <div class="col-3 flex-fill align-items-center">
+               <i class="bi bi-envelope-check" style="font-size: 65px"></i>
+            </div>
+            <div class="col-9 align-items-center">
+               <h2 th:text="#{verify}" name="verify"></h2>
+            </div>
+         </div>
+
+         <div class="form-group">
+            <a href="/login">
+               <button type="submit" class="w-100 btn btn-lg btn-primary" th:text=" #{login}"></button>
+            </a>
+         </div>
+      </main>
    </th:block>
-   </body>
-   
+</body>
+
 </html>
