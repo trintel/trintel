@@ -59,7 +59,7 @@ public class LoginTest {
         mockMvc
                 .perform(logout())
                 .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/login"));
+                .andExpect(redirectedUrl("/login?logout"));
     }
 
     /**
@@ -86,7 +86,7 @@ public class LoginTest {
         mockMvc
                 .perform(logout())
                 .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/login"));
+                .andExpect(redirectedUrl("/login?logout"));
     }
 
     /**
