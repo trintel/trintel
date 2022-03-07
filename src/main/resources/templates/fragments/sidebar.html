@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org">
+    <nav th:fragment="sidebar" id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+        <div class="sidebar-sticky px-3">
+            <ul class="nav flex-column">
+              <li class="nav-item">
+                <a th:classappend="${#httpServletRequest.getRequestURI() == '/home' ? 'active':''}" class="nav-link" th:href="@{/home}">
+                    <i th:class="${#httpServletRequest.getRequestURI() == '/home' ? 'bi bi-house-fill':'bi bi-house'}"></i> Home
+                </a>
+              </li>
+              <li class="nav-item">
+                <a th:classappend="${#httpServletRequest.getRequestURI() == '/companies' ? 'active':''}" class="nav-link" sec:authorize="hasRole('ADMIN')" th:href="@{/companies}">
+                  <i th:class="${#httpServletRequest.getRequestURI() == '/companies' ? 'bi bi-briefcase-fill':'bi bi-briefcase'}"></i> Companies
+                </a>
+              </li>
+              <li class="nav-item">
+                <a th:classappend="${#httpServletRequest.getRequestURI() == '/companies' ? 'active':''}" class="nav-link" sec:authorize="hasRole('STUDENT')" th:href="@{/company}">
+                  <i th:class="${#httpServletRequest.getRequestURI() == '/companies' ? 'bi bi-briefcase-fill':'bi bi-briefcase'}"></i> My company
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" th:href="@{/console}">
+                  <i class="bi bi-terminal"></i> H2 Console
+              </a>
+              </li>
+            </ul>
+            <!-- <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+              <span>Andere Links</span>
+            </h6>
+            <ul class="nav flex-column mb-2">
+              hier können noch andere Links eingefügt werden, die nicht zur Nav gehören
+            </ul> -->
+            <ul class="logout-side nav flex-column mb-2" th:with="currentUser=${#httpServletRequest.userPrincipal?.name}">
+              <li class="nav-item">
+              <form class="navbar-form navbar-right" th:action="@{/logout}" method="post" th:if="${currentUser != null}">
+                  <p class="navbar-text navbar-right align-middle my-0" th:text="${currentUser}">
+                      example_user
+                  </p>
+                  <input type="submit" class="btn btn-dark" value="Logout" />
+              </form>
+            </li>
+          </ul>
+          </div>
+    </nav>
+</html>

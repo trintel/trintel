@@ -11,6 +11,10 @@
 <h1>Edit your company</h1>
 
    <form action="#" th:action="@{/company/edit}" th:object="${company}" method="post">
+    <div class="mb-3">
+        <label for="formFile" class="form-label">Upload a custom logo for your company.</label>
+        <input class="form-control" type="file" id="formFile">
+    </div>
     <div>
         <label>Name</label>
         <input th:field="*{name}"/>
