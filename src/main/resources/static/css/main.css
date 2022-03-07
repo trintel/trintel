@@ -17,7 +17,7 @@ a.icon-link:hover { text-decoration: none; }
   margin: auto;
 }
 
-button {
+.btn {
   border-radius: .8rem !important;
 }
 
@@ -142,4 +142,18 @@ input {
 
 main {
   border-radius: 0.8rem;
+}
+
+.card {
+  border-radius: 0.8rem;
+}
+
+.btn-primary {
+  background-color: #556080;
+  border-color: #556080;
+}
+
+.btn-primary:hover {
+  background-color: #4c5672;
+  border-color: #4c5672;
 }
