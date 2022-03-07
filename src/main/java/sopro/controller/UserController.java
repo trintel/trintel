@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import sopro.TrintelApplication;
 import sopro.model.User;
 import sopro.repository.UserRepository;
 
@@ -24,7 +25,6 @@ public class UserController {
 
     @Autowired
     PasswordEncoder passwordEncoder;
-
 
     /** 
      * GET routing für Index.
@@ -42,29 +42,24 @@ public class UserController {
     }
 
     /**
-     * Returns signup page for students.
-     *
-     * @param model
-     * @return page
-     */
-    @GetMapping("/signup/student")
-    public String signUpStudent(Model model) {
-        User user = new User();
-        model.addAttribute("user", user);
-        return "sign-up-student";
-    }
-
-    /**
      * Returns signup page for admins.
      * 
      * @param model
      * @return page
      */
-    @GetMapping("/signup/admin")
-    public String signUpAdmin(Model model) {
+    @GetMapping("/signup/{rndStr}")
+    public String signUpAdmin(@PathVariable String rndStr, Model model) {
         User user = new User();
-        model.addAttribute("user", user);
-        return "sign-up-admin";
+        if (rndStr.equals(TrintelApplication.ADMIN_LOGIN_URL)) {
+            model.addAttribute("user", user);
+            return "sign-up-admin";
+        } else if (rndStr.equals(TrintelApplication.STUDENT_LOGIN_URL)){
+            model.addAttribute("user", user);
+            return "sign-up-student";
+        } else {
+            return "redirect:/login";
+        }
+
     }
 
     /**
@@ -84,7 +79,11 @@ public class UserController {
         // TODO check if email exists
         if (bindingResult.hasErrors()) {
             model.addAttribute("user", user);
-            return "sign-up";
+            if(role.equals("admin")) {
+                return "sign-up-admin";
+            } else {
+                return "sign-up-student";
+            }
         }
         // encode the new password for saving in the database
         String encPassword = passwordEncoder.encode(user.getPassword());
