@@ -46,7 +46,7 @@ public class InitDatabaseService {
 		if (userRepository.count() == 0 && companyRepository.count() == 0) {
 
             //Create demo Users
-            User admin = new User("admin", "admin", "admin@admin", passwordEncoder.encode("password"), null);
+            User admin = new User(true, true, true, true, "admin", "admin", "admin@admin", passwordEncoder.encode("password"), null);
             admin.setRole("ADMIN");
             userRepository.save(admin);
             
@@ -60,13 +60,13 @@ public class InitDatabaseService {
 
             
 			// Create demo Students
-			User student1 = new User("Schniedelus", "Maximilius", "m@m", passwordEncoder.encode("password"), null);
+			User student1 = new User(true, true, true, true,"Schniedelus", "Maximilius", "m@m", passwordEncoder.encode("password"), null);
             student1.setRole("STUDENT");
-            User student2 = new User("Speckmann", "Jonas", "j@j", passwordEncoder.encode("password"), company1);
+            User student2 = new User(true, true, true, true,"Speckmann", "Jonas", "j@j", passwordEncoder.encode("password"), company1);
             student2.setRole("STUDENT");
-            User student3 = new User("Mayo", "Luca", "l@l", passwordEncoder.encode("password"), company1);
+            User student3 = new User(true, true, true, true,"Mayo", "Luca", "l@l", passwordEncoder.encode("password"), company1);
             student3.setRole("STUDENT");
-            User student4 = new User("Vielesorgen", "Felix", "f@f", passwordEncoder.encode("password"), company3);
+            User student4 = new User(true, true, true, true,"Vielesorgen", "Felix", "f@f", passwordEncoder.encode("password"), company3);
             student4.setRole("STUDENT");
             userRepository.save(student1);
             userRepository.save(student2);
