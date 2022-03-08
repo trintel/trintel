@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" th:include="layout-fullscreen :: page">
 
 <head>
-   <title th:fragment="verify" th:text="#{verify}"></title>
+   <title th:fragment="title" th:text="#{verify}"></title>
    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 
@@ -11,7 +11,7 @@
       <style th:replace="fragments/small-content :: content"></style>
       <main class="form-small">
 
-         <div class="row mb-3 align-items-center">
+         <div class="row align-items-center">
             <div class="col-3 flex-fill align-items-center">
                <i class="bi bi-envelope-check" style="font-size: 65px"></i>
             </div>
@@ -19,6 +19,8 @@
                <h2 th:text="#{verify}" name="verify"></h2>
             </div>
          </div>
+
+         <p th:text="#{verifyText}"></p>
 
          <div class="form-group">
             <a href="/login">
