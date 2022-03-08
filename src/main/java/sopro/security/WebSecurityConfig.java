@@ -45,9 +45,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.headers().frameOptions().disable();
 		http
 			.authorizeRequests()
-				.antMatchers("/console/**", "/signup/**","/webjars/**", "/css/*", "/img/*", "/login/**").permitAll() // permit all to access those Mathes
-				.antMatchers("/companies/add/**").hasRole("ADMIN")
-				// .antMatchers("/companies/**").hasRole("ADMIN") // restrict to only ADMIN role is able to access /companies/* // "/companies" is overloaded for admins and students
+				.antMatchers(
+					"/console/**", 
+					"/signup/**",
+					"/webjars/**",
+					"/css/*",
+					"/img/*",
+					"/login/**",
+					"/verify-your-email",
+					"/registrationConfirm/**").permitAll() // permit all to access those Mathes
+				.antMatchers("/companies/**").hasRole("ADMIN") // restrict to only ADMIN role is able to access /companies/* 
 				.antMatchers("/company/**").hasRole("STUDENT") // restrict to only STUDENT role is able to access /company
 
 				// .antMatchers("/console/**").hasRole("ADMIN") // restrict to only ADMIN role is able to access /console
@@ -62,7 +69,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.csrf().ignoringAntMatchers("/console/**")
         	.and().headers().frameOptions().sameOrigin();
 	}
-
     
     /** 
      * @param auth

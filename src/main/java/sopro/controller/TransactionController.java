@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.ui.Model;
 
-import sopro.model.Action;
-import sopro.model.ActionType;
 import sopro.model.Transaction;
 import sopro.model.User;
 import sopro.repository.ActionRepository;
