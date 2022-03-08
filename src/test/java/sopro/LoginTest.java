@@ -1,5 +1,12 @@
 package sopro;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.logout;
+import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.unauthenticated;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -7,14 +14,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.event.annotation.AfterTestMethod;
 import org.springframework.test.web.servlet.MockMvc;
-
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.logout;
-import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.unauthenticated;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 // @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -26,7 +25,7 @@ public class LoginTest {
 
     /**
      * Tests, if the login screen is served on /login.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -38,7 +37,7 @@ public class LoginTest {
 
     /**
      * Tests if the Admin can access the companies.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -50,7 +49,8 @@ public class LoginTest {
     }
 
     /**
-     * Test if the Logout of the Admin works.
+     * Test if the Logout of the Admin works and if the admin is redirected to the
+     * login page
      *
      * @throcpti
      */
@@ -65,11 +65,12 @@ public class LoginTest {
 
     /**
      * Tests if the Student can access the companies.
-     * 
+     *
      * @throws Exception
      */
     @Test
-    @WithMockUser(username = "student@student", roles = { "STUDENT" }) // Erstellt User ohne die Daternbank zu verwenden.
+    @WithMockUser(username = "student@student", roles = { "STUDENT" }) // Erstellt User ohne die Daternbank zu
+                                                                       // verwenden.
     public void studentCanNotSeeCompanies() throws Exception {
         mockMvc
                 .perform(get("/companies"))
@@ -77,8 +78,9 @@ public class LoginTest {
     }
 
     /**
-     * Test if the Logout of the Student works.
-     * 
+     * Test if the Logout of the Student works and he is redirected to the Login
+     * Page
+     *
      * @throws Exception
      */
     @Test
@@ -93,13 +95,13 @@ public class LoginTest {
     /**
      * Tests, if the user is redirected to login error page when he uses wrong
      * password.
-     * 
+     *
      * @throws Exception
      */
     @Test
     public void testInvalidLoginDenied() throws Exception {
         mockMvc
-                .perform(formLogin().password("dasisteinpasswort"))  
+                .perform(formLogin().password("dasisteinpasswort"))
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl("/login?error"))
                 .andExpect(unauthenticated());
@@ -109,7 +111,7 @@ public class LoginTest {
      * Tests, if the client is redirected to login when accessing /companies as a
      * not authed user.
      * Code 302 = Redirection to another page
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -123,7 +125,7 @@ public class LoginTest {
 
     /**
      * Test if the Sign Up page is reachable for the Students.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -135,7 +137,7 @@ public class LoginTest {
 
     /**
      * Test if the Sign Up page is reachable for the Admins.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -144,4 +146,5 @@ public class LoginTest {
                 .perform(get("/signup/admin"))
                 .andExpect(status().isOk());
     }
+
 }

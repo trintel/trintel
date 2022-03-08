@@ -1,20 +1,19 @@
 package sopro.model;
 
-import javax.persistence.Entity;
-
-import lombok.Getter;
-import lombok.Setter;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
 import javax.validation.constraints.NotEmpty;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import lombok.Getter;
+import lombok.Setter;
 
 /**
   * Defines the class User with all needed entries for the Database.
@@ -29,9 +28,15 @@ public class User implements UserDetails {
     @Getter @Setter	@NotEmpty private String role;
     @Getter @Setter	@ManyToOne private Company company;
 
-    public User(){}
+    @Getter @Setter private boolean enabled = false;
+    @Getter @Setter private boolean accountNonExpired = true;
+    @Getter @Setter private boolean credentialsNonExpired = true;
+    @Getter @Setter private boolean accountNonLocked = true;
 
-    public User(String surname,String forename, String email, String password, Company company){
+
+    public User() {}
+
+    public User(String surname,String forename, String email, String password, Company company) {
        this.surname = surname;
        this.forename = forename;
        this.email = email;
@@ -39,44 +44,58 @@ public class User implements UserDetails {
        this.company = company;
     }
 
+    public User(boolean enabled, boolean accountNonExpired, boolean credentialsNonExpired, boolean accountNonLocked, String surname,String forename, String email, String password, Company company) {
+      this.surname = surname;
+      this.forename = forename;
+      this.email = email;
+      this.password = password;
+      this.company = company;
+      this.enabled = enabled;
+      this.accountNonExpired = accountNonExpired;
+      this.credentialsNonExpired = credentialsNonExpired;
+      this. accountNonLocked = accountNonLocked;
+   }
+
+    /**
+     * @return Collection<? extends GrantedAuthority>
+     */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
       List<GrantedAuthority> grantedAuthorities = new ArrayList<GrantedAuthority>();
 
       //authorities have to begin with "ROLE_", because Spring is stupid
-      grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_" + this.getRole()));   //assuming every user has only one role
+      grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_" + this.getRole()));   // assuming every user has only one role.
 
       return grantedAuthorities;
     }
 
+    // Spring wants a username. We use email as username.
     @Override
     public String getUsername() {
-      // TODO Auto-generated method stub
+      return this.email;
+    }
+
+    public String getEmail() {
       return this.email;
     }
 
     @Override
     public boolean isAccountNonExpired() {
-      // TODO Auto-generated method stub
-      return true;
+      return this.accountNonLocked;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-      // TODO Auto-generated method stub
-      return true;
+      return this.accountNonLocked;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-      // TODO Auto-generated method stub
-      return true;
+      return this.credentialsNonExpired;
     }
 
     @Override
     public boolean isEnabled() {
-      // TODO Auto-generated method stub
-      return true;
+      return this.enabled;
     }
-
 }

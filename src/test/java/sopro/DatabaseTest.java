@@ -1,5 +1,7 @@
 package sopro;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +12,6 @@ import sopro.model.Company;
 import sopro.model.User;
 import sopro.repository.CompanyRepository;
 import sopro.repository.UserRepository;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -24,7 +24,6 @@ public class DatabaseTest {
     CompanyRepository companyRepository;
 
     private User user;
-
     private Company company;
 
     String forename = "forename";
@@ -32,10 +31,9 @@ public class DatabaseTest {
     String email = "email@email.com";
     String password = "password";
 
-
     /**
      * Creates a User and a Company in the database.
-     * 
+     *
      * @throws Exception
      */
     @BeforeEach
@@ -46,27 +44,25 @@ public class DatabaseTest {
         companyRepository.save(company);
         user.setCompany(company);
         userRepository.save(user);
-
     }
 
     /**
      * Checks if a created user is really saved in database.
-     * 
+     *
      * @throws Exception
      */
     @Test
     public void isUserInDatabase() throws Exception {
         assertEquals(user, userRepository.findById(user.getId()).get()); // .get(): optional<User> in User
     }
-    
-    /** 
+
+    /**
      * Checks if the craeted user is assigned to the right company.
+     *
+     * @throws Exception
      */
     @Test
     public void isUserInCompany() throws Exception {
-        assertEquals(company,userRepository.findByEmail(email).getCompany());
+        assertEquals(company, userRepository.findByEmail(email).getCompany());
     }
-
-
-
 }
