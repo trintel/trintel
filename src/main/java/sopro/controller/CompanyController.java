@@ -4,6 +4,7 @@ package sopro.controller;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -83,7 +84,8 @@ public class CompanyController {
 
     @GetMapping("/company/select")
     public String selectCompany(Model model) {
-        model.addAttribute("companies", companyRepository.findAll());
+        // .findByOrderByNameAsc() statt .findAll()
+        model.addAttribute("companies", companyRepository.findByOrderByNameAsc());
         return "company-select";
     }
 
