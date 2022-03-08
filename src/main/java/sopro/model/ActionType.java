@@ -28,5 +28,5 @@ public class ActionType {
         this.name = name;
         this.text = text;
     }
-    
+
 }

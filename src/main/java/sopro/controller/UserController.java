@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import sopro.events.OnRegistrationCompleteEvent;
 import sopro.TrintelApplication;
+import sopro.events.OnRegistrationCompleteEvent;
 import sopro.model.User;
 import sopro.repository.UserRepository;
 import sopro.service.UserInterface;
@@ -42,7 +42,7 @@ public class UserController {
 
     /**
      * GET routing für Index.
-     * 
+     *
      * @return page Home
      */
     @GetMapping("/home")
@@ -58,7 +58,7 @@ public class UserController {
 
     /**
      * Returns signup page for admins.
-     * 
+     *
      * @param model
      * @return page
      */
@@ -81,7 +81,7 @@ public class UserController {
      * Receives POST requests from the signup pages.
      * Extracts role form path.
      * Validates inputs and saves when all good.
-     * 
+     *
      * @param user
      * @param role
      * @param bindingResult
@@ -116,9 +116,9 @@ public class UserController {
         return "verify-your-email";
     }
 
-    /** 
+    /**
      * Handles the email registration link.
-     * 
+     *
      * @param request
      * @param model
      * @param token
@@ -129,8 +129,8 @@ public class UserController {
     public ModelAndView confirmRegistration(final HttpServletRequest request, final ModelMap model, @RequestParam("token") final String token) throws UnsupportedEncodingException {
         final String result = userService.validateVerificationToken(token);
         if (result.equals("valid"))
-            return new ModelAndView("redirect:/login", model); // Success you can now login. 
-        
+            return new ModelAndView("redirect:/login", model); // Success you can now login.
+
         model.addAttribute("invalidLogin", "Registration token expired.");
         return new ModelAndView("redirect:/login?error", model); // Bad user, agelaufen.
     }
