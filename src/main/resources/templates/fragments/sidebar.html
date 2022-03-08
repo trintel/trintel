@@ -28,6 +28,11 @@
                 </a>
               </li>
               <li class="nav-item">
+                <a th:classappend="${#httpServletRequest.getRequestURI() == '/companies' ? 'active':''}" class="nav-link" sec:authorize="hasRole('STUDENT')" th:href="@{/companies}">
+                  <i th:class="${#httpServletRequest.getRequestURI() == '/companies' ? 'bi bi-briefcase-fill':'bi bi-briefcase'}"></i> New Transaction
+                </a>
+              </li>
+              <li class="nav-item">
                 <a class="nav-link" th:href="@{/console}">
                   <i class="bi bi-terminal"></i> H2 Console
               </a>

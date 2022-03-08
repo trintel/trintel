@@ -16,8 +16,6 @@
 					<th>Buyer</th>
                     <th>Seller</th>
                     <th>Product</th>
-                    <th>Amount</th>
-                    <th>Price per Piece</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -25,8 +23,6 @@
                     <td th:text="${transaction.buyer.name}"></td>
 					<td th:text="${transaction.seller.name}"></td>
                     <td th:text="${transaction.product}"></td>
-                    <td th:text="${transaction.amount}"></td>
-                    <td th:text="${transaction.pricePerPiece}"></td>
 					<td>
 						<a th:href="@{'/transaction/' + ${transaction.id}}" class="icon-link">
 							<p>Show Details</p>

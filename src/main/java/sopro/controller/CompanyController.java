@@ -30,12 +30,6 @@ public class CompanyController {
 // ----------------------------------- ADMIN FUNCTIONS -----------------------------------
 // #######################################################################################
 
-    @GetMapping("/companies")
-    public String listCompanies(Model model) {
-        model.addAttribute("companies", companyRepository.findAll()); //add a list of all companies to the model
-        return "company-list";
-    }
-
     @GetMapping("/companies/add")
     public String addCompany(Model model) {
         Company company = new Company();    //creating a new Company Object to be added to the database
@@ -154,6 +148,22 @@ public class CompanyController {
         return "redirect:/company";
     }
 
-    
+// #########################################################################################
+// ----------------------------------- FUNCTIONS FOR BOTH ----------------------------------
+// #########################################################################################
+
+    //a list of all companies. 
+    //Admins can click on them an get redirected to: TODO list of students in company (reassign)
+    //Admins can add new Companies
+    //Students see only other companies. can click on one to start transaction.
+    @GetMapping("/companies")   
+    public String listCompanies(Model model, @AuthenticationPrincipal User user) {
+        if(user.getRole().equals("ADMIN")) {
+            model.addAttribute("companies", companyRepository.findAll()); //add a list of all companies to the model
+        } else {
+            model.addAttribute("companies", companyRepository.findByIdNot(user.getCompany().getId()));  //add a list of all companies to the model, without the own company.
+        }
+        return "company-list";
+    }
 
 }
