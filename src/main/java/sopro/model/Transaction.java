@@ -26,7 +26,7 @@ public class Transaction {
     @Getter @Setter private Boolean completed = false;
     @Getter @Setter private Boolean shipped = false;
     @Getter @Setter private Boolean confirmed = false;
-    
+
     public Transaction() {}
 
     public Transaction(Company buyer, Company seller) {

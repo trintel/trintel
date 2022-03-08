@@ -12,7 +12,7 @@ a.icon-link:hover { text-decoration: none; }
   justify-content: center;
   height: 100%;
   width: 100%;
-  max-width: 350px;
+  max-width: 380px;
   padding: 15px;
   margin: auto;
 }
@@ -159,4 +159,9 @@ main {
 .btn-primary:hover {
   background-color: #4c5672;
   border-color: #4c5672;
+}
+
+.companylogo-sm {
+  border-radius: .8rem;
+  max-height: 3.5rem;
 }

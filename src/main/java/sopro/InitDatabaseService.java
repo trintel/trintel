@@ -18,38 +18,38 @@ import sopro.repository.UserRepository;
 @Service
 public class InitDatabaseService {
 
-	@Autowired
-	UserRepository userRepository;
-
-	@Autowired
-	CompanyRepository companyRepository;
+    @Autowired
+    UserRepository userRepository;
 
     @Autowired
-	ActionTypeRepository actionTypeRepository;
+    CompanyRepository companyRepository;
 
     @Autowired
-	ActionRepository actionRepository;
+    ActionTypeRepository actionTypeRepository;
 
     @Autowired
-	TransactionRepository transactionRepository;
+    ActionRepository actionRepository;
+
+    @Autowired
+    TransactionRepository transactionRepository;
 
 
     @Autowired
     PasswordEncoder passwordEncoder;
 
-	public void init() {
+    public void init() {
 
-		// If there is no data, add some initial values for testing the application.
-		// ATTENTION: If you change any model (i.e., the data scheme), you most likely
-		// need to delete the .h2 database file in your file system first!
-		
-		if (userRepository.count() == 0 && companyRepository.count() == 0) {
+        // If there is no data, add some initial values for testing the application.
+        // ATTENTION: If you change any model (i.e., the data scheme), you most likely
+        // need to delete the .h2 database file in your file system first!
+
+        if (userRepository.count() == 0 && companyRepository.count() == 0) {
 
             //Create demo Users
             User admin = new User(true, true, true, true, "admin", "admin", "admin@admin", passwordEncoder.encode("password"), null);
             admin.setRole("ADMIN");
             userRepository.save(admin);
-            
+
             //Create demo Companys
             Company company1 = new Company("[187]Strassenbande");
             Company company2 = new Company("Streber GmbH");
@@ -58,9 +58,9 @@ public class InitDatabaseService {
             companyRepository.save(company2);
             companyRepository.save(company3);
 
-            
-			// Create demo Students
-			User student1 = new User(true, true, true, true,"Schniedelus", "Maximilius", "m@m", passwordEncoder.encode("password"), null);
+
+            // Create demo Students
+            User student1 = new User(true, true, true, true,"Schniedelus", "Maximilius", "m@m", passwordEncoder.encode("password"), null);
             student1.setRole("STUDENT");
             User student2 = new User(true, true, true, true,"Speckmann", "Jonas", "j@j", passwordEncoder.encode("password"), company1);
             student2.setRole("STUDENT");
@@ -92,7 +92,7 @@ public class InitDatabaseService {
             transactionRepository.save(transaction1);
             actionRepository.save(trans1Request);
 
-		}
-	}
+        }
+    }
 
 }

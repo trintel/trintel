@@ -2,6 +2,7 @@ plugins {
 	id 'org.springframework.boot' version '2.6.3'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
+    id "com.diffplug.spotless" version "6.3.0"
 }
 
 group = '.'
@@ -54,4 +55,18 @@ tasks.named('test') {
 
 test {
     useJUnitPlatform()
+}
+
+spotless {
+  java {
+    importOrder('java', 'javax', 'org', 'sopro', '')
+    removeUnusedImports()
+    indentWithSpaces(4)
+    trimTrailingWhitespace()
+    endWithNewline()
+
+    custom 'Remove commented-out import statements', {
+      it.replaceAll(/\n\/\/ import .*?;.*/, '')
+    }
+  }
 }
