@@ -47,5 +47,11 @@ public class TransactionController {
         model.addAttribute("actions", actionRepository.findByTransaction(transactionRepository.findById(id).get()));
         return "transaction-view";
     }
+
+    //Hier eine kurzen Controller für Request erstellt aber Model fehlt noch!!!!!
+    @GetMapping("/transaction_request")
+    public String transactionRequest(Model model) {
+        return "transaction_request";
+    }
     
 }

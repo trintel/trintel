@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:include="layout-fullscreen :: page">
+
+<head>
+    <title th:fragment="title">TITEL</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+<body>
+    <th:block th:fragment="content">
+        <style th:replace="fragments/small-content :: content"></style>
+        <main class="form-small">
+            <h1 class="mb-4" th:text="#{request}"></h1>
+            <form action="#" th:action="@{/signup/student}" th:object="${user}" method="post">
+                <div class="form-group">
+
+
+                    <!-- Variante 1 mit Drop down menu -->
+                    <div class="dropdown form-floating">
+                        <button class="w-100 mb-3 btn btn-lg btn-secondary dropdown-toggle" type="button" id="dropdo"
+                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a th:text=" #{company}"></a>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdo">
+                            <li class="dropdown-item">Company</li>
+                            <li class="dropdown-item">Another Company</li>
+                            <li class="dropdown-item">Another new Company</li>
+                            <li class="dropdown-item">Another ultra new Company</li>
+                            <li class="dropdown-item">Another hyper ultra new Company</li>
+
+                            <li class="dropdown-item" th:each="company : ${companies}">
+                                <div th:text="${company.name}"></div>
+                            </li>
+
+                            <table>
+                                <tr th:each="company : ${companies}">
+                                    <td th:text="${company.name"></td>
+                                </tr>
+                            </table>
+                        </ul>
+                    </div>
+                </div>
+
+
+                <!-- Variante 2 mit collapse -->
+                <p>
+                    <button class="w-100 mb-3 btn btn-lg btn-secondary" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                        Button with data-bs-target
+                    </button>
+                </p>
+                <div class="collapse" id="collapseExample">
+                    <!-- Hier fehlt noch das Model vom Backend! -->
+                    <!-- <div th:unless="${companies.isEmpty()}"> -->
+                    <div class="card card-body">
+
+                        <li class="dropdown-item">Company</li>
+                        <li class="dropdown-item">Another Company</li>
+                        <li class="dropdown-item">Another new Company</li>
+                        <li class="dropdown-item">Another ultra new Company</li>
+                        <li class="dropdown-item">Another hyper ultra new Company</li>
+
+                        <div class="card mb-3" th:each="company : ${companies}">
+                            <div class="card-body d-lg-flex">
+
+                                <h5 class="card-title" th:text="${company.name}"></h5>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                </div>
+                </div>
+
+                <!-- <p th:if="${companies.isEmpty()}" th:text="#{noCompaniesFound}"></p> -->
+
+                <div class="d-flex">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="reqProduct" placeholder="product"
+                            name="Request_Product" required autofocus>
+                        <label for="floatingReqProduct" th:text="#{product}"></label>
+                    </div>
+                    <div class="form-floating mb-3 ms-3">
+                        <input type="number" class="form-control" id="reqAmount" placeholder="amount"
+                            name="Request_Amount" required>
+                        <label for="floatingReqAmount" th:text="#{amount}"></label>
+                    </div>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="reqText" placeholder="text" name="Request_Text"
+                        required>
+                    <label for="floatingReqText" th:text="#{text}"></label>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="w-100 btn btn-lg btn-primary">
+                        <a th:text=" #{send}"></a></button>
+                </div>
+            </form>
+        </main>
+    </th:block>
+</body>
+
+</html>

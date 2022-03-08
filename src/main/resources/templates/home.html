@@ -2,22 +2,28 @@
 <html xmlns:th="http://www.thymeleaf.org" th:include="layout :: page">
 
 <head>
-	<th:block th:fragment="title"><title>Home - Trintel</title></th:block>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+   <th:block th:fragment="title">
+      <title>Home - Trintel</title>
+   </th:block>
+   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 
-   <body>
-      <th:block th:fragment="content">
-         <h1>Trintel Home Page</h1>
-         <div sec:authorize="hasRole('ADMIN')">Text visible to user.</div>
-         <div sec:authorize="isAuthenticated()">
-            Text visible only to authenticated users.
-        </div>
-        Authenticated username:
-        <div sec:authentication="name"></div>
-        Authenticated user roles:
-        <div sec:authentication="principal.authorities"></div>
+<body>
+   <th:block th:fragment="content">
+      <h1>Trintel Home Page</h1>
+      <div sec:authorize="hasRole('ADMIN')">Text visible to user.</div>
+      <div sec:authorize="isAuthenticated()">
+         Text visible only to authenticated users.
+      </div>
+      Authenticated username:
+      <div sec:authentication="name"></div>
+      Authenticated user roles:
+      <div sec:authentication="principal.authorities"></div>
+      <a th:href="@{transaction_request}">
+         <button type="submit">Debug Request</button>
+      </a>
+      
    </th:block>
-   </body>
-   
+</body>
+
 </html>
