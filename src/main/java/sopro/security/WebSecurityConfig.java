@@ -13,15 +13,15 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-	/**
-	 * add the new UserDetailsService as a Bean, so Spring knows it
-	 * @return UserDetailsService
-	 */
-	@Bean
-	@Override
-	public UserDetailsService userDetailsService() {
-		return new CustomUserDetailsService();
-	}
+    /**
+     * add the new UserDetailsService as a Bean, so Spring knows it
+     * @return UserDetailsService
+     */
+    @Bean
+    @Override
+    public UserDetailsService userDetailsService() {
+        return new CustomUserDetailsService();
+    }
 
     /**
      * Password Encoder.
@@ -32,51 +32,51 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-	
-	/**
-	 * Configure which role can access what pages. 
-	 * Also works with annotations in the controllers. (https://www.baeldung.com/spring-security-method-security)
-	 * 
-	 * @param http
-	 * @throws Exception
-	 */
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-        http.headers().frameOptions().disable();
-		http
-			.authorizeRequests()
-				.antMatchers(
-					"/console/**", 
-					"/signup/**",
-					"/webjars/**",
-					"/css/*",
-					"/img/*",
-					"/login/**",
-					"/verify-your-email",
-					"/registrationConfirm/**").permitAll() // permit all to access those Mathes
-				.antMatchers("/companies/**").hasRole("ADMIN") // restrict to only ADMIN role is able to access /companies/* 
-				.antMatchers("/company/**").hasRole("STUDENT") // restrict to only STUDENT role is able to access /company
 
-				// .antMatchers("/console/**").hasRole("ADMIN") // restrict to only ADMIN role is able to access /console
-				.anyRequest().authenticated()
-				.and()
-			.formLogin()
-				.loginPage("/login").defaultSuccessUrl("/home", true)
-				.permitAll()
-				.and()
-			.logout()
-				.permitAll();
-		http.csrf().ignoringAntMatchers("/console/**")
-        	.and().headers().frameOptions().sameOrigin();
-	}
-    
-    /** 
+    /**
+     * Configure which role can access what pages.
+     * Also works with annotations in the controllers. (https://www.baeldung.com/spring-security-method-security)
+     *
+     * @param http
+     * @throws Exception
+     */
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.headers().frameOptions().disable();
+        http
+            .authorizeRequests()
+                .antMatchers(
+                    "/console/**",
+                    "/signup/**",
+                    "/webjars/**",
+                    "/css/*",
+                    "/img/*",
+                    "/login/**",
+                    "/verify-your-email",
+                    "/registrationConfirm/**").permitAll() // permit all to access those Mathes
+                .antMatchers("/companies/**").hasRole("ADMIN") // restrict to only ADMIN role is able to access /companies/*
+                .antMatchers("/company/**").hasRole("STUDENT") // restrict to only STUDENT role is able to access /company
+
+                // .antMatchers("/console/**").hasRole("ADMIN") // restrict to only ADMIN role is able to access /console
+                .anyRequest().authenticated()
+                .and()
+            .formLogin()
+                .loginPage("/login").defaultSuccessUrl("/home", true)
+                .permitAll()
+                .and()
+            .logout()
+                .permitAll();
+        http.csrf().ignoringAntMatchers("/console/**")
+            .and().headers().frameOptions().sameOrigin();
+    }
+
+    /**
      * @param auth
      * @throws Exception
      */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		//inject our new userDetailsService and add the password encoder
+        //inject our new userDetailsService and add the password encoder
         auth.userDetailsService(userDetailsService()).passwordEncoder(passwordEncoder());
     }
 

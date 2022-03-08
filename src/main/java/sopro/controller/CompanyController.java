@@ -1,10 +1,8 @@
 package sopro.controller;
 
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,7 +23,7 @@ public class CompanyController {
 
     @Autowired
     UserRepository userRepository;
-    
+
 // #######################################################################################
 // ----------------------------------- ADMIN FUNCTIONS -----------------------------------
 // #######################################################################################
@@ -33,16 +31,16 @@ public class CompanyController {
     @GetMapping("/companies/add")
     public String addCompany(Model model) {
         Company company = new Company();    //creating a new Company Object to be added to the database
-        model.addAttribute("company", company); 
+        model.addAttribute("company", company);
         return "company-create";
     }
 
     @PostMapping("/companies/save")
     public String saveCompany(@Valid Company company, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
-			model.addAttribute("company", company);
-			return "company-create";
-		}
+            model.addAttribute("company", company);
+            return "company-create";
+        }
         companyRepository.save(company);    //saves the new Company
         return "redirect:/companies";
     }
@@ -88,7 +86,7 @@ public class CompanyController {
         return "company-info";
     }
 
-    
+
 // #########################################################################################
 // ----------------------------------- STUDENT FUNCTIONS -----------------------------------
 // #########################################################################################
@@ -101,13 +99,13 @@ public class CompanyController {
 
     @GetMapping("/company/select/{id}")
     public String joinCompany(@PathVariable Long id, Model model) {
-        
+
         model.addAttribute("company", companyRepository.findById(id).get());
 
         return "company-view";
     }
 
-    @PostMapping("/company/join") 
+    @PostMapping("/company/join")
     public String joinCompany2(String companyName, @AuthenticationPrincipal User user, Model model) {
 
         // // //TODO schöner lösen
@@ -115,7 +113,7 @@ public class CompanyController {
         //      return "redirect:/home";
         // }
         user.setCompany(companyRepository.findByName(companyName));  //set the company of that user.
-        
+
         userRepository.save(user);
 
         return "redirect:/home";
@@ -140,8 +138,8 @@ public class CompanyController {
     public String saveOwnCompany(@Valid Company company, BindingResult bindingResult, @AuthenticationPrincipal User user, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("company", company);
-			return "company-edit";
-		}
+            return "company-edit";
+        }
         company.setId(user.getCompany().getId());                           //set the id of new Company-Object to the old id
         companyRepository.save(company);                                    //old company get overwritten, since id is primary key
 
@@ -152,18 +150,18 @@ public class CompanyController {
 // ----------------------------------- FUNCTIONS FOR BOTH ----------------------------------
 // #########################################################################################
 
-    //a list of all companies. 
+    //a list of all companies.
     //Admins can click on them an get redirected to: TODO list of students in company (reassign)
     //Admins can add new Companies
     //Students see only other companies. can click on one to start transaction.
-    @GetMapping("/companies")   
+    @GetMapping("/companies")
     public String listCompanies(Model model, @AuthenticationPrincipal User user) {
         if(user.getRole().equals("ADMIN")) {
             model.addAttribute("companies", companyRepository.findAll()); //add a list of all companies to the model
         } else {
-            model.addAttribute("companies", companyRepository.findByIdNot(user.getCompany().getId()));  //add a list of all companies to the model, without the own company.
+            model.addAttribute("companies", companyRepository.findByIdNot(user.getCompany().getId()));
+        //add a list of all companies to the model, without the own company.
         }
         return "company-list";
     }
-
 }

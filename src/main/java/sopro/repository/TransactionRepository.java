@@ -11,4 +11,3 @@ public interface TransactionRepository extends CrudRepository<Transaction, Long>
     List<Transaction> findByBuyer(Company buyer);
     List<Transaction> findBySeller(Company seller);
 }
-

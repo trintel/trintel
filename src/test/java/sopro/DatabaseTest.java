@@ -1,5 +1,7 @@
 package sopro;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +12,6 @@ import sopro.model.Company;
 import sopro.model.User;
 import sopro.repository.CompanyRepository;
 import sopro.repository.UserRepository;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -32,7 +33,7 @@ public class DatabaseTest {
 
     /**
      * Creates a User and a Company in the database.
-     * 
+     *
      * @throws Exception
      */
     @BeforeEach
@@ -47,7 +48,7 @@ public class DatabaseTest {
 
     /**
      * Checks if a created user is really saved in database.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -57,7 +58,7 @@ public class DatabaseTest {
 
     /**
      * Checks if the craeted user is assigned to the right company.
-     * 
+     *
      * @throws Exception
      */
     @Test

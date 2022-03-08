@@ -3,14 +3,14 @@ package sopro.model;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.Entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.validation.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 public class Company {
@@ -20,10 +20,10 @@ public class Company {
     @Getter @Setter	@JsonIgnore	@OneToMany(mappedBy = "company", cascade = CascadeType.ALL) private List<User> students;
 
     public Company(){}
-    
+
     public Company(String name){
        this.name = name;
        this.students = new ArrayList<User>();
        this.description = "";
-    }  
+    }
 }
