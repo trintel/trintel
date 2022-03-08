@@ -69,15 +69,15 @@ public class CompanyController {
         return "students-list";
     }
 
-    @GetMapping("/student/{id}/reasign")
+    @GetMapping("/student/{id}/reassign")
     public String editStudent(Model model, @PathVariable Long id) {
         User student = userRepository.findById(id).get();
         model.addAttribute("companies", companyRepository.findByIdNot(student.getCompany().getId())); //get all companies except for the current one
         model.addAttribute("studentID", id);                  //add the student id to the model (for post-request navigation)
-        return "student-reasign";
+        return "student-reassign";
     }
 
-    @PostMapping("/student/{id}/reasign")
+    @PostMapping("/student/{id}/reassign")
     public String moveToCompany(String companyName, @PathVariable Long id, Model model) {
         User user = userRepository.findById(id).get();      //find the student to be editet
         Company company2 = companyRepository.findByName(companyName);   //find the new company
