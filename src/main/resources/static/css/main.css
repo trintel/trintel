@@ -143,3 +143,8 @@ input {
 main {
   border-radius: 0.8rem;
 }
+
+.companylogo-sm {
+  border-radius: .8rem;
+  max-height: 3.5rem;
+}
