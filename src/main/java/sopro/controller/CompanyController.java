@@ -4,6 +4,7 @@ package sopro.controller;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -46,6 +47,15 @@ public class CompanyController {
         return "redirect:/companies";
     }
 
+    //TODO Rechte einschränken
+    @PostMapping("/companies/delete/{companyID}")
+    public String deleteCompany(@PathVariable Long companyID, Model model) {
+
+        companyRepository.deleteById(companyID);
+
+        return "redirect:/companies";
+    }
+
     @GetMapping("/students")
     public String listAllStudents(Model model) {
         model.addAttribute("students", userRepository.findByRole("STUDENT")); //list all students
@@ -53,21 +63,29 @@ public class CompanyController {
         return "students-list";
     }
 
-    @GetMapping("/student/{id}/reasign")
+    @GetMapping("/student/{id}/reassign")
     public String editStudent(Model model, @PathVariable Long id) {
         User student = userRepository.findById(id).get();
         model.addAttribute("companies", companyRepository.findByIdNot(student.getCompany().getId())); //get all companies except for the current one
         model.addAttribute("studentID", id);                  //add the student id to the model (for post-request navigation)
-        return "student-reasign";
+        return "student-reassign";
     }
 
-    @PostMapping("/student/{id}/reasign")
+    @PostMapping("/student/{id}/reassign")
     public String moveToCompany(String companyName, @PathVariable Long id, Model model) {
         User user = userRepository.findById(id).get();      //find the student to be editet
         Company company2 = companyRepository.findByName(companyName);   //find the new company
         user.setCompany(company2);
         userRepository.save(user);
         return "redirect:/students";
+    }
+
+    //TODO Rechte einschränken
+    @GetMapping("/companies/{companyID}")
+    public String viewCompany(@PathVariable Long companyID, Model model) {
+        model.addAttribute("company", companyRepository.findById(companyID).get());
+
+        return "company-info";
     }
 
     
@@ -107,9 +125,7 @@ public class CompanyController {
     @GetMapping("/company")
     public String viewOwnCompany(Model model, @AuthenticationPrincipal User user) {
 
-        model.addAttribute("company", companyRepository.findById(user.getCompany().getId()).get());
-
-        return "company-info";
+        return "redirect:/companies/" + user.getCompany().getId();
     }
 
     @GetMapping("/company/edit")
