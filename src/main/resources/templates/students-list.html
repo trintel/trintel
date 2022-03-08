@@ -9,7 +9,7 @@
 <body>
 	<th:block th:fragment="content">
 		<h1 th:text="#{students}"></h1>
-		<p>Manage all students in the database. </p>
+		<p th:text="#{sldescr}"></p>
 
 		<div th:unless="${students.isEmpty()}">
 			<div class="card mb-3" th:each="student : ${students}">
