@@ -145,6 +145,7 @@ public class LoginTest {
         mockMvc
                 .perform(get("/signup/admin"))
                 .andExpect(status().isOk());
+                
     }
 
 }
