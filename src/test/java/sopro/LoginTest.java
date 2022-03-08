@@ -23,6 +23,7 @@ public class LoginTest {
     @Autowired
     private MockMvc mockMvc;
 
+
     /**
      * Tests, if the login screen is served on /login.
      * 
@@ -101,7 +102,7 @@ public class LoginTest {
     @Test
     public void testInvalidLoginDenied() throws Exception {
         mockMvc
-                .perform(formLogin().password("dasisteinpasswort"))
+                .perform(formLogin().SSpassword("dasisteinpasswort"))
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl("/login?error"))
                 .andExpect(unauthenticated());
@@ -124,28 +125,30 @@ public class LoginTest {
     }
 
     /**
-     * Test if the Sign Up page is reachable for the Students.
+     * Test if the Sign Up page is forwarded to the login page for the Students.
      * 
      * @throws Exception
      */
     @Test
-    public void testSignupPageForStudents() throws Exception {
+    public void testSignupPageStudentIsNotAvailableWithoutInviteLink() throws Exception {
         mockMvc
                 .perform(get("/signup/student"))
-                .andExpect(status().isOk());
+                .andExpect(status().is(302))
+                .andExpect(redirectedUrl("/login"));
     }
 
     /**
-     * Test if the Sign Up page is reachable for the Admins.
+     * Test if the Sign Up page is forwarded to the login page for the admin.
      * 
      * @throws Exception
      */
     @Test
-    public void testSignupPageForAdmin() throws Exception {
+    public void testSignupPageAdminIsNotAvailableWithoutInviteLink() throws Exception {
         mockMvc
                 .perform(get("/signup/admin"))
-                .andExpect(status().isOk());
-                
+                .andExpect(status().is(302))
+                .andExpect(redirectedUrl("/login"));
+
     }
 
 }
