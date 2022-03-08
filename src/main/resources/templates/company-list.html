@@ -2,32 +2,42 @@
 <html xmlns:th="http://www.thymeleaf.org" th:include="layout :: page">
 
 <head>
-	<th:block th:fragment="title"><title>Companies - Trintel</title></th:block>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<th:block th:fragment="title">
+		<title>Companies - Trintel</title>
+	</th:block>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 
 <body>
 	<th:block th:fragment="content">
-		<h1>Companies</h1>
-		<p>Manage all companies in the database. Add new companies with the button at the bottom.</p>
-		<table th:unless="${companies.isEmpty()}">
-			<thead>
-				<tr>
-					<th>Company</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="company : ${companies}">
-					<td th:text="${company.name}"></td>
-				</tr>
-			</tbody>
-		</table>
+		<h1 th:text="#{companies}"></h1>
+		<p th:text="#{cldescr}"></p>
+		<div th:unless="${companies.isEmpty()}">
+			<div class="card mb-3" th:each="company : ${companies}">
+				<div class="card-body d-lg-flex">
+					<div class="col d-flex align-items-center">
+						<img style="max-height: 5rem" th:src="@{/img/onlyicon.png}" />
+						<div>
+							<h5 class="card-title" th:text="${company.name}"></h5>
+							<p class="card-text" th:text="${company.description}"></p>
+						</div>
+					</div>
+					<div class="col mt-3 mt-md-0">
+						<div class="float-lg-end">
+							<a href="#" class="btn btn-light me-1"><i class="bi bi-pencil-square"></i> <label th:text="#{edit}" /></a>
+							<a href="#" class="btn btn-light"><i class="bi bi-three-dots"></i> <label th:text="#{details}" /></a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 
-		<p th:if="${companies.isEmpty()}">No Companies found.</p>
+		<p th:if="${companies.isEmpty()}" th:text="#{noCompaniesFound}"></p>
 
-		<a th:href="@{companies/add}">
-			<button class="btn btn-success">Add company</button>
-		</a>
+		<div class="d-flex justify-content-center">
+		<a class="btn btn-primary btn-lg" th:href="@{companies/add}" th:text="#{registerCompany}"></a>
+	</div>
 	</th:block>
 </body>
+
 </html>
