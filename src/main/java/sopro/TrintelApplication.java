@@ -27,28 +27,29 @@ public class TrintelApplication implements CommandLineRunner {
 		StringBuilder sb1 = new StringBuilder();
 		StringBuilder sb2 = new StringBuilder();
 		Random random = new Random();
-		for(int i = 0; i < 25; i++) {
+		for (int i = 0; i < 25; i++) {
 			// generate random index number
 			int index1 = random.nextInt(alphabet.length());
 			int index2 = random.nextInt(alphabet.length());
-	  
+
 			// get character specified by index
 			// from the string
 			char randomChar1 = alphabet.charAt(index1);
 			char randomChar2 = alphabet.charAt(index2);
-	  
+
 			// append the character to string builder
 			sb1.append(randomChar1);
 			sb2.append(randomChar2);
-		  }
-	  
-		  ADMIN_LOGIN_URL = sb1.toString();
-		  STUDENT_LOGIN_URL = sb2.toString();
+		}
+
+		ADMIN_LOGIN_URL = sb1.toString();
+		STUDENT_LOGIN_URL = sb2.toString();
 
 		// System.setProperty("spring.devtools.restart.enabled", "true");
 		SpringApplication.run(TrintelApplication.class, args);
 		logger.info("The registration URL for ADMINS is: 		/signup/" + ADMIN_LOGIN_URL);
 		logger.info("The registration URL for STUDENTS is: 		/signup/" + STUDENT_LOGIN_URL);
+	}
 
 	@Override
 	public void run(String... arg0) throws Exception {
