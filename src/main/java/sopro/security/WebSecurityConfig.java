@@ -43,18 +43,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.headers().frameOptions().disable();
-		http
-			.authorizeRequests()
-				.antMatchers(
-					"/console/**", 
-					"/signup/**",
-					"/webjars/**",
-					"/css/*",
-					"/img/*",
-					"/login/**",
-					"/verify-your-email",
-					"/registrationConfirm/**").permitAll() // permit all to access those Mathes
-				.antMatchers("/companies/**").hasAnyRole("ADMIN", "STUDENT") // TODO: differentiate access of those two roles
+        http
+            .authorizeRequests()
+                .antMatchers(
+                    "/console/**",
+                    "/signup/**",
+                    "/webjars/**",
+                    "/css/*",
+                    "/img/*",
+                    "/login/**",
+                    "/verify-your-email",
+                    "/registrationConfirm/**").permitAll() // permit all to access those Mathes
+                .antMatchers("/companies/**").hasAnyRole("ADMIN", "STUDENT") // TODO: differentiate access of those two roles
 
                 // .antMatchers("/console/**").hasRole("ADMIN") // restrict to only ADMIN role is able to access /console
                 .anyRequest().authenticated()
