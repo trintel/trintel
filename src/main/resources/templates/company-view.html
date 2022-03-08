@@ -13,15 +13,13 @@
             <h3 class="mb-3" th:text="${company.name}"></h3>
             <form action="#" th:action="@{/company/join}" method="post">
                 <input type="hidden" th:value="${company.name}" th:attr="name='companyName'" />
-                <h5 class="mb-3" th:text="#{members}"></h5>
-                <div class="card mb-3" th:unless="${company.getStudents().isEmpty()}">
-                    <div class="text m-2 align-items-auto" th:each="student : ${company.getStudents()}">
-                        <div th:unless="${company.getStudents().isEmpty()}">
-                            <p class="card-text" th:text="${student.forename} + ' ' + ${student.surname}"></p>
-                        </div>
-                    </div>
-                </div>
-                <p th:if="${company.getStudents().isEmpty()}" th:text="#{noMembers}"></p>
+                <h5 class="mb-3" th:text="#{members}" th:unless="${company.getStudents().isEmpty()}"></h5>
+                <ul class="list-group mb-3" th:unless="${company.getStudents().isEmpty()}">
+                    <li class="list-group-item" th:text="${student.forename} + ' ' + ${student.surname}"
+                        th:each="student : ${company.getStudents()}"></li>
+                </ul>
+                <p class="alert alert-secondary" role="alert" th:if="${company.getStudents().isEmpty()}"
+                    th:text="#{noMembers}"></p>
                 <div class="form-group">
                     <button type="submit" class="w-100 btn btn-lg btn-primary">
                         <a th:text="#{join}"></a>
