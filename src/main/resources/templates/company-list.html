@@ -14,18 +14,27 @@
 			<thead>
 				<tr>
 					<th>Company</th>
+					<th>Action</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr th:each="company : ${companies}">
 					<td th:text="${company.name}"></td>
+					<td>
+						<a sec:authorize="hasRole('STUDENT')" th:href="@{'/transaction/' + ${company.id}} + '/create'" class="icon-link">
+							<p>Create transaction</p>
+						</a>
+						<a sec:authorize="hasRole('ADMIN')" th:href="@{'/company/select/' + ${company.id}}" class="icon-link">	 <!-- TODO link ist provisorisch -->
+							<p>View Company Details</p>
+						</a>
+					</td>
 				</tr>
 			</tbody>
 		</table>
 
 		<p th:if="${companies.isEmpty()}">No Companies found.</p>
 
-		<a th:href="@{companies/add}">
+		<a th:href="@{companies/add}" sec:authorize="hasRole('ADMIN')">
 			<button class="btn btn-success">Add company</button>
 		</a>
 	</th:block>

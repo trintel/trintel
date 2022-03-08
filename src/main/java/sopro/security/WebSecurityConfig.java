@@ -46,7 +46,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http
 			.authorizeRequests()
 				.antMatchers("/console/**", "/signup/**","/webjars/**", "/css/*", "/img/*", "/login/**").permitAll() // permit all to access those Mathes
-				.antMatchers("/companies/**").hasRole("ADMIN") // restrict to only ADMIN role is able to access /companies/* 
+				.antMatchers("/companies/add/**").hasRole("ADMIN")
+				// .antMatchers("/companies/**").hasRole("ADMIN") // restrict to only ADMIN role is able to access /companies/* // "/companies" is overloaded for admins and students
 				.antMatchers("/company/**").hasRole("STUDENT") // restrict to only STUDENT role is able to access /company
 
 				// .antMatchers("/console/**").hasRole("ADMIN") // restrict to only ADMIN role is able to access /console

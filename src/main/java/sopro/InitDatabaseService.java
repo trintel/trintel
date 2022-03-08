@@ -77,16 +77,18 @@ public class InitDatabaseService {
             //Create demo Action_types
             ActionType request = new ActionType("Request", "Demo request text.");
             ActionType offer = new ActionType("Offer", "Demo offer text.");
+            ActionType accept = new ActionType("Accept", "Demo offer text.");
 
             Transaction transaction1 = new Transaction(company1, company2);
 
             Action trans1Request = new Action("Test message", request, transaction1);
             transaction1.setProduct("Product 1");
-            transaction1.setAmount(10);
-            transaction1.setPricePerPiece(0.5);
+            trans1Request.setAmount(10);
+            trans1Request.setPricePerPiece(0.5);
 
             actionTypeRepository.save(request);
             actionTypeRepository.save(offer);
+            actionTypeRepository.save(accept);
             transactionRepository.save(transaction1);
             actionRepository.save(trans1Request);
 
