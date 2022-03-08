@@ -35,7 +35,7 @@
 				</tr>
 			</tbody>
 		</table>
-		<div th:unless="${transactions.isEmpty()}">
+		<!-- <div th:unless="${transactions.isEmpty()}">
 			<div class="card mb-3" th:each="transaction: ${transactions}">
 				<div class="card-body d-lg-flex">
 					<div class="col d-flex align-items-center">
@@ -52,7 +52,7 @@
 					</div>
 				</div>
 			</div>
-		</div>
+		</div> -->
 		<p th:if="${transactions.isEmpty()}">No Transactions found.</p>
 	</th:block>
 </body>
