@@ -23,14 +23,12 @@ public class DatabaseTest {
     CompanyRepository companyRepository;
 
     private User user;
-
     private Company company;
 
     String forename = "forename";
     String lastname = "lastname";
     String email = "email@email.com";
     String password = "password";
-
 
     /**
      * Creates a User and a Company in the database.
@@ -56,17 +54,14 @@ public class DatabaseTest {
     public void isUserInDatabase() throws Exception {
         assertEquals(user, userRepository.findById(user.getId()).get()); // .get(): optional<User> in User
     }
-    
-    /** 
+
+    /**
      * Checks if the craeted user is assigned to the right company.
+     * 
+     * @throws Exception
      */
     @Test
     public void isUserInCompany() throws Exception {
-        assertEquals(company,userRepository.findByEmail(email).getCompany());
+        assertEquals(company, userRepository.findByEmail(email).getCompany());
     }
-
-    
- 
-
-
 }

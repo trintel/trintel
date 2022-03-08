@@ -49,7 +49,8 @@ public class LoginTest {
     }
 
     /**
-     * Test if the Logout of the Admin works and if the admin is redirected to the login page
+     * Test if the Logout of the Admin works and if the admin is redirected to the
+     * login page
      *
      * @throcpti
      */
@@ -68,7 +69,8 @@ public class LoginTest {
      * @throws Exception
      */
     @Test
-    @WithMockUser(username = "student@student", roles = { "STUDENT" }) // Erstellt User ohne die Daternbank zu verwenden.
+    @WithMockUser(username = "student@student", roles = { "STUDENT" }) // Erstellt User ohne die Daternbank zu
+                                                                       // verwenden.
     public void studentCanNotSeeCompanies() throws Exception {
         mockMvc
                 .perform(get("/companies"))
@@ -76,7 +78,8 @@ public class LoginTest {
     }
 
     /**
-     * Test if the Logout of the Student works and he is redirected to the Login Page
+     * Test if the Logout of the Student works and he is redirected to the Login
+     * Page
      * 
      * @throws Exception
      */
@@ -98,7 +101,7 @@ public class LoginTest {
     @Test
     public void testInvalidLoginDenied() throws Exception {
         mockMvc
-                .perform(formLogin().password("dasisteinpasswort"))  
+                .perform(formLogin().password("dasisteinpasswort"))
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl("/login?error"))
                 .andExpect(unauthenticated());
@@ -143,6 +146,5 @@ public class LoginTest {
                 .perform(get("/signup/admin"))
                 .andExpect(status().isOk());
     }
-
 
 }
