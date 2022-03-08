@@ -44,7 +44,7 @@ import org.aspectj.lang.annotation.Before;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 
 
-@SpringBootTest
+@SpringBootTest(classes = SpringSecurityWebAuxTestConfig.class)
 @AutoConfigureMockMvc
 public class CompanyTest {
 
@@ -57,9 +57,6 @@ public class CompanyTest {
 
     @Autowired
     ObjectMapper objectMapper;
-
-    private MockHttpServletRequestBuilder builder;
-    private final ServletContext servletContext = new MockServletContext();
 
 
     String companyName = "NewComp";
@@ -116,15 +113,8 @@ public class CompanyTest {
      * @throws Exception
      */
     @Test
-    @WithMockUser(username = "student@student", roles = { "STUDENT" })
+    @WithUserDetails("m@m")
     public void studentJoinCompany() throws Exception{
-        User user = new User("student", "student","student@student", "password", null);
-
-       // this.builder = new MockHttpServletRequestBuilder(HttpMethod.POST, "/company/join");
-        this.builder.principal((Principal) user);
-        this.builder.param("companyName", companyName);
-
-        MockHttpServletRequest request = this.builder.buildRequest(this.servletContext);
 
         mockMvc.perform(get("/company/select"))
                .andExpect(status().is(200))
@@ -137,7 +127,7 @@ public class CompanyTest {
                .andExpect(status().isOk());
 
 
-        mockMvc.perform(post("/company/join").content(objectMapper.writeValueAsString(user)).param("companyName", companyName).with(csrf()))
+        mockMvc.perform(post("/company/join").param("companyName", companyName).with(csrf()))
                .andExpect(status().is(302))
                .andExpect(redirectedUrl("/home"));
                    
