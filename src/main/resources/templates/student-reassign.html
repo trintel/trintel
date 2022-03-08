@@ -5,11 +5,11 @@
 	<title>Reassign student</title>
 </head>
 <body>
-    <form action="#" th:action="@{'/student/' + ${studentID} + '/reasign'}" method="post">
+    <form action="#" th:action="@{'/student/' + ${studentID} + '/reassign'}" method="post">
             <select name="companyName">
                 <option th:each="company : ${companies}" th:text="${company.name}">
             </select>
-            <input type="submit" value="Reasign" />
+            <input type="submit" value="Reassign" />
     </form>
 
 </body>

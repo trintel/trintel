@@ -1,40 +1,37 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" th:include="layout :: page">
 
 <head>
-	<title>Students</title>
+	<title th:text="#{students}" th:fragment="title"></title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 </head>
 
 <body>
-	<div>
-		<h2>Students</h2>
+	<th:block th:fragment="content">
+		<h1 th:text="#{students}"></h1>
 		<p>Manage all students in the database. </p>
 
-		<table th:unless="${students.isEmpty()}">
-			<thead>
-				<tr>
-					<th>Forename</th>
-                    <th>Surname</th>
-					<th>Name of Company</th>
-					<th>Options</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="student : ${students}">
-					<td th:text="${student.forename}"></td>
-                    <td th:text="${student.surname}"></td>
-					<td th:text="${student.getCompany().getName()}"></td>
-					<td>
-						<a th:href="@{'/student/' + ${student.id} + '/reasign'}">
-							Reassign
-						</a>
-					</td>
-				</tr>
-			</tbody>
-		</table>
+		<div th:unless="${students.isEmpty()}">
+			<div class="card mb-3" th:each="student : ${students}">
+				<div class="card-body d-lg-flex">
+					<div class="col d-flex align-items-center">
+						<div>
+							<h5 class="card-title" th:text="${student.forename} + ' ' + ${student.surname}"></h5>
+							<p class="card-text" th:text="${student.getCompany().getName()}"></p>
+						</div>
+					</div>
+					<div class="col mt-3 mt-lg-0">
+						<div class="float-lg-end">
+							<a th:href="@{'/student/' + ${student.id} + '/reassign'}" class="btn btn-light"><i class="bi bi-arrow-left-right"></i>
+							<label th:text="#{reassign}" /></a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 
 		<p th:if="${students.isEmpty()}">No students found.</p>
 
-	</div>
+	</th:block>
 </body>
 </html>
