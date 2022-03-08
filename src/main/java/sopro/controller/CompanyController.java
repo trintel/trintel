@@ -4,6 +4,7 @@ package sopro.controller;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -52,6 +53,15 @@ public class CompanyController {
         return "redirect:/companies";
     }
 
+    //TODO Rechte einschränken
+    @PostMapping("/companies/delete/{companyID}")
+    public String deleteCompany(@PathVariable Long companyID, Model model) {
+
+        companyRepository.deleteById(companyID);
+
+        return "redirect:/companies";
+    }
+
     @GetMapping("/students")
     public String listAllStudents(Model model) {
         model.addAttribute("students", userRepository.findByRole("STUDENT")); //list all students
@@ -74,6 +84,14 @@ public class CompanyController {
         user.setCompany(company2);
         userRepository.save(user);
         return "redirect:/students";
+    }
+
+    //TODO Rechte einschränken
+    @GetMapping("/companies/{companyID}")
+    public String viewCompany(@PathVariable Long companyID, Model model) {
+        model.addAttribute("company", companyRepository.findById(companyID).get());
+
+        return "company-info";
     }
 
     
@@ -113,9 +131,7 @@ public class CompanyController {
     @GetMapping("/company")
     public String viewOwnCompany(Model model, @AuthenticationPrincipal User user) {
 
-        model.addAttribute("company", companyRepository.findById(user.getCompany().getId()).get());
-
-        return "company-info";
+        return "redirect:/companies/" + user.getCompany().getId();
     }
 
     @GetMapping("/company/edit")
