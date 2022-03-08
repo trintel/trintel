@@ -1,5 +1,6 @@
 package sopro;
 
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -11,30 +12,42 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
+import sopro.model.Company;
+import sopro.repository.CompanyRepository;
+
 @SpringBootTest
 @AutoConfigureMockMvc
 public class CompanyTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+        @Autowired
+        private MockMvc mockMvc;
 
-    /**
-     * Tests, if the Company screen is served on /myCompany.
-     *
-     * @throws Exception
-     */
-    @Test
-    @WithMockUser(username = "admin@admin", roles = { "ADMIN" })
-    public void adminAddCompany() throws Exception {
-        mockMvc.perform(get("/companies"))
-                .andExpect(status().is(200));
+        @Autowired
+        CompanyRepository companyRepository;
+        String companyName = "NewComp";
 
-        mockMvc.perform(get("/companies/add"))
-                .andExpect(status().is(200));
+        /**
+         * Tests, if the the admin can add a company.
+         *
+         * @throws Exception
+         */
+        @Test
+        @WithMockUser(username = "admin@admin", roles = { "ADMIN" })
+        public void adminAddCompany() throws Exception {
+                Company testCompany = companyRepository.findByName(companyName);
+                if (testCompany != null) {
+                        companyRepository.delete(testCompany);
 
-        mockMvc.perform(post("/companies/save").param("name", "187Comp.").with(csrf()))
-                .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/companies"))
-                .andExpect(status().isFound());
-    }
+                }
+
+                mockMvc.perform(get("/companies/add"))
+                                .andExpect(status().is(200));
+
+                mockMvc.perform(post("/companies/save").param("name", companyName).with(csrf()))
+                                .andExpect(status().isFound())
+                                .andExpect(redirectedUrl("/companies"))
+                                .andExpect(status().isFound());
+
+                assertNotEquals(null, companyRepository.findByName(companyName));
+        }
 }
