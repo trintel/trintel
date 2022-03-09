@@ -8,53 +8,39 @@
 
 <body>
 	<th:block th:fragment="content">
-		<form action="#" th:action="@{'/transaction/' + ${transactionID} + '/addAction'}" th:object="${action}" method="post">
-			<h1>Actions</h1>
-			<p></p>
-			<table th:unless="${actions.isEmpty()}">
-				<thead>
-					<tr>
-						<th>message</th>
-						<th>actiontype</th>
-						<th>initiating company</th>
-						<th>initiating student</th>
-						<th>date</th>
-						<th>time</th>
-						<th>amount</th>
-						<th>price per pice</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr th:each="action : ${actions}">
-						<td th:text="${action.message}"></td>
-						<td th:text="${action.actiontype.name}"></td>
-						<td th:text="${action.initiator.company.name}"></td>
-						<td th:text="${action.initiator.forename} + ${action.initiator.surname}"></td>
-						<td th:text="${action.date}"></td>
-						<td th:text="${action.time}"></td>
-						<td th:text="${action.amount}"></td>
-						<td th:text="${action.pricePerPiece}"></td>
-					</tr>
-					<tr>
-						<td><input th:field="*{message}"/></td>
-						<td><select th:field="*{actiontype}">
-							<option th:each="actiontype : ${actiontypes}" th:text="${actiontype.name}" th:value="${actiontype.id}">
-						</select></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td><input th:field="*{amount}"/></td>
-						<td><input th:field="*{pricePerPiece}"/></td>
-					</tr>
-				</tbody>
-			</table>
-			<p th:if="${actions.isEmpty()}">No Transactions found.</p>
+		<h1>Actions</h1>
+		<p></p>
+		<table th:unless="${actions.isEmpty()}">
+			<thead>
+				<tr>
+					<th>message</th>
+					<th>actiontype</th>
+					<th>initiating company</th>
+					<th>initiating student</th>
+					<th>date</th>
+					<th>time</th>
+					<th>amount</th>
+					<th>price per pice</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="action : ${actions}">
+					<td th:text="${action.message}"></td>
+					<td th:text="${action.actiontype.name}"></td>
+					<td th:text="${action.initiator.company.name}"></td>
+					<td th:text="${action.initiator.forename} + ${action.initiator.surname}"></td>
+					<td th:text="${action.date}"></td>
+					<td th:text="${action.time}"></td>
+					<td th:text="${action.amount}"></td>
+					<td th:text="${action.pricePerPiece}"></td>
+				</tr>
+			</tbody>
+		</table>
+		<p th:if="${actions.isEmpty()}">No Transactions found.</p>
 
-			<a th:href="@{'/transaction/' + ${transactionID} + '/addAction'}">
-				<button type="submit">Add new action</button>
-			</a>
-		</form>
+		<a th:href="@{'/transaction/' + ${transactionID} + '/addAction'}">
+			<button type="submit">Add new action</button>
+		</a>
 	</th:block>
 </body>
 </html>

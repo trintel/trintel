@@ -30,6 +30,7 @@
                 </table> -->
 
                 <!-- Placeholder for the Action Dropdown menu! -->
+                <!-- @Philo: mach hier ein dropdown oder radio-buttons mit den actionTypes. Die Liste heißt: "actiontypes"! -->
                 <div class="form-floating mb-3">
                     <input type="text" class="form-control" id="ph" placeholder="pht"
                         name="Request_PH">
@@ -37,7 +38,7 @@
                 </div>
 
                 <div class="d-flex">
-                    <div class="form-floating mb-3" th:object="${transaction}">
+                    <div class="form-floating mb-3" th:object="${action}">
                         <input th:field="*{pricePerPiece}" type="text" class="form-control" id="offPrice"
                             placeholder="price" name="Offer_Price" required autofocus>
                         <label for="floatingOffPrice" th:text="#{offPrice}"></label>
