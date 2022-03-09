@@ -56,15 +56,24 @@ public class CompanyController {
 
     @GetMapping("/students")
     public String listAllStudents(Model model) {
+        Company company = new Company("unassgined");
+        for (User student : userRepository.findByRole("STUDENT")) {
+            if (student.getCompany()==null) {
+                student.setCompany(company);
+            }
+        }
         model.addAttribute("students", userRepository.findByRole("STUDENT")); //list all students
-        //TODO deal with unassigned students (null-pointer Except. in template)
         return "students-list";
     }
 
     @GetMapping("/student/{id}/reassign")
     public String editStudent(Model model, @PathVariable Long id) {
         User student = userRepository.findById(id).get();
-        model.addAttribute("companies", companyRepository.findByIdNot(student.getCompany().getId())); //get all companies except for the current one
+        if (student.getCompany()==null) {
+            model.addAttribute("companies", companyRepository.findAll());
+        }else{
+            model.addAttribute("companies", companyRepository.findByIdNot(student.getCompany().getId())); //get all companies except for the current one
+        }
         model.addAttribute("studentID", id);                  //add the student id to the model (for post-request navigation)
         return "student-reassign";
     }
