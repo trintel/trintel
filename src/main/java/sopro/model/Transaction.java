@@ -17,6 +17,7 @@ import lombok.Setter;
 
 @Entity
 public class Transaction {
+    
 
     @Getter @Setter @Id @GeneratedValue(strategy = GenerationType.AUTO)	private Long id;
     @Getter @Setter @OneToMany(mappedBy = "transaction") List<Action> actions;
