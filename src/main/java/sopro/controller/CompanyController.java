@@ -143,21 +143,30 @@ public class CompanyController {
         return "redirect:/companies/" + user.getCompany().getId();
     }
 
-    @GetMapping("/company/edit")
-    public String editOwnCompany(Model model, @AuthenticationPrincipal User user) {
+    @GetMapping("/company/{companyID}/edit")
+    public String editOwnCompany(Model model, @AuthenticationPrincipal User user, @PathVariable Long companyID) {
+        try {
 
-        model.addAttribute("company", companyRepository.findById(user.getCompany().getId()).get());
+            if(user.getRole().equals("ADMIN") || user.getCompany().getId() == companyID) {
+                model.addAttribute("company", companyRepository.findById(companyID).get());
 
-        return "company-edit";
+                return "company-edit";
+            } else {
+                return "redirect:/home";        //not allowed to edit that company
+            }
+
+        } catch (NullPointerException e) {      //if company not assigned (should never happen...)
+            return "redirect:/home";
+        }
     }
 
-    @PostMapping(consumes = "multipart/form-data", value = "/company/edit")
-    public String saveOwnCompany(@RequestParam("formFile") MultipartFile companyLogo, @Valid Company company, BindingResult bindingResult, @AuthenticationPrincipal User user, Model model) throws Exception {
+    @PostMapping(consumes = "multipart/form-data", value = "/company/{companyID}/edit")
+    public String saveOwnCompany(@RequestParam("formFile") MultipartFile companyLogo, @Valid Company company, BindingResult bindingResult, @PathVariable Long companyID, @AuthenticationPrincipal User user, Model model) throws Exception {
         if (bindingResult.hasErrors()) {
             model.addAttribute("company", company);
             return "company-edit";
         }
-        company.setId(user.getCompany().getId());                           //set the id of new Company-Object to the old id
+        company.setId(companyID);                           //set the id of new Company-Object to the old id
         companyRepository.save(company);                                    //old company get overwritten, since id is primary key
 
         if (!companyLogo.isEmpty()) {
@@ -169,7 +178,7 @@ public class CompanyController {
             dbLogo.setCompany(company);
             companyLogoRepository.save(dbLogo);
         }
-        return "redirect:/company";
+        return "redirect:/companies/" + companyID;
     }
 
 // #########################################################################################

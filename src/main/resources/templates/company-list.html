@@ -16,7 +16,9 @@
 			<div class="card mb-3" th:each="company : ${companies}">
 				<div class="card-body d-lg-flex">
 					<div class="col d-flex align-items-center">
-						<img style="max-height: 5rem" th:src="@{/img/onlyicon.png}" />
+						<div class="companylogo companylogo-md me-3">
+							<img th:src="@{'/company/logo/' + ${company.id}}" />
+						</div>
 						<div>
 							<h5 class="card-title" th:text="${company.name}"></h5>
 							<p class="card-text" th:text="${company.description}"></p>
@@ -30,10 +32,11 @@
 							<a href="#" class="btn btn-danger">
 								<i class="bi bi-trash3"></i> <span th:text="#{delete}" />
 							</a>
-							<a sec:authorize="hasRole('STUDENT')" th:href="@{'/transaction/' + ${company.id}} + '/create'" class="btn btn-light">
+							<a sec:authorize="hasRole('STUDENT')"
+								th:href="@{'/transaction/' + ${company.id}} + '/create'" class="btn btn-light">
 								<i class="bi bi-cart-plus"></i> <span th:text="#{createTransaction}" />
 							</a>
-							<!-- anzeige für studenten wird noch angepasst, habe ich noch weggelassen um merge conflict zu vermeiden -->	
+							<!-- anzeige für studenten wird noch angepasst, habe ich noch weggelassen um merge conflict zu vermeiden -->
 						</div>
 					</div>
 				</div>
@@ -42,9 +45,9 @@
 
 		<p th:if="${companies.isEmpty()}" th:text="#{noCompaniesFound}"></p>
 
-		<div class="d-flex justify-content-center">
-		<a class="btn btn-primary btn-lg" th:href="@{companies/add}" th:text="#{registerCompany}"></a>
-	</div>
+		<div class="d-flex justify-content-center justify-content-md-end">
+			<a class="btn btn-primary btn-lg" th:href="@{companies/add}" th:text="#{registerCompany}"></a>
+		</div>
 	</th:block>
 </body>
 
