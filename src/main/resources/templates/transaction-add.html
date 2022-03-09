@@ -1,0 +1,24 @@
+<html>
+<body>
+<h1>Create a new Request</h1>
+<form action="#" th:action="@{'/transaction/' + ${companyID} + '/save'}" th:object="${action}" method="post">
+    <div th:object="${transaction}">
+        <label>Product</label>
+        <input th:field="*{product}"/>
+    </div>
+    <div>
+        <label>Amount</label>
+        <input th:field="*{amount}"/>
+    </div>
+    <div>
+        <label>Price per piece</label>
+        <input th:field="*{pricePerPiece}"/>
+    </div>
+    <div>
+        <label>Message</label>
+        <input th:field="*{message}"/>
+    </div>
+    <button type="submit">submit</button>
+</form>
+</body>
+</html>

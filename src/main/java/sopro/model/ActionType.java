@@ -2,6 +2,7 @@ package sopro.model;
 
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,7 +19,7 @@ public class ActionType {
 
     @Getter @Setter @Id @GeneratedValue(strategy = GenerationType.AUTO)	private Long id;
     @Getter @Setter @OneToMany(mappedBy = "actiontype") private List<Action> actions;
-    @Getter @Setter @NotEmpty private String name;
+    @Getter @Setter @NotEmpty @Column(unique = true) private String name;
     @Getter @Setter private String text;
 
     public ActionType() {}
@@ -27,5 +28,5 @@ public class ActionType {
         this.name = name;
         this.text = text;
     }
-    
+
 }

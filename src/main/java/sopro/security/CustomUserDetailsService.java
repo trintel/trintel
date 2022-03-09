@@ -18,7 +18,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     /**
      * Read username from database.
      * In our case email equals username.
-     * 
+     *
      * @param email
      * @return a new Authenticated User as "MyPricipalUser"
      */
@@ -26,7 +26,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) {
         User user = userRepository.findByEmail(email);
 
-        if (user == null) 
+        if (user == null)
             throw new UsernameNotFoundException(email);
 
         return user;
