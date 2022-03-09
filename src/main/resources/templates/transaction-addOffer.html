@@ -1,28 +1,3 @@
-<!-- <html>
-
-<body>
-    <h1>Create a new Request</h1>
-    <form action="#" th:action="@{'/transaction/' + ${companyID} + '/save'}" th:object="${action}" method="post">
-        <div th:object="${transaction}">
-            <label>Product</label>
-            <input th:field="*{product}" />
-        </div>
-        <div>
-            <label>Amount</label>
-            <input th:field="*{amount}" />
-        </div>
-        <div>
-            <label>Price per piece</label>
-            <input th:field="*{pricePerPiece}" />
-        </div>
-        <div>
-            <label>Message</label>
-            <input th:field="*{message}" />
-        </div>
-        <button type="submit">submit</button>
-    </form>
-</body> -->
-
 </html>
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" th:include="layout-fullscreen :: page">
@@ -35,19 +10,19 @@
     <th:block th:fragment="content">
         <style th:replace="fragments/small-content :: content"></style>
         <main class="form-small">
-            <h1 class="mb-3" th:text="#{request}"></h1>
+            <h1 class="mb-3" th:text="#{offer}"></h1>
             <h3 class="mb-3" th:text="#{requTo} + ' ' + ${companyID}"></h3>
-            <form th:action="@{'/transaction/' + ${companyID} + '/save'}" th:object="${action}" method="post">
+            <form th:action="@{'/transaction/' + ${transactionID} + '/addAction'}"> th:object="${action}" method="post">
                 <div class="d-flex">
                     <div class="form-floating mb-3" th:object="${transaction}">
-                        <input th:field="*{product}" type="text" class="form-control" id="reqProduct"
-                            placeholder="product" name="Request_Product" required autofocus>
-                        <label for="floatingReqProduct" th:text="#{product}"></label>
+                        <input th:field="*{pricePerPiece}" type="text" class="form-control" id="offPrice"
+                            placeholder="price" name="Offer_Price" required autofocus>
+                        <label for="floatingOffPrice" th:text="#{offPrice}"></label>
                     </div>
                     <div class="form-floating mb-3 ms-3">
-                        <input th:field="*{amount}" type="number" class="form-control" id="reqAmount"
-                            placeholder="amount" name="Request_Amount" required>
-                        <label for="floatingReqAmount" th:text="#{amount}"></label>
+                        <input th:field="*{amount}" type="number" class="form-control" id="offAmount"
+                            placeholder="amount" name="Offer_Amount" required>
+                        <label for="floatingOffAmount" th:text="#{amount}"></label>
                     </div>
                 </div>
                 <div class="form-floating mb-3">
@@ -55,7 +30,6 @@
                         name="Request_Message">
                     <label for="floatingReqMessage" th:text="#{message}"></label>
                 </div>
-
                 <div class="form-group">
                     <button type="submit" class="w-100 btn btn-lg btn-primary">
                         <a th:text=" #{send}"></a></button>
@@ -67,5 +41,3 @@
         </main>
     </th:block>
 </body>
-
-</html>
