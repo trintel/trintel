@@ -24,10 +24,12 @@ import sopro.repository.CompanyRepository;
 import sopro.repository.TransactionRepository;
 import sopro.repository.UserRepository;
 
+
 import static org.hamcrest.Matchers.containsString;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -53,8 +55,8 @@ public class CompanyTest {
        
        @Autowired
        UserRepository userRepository;
-       
-       
+
+
        @Autowired
        CompanyRepository companyRepository;
        
@@ -69,9 +71,10 @@ public class CompanyTest {
 
     String companyName = "NewComp";
 
-///////////////////////////////////////////////////////////////////////////////
-//////////////////METHOD TESTS/////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+// #######################################################################################
+// ----------------------------------- Method Tests -------------------------------------
+// --------------------------------------- ADMIN ----------------------------------------
+// #######################################################################################
        
      /**
      * Tests if the right view is displayed when the Admin wants to see all Companies
@@ -146,49 +149,34 @@ public class CompanyTest {
     }
 
 
-    ///////////////Hier Weiter////////////////////
-      /**
+
+    /**Test before function
      * Tests if the Admin can acces the list of all students
      * @throws Exception
      */
     @Test
     @WithMockUser(username = "admin@admin", roles = {"ADMIN"})
-    public void CompanieTestAdmin() throws Exception {
-        mockMvc.perform(get("/companies/add"))
-               .andExpect(status().isOk());
+    public void listAllStudentsTestAdmin() throws Exception {
+        mockMvc.perform(get("/students"))
+               .andExpect(status().isOk())
+               .andExpect(view().name("students-list"));	
     }
-
-    /**
-     * Tests if the Student can not acces the list of all students
-     * @throws Exception
-     */
+            
+   /**Test before function
+    * Tests if the Student can not acces the list of all students
+    * @throws Exception
+    */
     @Test
     @WithMockUser(username = "student@student", roles = {"STUDENT"})
-    public void addCompanieTestStudent() throws Exception {
-        mockMvc.perform(get("/companies/add"))
+    public void listAllStudentsTestStudent() throws Exception {
+        mockMvc.perform(get("/students"))
                .andExpect(status().isForbidden());
     }
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /**
-     * Tests if the Company page is reachable for the Admin
-     * @throws Exception
-     */
+            
+   /**
+    * Tests if the Company page is reachable for the Admin
+    * @throws Exception
+    */
     @Test
     @WithMockUser(username = "admin@admin", roles = { "ADMIN" })
     public void companiesReachable() throws Exception {
@@ -196,11 +184,138 @@ public class CompanyTest {
                .andExpect(status().is(200));
     }
 
+   /////////////////////////////////////
+   /// TODO Write Test for editStudent and moveToCompany when function implemented
+
+
+// #######################################################################################
+// ----------------------------------- Method Tests -------------------------------------
+// ------------------------------------- Students ---------------------------------------
+// #######################################################################################
+
+
+    /**Test before function
+     * Tests if the Admin can not acces the company selection page
+     * @throws Exception
+     */
+    @Test
+    @WithMockUser(username = "admin@admin", roles = {"ADMIN"})
+    public void companySelectTestAdmin() throws Exception {
+        mockMvc.perform(get("/company/select"))
+               .andExpect(status().isForbidden());
+    }
+
+    /**Test before function
+     * Tests if the Student can acces the company selection page
+     * @throws Exception
+     */
+    @Test
+    @WithMockUser(username = "student@student", roles = {"STUDENT"})
+    public void companySelectTestStudent() throws Exception {
+        mockMvc.perform(get("/company/select"))
+               .andExpect(status().isOk())
+               .andExpect(view().name("company-select"));	
+    }
+
+
+
+
+    /**
+     * Tests if the Admin can not select a company
+     * @throws Exception
+     */
+    @Test
+    @WithMockUser(username = "admin@admin", roles = {"ADMIN"})
+    public void companySelectIdTestAdmin() throws Exception {
+        Company testCompany = new Company(companyName); 
+        companyRepository.save(testCompany);
+        long id = testCompany.getId();   
+        
+        mockMvc.perform(get("/company/select/" + id))
+               .andExpect(status().isForbidden());
+
+        companyRepository.delete(testCompany);
+        
+    }
+
+    /**
+     * Tests if the Student can select the company
+     * @throws Exception
+     */
+    @Test
+    @WithMockUser(username = "student@student", roles = {"STUDENT"})
+    public void companySelectIdTestStudent() throws Exception {
+        Company testCompany = new Company(companyName);
+        companyRepository.save(testCompany);
+        long id = testCompany.getId();        
+
+        mockMvc.perform(get("/company/select/" + id))
+               .andExpect(status().isOk())
+               .andExpect(view().name("company-view"));	
+
+        companyRepository.delete(testCompany);
+    }
+
+
+
+   /////////////////////////////////////
+   /// TODO Write IntegrationTest for joinCompany2
+
+
+
+
+    /**
+     * Tests if the Admin can not see his company (has none)
+     * @throws Exception
+     */
+    @Test
+    @WithMockUser(username = "admin@admin", roles = {"ADMIN"})
+    public void viewOwnCompanyTestAdmin() throws Exception {
+        mockMvc.perform(get("/company"))
+               .andExpect(status().isForbidden());
+    }
+
+    /**
+     * Tests if the Students can see their own company
+     * @throws Exception
+     */
+   /*  @Test
+    @WithMockUser(username = "student@student", roles = {"STUDENT"})
+    public void viewOwnCompanyTestStudent() throws Exception {
+        Company testCompany = new Company(companyName);
+        companyRepository.save(testCompany);
+        User user = new User("student", "student", "student@student", "password", testCompany);
+        user.setRole("STUDENT");
+        userRepository.save(user);
+
+        //User userMock = mock(User.class, "myMock");
+   
+        //userMock.perform(get("/company"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("company-info"));	
+
+                // https://stackoverflow.com/questions/42693486/how-to-mock-method-that-called-in-other-method-while-using-spring-dependency-inj
+    }
+
+ */
+
+
+
+
+
+
+
+
+
+
+
+
+
     
     
-///////////////////////////////////////////////////////////////////////////////
-//////////////////Integrations Tests///////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+// #######################################################################################
+// ----------------------------------- Integration Tests ---------------------------------
+// #######################################################################################
 
         
 
