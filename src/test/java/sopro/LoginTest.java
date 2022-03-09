@@ -102,7 +102,7 @@ public class LoginTest {
     @Test
     public void testInvalidLoginDenied() throws Exception {
         mockMvc
-                .perform(formLogin().SSpassword("dasisteinpasswort"))
+                .perform(formLogin().password("dasisteinpasswort"))
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl("/login?error"))
                 .andExpect(unauthenticated());

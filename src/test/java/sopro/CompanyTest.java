@@ -9,12 +9,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockServletContext;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithSecurityContext;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.event.annotation.BeforeTestMethod;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
-import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
+import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.*;
 import org.springframework.http.HttpMethod;
 
 import sopro.model.Company;
@@ -30,6 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import java.lang.annotation.Retention;
 import java.security.Principal;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.*;
@@ -42,6 +44,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.aspectj.lang.annotation.Before;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
+
 
 
 @SpringBootTest
@@ -58,11 +61,14 @@ public class CompanyTest {
     @Autowired
     ObjectMapper objectMapper;
 
-    private MockHttpServletRequestBuilder builder;
-    private final ServletContext servletContext = new MockServletContext();
+    //private MockHttpServletRequestBuilder builder;
+    //private final ServletContext servletContext = new MockServletContext();
 
 
     String companyName = "NewComp";
+
+
+
 
 
 
@@ -91,11 +97,11 @@ public class CompanyTest {
     @WithMockUser(username = "admin@admin", roles = { "ADMIN" })
     public void adminAddCompany() throws Exception {
         Company testCompany = companyRepository.findByName(companyName);
+        
         if (testCompany != null) {
             companyRepository.delete(testCompany);
             
         }
-
 
         mockMvc.perform(get("/companies/add"))
                .andExpect(status().is(200));
@@ -110,38 +116,6 @@ public class CompanyTest {
     }
 
 
-    /**
-     * Tests if the student can join a company
-     *
-     * @throws Exception
-     */
-    @Test
-    @WithMockUser(username = "student@student", roles = { "STUDENT" })
-    public void studentJoinCompany() throws Exception{
-        User user = new User("student", "student","student@student", "password", null);
-
-       // this.builder = new MockHttpServletRequestBuilder(HttpMethod.POST, "/company/join");
-        this.builder.principal((Principal) user);
-        this.builder.param("companyName", companyName);
-
-        MockHttpServletRequest request = this.builder.buildRequest(this.servletContext);
-
-        mockMvc.perform(get("/company/select"))
-               .andExpect(status().is(200))
-               .andExpect(content().string(containsString(companyName)));
-
-        Company company = companyRepository.findByName(companyName);
-        long id = company.getId();
-
-        mockMvc.perform(get("/company/select/" + id))
-               .andExpect(status().isOk());
-
-
-        mockMvc.perform(post("/company/join").content(objectMapper.writeValueAsString(user)).param("companyName", companyName).with(csrf()))
-               .andExpect(status().is(302))
-               .andExpect(redirectedUrl("/home"));
-                   
-    }
 
     
     /**
@@ -162,9 +136,53 @@ public class CompanyTest {
                .andExpect(status().isFound());
     }
 
+    /**
+     * 
+     * @throws Exception
+     */
+/**   
+    @Test
+    @WithMockUser(username = "m@m", roles = { "STUDENT" })
+    public void studentRegistrationDirectedToCompany() throws Exception {
+
+        mockMvc.perform(formLogin().password("password").user("m@m"))
+               .andExpect(status().isFound())
+               .andExpect(redirectedUrl("/home"));
+
+        mockMvc.perform(get("/home"))                                       //Problem: UserController setHome2() wird auf einen "richtigen" User aufgerufen, funktioniert nicht mit MockUser
+               .andExpect(authenticated())
+               .andExpect(status().isFound())
+               .andExpect(redirectedUrl("/company/select"));
+    }
+    
+    /**
+     * Tests if the student can join a company
+     *
+     * @throws Exception
+     */
+/** @Test
+    @WithMockUser(username = "m@m", roles = { "STUDENT" })
+    public void studentJoinCompany() throws Exception{
+        User user = new User("student", "student","student@student", "password", null);
+
+        mockMvc.perform(get("/company/select"))
+               .andExpect(status().is(200))
+               .andExpect(content().string(containsString(companyName)));
+
+        Company company = companyRepository.findByName(companyName);
+        long id = company.getId();
+
+        mockMvc.perform(get("/company/select/" + id))
+               .andExpect(status().isOk());
+
+        mockMvc.perform(post("/company/join").content(objectMapper.writeValueAsString(user)).param("companyName", companyName).with(csrf()))
+               .andExpect(status().is(302))
+               .andExpect(redirectedUrl("/home"));
+                   
+    }
 
     @Test
-    //@WithMockUser(username = "student@student", roles = { "STUDENT" })
+    @WithMockUser(username = "student@student", roles = { "STUDENT" })
     public void studentJoinCompany2() throws Exception{
         
 
@@ -188,8 +206,7 @@ public class CompanyTest {
                .andExpect(redirectedUrl("/home"));
                    
     }
-
-
+*/    
 
 
 }
