@@ -74,28 +74,4 @@ public class User implements UserDetails {
     public String getUsername() {
       return this.email;
     }
-
-    public String getEmail() {
-      return this.email;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-      return this.accountNonLocked;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-      return this.accountNonLocked;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-      return this.credentialsNonExpired;
-    }
-
-    @Override
-    public boolean isEnabled() {
-      return this.enabled;
-    }
 }
