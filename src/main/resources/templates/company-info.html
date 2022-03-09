@@ -5,6 +5,7 @@
 	<div>
             <h1>Company:<p th:text="${company.name}"></p></h1>
             <h1>Description:<p th:text="${company.description}"></p></h1>
+            <img th:src="@{'/company/logo/' + ${company.id}}" />
             
             <table th:unless="${company.getStudents().isEmpty()}">
                 <thead>
