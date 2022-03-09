@@ -50,33 +50,143 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 @SpringBootTest
 @AutoConfigureMockMvc
 public class CompanyTest {
-
-    @Autowired
-    UserRepository userRepository;
-
-
-    @Autowired
-    CompanyRepository companyRepository;
-
-    @Autowired
-    ObjectMapper objectMapper;
-
+       
+       @Autowired
+       UserRepository userRepository;
+       
+       
+       @Autowired
+       CompanyRepository companyRepository;
+       
+       @Autowired
+       ObjectMapper objectMapper;
+       
+       @Autowired
+       private MockMvc mockMvc;
     //private MockHttpServletRequestBuilder builder;
     //private final ServletContext servletContext = new MockServletContext();
 
 
     String companyName = "NewComp";
 
+///////////////////////////////////////////////////////////////////////////////
+//////////////////METHOD TESTS/////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+       
+     /**
+     * Tests if the right view is displayed when the Admin wants to see all Companies
+     * @throws Exception
+     */
+    @Test
+    @WithMockUser(username = "admin@admin", roles = {"ADMIN"})
+    public void listCompaniesTestAdmin() throws Exception {
 
-
-
-
-
-    @Autowired
-    private MockMvc mockMvc;
+        mockMvc.perform(get("/companies"))
+               .andExpect(status().isOk())
+               .andExpect(view().name("company-list"));	
+    }
 
     /**
-     * Tests if the Company page is reachjable for the Admin
+     * Tests if the students can not see the list of all companys
+     *  @throws Exception
+     */
+    @Test
+    @WithMockUser(username = "student@student", roles = {"STUDENT"})
+    public void listCompaniesTestStudent() throws Exception {
+
+        mockMvc.perform(get("/companies"))
+               .andExpect(status().isForbidden());
+    }
+
+    /**
+     * Tests if the Admin can acces the add view
+     * @throws Exception
+     */
+    @Test
+    @WithMockUser(username = "admin@admin", roles = {"ADMIN"})
+    public void addCompanieTestAdmin() throws Exception {
+        mockMvc.perform(get("/companies/add"))
+               .andExpect(status().isOk());
+    }
+
+    /**
+     * Tests if the Student can not acces the add view
+     * @throws Exception
+     */
+    @Test
+    @WithMockUser(username = "student@student", roles = {"STUDENT"})
+    public void addCompanieTestStudent() throws Exception {
+        mockMvc.perform(get("/companies/add"))
+               .andExpect(status().isForbidden());
+    }
+
+
+    /**
+     * Tests if the Admin can acces the view to save a company
+     * @throws Exception
+     */
+    @Test
+    @WithMockUser(username = "admin@admin", roles = {"ADMIN"})
+    public void saveCompanieTestAdmin() throws Exception {
+        mockMvc.perform(get("/companies/save"))
+               .andExpect(status().is(405));         //Test with database check is down below
+    }
+
+    /**
+     * Tests if the Student can not acces the view to save a company, and save it to the database
+     * @throws Exception
+     */
+    @Test
+    @WithMockUser(username = "student@student", roles = {"STUDENT"})
+    public void saveCompanieTestStudent() throws Exception {
+        mockMvc.perform(get("/companies/save"))
+               .andExpect(status().is3xxRedirection())
+               .andExpect(redirectedUrl("/companies"));
+       
+    }
+
+
+    ///////////////Hier Weiter////////////////////
+      /**
+     * Tests if the Admin can acces the list of all students
+     * @throws Exception
+     */
+    @Test
+    @WithMockUser(username = "admin@admin", roles = {"ADMIN"})
+    public void CompanieTestAdmin() throws Exception {
+        mockMvc.perform(get("/companies/add"))
+               .andExpect(status().isOk());
+    }
+
+    /**
+     * Tests if the Student can not acces the list of all students
+     * @throws Exception
+     */
+    @Test
+    @WithMockUser(username = "student@student", roles = {"STUDENT"})
+    public void addCompanieTestStudent() throws Exception {
+        mockMvc.perform(get("/companies/add"))
+               .andExpect(status().isForbidden());
+    }
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     * Tests if the Company page is reachable for the Admin
      * @throws Exception
      */
     @Test
@@ -85,6 +195,13 @@ public class CompanyTest {
         mockMvc.perform(get("/companies"))
                .andExpect(status().is(200));
     }
+
+    
+    
+///////////////////////////////////////////////////////////////////////////////
+//////////////////Integrations Tests///////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
         
 
 
