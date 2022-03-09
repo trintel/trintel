@@ -7,8 +7,8 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.MessageSource;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -32,13 +32,13 @@ public class UserController {
     UserRepository userRepository;
 
     @Autowired
-    PasswordEncoder passwordEncoder;
-
-    @Autowired
     ApplicationEventPublisher eventPublisher;
 
     @Autowired
     UserInterface userService;
+
+    @Autowired
+    private MessageSource messages;
 
     /**
      * GET routing für Index.
@@ -47,7 +47,6 @@ public class UserController {
      */
     @GetMapping("/home")
     public String showHome2(@AuthenticationPrincipal User user) {
-
         if (user.getCompany() != null || user.getRole().equals("ADMIN")) { // just go to the home page if a company is
                                                                            // already selected or the user is admin
             return "home";
@@ -63,18 +62,17 @@ public class UserController {
      * @return page
      */
     @GetMapping("/signup/{rndStr}")
-    public String signUpAdmin(@PathVariable String rndStr, Model model) {
+    public String signupRedirect(@PathVariable String rndStr, Model model) {
         User user = new User();
         if (rndStr.equals(TrintelApplication.ADMIN_LOGIN_URL)) {
             model.addAttribute("user", user);
             return "sign-up-admin";
-        } else if (rndStr.equals(TrintelApplication.STUDENT_LOGIN_URL)){
+        } else if (rndStr.equals(TrintelApplication.STUDENT_LOGIN_URL)) {
             model.addAttribute("user", user);
             return "sign-up-student";
         } else {
             return "redirect:/login";
         }
-
     }
 
     /**
@@ -89,30 +87,35 @@ public class UserController {
      * @return redirect:login
      */
     @PostMapping("/signup/{role}")
-    public String signedUp(@Valid User user, HttpServletRequest request, @PathVariable String role,
+    public String signup(@Valid User user, HttpServletRequest request, @PathVariable String role,
             BindingResult bindingResult, Model model) {
 
-        // TODO check mail exists
-        user.setRole(role.toUpperCase());
         if (bindingResult.hasErrors()) {
             model.addAttribute("user", user);
-            if(role.equals("admin")) {
+            if (role.equals("admin")) {
                 return "sign-up-admin";
             } else {
                 return "sign-up-student";
             }
         }
-        // encode the new password for saving in the database
-        String encPassword = passwordEncoder.encode(user.getPassword());
-        user.setPassword(encPassword);
 
-        // TODO move the registerNewUser part to UserService.
+        try {
+            userService.createUser(user, role);
+        } catch (Exception e) {
+            TrintelApplication.logger.error("Email Adresse schon registriert.\n\n" + e);
 
-        // saves the new user in userRepo
-        userRepository.save(user);
+            model.addAttribute("isSignupError", true);
+            model.addAttribute("signupErrorMsg", messages.getMessage("mailAlreadyExists", null, "Mail already exitst.", request.getLocale()));
+            if (role.equals("admin")) {
+                return "sign-up-admin";
+            } else {
+                return "sign-up-student";
+            }
+        }
 
         // Publish event for Mail validation.
-        eventPublisher.publishEvent(new OnRegistrationCompleteEvent(user, request.getLocale(), request.getServerName() + ":" + request.getServerPort()));
+        eventPublisher.publishEvent(new OnRegistrationCompleteEvent(user, request.getLocale(),
+                request.getServerName() + ":" + request.getServerPort()));
         return "verify-your-email";
     }
 
@@ -126,7 +129,8 @@ public class UserController {
      * @throws UnsupportedEncodingException
      */
     @GetMapping("/registrationConfirm")
-    public ModelAndView confirmRegistration(final HttpServletRequest request, final ModelMap model, @RequestParam("token") final String token) throws UnsupportedEncodingException {
+    public ModelAndView confirmRegistration(final HttpServletRequest request, final ModelMap model,
+            @RequestParam("token") final String token) throws UnsupportedEncodingException {
         final String result = userService.validateVerificationToken(token);
         if (result.equals("valid"))
             return new ModelAndView("redirect:/login", model); // Success you can now login.
