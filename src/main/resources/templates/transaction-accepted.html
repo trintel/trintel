@@ -1,0 +1,76 @@
+</html>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:include="layout-fullscreen :: page">
+
+<head>
+    <title th:text="#{request}"> </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+<body>
+    <th:block th:fragment="content">
+        <style th:replace="fragments/small-content :: content"></style>
+        <main class="form-small">
+            <!-- TODO -->
+            <!-- <h3 class="mb-3" th:text="#{requTo} + ' ' + ${companyID}"></h3> -->
+            <form th:action="@{'/transaction/' + ${transactionID} + '/addAction'}" th:object="${action}" method="post">
+                
+                <h1 th:text="#{accepted}"></h1>
+
+                <!-- TODO -->
+                <!-- <table th:unless="${actions.isEmpty()}" -->
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <h1 th:text="#{offer}"></h1>
+                                </td>
+                            </tr>
+    
+                            <!-- TODO -->
+                            <!-- <p th:if="${actiontype.isEmpty()}" th:text="#{noActionsFound}"></p> -->
+                            <tr>
+                                <td>
+                                    <div class="d-flex">
+                                        <div class="form-floating mb-3" th:object="${action}">
+                                            <input th:field="*{pricePerPiece}" type="number" class="form-control"
+                                                id="offPrice" placeholder="price" name="Offer_Price" required>
+                                            <label for="floatingOffPrice" th:text="#{offPrice}"></label>
+                                        </div>
+                                        <div class="form-floating mb-3 ms-3">
+                                            <input th:field="*{amount}" type="number" class="form-control" id="offAmount"
+                                                placeholder="amount" name="Offer_Amount" required>
+                                            <label for="floatingOffAmount" th:field="*{amount}" th:text="#{amount}"></label>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+    
+                            <tr>
+                                <td>
+                                    <div class="form-floating mb-3">
+                                        <input th:field="*{message}" type="text" class="form-control" id="reqMessage"
+                                            placeholder="message" name="Request_Message">
+                                        <label for="floatingReqMessage" th:field="*{message}" th:text="#{message}"></label>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                <div class="form-group">
+                    <a th:href="@{'/transaction/' + ${transactionID} + '/addAction'}">
+                        <button type="submit" class="w-100 btn btn-lg btn-primary"><a th:text=" #{send}"></a></button>
+                    </a>
+                </div>
+                
+                <!-- CHECKBOX -->
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                    <label class="form-check-label" for="flexCheckDefault" th:text="#{accept}">
+                    </label>
+                </div>
+            </form>
+        </main>
+    </th:block>
+</body>

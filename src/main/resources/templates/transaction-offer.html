@@ -20,18 +20,10 @@
                     <tbody>
                         <tr>
                             <td>
-                                <div class="form-floating mb-3">
-                                    <h1 th:text="#{actiontype}"></h1>
-                                    <select class="custom-select-lg w-100 btn btn-lg btn-primary"
-                                        th:field="*{actiontype}">
-                                        <option th:each="actiontype : ${actiontypes}" th:text="${actiontype.name}"
-                                            th:value="${actiontype.id}">
-                                    </select>
-                                </div>
+                                <h1 th:text="#{offer}"></h1>
                             </td>
                         </tr>
-                        
-                        
+
                         <!-- TODO -->
                         <!-- <p th:if="${actiontype.isEmpty()}" th:text="#{noActionsFound}"></p> -->
                         <tr>
@@ -62,8 +54,6 @@
                         </tr>
                     </tbody>
                 </table>
-
-                
 
                 <div class="form-group">
                     <a th:href="@{'/transaction/' + ${transactionID} + '/addAction'}">
