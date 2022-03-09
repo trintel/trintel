@@ -10,9 +10,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import sopro.model.Company;
+import sopro.model.CompanyLogo;
 import sopro.model.User;
+import sopro.repository.CompanyLogoRepository;
 import sopro.repository.CompanyRepository;
 import sopro.repository.UserRepository;
 @Controller
@@ -23,6 +27,9 @@ public class CompanyController {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    CompanyLogoRepository companyLogoRepository;
 
 // #######################################################################################
 // ----------------------------------- ADMIN FUNCTIONS -----------------------------------
@@ -136,24 +143,42 @@ public class CompanyController {
         return "redirect:/companies/" + user.getCompany().getId();
     }
 
-    @GetMapping("/company/edit")
-    public String editOwnCompany(Model model, @AuthenticationPrincipal User user) {
+    @GetMapping("/company/{companyID}/edit")
+    public String editOwnCompany(Model model, @AuthenticationPrincipal User user, @PathVariable Long companyID) {
+        try {
 
-        model.addAttribute("company", companyRepository.findById(user.getCompany().getId()).get());
+            if(user.getRole().equals("ADMIN") || user.getCompany().getId() == companyID) {
+                model.addAttribute("company", companyRepository.findById(companyID).get());
 
-        return "company-edit";
+                return "company-edit";
+            } else {
+                return "redirect:/home";        //not allowed to edit that company
+            }
+
+        } catch (NullPointerException e) {      //if company not assigned (should never happen...)
+            return "redirect:/home";
+        }
     }
 
-    @PostMapping("/company/edit")
-    public String saveOwnCompany(@Valid Company company, BindingResult bindingResult, @AuthenticationPrincipal User user, Model model) {
+    @PostMapping(consumes = "multipart/form-data", value = "/company/{companyID}/edit")
+    public String saveOwnCompany(@RequestParam("formFile") MultipartFile companyLogo, @Valid Company company, BindingResult bindingResult, @PathVariable Long companyID, @AuthenticationPrincipal User user, Model model) throws Exception {
         if (bindingResult.hasErrors()) {
             model.addAttribute("company", company);
             return "company-edit";
         }
-        company.setId(user.getCompany().getId());                           //set the id of new Company-Object to the old id
+        company.setId(companyID);                           //set the id of new Company-Object to the old id
         companyRepository.save(company);                                    //old company get overwritten, since id is primary key
 
-        return "redirect:/company";
+        if (!companyLogo.isEmpty()) {
+            CompanyLogo dbLogo = companyLogoRepository.findByCompany(company);
+            if(dbLogo == null) {
+                dbLogo = new CompanyLogo();
+            }
+            dbLogo.setLogo(companyLogo.getBytes());
+            dbLogo.setCompany(company);
+            companyLogoRepository.save(dbLogo);
+        }
+        return "redirect:/companies/" + companyID;
     }
 
 // #########################################################################################
