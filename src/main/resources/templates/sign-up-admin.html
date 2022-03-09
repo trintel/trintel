@@ -11,6 +11,7 @@
         <style th:replace="fragments/small-content :: content"></style>
         <main class="form-small">
             <h1 class="mb-4" th:text="#{registerAdmin}"></h1>
+            <p class="alert alert-danger" th:if="${isSignupError}" th:text="${signupErrorMsg}"></p>
             <form action="#" th:action="@{/signup/admin}" th:object="${user}" method="post">
                 <div class="d-flex">
                     <div class="form-floating mb-3">

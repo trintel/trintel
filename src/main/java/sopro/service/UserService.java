@@ -2,9 +2,11 @@ package sopro.service;
 
 import java.util.Calendar;
 
+import javax.management.relation.Role;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import sopro.model.User;
@@ -15,6 +17,9 @@ import sopro.repository.VerificationTokenRepository;
 @Service
 @Transactional
 public class UserService implements UserInterface {
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Autowired
     private VerificationTokenRepository tokenRepository;
@@ -101,5 +106,17 @@ public class UserService implements UserInterface {
         tokenRepository.delete(verificationToken); // Should not be needed anymore.
         userRepository.save(user);
         return TOKEN_VALID;
+    }
+
+    @Override
+    public void createUser(User user, String role) throws Exception {
+        user.setRole(role.toUpperCase());
+
+        // encode the new password for saving in the database
+        String encPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encPassword);
+
+        // saves the new user in userRepo
+        userRepository.save(user);
     }
 }

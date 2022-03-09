@@ -13,4 +13,6 @@ public interface UserInterface {
     VerificationToken getVerificationToken(String VerificationToken);
 
     String validateVerificationToken(String token);
+
+    void createUser(User user, String role) throws Exception;
 }
