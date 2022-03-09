@@ -74,7 +74,6 @@ public class UserController {
         } else {
             return "redirect:/login";
         }
-
     }
 
     /**

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import sopro.model.Action;
 import sopro.model.ActionType;
 import sopro.model.Company;
+import sopro.model.InitiatorType;
 import sopro.model.Transaction;
 import sopro.model.User;
 import sopro.repository.ActionRepository;
@@ -75,9 +76,9 @@ public class InitDatabaseService {
 
 
             //Create demo Action_types
-            ActionType request = new ActionType("Request", "Demo request text.");
-            ActionType offer = new ActionType("Offer", "Demo offer text.");
-            ActionType accept = new ActionType("Accept", "Demo offer text.");
+            ActionType request = new ActionType("Request", "Demo request text.", InitiatorType.BUYER);
+            ActionType offer = new ActionType("Offer", "Demo offer text.", InitiatorType.SELLER);
+            ActionType accept = new ActionType("Accept", "Demo offer text.", InitiatorType.SELLER);
 
             Transaction transaction1 = new Transaction(company1, company2);
 

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:include="layout :: page">
+
+<head>
+	<th:block th:fragment="title"><title> Action - Add</title></th:block>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+
+<body>
+	<th:block th:fragment="content">
+<h1>Add action</h1>
+
+   <form action="#" th:action="@{/action/save}" th:object="${actionType}" method="post">
+    <div>
+        <label>Name</label>
+        <input th:field="*{name}"/>
+    </div>
+    <div>
+        <label>Description</label>
+        <input type="text" th:field="*{text}"/>
+    </div>
+    <div>
+        <label>Available for</label>
+        <select th:field="*{initiatorType}">
+            <option th:each="initiatorType : ${initiatorTypes}" th:text="${initiatorType.name}" th:value="${initiatorType}"/>
+        </select>
+    </div>
+    <button type="submit">submit</button>
+</form>
+</body>
+</html>

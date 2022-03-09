@@ -1,17 +1,23 @@
 package sopro.controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import sopro.model.Action;
+import sopro.model.ActionType;
+import sopro.model.InitiatorType;
 import sopro.model.Transaction;
 import sopro.model.User;
 import sopro.repository.ActionRepository;
@@ -77,12 +83,18 @@ public class TransactionController {
 
     }
     //TODO rechte einstellen
+    //TODO enums berücksichtigen
     @GetMapping("/transaction/{id}")
-    public String transactionDetail(Model model, @PathVariable Long id) {
+    public String transactionDetail(Model model, @PathVariable Long id, @AuthenticationPrincipal User user) {
+        Transaction transaction = transactionRepository.findById(id).get();
+        InitiatorType initiatorType = InitiatorType.SELLER;
+        if(user.getCompany().equals(transaction.getBuyer())) {      //findout if current user is Buyer or seller.
+            initiatorType = InitiatorType.BUYER;
+        }
         Action newAction = new Action();
-        model.addAttribute("actiontypes", actionTypeRepository.findAll());
+        model.addAttribute("actiontypes", actionTypeRepository.findByInitiatorType(initiatorType));     //only find the available actiontypes for that user.
         model.addAttribute("action", newAction);
-        model.addAttribute("actions", actionRepository.findByTransaction(transactionRepository.findById(id).get()));
+        model.addAttribute("actions", actionRepository.findByTransaction(transaction));
         model.addAttribute("transactionID", id);
         return "transaction-view";
     }
@@ -99,6 +111,55 @@ public class TransactionController {
 
 
         return "redirect:/transaction/" + transactionID;
+
+    }
+
+    @GetMapping("/actions")
+    public String showActions(Model model) {
+        model.addAttribute("actionTypes", actionTypeRepository.findAll());
+        return "action-list";
+    }
+
+    @GetMapping("/action/add")
+    public String addAction(Model model) {
+        ActionType actionType = new ActionType();
+        model.addAttribute("actionType", actionType);
+        model.addAttribute("initiatorTypes", InitiatorType.values());
+        return "action-add";
+
+    }
+
+    @PostMapping("/action/save")
+    public String saveAction(@Valid ActionType actionType, BindingResult bindingResult, Model model) {
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("actionType", actionType);
+            model.addAttribute("initiatorTypes", InitiatorType.values());
+            return "action-add";
+        }
+
+        actionTypeRepository.save(actionType);
+
+        return "redirect:/actions";
+    }
+
+    @GetMapping("action/edit/{actionTypeID}")
+    public String editActionType(Model model, @PathVariable Long actionTypeID) {
+        model.addAttribute("actionType", actionTypeRepository.findById(actionTypeID).get());
+        model.addAttribute("initiatorTypes", InitiatorType.values());
+        return "action-edit";
+    }
+
+    @PostMapping("action/edit/{actionTypeID}")
+    public String editAction(@Valid ActionType actionType, @PathVariable Long actionTypeID, BindingResult bindingResult, Model model) {
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("actionType", actionType);
+            return "action-edit";
+        }
+        actionType.setId(actionTypeID);
+        actionTypeRepository.save(actionType);
+        return "redirect:/actions";
 
     }
 
