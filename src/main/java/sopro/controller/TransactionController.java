@@ -102,4 +102,7 @@ public class TransactionController {
 
     }
 
+    //Hier zusätzliches Get Mapping für transaction-addOffer.html Page
+    //Eventuell ist die Seite nicht kompilierbar konnte ich nicht testen.
+
 }

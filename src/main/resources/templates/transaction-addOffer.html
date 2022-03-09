@@ -3,7 +3,8 @@
 <html xmlns:th="http://www.thymeleaf.org" th:include="layout-fullscreen :: page">
 
 <head>
-    <title th:text="#{request}" </title> <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title th:text="#{request}"> </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 
 <body>
@@ -12,7 +13,29 @@
         <main class="form-small">
             <h1 class="mb-3" th:text="#{offer}"></h1>
             <h3 class="mb-3" th:text="#{requTo} + ' ' + ${companyID}"></h3>
-            <form th:action="@{'/transaction/' + ${transactionID} + '/addAction'}"> th:object="${action}" method="post">
+            <form th:action="@{'/transaction/' + ${transactionID} + '/addAction'}" th:object="${action}" method="post">
+                
+                <!-- <table th:unless="${actions.isEmpty()}">
+                    <!-- Maybe not done yet 
+                    <tbody>
+                        <tr>
+                            <td>
+                                <select th:field="*{actiontype}">
+                                    <option th:each="actiontype : ${actiontypes}" th:text="${actiontype.name}"
+                                        th:value="${actiontype.id}">
+                                </select>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table> -->
+
+                <!-- Placeholder for the Action Dropdown menu! -->
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="ph" placeholder="pht"
+                        name="Request_PH">
+                    <label>ActionType</label>
+                </div>
+
                 <div class="d-flex">
                     <div class="form-floating mb-3" th:object="${transaction}">
                         <input th:field="*{pricePerPiece}" type="text" class="form-control" id="offPrice"
@@ -32,11 +55,13 @@
                 </div>
                 <div class="form-group">
                     <button type="submit" class="w-100 btn btn-lg btn-primary">
-                        <a th:text=" #{send}"></a></button>
+                        <a th:text=" #{send}"></a>
+                    </button>
                 </div>
             </form>
             <button class="w-100 btn btn-lg btn-light" onclick="history.back()">
-                <i class="bi bi-arrow-left"></i> <a th:text=" #{back}"></a>
+                <i class="bi bi-arrow-left"></i>
+                <a th:text=" #{back}"></a>
             </button>
         </main>
     </th:block>
