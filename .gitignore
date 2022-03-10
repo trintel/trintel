@@ -120,5 +120,4 @@ gradle-app.setting
 **/build/
 
 .vscode/
-
-# End of https://www.gitignore.io/api/java,gradle,eclipse
+trintel-export-*
