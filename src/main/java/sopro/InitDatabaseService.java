@@ -15,6 +15,7 @@ import sopro.repository.ActionTypeRepository;
 import sopro.repository.CompanyRepository;
 import sopro.repository.TransactionRepository;
 import sopro.repository.UserRepository;
+import sopro.service.BackupService;
 
 @Service
 public class InitDatabaseService {
@@ -34,9 +35,11 @@ public class InitDatabaseService {
     @Autowired
     TransactionRepository transactionRepository;
 
-
     @Autowired
     PasswordEncoder passwordEncoder;
+
+    @Autowired
+    BackupService backupService;
 
     public void init() {
 
@@ -94,6 +97,8 @@ public class InitDatabaseService {
             actionRepository.save(trans1Request);
 
         }
+
+        backupService.export();
     }
 
 }
