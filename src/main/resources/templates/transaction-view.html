@@ -23,8 +23,8 @@
 									<h4 th:case="Offer"><div class="badge bg-warning me-3" th:text="#{offerTLV}"></div></h4>
 									<h4 th:case="Accept"><div class="badge bg-success me-3" th:text="#{acceptTV}"></div></h4>
 									<!-- <h4 th:case="End"><div class="badge bg-light text-dark me-3" th:text="#{endTV}"></div></h4> -->
-									<!-- <h4 th:case="Delivery"><div class="badge bg-primary" th:text="#{deliveryTLV}"></div></h4> -->
-									<!-- <h4 th:case="Invoicing"><div class="badge bg-dark" th:text="#{invoicingTLV}"></div></h4> -->
+									<!-- <h4 th:case="Delivery"><div class="badge bg-primary me-3" th:text="#{deliveryTLV}"></div></h4> -->
+									<!-- <h4 th:case="Invoicing"><div class="badge bg-dark me-3" th:text="#{invoicingTLV}"></div></h4> -->
 									<!-- <h4 th:case="Paid"><div class="badge bg-primary me-3" th:text="#{paidTV}"></div></h4> -->
 									<h4 th:case="*"><div class="badge bg-secondary me-3" th:text="${transaction.actions[#lists.size(transaction.actions) - 1].actiontype.name}"></div></h4>
 								</div>
