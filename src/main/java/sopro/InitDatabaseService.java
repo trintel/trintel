@@ -1,5 +1,12 @@
 package sopro;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -7,15 +14,16 @@ import org.springframework.stereotype.Service;
 import sopro.model.Action;
 import sopro.model.ActionType;
 import sopro.model.Company;
+import sopro.model.CompanyLogo;
 import sopro.model.InitiatorType;
 import sopro.model.Transaction;
 import sopro.model.User;
 import sopro.repository.ActionRepository;
 import sopro.repository.ActionTypeRepository;
+import sopro.repository.CompanyLogoRepository;
 import sopro.repository.CompanyRepository;
 import sopro.repository.TransactionRepository;
 import sopro.repository.UserRepository;
-
 @Service
 public class InitDatabaseService {
 
@@ -34,6 +42,8 @@ public class InitDatabaseService {
     @Autowired
     TransactionRepository transactionRepository;
 
+    @Autowired
+    CompanyLogoRepository companyLogoRepository;
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -43,6 +53,8 @@ public class InitDatabaseService {
         // If there is no data, add some initial values for testing the application.
         // ATTENTION: If you change any model (i.e., the data scheme), you most likely
         // need to delete the .h2 database file in your file system first!
+
+        //TODO not all should be created in final version!!
 
         if (userRepository.count() == 0 && companyRepository.count() == 0) {
 
@@ -92,6 +104,25 @@ public class InitDatabaseService {
             actionTypeRepository.save(accept);
             transactionRepository.save(transaction1);
             actionRepository.save(trans1Request);
+
+            //save the default companylogo in database
+            // ClassLoader classLoader = getClass().getClassLoader();
+            // URL resource = classLoader.getResource("src/main/ressources/static/img/onlyicon.png");
+            // File img = new Imga(resource.toURI());
+
+            try {
+                // byte[] defaultImg = Files.readAllBytes(Paths.get("src/main/ressources/static/img/onlyicon.png").normalize().toAbsolutePath());
+                File f = new File ("./src/main/resources/static/img/placeholder.jpg");
+                BufferedImage image = ImageIO.read(f);
+                CompanyLogo companyLogo = new CompanyLogo();
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                ImageIO.write(image, "jpg", baos);
+                companyLogo.setLogo(baos.toByteArray());
+                companyLogoRepository.save(companyLogo);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
 
         }
     }
