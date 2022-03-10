@@ -127,8 +127,10 @@ public class CompanyTest {
     @Test
     @WithMockUser(username = "admin@admin", roles = {"ADMIN"})
     public void saveCompanieTestAdmin() throws Exception {
-        mockMvc.perform(get("/companies/save"))
-               .andExpect(status().is(405));         //Test with database check is down below
+        Company company = new Company(companyName);
+        mockMvc.perform(post("/companies/save").flashAttr("company", company).with(csrf()))
+               .andExpect(status().is(302))
+               .andExpect(redirectedUrl("/companies"));         //Test with database check is down below
     }
 
     /**
@@ -317,11 +319,8 @@ public class CompanyTest {
     @Test
     @WithMockUser(username = "admin@admin", roles = { "ADMIN" })
     public void adminDeleteCompany() throws Exception {
-        mockMvc.perform(get("/companies/delete"))
-               .andExpect(status().is(200));   
-
-        
-        mockMvc.perform(post("/company/deleted").param("name", companyName).with(csrf()))
+  
+        mockMvc.perform(post("/companies/delete/").param("name", companyName).with(csrf()))
                .andExpect(status().isFound())
                .andExpect(redirectedUrl("/companies"))
                .andExpect(status().isFound());
