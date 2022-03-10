@@ -53,7 +53,7 @@
 		<div class="d-flex justify-content-center" sec:authorize="hasRole('STUDENT')">
 			<a class="btn btn-primary btn-lg" th:href="@{/companies}" th:text="#{newTransaction}"></a>
 		</div>
-		<p th:if="${transactions.isEmpty()}" th:text="#{noTransactionFound]"></p>
+		<p th:if="${transactions.isEmpty()}" th:text="#{noTransactionFound}"></p>
 	</th:block>
 </body>
 

@@ -17,13 +17,22 @@ public class Company {
     @Getter @Setter @Id @GeneratedValue(strategy = GenerationType.AUTO)	private Long id;
     @Getter @Setter @NotEmpty @Column(unique = true) private String name;
     @Getter @Setter private String description;
-    @Getter @Setter	@JsonIgnore	@OneToMany(mappedBy = "company", cascade = CascadeType.ALL) private List<User> students;
+    @Getter @Setter	@JsonIgnore	@OneToMany(mappedBy = "company") private List<User> students;
+    @Getter @Setter	@JsonIgnore	@OneToOne private CompanyLogo companyLogo;
 
-    public Company(){}
+    public Company(){
+        this.description = "";
+    }
 
-    public Company(String name){
+    public Company(String name) {
        this.name = name;
        this.students = new ArrayList<User>();
        this.description = "";
     }
+
+    @PreRemove
+    private void preRemove() {
+        students.forEach(student -> student.setCompany(null));
+    }
+
 }
