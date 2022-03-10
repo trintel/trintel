@@ -65,11 +65,8 @@ public class CompanyTest {
        
        @Autowired
        private MockMvc mockMvc;
-    //private MockHttpServletRequestBuilder builder;
-    //private final ServletContext servletContext = new MockServletContext();
-
-
-    String companyName = "NewComp";
+   
+       String companyName = "NewComp";
 
 // #######################################################################################
 // ----------------------------------- Method Tests -------------------------------------
@@ -123,9 +120,8 @@ public class CompanyTest {
                .andExpect(status().isForbidden());
     }
 
-
     /**
-     * Tests if the Admin can acces the view to save a company
+     * Tests if the Admin can acces the view to save a company before he adds a company
      * @throws Exception
      */
     @Test
@@ -143,12 +139,9 @@ public class CompanyTest {
     @WithMockUser(username = "student@student", roles = {"STUDENT"})
     public void saveCompanieTestStudent() throws Exception {
         mockMvc.perform(get("/companies/save"))
-               .andExpect(status().is3xxRedirection())
-               .andExpect(redirectedUrl("/companies"));
+               .andExpect(status().isForbidden());
        
     }
-
-
 
     /**Test before function
      * Tests if the Admin can acces the list of all students
@@ -184,8 +177,8 @@ public class CompanyTest {
                .andExpect(status().is(200));
     }
 
-   /////////////////////////////////////
-   /// TODO Write Test for editStudent and moveToCompany when function implemented
+
+   // TODO Write Test for editStudent and moveToCompany when function implemented
 
 
 // #######################################################################################
@@ -217,9 +210,6 @@ public class CompanyTest {
                .andExpect(view().name("company-select"));	
     }
 
-
-
-
     /**
      * Tests if the Admin can not select a company
      * @throws Exception
@@ -227,10 +217,14 @@ public class CompanyTest {
     @Test
     @WithMockUser(username = "admin@admin", roles = {"ADMIN"})
     public void companySelectIdTestAdmin() throws Exception {
+        //Deletes Company if it is allready in the database for some reason
+        if (companyRepository.findByName(companyName) != null) {
+              companyRepository.delete(companyRepository.findByName(companyName));
+          }  
         Company testCompany = new Company(companyName); 
         companyRepository.save(testCompany);
         long id = testCompany.getId();   
-        
+
         mockMvc.perform(get("/company/select/" + id))
                .andExpect(status().isForbidden());
 
@@ -263,7 +257,6 @@ public class CompanyTest {
 
 
 
-
     /**
      * Tests if the Admin can not see his company (has none)
      * @throws Exception
@@ -274,52 +267,16 @@ public class CompanyTest {
         mockMvc.perform(get("/company"))
                .andExpect(status().isForbidden());
     }
+ 
+// TODO editOwnCompany und saveOwnCompany
 
-    /**
-     * Tests if the Students can see their own company
-     * @throws Exception
-     */
-   /*  @Test
-    @WithMockUser(username = "student@student", roles = {"STUDENT"})
-    public void viewOwnCompanyTestStudent() throws Exception {
-        Company testCompany = new Company(companyName);
-        companyRepository.save(testCompany);
-        User user = new User("student", "student", "student@student", "password", testCompany);
-        user.setRole("STUDENT");
-        userRepository.save(user);
-
-        //User userMock = mock(User.class, "myMock");
-   
-        //userMock.perform(get("/company"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("company-info"));	
-
-                // https://stackoverflow.com/questions/42693486/how-to-mock-method-that-called-in-other-method-while-using-spring-dependency-inj
-    }
-
- */
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
+  
     
 // #######################################################################################
 // ----------------------------------- Integration Tests ---------------------------------
 // #######################################################################################
 
         
-
-
     /**
      * Tests, if the the admin can add a company.
      * 
@@ -347,9 +304,7 @@ public class CompanyTest {
 
     }
 
-
-
-    
+  
     /**
      * Test written before Function implemented
      * Tests, if the added Company can be deleted
@@ -367,78 +322,5 @@ public class CompanyTest {
                .andExpect(redirectedUrl("/companies"))
                .andExpect(status().isFound());
     }
-
-    /**
-     * 
-     * @throws Exception
-     */
-/**   
-    @Test
-    @WithMockUser(username = "m@m", roles = { "STUDENT" })
-    public void studentRegistrationDirectedToCompany() throws Exception {
-
-        mockMvc.perform(formLogin().password("password").user("m@m"))
-               .andExpect(status().isFound())
-               .andExpect(redirectedUrl("/home"));
-
-        mockMvc.perform(get("/home"))                                       //Problem: UserController setHome2() wird auf einen "richtigen" User aufgerufen, funktioniert nicht mit MockUser
-               .andExpect(authenticated())
-               .andExpect(status().isFound())
-               .andExpect(redirectedUrl("/company/select"));
-    }
-    
-    /**
-     * Tests if the student can join a company
-     *
-     * @throws Exception
-     */
-/** @Test
-    @WithMockUser(username = "m@m", roles = { "STUDENT" })
-    public void studentJoinCompany() throws Exception{
-        User user = new User("student", "student","student@student", "password", null);
-
-        mockMvc.perform(get("/company/select"))
-               .andExpect(status().is(200))
-               .andExpect(content().string(containsString(companyName)));
-
-        Company company = companyRepository.findByName(companyName);
-        long id = company.getId();
-
-        mockMvc.perform(get("/company/select/" + id))
-               .andExpect(status().isOk());
-
-        mockMvc.perform(post("/company/join").content(objectMapper.writeValueAsString(user)).param("companyName", companyName).with(csrf()))
-               .andExpect(status().is(302))
-               .andExpect(redirectedUrl("/home"));
-                   
-    }
-
-    @Test
-    @WithMockUser(username = "student@student", roles = { "STUDENT" })
-    public void studentJoinCompany2() throws Exception{
-        
-
-        mockMvc.perform(formLogin().password("password").user("m@m"))
-               .andExpect(status().isFound())
-               .andExpect(redirectedUrl("/home"));             
-        
-        mockMvc.perform(get("/company/select"))
-               .andExpect(status().is(200))
-               .andExpect(content().string(containsString(companyName)));
-
-        Company company = companyRepository.findByName(companyName);
-        long id = company.getId();
-
-        mockMvc.perform(get("/company/select/" + id))
-               .andExpect(status().isOk());
-
-
-        mockMvc.perform(post("/company/join").param("companyName", companyName).with(user("m@m").roles("STUDENT")).with(csrf()))
-               .andExpect(status().is(302))
-               .andExpect(redirectedUrl("/home"));
-                   
-    }
-*/    
-
 
 }
