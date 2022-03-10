@@ -37,7 +37,7 @@
 						<div th:id="'panelsStayOpen-collapseOne'+${action.id}" class="accordion-collapse collapse" th:classappend="${{action.id == actions[#lists.size(actions)-1].id} ? 'show':''}" th:aria-labelledby="'panelsStayOpen-headingOne'+${action.id}">
 							<div class="accordion-body d-flex">
 								<div class="me-5" sec:authorize="hasRole('ADMIN')">
-									<span class="text-muted me-5" style="font-size: 15px" th:text="#{initiatingStudent}"></span>
+									<span class="text-muted" style="font-size: 15px" th:text="#{initiatingStudent}"></span>
 									<span class="text-black"><h5 th:text="${action.initiator.forename} + ' ' + ${action.initiator.surname}"></h5></span>
 								</div>
 								<div class="me-5">
@@ -55,7 +55,7 @@
 									<span class="text-black"><h5 th:text="${action.amount}"></h5></span>
 								</div>
 								<div th:unless="${action.actiontype.name} == 'Request'" class="me-5">
-									<div class="text-muted flex-grow-1" style="font-size: 15px" th:text="#{pricePerPiece}"></div>
+									<div class="text-muted" style="font-size: 15px" th:text="#{pricePerPiece}"></div>
 									<div class="text-black"><h5 th:text="${action.pricePerPiece}"></h5></div>
 								</div>
 								<div>
@@ -80,7 +80,7 @@
 						<a th:case="*" class="btn btn-primary btn-lg me-3" th:text="${actiontype.name}" th:href="@{'/transaction/' + ${transactionID} + '/addAction'}"></a>
 					</div>
 				</div>
-				<!-- For "Paid" check button (maybe change to whatever name the action gets in the end) -->
+				<!-- For "Paid" check button (for the case that we don't make Paid as Action in the end) -->
 				<!-- <div th:each="action: ${actions}">
 					<div th:if="${action.actiontype.name} == 'Invoicing'">
 						<input type="checkbox" class="btn-check" id="checkPaid" autocomplete="off">
