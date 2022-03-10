@@ -14,9 +14,11 @@ ONLY AVAILABLE whenn Transaction is created as first action.-->
     <th:block th:fragment="content">
         <style th:replace="fragments/small-content :: content"></style>
         <main class="form-small">
+            <!-- Block: Header -->
             <h1 class="mb-3" th:text="#{request}"></h1>
-            <h3 class="mb-3" th:text="#{requTo} + ' ' + ${companyID}"></h3>
+            <h3 class="mb-3" th:object="${newTransaction}" th:text="#{requTo} + ' ' + ${transaction.seller.name}"></h3>
             <form th:action="@{'/transaction/' + ${companyID} + '/save'}" th:object="${action}" method="post">
+                <!-- Block: Produkt & Amount -->
                 <div class="d-flex">
                     <div class="form-floating mb-3" th:object="${transaction}">
                         <input th:field="*{product}" type="text" class="form-control" id="reqProduct"
@@ -29,17 +31,20 @@ ONLY AVAILABLE whenn Transaction is created as first action.-->
                         <label for="floatingReqAmount" th:text="#{amount}"></label>
                     </div>
                 </div>
+                <!-- Block: Message -->
                 <div class="form-floating mb-3">
                     <input th:field="*{message}" type="text" class="form-control" id="reqMessage" placeholder="message"
                         name="Request_Message">
                     <label for="floatingReqMessage" th:text="#{message}"></label>
                 </div>
+                <!-- Block: Submit Button -->
                 <div class="form-group">
                     <button type="submit" class="w-100 btn btn-lg btn-primary">
                         <a th:text=" #{send}"></a>
                     </button>
                 </div>
             </form>
+            <!-- Block: Back Button -->
             <button class="w-100 btn btn-lg btn-light" onclick="history.back()">
                 <i class="bi bi-arrow-left"></i>
                 <a th:text=" #{back}"></a>

@@ -56,6 +56,8 @@ public class TransactionController {
     public String createTransaction(@PathVariable Long companyID, @AuthenticationPrincipal User user, Model model) {
 
         Transaction newTransaction = new Transaction();
+        //added by @philo to pre set the seller known by the id to print the name in the formular
+        newTransaction.setSeller(companyRepository.findById(companyID).get());
 
         Action newAction = new Action();
         model.addAttribute("companyID", companyID);
@@ -115,7 +117,7 @@ public class TransactionController {
 
         if(user.getCompany().equals(transactionRepository.findById(transactionID).get().getBuyer())) {      //findout if current user is Buyer or seller.
             initiatorType = InitiatorType.BUYER;
-        }    
+        } 
         
         Action newAction = new Action();
         model.addAttribute("actiontypes", actionTypeRepository.findByInitiatorType(initiatorType));     //only find the available actiontypes for that user.

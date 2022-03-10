@@ -15,11 +15,11 @@ AVIALABLE as long as no offer is accepted-->
         <style th:replace="fragments/small-content :: content"></style>
         <main class="form-small">
             <form th:action="@{'/transaction/' + ${transactionID} + '/addAction'}" th:object="${action}" method="post">
-
+                <!-- Block: Header -->
                 <div class="form-floating mb-3">
                     <h1 th:text="#{offer}"></h1>
                 </div>
-
+                <!-- Block: Price & Amount -->
                 <div class="d-flex">
                     <div class="form-floating mb-3" th:object="${action}">
                         <input th:field="*{pricePerPiece}" type="number" class="form-control" id="offPrice"
@@ -29,22 +29,27 @@ AVIALABLE as long as no offer is accepted-->
                     <div class="form-floating mb-3 ms-3">
                         <input th:field="*{amount}" type="number" class="form-control" id="offAmount"
                             placeholder="amount" name="Offer_Amount" required>
-                        <label for="floatingOffAmount" th:field="*{amount}" th:text="#{amount}"></label>
+                        <label for="floatingOffAmount" th:text="#{amount}"></label>
                     </div>
                 </div>
-
+                <!-- Block: Message -->
                 <div class="form-floating mb-3">
                     <input th:field="*{message}" type="text" class="form-control" id="reqMessage" placeholder="message"
                         name="Request_Message">
-                    <label for="floatingReqMessage" th:field="*{message}" th:text="#{message}"></label>
+                    <label for="floatingReqMessage" th:text="#{message}"></label>
                 </div>
-
+                <!-- Block: Submit Button -->
                 <div class="form-group">
                     <a th:href="@{'/transaction/' + ${transactionID} + '/addAction'}">
                         <button type="submit" class="w-100 btn btn-lg btn-primary"><a th:text=" #{send}"></a></button>
                     </a>
                 </div>
             </form>
+            <!-- Block: Back Button -->
+            <button class="w-100 btn btn-lg btn-light" onclick="history.back()">
+                <i class="bi bi-arrow-left"></i>
+                <a th:text=" #{back}"></a>
+            </button>
         </main>
     </th:block>
 </body>

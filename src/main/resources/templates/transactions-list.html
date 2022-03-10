@@ -19,7 +19,7 @@
 							<div class="col d-flex align-items-center">
                                 <div th:switch="${transaction.actions[#lists.size(transaction.actions) - 1].actiontype.name}">
                                     <h4 th:case="Request" class="mb-0"><div class="badge bg-danger me-5" th:text="#{request}"></div></h4>
-                                    <!-- <h4 th:case="Offer" class="mb-0"><div class="badge bg-warning text-dark me-5" th:text="#{offer}"></div></h4> -->
+                                    <h4 th:case="Offer" class="mb-0"><div class="badge bg-warning text-dark me-5" th:text="#{offer}"></div></h4> 
                                     <!-- <h4 th:case="Order" class="mb-0"><div class="badge bg-success me-5" th:text="#{order}"></div></h4> -->
                                     <!-- <h4 th:case="Delivery" class="mb-0"><div class="badge bg-light text-dark me-5" th:text="#{delivery}"></div></h4> -->
                                     <!-- <h4 th:case="Invoicing" class="mb-0"><div class="badge bg-dark me-5" th:text="#{invoicing}"></div></h4> -->
