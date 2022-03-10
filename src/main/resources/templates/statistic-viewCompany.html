@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:include="layout :: page">
+
+<head>
+    <title th:fragment="title">TITEL</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+<body>
+    <th:block th:fragment="content" sec:authorize=”hasRole('STUDENT')”>
+        <h1 class="mb-5 mt-2" th:text="#{statistics}"></h1>
+        <h3 class="mb-3" th:text="#{generalStatistics}"></h3>
+        <div class="container mb-3">
+            <div class="row">
+
+                <div class="col">
+                    <ul class="list-group mb-3 mx-auto">
+                        <li class="list-group-item" ><h5 th:text="#{amountTransactions}"></h5></li>
+                        <li class="list-group-item">242</li>
+                    </ul>
+                </div>
+
+                <div class="col">
+                    <ul class="list-group mb-3 mx-auto">
+                        <li class="list-group-item" ><h5 th:text="#{turnover}"></h5></li>
+                        <li class="list-group-item">10Mio$</li>
+                    </ul>
+                </div>
+
+                <div class="col">
+                    <ul class="list-group mb-3 mx-auto">
+                        <li class="list-group-item" ><h5 th:text="#{percentTurnover}"></h5></li>
+                        <li class="list-group-item">12%</li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+
+        <h3 class="mb-3" th:text="#{transactionStatistics}"></h3>
+
+        <div class="container mb-3">
+            <table class="table">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col" th:text="#{company}"></th>
+                        <th scope="col" th:text="#{amountTransactions}"></th>
+                        <th scope="col" th:text="#{offers}"></th>
+                        <th scope="col" th:text="#{products}"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Company1</td>
+                        <td>99</td>
+                        <td>235</td>
+                        <td>433</td>
+                    </tr>
+                    <tr>
+                        <td>Company2</td>
+                        <td>80</td>
+                        <td>232</td>
+                        <td>333</td>
+                    </tr>
+                    <tr>
+                        <td>Company3</td>
+                        <td>68</td>
+                        <td>222</td>
+                        <td>255</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </th:block>
+</body>
+
+</html>
