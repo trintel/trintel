@@ -308,38 +308,7 @@ public class CompanyTest {
 
     }
 
-<<<<<<< HEAD
-
-    /**
-     * Tests if the student can join a company
-     *
-     * @throws Exception
-     */
-    @Test
-    @WithUserDetails("m@m")
-    public void studentJoinCompany() throws Exception{
-
-        mockMvc.perform(get("/company/select"))
-               .andExpect(status().is(200))
-               .andExpect(content().string(containsString(companyName)));
-
-        Company company = companyRepository.findByName(companyName);
-        long id = company.getId();
-
-        mockMvc.perform(get("/company/select/" + id))
-               .andExpect(status().isOk());
-
-
-        mockMvc.perform(post("/company/join").param("companyName", companyName).with(csrf()))
-               .andExpect(status().is(302))
-               .andExpect(redirectedUrl("/home"));
-                   
-    }
-
-    
-=======
   
->>>>>>> f355a84d4aea718f5b8985e8b2fb303dbeedaa6e
     /**
      * Test written before Function implemented
      * Tests, if the added Company can be deleted
