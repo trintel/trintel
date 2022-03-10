@@ -10,7 +10,11 @@
     <th:block th:fragment="content">
         <style th:replace="fragments/small-content :: content"></style>
         <main class="form-small">
-            <h3 class="mb-3" th:text="${company.name}"></h3>
+            <h3 class="mb-3 text-break" th:text="${company.name}"></h3>
+            <div th:unless="${company.getDescription().isEmpty()}">
+                <h5 th:text="#{description}"></h5>
+                <p class="mb-3" th:text="${company.description}"></p>
+            </div>
             <form action="#" th:action="@{/company/join}" method="post">
                 <input type="hidden" th:value="${company.name}" th:attr="name='companyName'" />
                 <h5 class="mb-3" th:text="#{members}" th:unless="${company.getStudents().isEmpty()}"></h5>
