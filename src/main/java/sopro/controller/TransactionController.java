@@ -97,6 +97,8 @@ public class TransactionController {
         // action.setActiontype(actionType);
         action.setTransaction(transactionRepository.findById(transactionID).get());
         action.setInitiator(user);
+        //added by @philo because actiontype should be prededined 
+        action.setActiontype(actionTypeRepository.findByName("Offer"));
 
         actionRepository.save(action);
 
@@ -104,6 +106,7 @@ public class TransactionController {
         return "redirect:/transaction/" + transactionID;
 
     }
+
 
     @GetMapping("/transaction/{transactionID}/addAction")
     public String showAction(Action action, @PathVariable Long transactionID, @AuthenticationPrincipal User user, Model model) {
@@ -120,6 +123,7 @@ public class TransactionController {
         model.addAttribute("transactionID", transactionID);
         return "transaction-addOffer";
     }
+
 
     @GetMapping("/actions")
     public String showActions(Model model) {

@@ -20,19 +20,19 @@
                     method="post">
 
                     <div class="form-floating mb-3 w-100">
-                        <h1 th:text="#{accepted}"></h1>
+                        <h1 th:text="${action.name}"></h1>
                     </div>
 
                     <div class="form-floating mb-3 w-100">
-                        <input th:field="*{text}" type="text" class="form-control" id="reqMessage" placeholder="message"
-                            name="Request_Message">
-                        <label for="floatingReqMessage" th:field="*{message}" th:text="#{message}"></label>
+                        <input th:field="*{text}" type="text" class="form-control" id="actionText" placeholder="text"
+                            name="Action_Text" required autofocus>
+                        <label for="floatingReqMessage" th:field="*{text}" th:text="#{text}"></label>
                     </div>
 
                     <div class="form-group">
                         <a th:href="@{'/transaction/' + ${transactionID} + '/addAction'}">
-                            <button type="submit" class="w-100 btn btn-lg btn-primary"><a
-                                    th:text=" #{send}"></a></button>
+                            <button type="submit" class="w-100 btn btn-lg btn-primary"><a th:text=" #{send}"></a>
+                            </button>
                         </a>
                     </div>
                 </form>
