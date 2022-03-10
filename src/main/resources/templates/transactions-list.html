@@ -2,40 +2,57 @@
 <html xmlns:th="http://www.thymeleaf.org" th:include="layout :: page">
 
 <head>
-	<th:block th:fragment="title"><title>Trintel</title></th:block>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<th:block th:fragment="title">
+		<title>Trintel</title>
+	</th:block>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 
 <body>
 	<th:block th:fragment="content">
-		<h1>Transactions</h1>
-		<p></p>
-		<table th:unless="${transactions.isEmpty()}">
-			<thead>
-				<tr>
-					<th>Buyer</th>
-                    <th>Seller</th>
-                    <th>Product</th>
-                    <th>Amount</th>
-                    <th>Price per Piece</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="transaction : ${transactions}">
-                    <td th:text="${transaction.buyer.name}"></td>
-					<td th:text="${transaction.seller.name}"></td>
-                    <td th:text="${transaction.product}"></td>
-                    <td th:text="${transaction.amount}"></td>
-                    <td th:text="${transaction.pricePerPiece}"></td>
-					<td>
-						<a th:href="@{'/transaction/' + ${transaction.id}}" class="icon-link">
-							<p>Show Details</p>
-						</a>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-		<p th:if="${transactions.isEmpty()}">No Transactions found.</p>
+		<h1 th:text="#{transactions}"></h1>
+		<div th:unless="${transactions.isEmpty()}">
+			<div th:each="transaction: ${transactions}">
+				<a th:href="@{'/transaction/' + ${transaction.id}}" class="text-decoration-none">
+					<div class="card mb-3">
+						<div class="card-body d-flex align-items-center">
+							<div class="col d-flex align-items-center">
+                                <div th:switch="${transaction.actions[#lists.size(transaction.actions) - 1].actiontype.name}">
+                                    <h4 th:case="Request" class="mb-0"><div class="badge bg-danger me-5" th:text="#{request}"></div></h4>
+                                    <!-- <h4 th:case="Offer" class="mb-0"><div class="badge bg-warning text-dark me-5" th:text="#{offer}"></div></h4> -->
+                                    <!-- <h4 th:case="Order" class="mb-0"><div class="badge bg-success me-5" th:text="#{order}"></div></h4> -->
+                                    <!-- <h4 th:case="Delivery" class="mb-0"><div class="badge bg-light text-dark me-5" th:text="#{delivery}"></div></h4> -->
+                                    <!-- <h4 th:case="Invoicing" class="mb-0"><div class="badge bg-dark me-5" th:text="#{invoicing}"></div></h4> -->
+                                    <h4 th:case="*" class="mb-0"><div class="badge bg-secondary me-5" th:text="${transaction.actions[#lists.size(transaction.actions) - 1].actiontype.name}"></div></h4>
+                                </div>
+								<div style="display: inline-block" class="me-5">
+									<span class="card-text text-muted" style="font-size: 15px" th:text="#{buyer}"></span>
+									<span class="card-text text-black"><h5 th:text="${transaction.buyer.name}"></h5></span>
+								</div>
+								<div style="display: inline-block" class="me-5">
+									<span class="card-text text-muted me-5" style="font-size: 15px" th:text="#{seller}"></span>
+									<span class="card-text text-black"><h5 th:text="${transaction.seller.name}"></h5></span>
+								</div>
+								<div style="display: inline-block">
+									<span class="card-text text-muted" style="font-size: 15px" th:text="#{product}"></span>
+									<span class="card-text text-black"><h5 th:text="${transaction.product}"></h5></span>
+								</div>
+							</div>
+							<div class="col-2">
+								<div class="float-end">
+									<i class="bi bi-chevron-right text-black" style="font-size:2rem;"></i>
+								</div>
+							</div>
+						</div>
+					</div>
+				</a>
+			</div>
+		</div>
+		<div class="d-flex justify-content-center" sec:authorize="hasRole('STUDENT')">
+			<a class="btn btn-primary btn-lg" th:href="@{/companies}" th:text="#{newTransaction}"></a>
+		</div>
+		<p th:if="${transactions.isEmpty()}" th:text="#{noTransactionFound]"></p>
 	</th:block>
 </body>
+
 </html>

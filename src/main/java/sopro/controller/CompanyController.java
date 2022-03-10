@@ -1,6 +1,5 @@
 package sopro.controller;
 
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +10,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import sopro.model.Company;
+import sopro.model.CompanyLogo;
 import sopro.model.User;
+import sopro.repository.CompanyLogoRepository;
 import sopro.repository.CompanyRepository;
 import sopro.repository.UserRepository;
 @Controller
@@ -24,50 +27,65 @@ public class CompanyController {
 
     @Autowired
     UserRepository userRepository;
-    
+
+    @Autowired
+    CompanyLogoRepository companyLogoRepository;
+
 // #######################################################################################
 // ----------------------------------- ADMIN FUNCTIONS -----------------------------------
 // #######################################################################################
 
-    @GetMapping("/companies")
-    public String listCompanies(Model model) {
-        model.addAttribute("companies", companyRepository.findAll()); //add a list of all companies to the model
-        return "company-list";
-    }
-
     @GetMapping("/companies/add")
     public String addCompany(Model model) {
         Company company = new Company();    //creating a new Company Object to be added to the database
-        model.addAttribute("company", company); 
+        model.addAttribute("company", company);
         return "company-create";
     }
 
     @PostMapping("/companies/save")
     public String saveCompany(@Valid Company company, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
-			model.addAttribute("company", company);
-			return "company-create";
-		}
+            model.addAttribute("company", company);
+            return "company-create";
+        }
         companyRepository.save(company);    //saves the new Company
+        return "redirect:/companies";
+    }
+
+    //TODO Rechte einschränken
+    @PostMapping("/companies/delete/{companyID}")
+    public String deleteCompany(@PathVariable Long companyID, Model model) {
+
+        companyRepository.deleteById(companyID);
+
         return "redirect:/companies";
     }
 
     @GetMapping("/students")
     public String listAllStudents(Model model) {
+        Company company = new Company("unassgined");
+        for (User student : userRepository.findByRole("STUDENT")) {
+            if (student.getCompany()==null) {
+                student.setCompany(company);
+            }
+        }
         model.addAttribute("students", userRepository.findByRole("STUDENT")); //list all students
-        //TODO deal with unassigned students (null-pointer Except. in template)
         return "students-list";
     }
 
-    @GetMapping("/student/{id}/reasign")
+    @GetMapping("/student/{id}/reassign")
     public String editStudent(Model model, @PathVariable Long id) {
         User student = userRepository.findById(id).get();
-        model.addAttribute("companies", companyRepository.findByIdNot(student.getCompany().getId())); //get all companies except for the current one
+        if (student.getCompany()==null) {
+            model.addAttribute("companies", companyRepository.findAll());
+        }else{
+            model.addAttribute("companies", companyRepository.findByIdNot(student.getCompany().getId())); //get all companies except for the current one
+        }
         model.addAttribute("studentID", id);                  //add the student id to the model (for post-request navigation)
-        return "student-reasign";
+        return "student-reassign";
     }
 
-    @PostMapping("/student/{id}/reasign")
+    @PostMapping("/student/{id}/reassign")
     public String moveToCompany(String companyName, @PathVariable Long id, Model model) {
         User user = userRepository.findById(id).get();      //find the student to be editet
         Company company2 = companyRepository.findByName(companyName);   //find the new company
@@ -76,26 +94,35 @@ public class CompanyController {
         return "redirect:/students";
     }
 
-    
+    //TODO Rechte einschränken
+    @GetMapping("/companies/{companyID}")
+    public String viewCompany(@PathVariable Long companyID, Model model) {
+        model.addAttribute("company", companyRepository.findById(companyID).get());
+
+        return "company-info";
+    }
+
+
 // #########################################################################################
 // ----------------------------------- STUDENT FUNCTIONS -----------------------------------
 // #########################################################################################
 
     @GetMapping("/company/select")
     public String selectCompany(Model model) {
-        model.addAttribute("companies", companyRepository.findAll());
+        // .findByOrderByNameAsc() statt .findAll()
+        model.addAttribute("companies", companyRepository.findByOrderByNameAsc());
         return "company-select";
     }
 
     @GetMapping("/company/select/{id}")
     public String joinCompany(@PathVariable Long id, Model model) {
-        
+
         model.addAttribute("company", companyRepository.findById(id).get());
 
         return "company-view";
     }
 
-    @PostMapping("/company/join") 
+    @PostMapping("/company/join")
     public String joinCompany2(String companyName, @AuthenticationPrincipal User user, Model model) {
 
         // // //TODO schöner lösen
@@ -103,7 +130,7 @@ public class CompanyController {
         //      return "redirect:/home";
         // }
         user.setCompany(companyRepository.findByName(companyName));  //set the company of that user.
-        
+
         userRepository.save(user);
 
         return "redirect:/home";
@@ -113,31 +140,63 @@ public class CompanyController {
     @GetMapping("/company")
     public String viewOwnCompany(Model model, @AuthenticationPrincipal User user) {
 
-        model.addAttribute("company", companyRepository.findById(user.getCompany().getId()).get());
-
-        return "company-info";
+        return "redirect:/companies/" + user.getCompany().getId();
     }
 
-    @GetMapping("/company/edit")
-    public String editOwnCompany(Model model, @AuthenticationPrincipal User user) {
+    @GetMapping("/company/{companyID}/edit")
+    public String editOwnCompany(Model model, @AuthenticationPrincipal User user, @PathVariable Long companyID) {
+        try {
 
-        model.addAttribute("company", companyRepository.findById(user.getCompany().getId()).get());
+            if(user.getRole().equals("ADMIN") || user.getCompany().getId() == companyID) {
+                model.addAttribute("company", companyRepository.findById(companyID).get());
 
-        return "company-edit";
+                return "company-edit";
+            } else {
+                return "redirect:/home";        //not allowed to edit that company
+            }
+
+        } catch (NullPointerException e) {      //if company not assigned (should never happen...)
+            return "redirect:/home";
+        }
     }
 
-    @PostMapping("/company/edit")
-    public String saveOwnCompany(@Valid Company company, BindingResult bindingResult, @AuthenticationPrincipal User user, Model model) {
+    @PostMapping(consumes = "multipart/form-data", value = "/company/{companyID}/edit")
+    public String saveOwnCompany(@RequestParam("formFile") MultipartFile companyLogo, @Valid Company company, BindingResult bindingResult, @PathVariable Long companyID, @AuthenticationPrincipal User user, Model model) throws Exception {
         if (bindingResult.hasErrors()) {
             model.addAttribute("company", company);
-			return "company-edit";
-		}
-        company.setId(user.getCompany().getId());                           //set the id of new Company-Object to the old id
+            return "company-edit";
+        }
+        company.setId(companyID);                           //set the id of new Company-Object to the old id
         companyRepository.save(company);                                    //old company get overwritten, since id is primary key
 
-        return "redirect:/company";
+        if (!companyLogo.isEmpty()) {
+            CompanyLogo dbLogo = companyLogoRepository.findByCompany(company);
+            if(dbLogo == null) {
+                dbLogo = new CompanyLogo();
+            }
+            dbLogo.setLogo(companyLogo.getBytes());
+            dbLogo.setCompany(company);
+            companyLogoRepository.save(dbLogo);
+        }
+        return "redirect:/companies/" + companyID;
     }
 
-    
+// #########################################################################################
+// ----------------------------------- FUNCTIONS FOR BOTH ----------------------------------
+// #########################################################################################
 
+    //a list of all companies.
+    //Admins can click on them an get redirected to: TODO list of students in company (reassign)
+    //Admins can add new Companies
+    //Students see only other companies. can click on one to start transaction.
+    @GetMapping("/companies")
+    public String listCompanies(Model model, @AuthenticationPrincipal User user) {
+        if(user.getRole().equals("ADMIN")) {
+            model.addAttribute("companies", companyRepository.findAll()); //add a list of all companies to the model
+        } else {
+            model.addAttribute("companies", companyRepository.findByIdNot(user.getCompany().getId()));
+        //add a list of all companies to the model, without the own company.
+        }
+        return "company-list";
+    }
 }

@@ -1,31 +1,43 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" th:include="layout-fullscreen :: page">
 
+<head>
+	<th:block th:fragment="title">
+		<title>Company Selection - Trintel</title>
+	</th:block>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+</head>
 
 <body>
-	<div>
-		<h2>Companies</h2>
-		<p>Manage all companies in the database. Add new companies with the button at the bottom.</p>
-		<table th:unless="${companies.isEmpty()}">
-			<thead>
-				<tr>
-					<th>Company</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="company : ${companies}">
-					 <td th:text="${company.name}"></td>
-                     <td>
-						<a th:href="@{'/company/select/' + ${company.id}}" class="icon-link">
-							<p>Beitreten</p>
-						</a>
-					</td>
-
-				</tr>
-			</tbody>
-		</table>
-
-		<p th:if="${companies.isEmpty()}">No Companies found.</p>
-	</div>
+	<th:block th:fragment="content">
+		<style th:replace="fragments/small-content :: content"></style>
+		<main class="form-small">
+			<h1 class="mb-4" th:utext="#{companySelection}"></h1>
+			<p th:text="#{companySelectionText}"></p>
+			<div th:unless="${companies.isEmpty()}">
+				<div th:each="company : ${companies}">
+					<a th:href="@{'/company/select/' + ${company.id}}" class="text-decoration-none">
+						<div class="card mb-3">
+							<div class="card-body d-flex align-items-center">
+								<div class="col d-flex align-items-center">
+									<div class="companylogo companylogo-sm me-3">
+										<img th:src="@{'/company/logo/' + ${company.id}}" />
+									</div>
+									<h5 class="text-black mb-0" th:text="${company.name}"></h5>
+								</div>
+								<div class="col-2">
+									<div class="float-end">
+										<i class="bi bi-chevron-right text-black" style="font-size:2rem;"></i>
+									</div>
+								</div>
+							</div>
+						</div>
+					</a>
+				</div>
+			</div>
+			<p th:if="${companies.isEmpty()}" th:text="#{noCompaniesFound}"></p>
+	</th:block>
 </body>
+
 </html>

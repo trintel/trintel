@@ -5,6 +5,7 @@ import java.util.Calendar;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import sopro.model.User;
@@ -17,6 +18,9 @@ import sopro.repository.VerificationTokenRepository;
 public class UserService implements UserInterface {
 
     @Autowired
+    PasswordEncoder passwordEncoder;
+
+    @Autowired
     private VerificationTokenRepository tokenRepository;
 
     @Autowired
@@ -27,10 +31,10 @@ public class UserService implements UserInterface {
     public static final String TOKEN_VALID = "valid";
 
     // TODO move registerNewUser here!
-    
+
     /**
-     * Create a token for a user. 
-     * 
+     * Create a token for a user.
+     *
      * @param user
      * @param token
      */
@@ -40,9 +44,9 @@ public class UserService implements UserInterface {
         tokenRepository.save(myToken);
     }
 
-    /** 
-     * Get user by verification token. 
-     * 
+    /**
+     * Get user by verification token.
+     *
      * @param verificationToken
      * @return User
      */
@@ -56,8 +60,8 @@ public class UserService implements UserInterface {
     }
 
     /**
-     * Save user. 
-     * 
+     * Save user.
+     *
      * @param user
      */
     @Override
@@ -67,7 +71,7 @@ public class UserService implements UserInterface {
 
     /**
      * Get token by value.
-     * 
+     *
      * @param VerificationToken
      * @return VerificationToken
      */
@@ -75,11 +79,11 @@ public class UserService implements UserInterface {
     public VerificationToken getVerificationToken(String VerificationToken) {
         return tokenRepository.findByToken(VerificationToken);
     }
-    
+
     /**
      * Check if a token is valid. Delete if not.
      * Also delete old tokens.
-     * 
+     *
      * @param token
      * @return String
      */
@@ -101,5 +105,17 @@ public class UserService implements UserInterface {
         tokenRepository.delete(verificationToken); // Should not be needed anymore.
         userRepository.save(user);
         return TOKEN_VALID;
+    }
+
+    @Override
+    public void createUser(User user, String role) throws Exception {
+        user.setRole(role.toUpperCase());
+
+        // encode the new password for saving in the database
+        String encPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encPassword);
+
+        // saves the new user in userRepo
+        userRepository.save(user);
     }
 }

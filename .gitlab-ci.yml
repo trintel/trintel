@@ -1,10 +1,11 @@
 stages:
-  - build
+  - assemble
+  - style-check
   - test
   - build-docker
 
-build:
-  stage: build
+assemble:
+  stage: assemble
   image: adoptopenjdk/openjdk11
   
   variables:
@@ -25,6 +26,23 @@ build:
   artifacts:
     paths:
       - target/app.jar
+
+style-check:
+  stage: style-check
+  image: adoptopenjdk/openjdk11
+  
+  variables:
+     GRADLE_USER_HOME: '.gradle-cache'
+     GRADLE_OPTS: "-Dorg.gradle.daemon=false"
+     
+  cache:
+    key: "$CI_JOB_NAME"
+    paths:
+      - $GRADLE_USER_HOME
+     
+  script:
+    - chmod +x gradlew
+    - ./gradlew spotlessCheck
 
 test:
   stage: test

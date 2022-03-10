@@ -1,28 +1,40 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" th:include="layout-fullscreen :: page">
+
+<head>
+    <title th:text="#{companyView}"></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
 
 <body>
-	<div>
-        <h1>Company:<p name="companyName" th:text="${company.name}"></p></h1>
-        <form action="#" th:action="@{/company/join}" method="post">
-            <input type="hidden" th:value="${company.name}" th:attr="name='companyName'"/>
-            <table th:unless="${company.getStudents().isEmpty()}">
-                <thead>
-                    <tr>
-                        <th>Students</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="student : ${company.getStudents()}">
-                        <td th:text="${student.forename}"></td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <p th:if="${company.getStudents().isEmpty()}">No Members found.</p>
-
-            <input type="submit" value="Join" />
-        </form>
-	</div>
+    <th:block th:fragment="content">
+        <style th:replace="fragments/small-content :: content"></style>
+        <main class="form-small">
+            <h3 class="mb-3 text-break" th:text="${company.name}"></h3>
+            <div th:unless="${company.getDescription().isEmpty()}">
+                <h5 th:text="#{description}"></h5>
+                <p class="mb-3" th:text="${company.description}"></p>
+            </div>
+            <form action="#" th:action="@{/company/join}" method="post">
+                <input type="hidden" th:value="${company.name}" th:attr="name='companyName'" />
+                <h5 class="mb-3" th:text="#{members}" th:unless="${company.getStudents().isEmpty()}"></h5>
+                <ul class="list-group mb-3" th:unless="${company.getStudents().isEmpty()}">
+                    <li class="list-group-item" th:text="${student.forename} + ' ' + ${student.surname}"
+                        th:each="student : ${company.getStudents()}"></li>
+                </ul>
+                <p class="alert alert-secondary" role="alert" th:if="${company.getStudents().isEmpty()}"
+                    th:text="#{noMembers}"></p>
+                <div class="form-group">
+                    <button type="submit" class="w-100 btn btn-lg btn-primary">
+                        <a th:text="#{join}"></a>
+                    </button>
+                </div>
+            </form>
+            <button class="w-100 btn btn-lg btn-light mt-3" onclick="history.back()">
+                <i class="bi bi-arrow-left"></i> <a th:text=" #{back}"></a>
+            </button>
+        </main>
+    </th:block>
 </body>
+
 </html>
