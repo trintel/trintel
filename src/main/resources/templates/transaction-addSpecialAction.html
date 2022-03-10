@@ -1,0 +1,42 @@
+<!-- This file represents the creation of an special action provided by the admin.-->
+
+</html>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:include="layout-fullscreen :: page">
+
+<head>
+    <title th:text="#{request}"> </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+<body>
+    <th:block th:fragment="content">
+        <style th:replace="fragments/small-content :: content"></style>
+        <main class="form-small">
+            <div id="carouselExampleDark" class="carousel slide" data-ride="carousel" data-bs-interval="500"
+                data-bs-pause="false">
+
+                <form th:action="@{'/transaction/' + ${transactionID} + '/addAction'}" th:object="${action}"
+                    method="post">
+
+                    <div class="form-floating mb-3 w-100">
+                        <h1 th:text="#{accepted}"></h1>
+                    </div>
+
+                    <div class="form-floating mb-3 w-100">
+                        <input th:field="*{text}" type="text" class="form-control" id="reqMessage" placeholder="message"
+                            name="Request_Message">
+                        <label for="floatingReqMessage" th:field="*{message}" th:text="#{message}"></label>
+                    </div>
+
+                    <div class="form-group">
+                        <a th:href="@{'/transaction/' + ${transactionID} + '/addAction'}">
+                            <button type="submit" class="w-100 btn btn-lg btn-primary"><a
+                                    th:text=" #{send}"></a></button>
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </th:block>
+</body>

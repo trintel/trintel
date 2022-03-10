@@ -1,3 +1,6 @@
+<!-- This file represents the creation of an offer. 
+AVIALABLE as long as no offer is accepted-->
+
 </html>
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" th:include="layout-fullscreen :: page">
@@ -11,59 +14,30 @@
     <th:block th:fragment="content">
         <style th:replace="fragments/small-content :: content"></style>
         <main class="form-small">
-            <!-- TODO -->
-            <!-- <h3 class="mb-3" th:text="#{requTo} + ' ' + ${companyID}"></h3> -->
             <form th:action="@{'/transaction/' + ${transactionID} + '/addAction'}" th:object="${action}" method="post">
-                <!-- TODO -->
-                <!-- <table th:unless="${actions.isEmpty()}" -->
-                <table>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <div class="form-floating mb-3">
-                                    <h1 th:text="#{actiontype}"></h1>
-                                    <select class="custom-select-lg w-100 btn btn-lg btn-primary"
-                                        th:field="*{actiontype}">
-                                        <option th:each="actiontype : ${actiontypes}" th:text="${actiontype.name}"
-                                            th:value="${actiontype.id}">
-                                    </select>
-                                </div>
-                            </td>
-                        </tr>
-                        
-                        
-                        <!-- TODO -->
-                        <!-- <p th:if="${actiontype.isEmpty()}" th:text="#{noActionsFound}"></p> -->
-                        <tr>
-                            <td>
-                                <div class="d-flex">
-                                    <div class="form-floating mb-3" th:object="${action}">
-                                        <input th:field="*{pricePerPiece}" type="number" class="form-control"
-                                            id="offPrice" placeholder="price" name="Offer_Price" required>
-                                        <label for="floatingOffPrice" th:text="#{offPrice}"></label>
-                                    </div>
-                                    <div class="form-floating mb-3 ms-3">
-                                        <input th:field="*{amount}" type="number" class="form-control" id="offAmount"
-                                            placeholder="amount" name="Offer_Amount" required>
-                                        <label for="floatingOffAmount" th:field="*{amount}" th:text="#{amount}"></label>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
 
-                        <tr>
-                            <td>
-                                <div class="form-floating mb-3">
-                                    <input th:field="*{message}" type="text" class="form-control" id="reqMessage"
-                                        placeholder="message" name="Request_Message">
-                                    <label for="floatingReqMessage" th:field="*{message}" th:text="#{message}"></label>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="form-floating mb-3">
+                    <h1 th:text="#{offer}"></h1>
+                </div>
 
-                
+                <div class="d-flex">
+                    <div class="form-floating mb-3" th:object="${action}">
+                        <input th:field="*{pricePerPiece}" type="number" class="form-control" id="offPrice"
+                            placeholder="price" name="Offer_Price" required>
+                        <label for="floatingOffPrice" th:text="#{offPrice}"></label>
+                    </div>
+                    <div class="form-floating mb-3 ms-3">
+                        <input th:field="*{amount}" type="number" class="form-control" id="offAmount"
+                            placeholder="amount" name="Offer_Amount" required>
+                        <label for="floatingOffAmount" th:field="*{amount}" th:text="#{amount}"></label>
+                    </div>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input th:field="*{message}" type="text" class="form-control" id="reqMessage" placeholder="message"
+                        name="Request_Message">
+                    <label for="floatingReqMessage" th:field="*{message}" th:text="#{message}"></label>
+                </div>
 
                 <div class="form-group">
                     <a th:href="@{'/transaction/' + ${transactionID} + '/addAction'}">

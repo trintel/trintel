@@ -108,6 +108,8 @@ public class TransactionController {
     @GetMapping("/transaction/{transactionID}/addAction")
     public String showAction(Action action, @PathVariable Long transactionID, @AuthenticationPrincipal User user, Model model) {
         InitiatorType initiatorType = InitiatorType.SELLER;
+        // ActionType actionType = actionTypeRepository.findByName(actionTypeName);
+
         if(user.getCompany().equals(transactionRepository.findById(transactionID).get().getBuyer())) {      //findout if current user is Buyer or seller.
             initiatorType = InitiatorType.BUYER;
         }    
