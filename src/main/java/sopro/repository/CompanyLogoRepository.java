@@ -7,4 +7,5 @@ import sopro.model.CompanyLogo;
 
 public interface CompanyLogoRepository  extends CrudRepository<CompanyLogo, Long> {
     CompanyLogo findByCompany(Company company);
+    CompanyLogo findByCompanyId(Long companyId);
 }

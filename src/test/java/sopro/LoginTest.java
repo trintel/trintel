@@ -41,11 +41,12 @@ public class LoginTest {
      * @throws Exception
      */
     // @Test
-    // @WithMockUser(username = "admin@admin", roles = { "ADMIN" }) // Erstellt User ohne die Daternbank zu verwenden.
+    // @WithMockUser(username = "admin@admin", roles = { "ADMIN" }) // Erstellt User
+    // ohne die Daternbank zu verwenden.
     // public void adminCanSeeCompanies() throws Exception {
-    //     mockMvc
-    //             .perform(get("/companies"))
-    //             .andExpect(status().is(200));
+    // mockMvc
+    // .perform(get("/companies"))
+    // .andExpect(status().is(200));
     // }
 
     /**
@@ -70,12 +71,13 @@ public class LoginTest {
      * @throws Exception
      */
     // @Test
-    // @WithMockUser(username = "student@student", roles = { "STUDENT" }) // Erstellt User ohne die Daternbank zu
-    //                                                                    // verwenden.
+    // @WithMockUser(username = "student@student", roles = { "STUDENT" }) //
+    // Erstellt User ohne die Daternbank zu
+    // // verwenden.
     // public void studentCanNotSeeCompanies() throws Exception {
-    //     mockMvc
-    //             .perform(get("/companies"))
-    //             .andExpect(status().isForbidden());
+    // mockMvc
+    // .perform(get("/companies"))
+    // .andExpect(status().isForbidden());
     // }
 
     /**
@@ -122,31 +124,5 @@ public class LoginTest {
                 .andReturn()
                 .getResponse()
                 .getRedirectedUrl().endsWith("/login"));
-    }
-
-    /**
-     * Test if the Sign Up page is forwarded to the login page for the Students.
-     *
-     * @throws Exception
-     */
-    @Test
-    public void testSignupPageStudentIsNotAvailableWithoutInviteLink() throws Exception {
-        mockMvc
-                .perform(get("/signup/student"))
-                .andExpect(status().is(302))
-                .andExpect(redirectedUrl("/login"));
-    }
-
-    /**
-     * Test if the Sign Up page is forwarded to the login page for the admin.
-     *
-     * @throws Exception
-     */
-    @Test
-    public void testSignupPageAdminIsNotAvailableWithoutInviteLink() throws Exception {
-        mockMvc
-                .perform(get("/signup/admin"))
-                .andExpect(status().is(302))
-                .andExpect(redirectedUrl("/login"));
     }
 }

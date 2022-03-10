@@ -55,9 +55,12 @@ public class CompanyController {
     //TODO Rechte einschränken
     @PostMapping("/companies/delete/{companyID}")
     public String deleteCompany(@PathVariable Long companyID, Model model) {
-
-        companyRepository.deleteById(companyID);
-
+        //TODO maybe delete all transactions. so that companies with transactions can also be deleted.
+        if(companyLogoRepository.findByCompanyId(companyID) != null) {
+            companyLogoRepository.delete(companyLogoRepository.findByCompanyId(companyID));     //company gets deleted because of cascade.remove.
+        } else {
+            companyRepository.deleteById(companyID);                                            //if there is no custom logo just delete the company
+        }
         return "redirect:/companies";
     }
 

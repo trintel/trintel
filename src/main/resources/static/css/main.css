@@ -168,7 +168,6 @@ main {
 .companylogo {
   position: relative;
   border-radius: .8rem;
-  width: 5rem;
   border: 1px solid rgba(0,0,0,.125);
 }
 
@@ -192,11 +191,11 @@ main {
 }
 
 .companylogo-sm {
-  width: 3.5rem;
+  min-width: 3.5rem;
 }
 
 .companylogo-md {
-  width: 5rem;
+  min-width: 5rem;
 }
 
 .companylogo-lg {
@@ -207,4 +206,24 @@ main {
   .companylogo-lg {
     width: 100%;
   }
+}
+
+.accordion-item {
+  border-radius:.8rem !important;
+}
+
+.accordion-item .accordion-button {
+  border-top-left-radius: .8rem !important;
+  border-top-right-radius: .8rem !important;
+  background-color: rgba(84, 97, 127, 0.117);
+}
+
+.accordion-item .accordion-button.collapsed {
+  border-bottom-left-radius: .8rem !important;
+  border-bottom-right-radius: .8rem !important;
+}
+
+.accordion-item .accordion-collapse {
+  border-bottom-left-radius: .8rem !important;
+  border-bottom-right-radius: .8rem !important;
 }

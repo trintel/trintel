@@ -15,7 +15,7 @@
             </div>
             <div class="col-md-9">
                 <h1 th:text="${company.name}"></h1>
-                <div th:unless="${company.getDescription().isEmpty()}">
+                <div th:unless="${company.getDescription() == null || company.getDescription().isEmpty()}">
                     <h5 th:text="#{description}"></h5>
                     <p class="mb-3" th:text="${company.description}"></p>
                 </div>
@@ -27,12 +27,11 @@
                 </ul>
 
                 <p th:if="${company.getStudents().isEmpty()}" th:text="#{noMembers}"></p>
-
-                <a class="float-end" th:href="@{/company/{id}/edit(id=${company.id})}">
-                    <button class="btn btn-primary" type="submit" th:text="#{edit}"></button>
-                </a>
             </div>
         </div>
+        <a class="float-end" th:href="@{/company/{id}/edit(id=${company.id})}" th:if="${#request.userPrincipal.principal.role} == 'ADMIN' or ${#request.userPrincipal.principal.company.id} == ${company.id}">
+            <button class="btn btn-primary mt-md-3" type="submit" th:text="#{edit}"></button>
+        </a>
     </th:block>
 </body>
 
