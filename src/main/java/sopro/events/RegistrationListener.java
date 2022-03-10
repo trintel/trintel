@@ -30,10 +30,10 @@ public class RegistrationListener implements
         this.confirmRegistration(event);
     }
 
-    
-    /** 
+
+    /**
      * Creates token and send email.
-     * 
+     *
      * @param event
      */
     private void confirmRegistration(OnRegistrationCompleteEvent event) {
@@ -45,10 +45,10 @@ public class RegistrationListener implements
         mailSender.send(email);
     }
 
-    
-    /** 
+
+    /**
      * Construct and send mail.
-     * 
+     *
      * @param event
      * @param user
      * @param token

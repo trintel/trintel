@@ -6,18 +6,31 @@
               <li class="nav-item">
                 <a th:classappend="${#httpServletRequest.getRequestURI() == '/home' ? 'active':''}" class="nav-link" th:href="@{/home}">
                     <i th:class="${#httpServletRequest.getRequestURI() == '/home' ? 'bi bi-house-fill':'bi bi-house'}"></i>
-                    <label th:text="#{home}"/>
+                    <span th:text="#{home}"/>
                 </a>
               </li>
               <li class="nav-item">
-                <a th:classappend="${#httpServletRequest.getRequestURI() == '/companies' ? 'active':''}" class="nav-link" sec:authorize="hasRole('ADMIN')" th:href="@{/companies}">
-                  <i th:class="${#httpServletRequest.getRequestURI() == '/companies' ? 'bi bi-briefcase-fill':'bi bi-briefcase'}"></i>
-                  <label th:text="#{companies}"/>
+                <a th:classappend="${#httpServletRequest.getRequestURI().startsWith('/companies') ? 'active':''}" class="nav-link" sec:authorize="hasRole('ADMIN')" th:href="@{/companies}">
+                  <i th:class="${#httpServletRequest.getRequestURI().startsWith('/companies') ? 'bi bi-briefcase-fill':'bi bi-briefcase'}"></i>
+                  <span th:text="#{companies}"/>
                 </a>
               </li>
               <li class="nav-item">
-                <a th:classappend="${#httpServletRequest.getRequestURI() == '/companies' ? 'active':''}" class="nav-link" sec:authorize="hasRole('STUDENT')" th:href="@{/company}">
-                  <i th:class="${#httpServletRequest.getRequestURI() == '/companies' ? 'bi bi-briefcase-fill':'bi bi-briefcase'}"></i> My company
+                <a th:classappend="${#httpServletRequest.getRequestURI() == '/students' ? 'active':''}" class="nav-link" sec:authorize="hasRole('ADMIN')" th:href="@{/students}">
+                  <i th:class="${#httpServletRequest.getRequestURI() == '/students' ? 'bi bi-people-fill':'bi bi-people'}"></i>
+                  <span th:text="#{students}"/>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a th:classappend="${#httpServletRequest.getRequestURI().startsWith('/companies') ? 'active':''}" class="nav-link" sec:authorize="hasRole('STUDENT')" th:href="@{/company}">
+                  <i th:class="${#httpServletRequest.getRequestURI().startsWith('/companies') ? 'bi bi-briefcase-fill':'bi bi-briefcase'}"></i>
+                  <span th:text="#{myCompany}"/>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a th:classappend="${#httpServletRequest.getRequestURI() == '/transactions' ? 'active':''}" class="nav-link" th:href="@{/transactions}">
+                  <i th:class="${#httpServletRequest.getRequestURI() == '/transactions' ? 'bi bi-cart-fill':'bi bi-cart'}"></i>
+                  <span th:text="#{transactions}"/>
                 </a>
               </li>
               <li class="nav-item">

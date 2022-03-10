@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 
 import lombok.Getter;
@@ -19,7 +20,10 @@ public class Action {
     @Getter @Setter @Id @GeneratedValue(strategy = GenerationType.AUTO)	private Long id;
     @Getter @Setter @ManyToOne @NotNull private ActionType actiontype;
     @Getter @Setter @ManyToOne @NotNull private Transaction transaction;
+    @Getter @Setter @ManyToOne @OneToOne private User initiator;
     @Getter @Setter private String message;
+    @Getter @Setter private Integer amount;
+    @Getter @Setter private Double pricePerPiece;
     @Getter final private LocalDate date;       //the time and date of the action
     @Getter final private LocalTime time;
 
