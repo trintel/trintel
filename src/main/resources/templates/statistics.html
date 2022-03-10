@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:include="layout :: page">
+
+<head>
+	<th:block th:fragment="title"><title>Trintel</title></th:block>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+
+<body>
+	<th:block th:fragment="content">
+		<h1>Transactions</h1>
+		<p></p>
+		<table>
+			<thead>
+				<tr>
+					<th>totalCost</th>
+					<th>amount</th>
+				</tr>
+			</thead>
+			<tbody>
+                    <td th:text="${totalCost}"></td>
+                    <td th:text="${amount}"></td>
+			</tbody>
+		</table>
+	</th:block>
+</body>
+</html>
