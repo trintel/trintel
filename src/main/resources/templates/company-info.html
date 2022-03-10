@@ -27,12 +27,11 @@
                 </ul>
 
                 <p th:if="${company.getStudents().isEmpty()}" th:text="#{noMembers}"></p>
-
-                <a class="float-end" th:href="@{/company/{id}/edit(id=${company.id})}">
-                    <button class="btn btn-primary" type="submit" th:text="#{edit}"></button>
-                </a>
             </div>
         </div>
+        <a class="float-end" th:href="@{/company/{id}/edit(id=${company.id})}" th:if="${#request.userPrincipal.principal.role} == 'ADMIN' or ${#request.userPrincipal.principal.company.id} == ${company.id}">
+            <button class="btn btn-primary mt-md-3" type="submit" th:text="#{edit}"></button>
+        </a>
     </th:block>
 </body>
 
