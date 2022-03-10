@@ -145,7 +145,7 @@ public class CompanyTest {
     @Test
     @WithMockUser(username = "admin@admin", roles = {"ADMIN"})
     public void saveCompanieTestAdmin() throws Exception {
-         //Deletes Company if it is allready in the database for some reason
+         //Deletes Company if it is allready in the database from other tests
         if (companyRepository.findByName(companyName) != null) {
                 companyRepository.delete(companyRepository.findByName(companyName));
             } 
@@ -198,11 +198,11 @@ public class CompanyTest {
     @Test
     @WithMockUser(username = "adminTest@admin", roles = {"ADMIN"})
     public void editReassignStudentTestAdmin() throws Exception {
-         //Deletes Company if it is allready in the database for some reason
+         //Deletes Company if it is allready in the database from other tests
         if (companyRepository.findByName(companyName) != null) {
             companyRepository.delete(companyRepository.findByName(companyName));
         }
-        //Deletes User if it is allready in the database for some reason  
+        //Deletes User if it is allready in the database from other tests  
         if (userRepository.findByEmail("adminTest@admin") != null) {
             userRepository.delete(userRepository.findByEmail("adminTest@admin"));
         } 
@@ -228,11 +228,11 @@ public class CompanyTest {
     @Test
     @WithMockUser(username = "studentTest@student", roles = {"STUDENT"})
     public void editReassignStudentTestStudent() throws Exception {
-        //Deletes Company if it is allready in the database for some reason
+        //Deletes Company if it is allready in the database from other tests
         if (companyRepository.findByName(companyName) != null) {
             companyRepository.delete(companyRepository.findByName(companyName));
         }
-        //Deletes User if it is allready in the database for some reason  
+        //Deletes User if it is allready in the database from other tests  
         if (userRepository.findByEmail("studentTest@student") != null) {
             userRepository.delete(userRepository.findByEmail("studentTest@student"));
         } 
@@ -257,11 +257,11 @@ public class CompanyTest {
     @Test
     @WithMockUser(username = "adminTest@admin", roles = {"ADMIN"})
     public void moveToCompanyTestAdmin() throws Exception {
-        //Deletes Company if it is allready in the database for some reason
+        //Deletes Company if it is allready in the database from other tests
         if (companyRepository.findByName(companyName) != null) {
             companyRepository.delete(companyRepository.findByName(companyName));
         }
-        //Deletes User if it is allready in the database for some reason  
+        //Deletes User if it is allready in the database from other tests 
         if (userRepository.findByEmail("adminTest@admin") != null) {
             userRepository.delete(userRepository.findByEmail("adminTest@admin"));
         } 
@@ -288,11 +288,11 @@ public class CompanyTest {
     @Test
     @WithMockUser(username = "studentTest@student", roles = {"STUDENT"})
     public void moveToCompanyTestStudent() throws Exception {
-        //Deletes Company if it is allready in the database for some reason
+        //Deletes Company if it is allready in the database from other tests
         if (companyRepository.findByName(companyName) != null) {
             companyRepository.delete(companyRepository.findByName(companyName));
         }
-        //Deletes User if it is allready in the database for some reason  
+        //Deletes User if it is allready in the database from other tests  
         if (userRepository.findByEmail("studentTest@student") != null) {
             userRepository.delete(userRepository.findByEmail("studentTest@student"));
         } 
@@ -348,7 +348,7 @@ public class CompanyTest {
     @Test
     @WithMockUser(username = "admin@admin", roles = {"ADMIN"})
     public void companySelectIdTestAdmin() throws Exception {
-        //Deletes Company if it is allready in the database for some reason
+        //Deletes Company if it is allready in the database from other tests
         if (companyRepository.findByName(companyName) != null) {
               companyRepository.delete(companyRepository.findByName(companyName));
           }  
@@ -370,7 +370,7 @@ public class CompanyTest {
     @Test
     @WithMockUser(username = "student@student", roles = {"STUDENT"})
     public void companySelectIdTestStudent() throws Exception {
-        //Deletes Company if it is allready in the database for some reason
+        //Deletes Company if it is allready in the database from other tests
         if (companyRepository.findByName(companyName) != null) {
                 companyRepository.delete(companyRepository.findByName(companyName));
             } 
@@ -405,7 +405,7 @@ public class CompanyTest {
      * @throws Exception
      */
     @Test
-    @WithUserDetails(value="student@student", userDetailsServiceBeanName="userDetailsService")
+    @WithUserDetails(value="studentTest@student", userDetailsServiceBeanName="userDetailsService")
     public void joinCompany2TestStudent() throws Exception {
         mockMvc.perform(post("/company/join").param("name", companyName).with(csrf()))
                .andExpect(status().is3xxRedirection())
@@ -419,32 +419,33 @@ public class CompanyTest {
      */
     @Test
     @WithUserDetails(value="admin@admin", userDetailsServiceBeanName="userDetailsService")
-    public void editOwnCompanyAdmin() throws Exception {
-        //Deletes Company if it is allready in the database for some reason
+    public void editOwnCompanyAdminTest() throws Exception {
+        //Deletes Company if it is allready in the database from other tests
         if (companyRepository.findByName(companyName) != null) {
                 companyRepository.delete(companyRepository.findByName(companyName));
             } 
         Company testCompany = new Company(companyName);
         companyRepository.save(testCompany);
-        long id = testCompany.getId(); 
+        long companyId = testCompany.getId(); 
 
         
-        mockMvc.perform(get("/company/" + id + "/edit"))
+        mockMvc.perform(get("/company/" + companyId + "/edit"))
                .andExpect(status().isOk())
                .andExpect(view().name("company-edit"));
     }
 
     /**
-     * Tests if the Admin can not edit his own company (has none)
+     * Tests if the Student can  edit his own company (has one)
      * @throws Exception
      */
     @Test
     @WithUserDetails(value="studentTest@student", userDetailsServiceBeanName="userDetailsService")
-    public void editOwnCompanyStudent() throws Exception {
-        //Deletes Company if it is allready in the database for some reason
+    public void editOwnCompanyStudentTest() throws Exception {
+        //Deletes Company if it is allready in the database from other tests
         if (companyRepository.findByName(companyName) != null) {
                 companyRepository.delete(companyRepository.findByName(companyName));
-            } 
+            }
+        //Deletes User if it is allready in the database from other tests
         if (userRepository.findByEmail("studentTest@student") != null) {
             userRepository.delete(userRepository.findByEmail("studentTest@student"));
             }       
@@ -453,18 +454,17 @@ public class CompanyTest {
         companyRepository.save(testCompany);
         
         User testUser = new User("studentTest", "studentTest", "studentTest@student", "password", testCompany);
-        testUser.setRole("STUDENT");       
+        testUser.setRole("STUDENT");    
         userRepository.save(testUser);
-
-        long id = testUser.getCompany().getId(); 
         
-        mockMvc.perform(get("/company/" + id + "/edit"))
-               .andExpect(status().isOk())
-               .andExpect(view().name("company-edit"));
+        long companyId = testCompany.getId(); 
+        
+        mockMvc.perform(get("/company/"+companyId+"/edit"))
+               .andExpect(view().name("company-edit"));             //TODO: Kommt in den else Fall
     }
 
 
-// TODO editOwnCompany und saveOwnCompany
+    // TODO saveOwnCompany
 
   
     

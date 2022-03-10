@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import sopro.TrintelApplication;
 import sopro.model.Company;
 import sopro.model.CompanyLogo;
 import sopro.model.User;
@@ -145,6 +146,7 @@ public class CompanyController {
 
     @GetMapping("/company/{companyID}/edit")
     public String editOwnCompany(Model model, @AuthenticationPrincipal User user, @PathVariable Long companyID) {
+        TrintelApplication.logger.debug("Request with company ID: "+ companyID +"\nUser: "+user);
         try {
 
             if(user.getRole().equals("ADMIN") || user.getCompany().getId() == companyID) {
