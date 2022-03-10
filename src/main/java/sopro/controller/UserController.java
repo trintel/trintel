@@ -23,6 +23,7 @@ import sopro.TrintelApplication;
 import sopro.events.OnRegistrationCompleteEvent;
 import sopro.model.User;
 import sopro.repository.UserRepository;
+import sopro.service.SignupUrlInterface;
 import sopro.service.UserInterface;
 
 @Controller
@@ -39,6 +40,7 @@ public class UserController {
 
     @Autowired
     private MessageSource messages;
+    SignupUrlInterface signupUrlService;
 
     /**
      * GET routing für Index.
@@ -64,10 +66,10 @@ public class UserController {
     @GetMapping("/signup/{rndStr}")
     public String signupRedirect(@PathVariable String rndStr, Model model) {
         User user = new User();
-        if (rndStr.equals(TrintelApplication.ADMIN_LOGIN_URL)) {
+        if (rndStr.equals(signupUrlService.getAdminSignupUrl())) {
             model.addAttribute("user", user);
             return "sign-up-admin";
-        } else if (rndStr.equals(TrintelApplication.STUDENT_LOGIN_URL)) {
+        } else if (rndStr.equals(signupUrlService.getStudentSignupUrl())){
             model.addAttribute("user", user);
             return "sign-up-student";
         } else {
