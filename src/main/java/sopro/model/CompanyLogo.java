@@ -1,5 +1,6 @@
 package sopro.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,6 +16,6 @@ public class CompanyLogo {
 
     @Getter @Setter @Id @GeneratedValue(strategy = GenerationType.AUTO) Long id;
     @Getter @Setter @Lob byte[] logo;
-    @Getter @Setter @OneToOne Company company;
+    @Getter @Setter @OneToOne(cascade = CascadeType.REMOVE) Company company;
 
 }

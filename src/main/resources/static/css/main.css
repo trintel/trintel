@@ -191,11 +191,11 @@ main {
 }
 
 .companylogo-sm {
-  width: 3.5rem;
+  min-width: 3.5rem;
 }
 
 .companylogo-md {
-  width: 5rem;
+  min-width: 5rem;
 }
 
 .companylogo-lg {
