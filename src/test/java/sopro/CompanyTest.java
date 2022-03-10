@@ -239,6 +239,10 @@ public class CompanyTest {
     @Test
     @WithMockUser(username = "student@student", roles = {"STUDENT"})
     public void companySelectIdTestStudent() throws Exception {
+        //Deletes Company if it is allready in the database for some reason
+        if (companyRepository.findByName(companyName) != null) {
+                companyRepository.delete(companyRepository.findByName(companyName));
+            } 
         Company testCompany = new Company(companyName);
         companyRepository.save(testCompany);
         long id = testCompany.getId();        
