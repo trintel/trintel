@@ -14,7 +14,7 @@ import sopro.repository.CompanyRepository;
 import sopro.repository.TransactionRepository;
 import sopro.repository.UserRepository;
 import sopro.model.Action;
-import sopro.model.Company;
+
 import sopro.model.Transaction;
 import sopro.model.User;
 import org.springframework.ui.Model;
