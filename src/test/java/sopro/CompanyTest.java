@@ -5,8 +5,6 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import java.io.FileInputStream;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -427,7 +425,7 @@ public class CompanyTest {
         long companyId = testCompany.getId();
 
         MockMultipartFile file = new MockMultipartFile("formFile", "".getBytes());
-        
+
         mockMvc.perform(multipart("/company/" + companyId + "/edit").file(file).with(csrf())
                .flashAttr("company", companyId))
                .andExpect(status().is3xxRedirection())
@@ -437,15 +435,15 @@ public class CompanyTest {
 
 
     /**
-     * 
-     * Tests if the Student can save his company 
+     *
+     * Tests if the Student can save his company
      * @throws Exception
      */
     @Test
     @WithUserDetails(value = "j@j", userDetailsServiceBeanName = "userDetailsService")
     public void saveOwnCompanyTestStudent() throws Exception {
         MockMultipartFile file = new MockMultipartFile("formFile", "".getBytes());
-        
+
         mockMvc.perform(multipart("/company/" + userRepository.findByEmail("j@j").getCompany().getId() + "/edit").file(file).with(csrf())
                .flashAttr("company", userRepository.findByEmail("j@j").getCompany().getId()))
                .andExpect(status().is3xxRedirection())
