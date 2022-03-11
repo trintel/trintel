@@ -72,21 +72,15 @@
 				<div th:each="actiontype: ${actiontypes}">
 					<div th:switch="${actiontype.name}">
 						<a th:case="Offer" class="btn btn-primary btn-lg me-3" th:text="#{offerNA}" th:href="@{'/transaction/' + ${transactionID} + '/addOffer'}"></a>
-						<a th:case="Accept" class="btn btn-primary btn-lg me-3" th:text="#{acceptNA}" th:href="@{'/transaction/' + ${transactionID} + '/accept'}" method="post"></a>
+						<a th:case="Accept" class="btn btn-success btn-lg me-3" th:text="#{acceptNA}" th:href="@{'/transaction/' + ${transactionID} + '/accept'}" method="post"></a>
 						<!-- <a th:case="End" class="btn btn-danger btn-lg me-3" th:text="#{endNA}" th:href="@{'/transaction/' + ${transactionID} + '/cancel'}"></a> -->
 						<!-- <a th:case="Delivery" class="btn btn-primary btn-lg me-3" th:text="#{deliveryNA}" th:href="@{'/transaction/' + ${transactionID} + '/addAction'}"></a> -->
 						<!-- <a th:case="Invoicing" class="btn btn-primary btn-lg me-3" th:text="#{invoicingNA}" th:href="@{'/transaction/' + ${transactionID} + '/addAction'}"></a> -->
 						<!-- <a th:case="Paid" class="btn btn-primary btn-lg me-3" th:text="#{paidNA}" th:href="@{'/transaction/' + ${transactionID} + '/addAction'}"></a> -->
-						<a th:case="*" class="btn btn-primary btn-lg me-3" th:text="${actiontype.name}" th:href="@{'/transaction/' + ${transactionID} + '/addAction'}"></a>
 					</div>
 				</div>
-				<!-- For "Paid" check button (for the case that we don't make Paid as Action in the end) -->
-				<!-- <div th:each="action: ${actions}">
-					<div th:if="${action.actiontype.name} == 'Invoicing'">
-						<input type="checkbox" class="btn-check" id="checkPaid" autocomplete="off">
-						<label class="btn btn-outline-success btn-lg" for="checkPaid" th:text="#{paidNA}"></button>
-					</div>
-				</div> -->
+				<!-- Button for access to special actions -->
+				<a class="btn btn-primary btn-lg me-3" th:href="@{'/transaction/' + ${transactionID} + '/addAction'}" th:text="#{specialActions}"></a>
 			</div>
 		</div>
 	</th:block>
