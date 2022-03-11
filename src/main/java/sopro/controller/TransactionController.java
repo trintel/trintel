@@ -92,11 +92,15 @@ public class TransactionController {
     public String transactionDetail(Model model, @PathVariable Long id, @AuthenticationPrincipal User user) {
         Action newAction = new Action();
         Transaction transaction = transactionRepository.findById(id).get();
-        InitiatorType initiatorType = InitiatorType.SELLER;
-        if(user.getCompany().equals(transaction.getBuyer())) {      //findout if current user is Buyer or seller.
-            initiatorType = InitiatorType.BUYER;
+        List<ActionType> actionTypes = new ArrayList<>();
+        if(!user.getRole().equals("ADMIN")){
+            InitiatorType initiatorType = InitiatorType.SELLER;
+            if(user.getCompany().equals(transaction.getBuyer())) {      //findout if current user is Buyer or seller.
+                initiatorType = InitiatorType.BUYER;
+            }
+            actionTypes = actionTypeRepository.findByInitiatorType(initiatorType);
         }
-        model.addAttribute("actiontypes", actionTypeRepository.findByInitiatorType(initiatorType));     //only find the available actiontypes for that user.
+        model.addAttribute("actiontypes", actionTypes);     //only find the available actiontypes for that user.
         model.addAttribute("action", newAction);
         model.addAttribute("actions", actionRepository.findByTransaction(transaction));
         model.addAttribute("transactionID", id);
