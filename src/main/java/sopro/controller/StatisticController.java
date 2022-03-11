@@ -57,8 +57,8 @@ public class StatisticController {
      *
      * @return statistic page
      */
-    @GetMapping("/statistics")
-    public String showStatistic() {
-        return "statistic-viewCompany";
-    }
+    //@GetMapping("/statistics")
+    //public String showStatistic() {
+    //    return "statistic-viewCompany";
+    //}
 }

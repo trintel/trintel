@@ -8,7 +8,7 @@
 
 <body>
     <th:block th:fragment="content" sec:authorize=”hasRole('STUDENT')”>
-        <div class="container mt-3 d-md-flex justify-content-md-between">
+        <div class="container mt-3 d-md-flex justify-content-md-between" style="align-items: center;">
             <div class="col-10">
                 <h1 class="mb-5 mt-2" th:text="#{statistics}"></h1>
             </div>
@@ -72,7 +72,7 @@
                         <li class="list-group-item">
                             <h5 th:text="#{totalTransationBuyerVolume}"></h5>
                         </li>
-                        <li class="list-group-item" th:text="${totalTransationBuyerVolume}"></li>
+                        <li class="list-group-item" th:text="${totalTransationBuyerVolume} +'€'"></li>
                     </ul>
                 </div>
             </div>
@@ -82,7 +82,7 @@
                         <li class="list-group-item">
                             <h5 th:text="#{totalTransationSellerVolume}"></h5>
                         </li>
-                        <li class="list-group-item" th:text="${totalTransationSellerVolume}"></li>
+                        <li class="list-group-item" th:text="${totalTransationSellerVolume} +'€'"></li>
                     </ul>
                 </div>
 
