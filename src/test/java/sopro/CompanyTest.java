@@ -5,25 +5,37 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import org.aspectj.lang.annotation.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.context.support.WithUserDetails;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 
 import sopro.model.Company;
+import sopro.model.Transaction;
 import sopro.model.User;
 import sopro.repository.CompanyRepository;
+import sopro.repository.TransactionRepository;
 import sopro.repository.UserRepository;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.introspect.TypeResolutionContext.Empty;
+import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 public class CompanyTest {
+
+    @Autowired
+    TransactionRepository transactionRepository;
 
     @Autowired
     UserRepository userRepository;
@@ -37,12 +49,42 @@ public class CompanyTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
     String companyName = "NewComp";
 
-    // @BeforeAll // TODO
-    // public void initDatabase() {
-    // initDatabaseService.init(); // TODO SQL ding von felix machen
-    // }
+
+/*     @BeforeEach
+    public void setup() {
+        //delete all Transactions
+        Iterable<Transaction> transactions = transactionRepository.findAll();
+        if (transactions != null) {
+            for (Transaction transaction : transactions) {
+                transactionRepository.delete(transaction);
+            }
+        //delete all User
+        Iterable<User> users = userRepository.findAll();
+        if (users != null) {
+            for (User user : users) {
+                userRepository.delete(user);
+            }
+        }
+            
+        }
+        //delete all Companies
+        Iterable<Company> companies = companyRepository.findAll();
+        if (companies != null) {
+            for (Company company : companies) {
+                companyRepository.delete(company);
+            }
+        }
+
+        //Create demo Users
+        User student1 = new User(true, true, true, true,"Schniedelus", "Maximilius", "m@m", passwordEncoder.encode("password"), null);
+        student1.setRole("STUDENT");
+        userRepository.save(student1);
+    } */
 
     // #######################################################################################
     // ----------------------------------- Method Tests ADMIN
