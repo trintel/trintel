@@ -72,7 +72,7 @@
 				<div th:each="actiontype: ${actiontypes}">
 					<div th:switch="${actiontype.name}">
 						<a th:case="Offer" class="btn btn-primary btn-lg me-3" th:text="#{offerNA}" th:href="@{'/transaction/' + ${transactionID} + '/addOffer'}"></a>
-						<a th:case="Accept" class="btn btn-primary btn-lg me-3" th:text="#{acceptNA}" th:href="@{'/transaction/' + ${transactionID} + '/accept'}"></a>
+						<a th:case="Accept" class="btn btn-primary btn-lg me-3" th:text="#{acceptNA}" th:href="@{'/transaction/' + ${transactionID} + '/accept'}" method="post"></a>
 						<!-- <a th:case="End" class="btn btn-danger btn-lg me-3" th:text="#{endNA}" th:href="@{'/transaction/' + ${transactionID} + '/cancel'}"></a> -->
 						<!-- <a th:case="Delivery" class="btn btn-primary btn-lg me-3" th:text="#{deliveryNA}" th:href="@{'/transaction/' + ${transactionID} + '/addAction'}"></a> -->
 						<!-- <a th:case="Invoicing" class="btn btn-primary btn-lg me-3" th:text="#{invoicingNA}" th:href="@{'/transaction/' + ${transactionID} + '/addAction'}"></a> -->
