@@ -22,8 +22,11 @@
                 <div class="form-floating mb-3">
                     
                     <select class="custom-select-lg w-100 btn btn-lg btn-primary" th:field="*{actiontype}">
-                        <option th:each="actiontype : ${actiontypes}"
-                            th:text="${actiontype.name} + ': ' + ${actiontype.text}" th:value="${actiontype.id}">
+                        <div th:each="actiontype : ${actiontypes}">
+                            <div th:unless="${actiontype.standartAction}">
+                                <option th:text="${actiontype.name} + ': ' + ${actiontype.text}" th:value="${actiontype.id}"> </option>
+                            </div>
+                        </div>
                     </select>
 
                 </div>

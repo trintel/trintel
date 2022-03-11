@@ -8,44 +8,6 @@
 
 <body>
 	<th:block th:fragment="content">
-		<!-- <h1>Actions</h1>
-		<p></p>
-		<table th:unless="${actions.isEmpty()}">
-			<thead>
-				<tr>
-					<th>message</th>
-					<th>actiontype</th>
-					<th>initiating company</th>
-					<th>initiating student</th>
-					<th>date</th>
-					<th>time</th>
-					<th>amount</th>
-					<th>price per pice</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="action : ${actions}">
-					<td th:text="${action.message}"></td>
-					<td th:text="${action.actiontype.name}"></td>
-					<td th:text="${action.initiator.company.name}"></td>
-					<td th:text="${action.initiator.forename} + ${action.initiator.surname}"></td>
-					<td th:text="${action.date}"></td>
-					<td th:text="${action.time}"></td>
-					<td th:text="${action.amount}"></td>
-					<td th:text="${action.pricePerPiece}"></td>
-				</tr>
-			</tbody>
-		</table>
-		<p th:if="${actions.isEmpty()}">No Transactions found.</p>
-
-		<a th:href="@{'/transaction/' + ${transactionID} + '/addAction'}">
-			<button type="submit">Add new action</button>
-		</a>
-
-		<a th:href="@{'/transaction/' + ${transactionID} + '/addSpeacialAction'}">
-			<button type="submit">Add new special  action</button>
-		</a> -->
-
 		<h1 th:text="#{transactionProgress}"></h1>
 		<h3 class="mb-3" th:text="|${actions[0].transaction.buyer.name} #{buying} ${actions[0].transaction.product} #{from} ${actions[0].transaction.seller.name}|"></h3>
 		<!-- Accordion for every action in chosen transaction to visualize transaction progress -->
@@ -64,7 +26,7 @@
 									<!-- <h4 th:case="Delivery"><div class="badge bg-primary me-3" th:text="#{deliveryTLV}"></div></h4> -->
 									<!-- <h4 th:case="Invoicing"><div class="badge bg-dark me-3" th:text="#{invoicingTLV}"></div></h4> -->
 									<!-- <h4 th:case="Paid"><div class="badge bg-primary me-3" th:text="#{paidTV}"></div></h4> -->
-									<h4 th:case="*"><div class="badge bg-secondary me-3" th:text="${transaction.actions[#lists.size(transaction.actions) - 1].actiontype.name}"></div></h4>
+									<h4 th:case="*"><div class="badge bg-secondary me-3" th:text="${action.actiontype.name}"></div></h4>
 								</div>
 								<div>
 									<div class="text-muted" style="font-size: 15px" th:text="#{initiatingCompany}"></div>

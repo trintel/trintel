@@ -119,27 +119,11 @@ public class TransactionController {
         }
 
         //a ArrayList for all available actions for the current Initiator
-        List<ActionType> availableActions = new ArrayList<>();
-
-        //check on all available actions to exclude the standart actions to only have the special actions
-        for(int i = 0; i < actionTypeRepository.findByInitiatorType(initiatorType).size(); i++){
-            if(actionTypeRepository.findByInitiatorType(initiatorType).get(i).equals(actionTypeRepository.findByName("Offer"))
-            || actionTypeRepository.findByInitiatorType(initiatorType).get(i).equals(actionTypeRepository.findByName("Accept"))
-            || actionTypeRepository.findByInitiatorType(initiatorType).get(i).equals(actionTypeRepository.findByName("Shipped"))
-            || actionTypeRepository.findByInitiatorType(initiatorType).get(i).equals(actionTypeRepository.findByName("Paid"))
-            || actionTypeRepository.findByInitiatorType(initiatorType).get(i).equals(actionTypeRepository.findByName("Completed"))
-            || actionTypeRepository.findByInitiatorType(initiatorType).get(i).equals(actionTypeRepository.findByName("Invoicing"))
-            || actionTypeRepository.findByInitiatorType(initiatorType).get(i).equals(actionTypeRepository.findByName("End"))){
-            }
-            else{
-                //if the type is none of the standard actiontypes it will be transmitted to the List of available special actions
-                availableActions.add(actionTypeRepository.findByInitiatorType(initiatorType).get(i));
-            }
-        }
+        List<ActionType> actionTypes  = new ArrayList<>();
+        actionTypes = actionTypeRepository.findByInitiatorType(initiatorType);
 
         //add the list of special actions
-        model.addAttribute("actiontypes", availableActions);
-
+        model.addAttribute("actiontypes", actionTypes );
         model.addAttribute("action", newAction);
         model.addAttribute("transactionID", transactionID);
         return "transaction-addSpecialAction";
