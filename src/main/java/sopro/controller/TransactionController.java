@@ -3,7 +3,6 @@ package sopro.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -112,7 +111,7 @@ public class TransactionController {
         // ActionType actionType = actionTypeRepository.findByName(actionTypeName);
         // action.setActiontype(actionType);
         Transaction transaction = transactionRepository.findById(transactionID).get();
-        
+
         if (action.getActiontype().getName().equals("ACCEPT")){
             transaction.setConfirmed(true);
         }else if(action.getActiontype().getName().equals("PAID")){

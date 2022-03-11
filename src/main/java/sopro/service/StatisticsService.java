@@ -14,7 +14,7 @@ import sopro.repository.TransactionRepository;
 
 @Service
 public class StatisticsService {
-    
+
     @Autowired
     CompanyRepository companyRepository;
 
@@ -31,7 +31,7 @@ public class StatisticsService {
     ActionTypeRepository actionTypeRepository;
 
     /**
-     * 
+     *
      * @param buyer the buying company
      * @return the total volume of all transactions, where the company was buyer
      */
@@ -45,7 +45,7 @@ public class StatisticsService {
     }
 
     /**
-     * 
+     *
      * @param seller the seller company
      * @return the total volume of all transactions, where the company was seller
      */
@@ -57,10 +57,10 @@ public class StatisticsService {
         }
         return volume;
     }
-    
+
 
     /**
-     * 
+     *
      * @param buyer the buying company
      * @return the number of transactions, where the company has bought products
      */
@@ -70,7 +70,7 @@ public class StatisticsService {
     }
 
     /**
-     * 
+     *
      * @param seller the selling company
      * @return the number of transactions, where the company has sold products
      */
@@ -80,7 +80,7 @@ public class StatisticsService {
     }
 
     /**
-     * 
+     *
      * @param seller the selling company
      * @return the number of different companies, that have bought from the selling company
      */
@@ -89,7 +89,7 @@ public class StatisticsService {
     }
 
     /**
-     * 
+     *
      * @param buyer the buying company
      * @return the number of different companies, that have sold to the buying company
      */

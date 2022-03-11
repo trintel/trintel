@@ -37,7 +37,7 @@ public class Transaction {
 
 
     /**
-     * 
+     *
      * @return the amount of the transaction, if set.
      */
     public Integer getAmount() {
@@ -51,7 +51,7 @@ public class Transaction {
     }
 
     /**
-     * 
+     *
      * @return the price per piece of the transaction, if set.
      */
     public Double getPricePerPiece() {

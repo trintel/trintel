@@ -98,7 +98,7 @@ public class InitDatabaseService {
             Action trans1Request = new Action("Test message", request, transaction1);
             trans1Request.setInitiator(student2);
 
-            Action trans1Offer = new Action("Test message", offer, transaction1);   
+            Action trans1Offer = new Action("Test message", offer, transaction1);
             trans1Offer.setAmount(20);
             trans1Offer.setPricePerPiece(0.4);
             trans1Offer.setInitiator(student1);
