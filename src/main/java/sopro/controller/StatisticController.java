@@ -51,4 +51,14 @@ public class StatisticController {
 
         return "statistics";
     }
+
+    /**
+     * GET routing für Index.
+     *
+     * @return statistic page
+     */
+    @GetMapping("/statistics")
+    public String showStatistic() {
+        return "statistic-viewCompany";
+    }
 }
