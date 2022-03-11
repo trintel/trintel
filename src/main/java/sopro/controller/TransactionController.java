@@ -55,6 +55,10 @@ public class TransactionController {
     @GetMapping("/transaction/{companyID}/create")
     public String createTransaction(@PathVariable Long companyID, @AuthenticationPrincipal User user, Model model) {
 
+        if(user.getCompany().getId() != companyID && user.getRole() != "ADMIN") {
+            return "redirect:/transactions";
+        }
+
         Transaction newTransaction = new Transaction();
         //added by @philo to pre set the seller known by the id to print the name in the formular
         newTransaction.setSeller(companyRepository.findById(companyID).get());
@@ -125,6 +129,16 @@ public class TransactionController {
         //add the list of special actions
         model.addAttribute("actiontypes", availableActions);
         //model.addAttribute("actiontypes", actionTypeRepository.findByInitiatorType(initiatorType));     //only find the available actiontypes for that user.
+        Transaction transaction = transactionRepository.findById(id).get();
+        List<ActionType> actionTypes = new ArrayList<>();
+        if(!user.getRole().equals("ADMIN")){
+            InitiatorType initiatorType = InitiatorType.SELLER;
+            if(user.getCompany().equals(transaction.getBuyer())) {      //findout if current user is Buyer or seller.
+                initiatorType = InitiatorType.BUYER;
+            }
+            actionTypes = actionTypeRepository.findByInitiatorType(initiatorType);
+        }
+        model.addAttribute("actiontypes", actionTypes);     //only find the available actiontypes for that user.
         model.addAttribute("action", newAction);
         model.addAttribute("transactionID", transactionID);
         return "transaction-addSpecialAction";
@@ -152,13 +166,15 @@ public class TransactionController {
     public String createAction(Action action, @PathVariable Long transactionID, @AuthenticationPrincipal User user, Model model) {
         // ActionType actionType = actionTypeRepository.findByName(actionTypeName);
         // action.setActiontype(actionType);
+        Transaction transaction = transactionRepository.findById(transactionID).get();
 
         if (action.getActiontype().getName().equals("ACCEPT")){
-            transactionRepository.findById(transactionID).get().setConfirmed(true);
+            transaction.setConfirmed(true);
         }else if(action.getActiontype().getName().equals("PAID")){
-            transactionRepository.findById(transactionID).get().setPaid(true);
+            transaction.setPaid(true);
         }
-        action.setTransaction(transactionRepository.findById(transactionID).get());
+
+        action.setTransaction(transaction);
         action.setInitiator(user);
         actionRepository.save(action);
 
