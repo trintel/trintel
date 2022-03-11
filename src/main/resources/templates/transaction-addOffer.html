@@ -41,15 +41,23 @@ AVIALABLE as long as no offer is accepted-->
                 <!-- Block: Submit Button -->
                 <div class="form-group">
                     <a th:href="@{'/transaction/' + ${transactionID} + '/addAction'}">
-                        <button type="submit" class="w-100 btn btn-lg btn-primary"><a th:text=" #{send}"></a></button>
+                        <button type="submit" class="w-100 btn btn-lg btn-primary mb-3"><a
+                                th:text=" #{send}"></a></button>
                     </a>
+
+                <!-- DEBUG BUTTON -->
                 </div>
+                <select th:field="*{actiontype}">
+                    <option th:each="actiontype : ${actiontypes}" th:text="${actiontype.name}" th:value="${actiontype.id}">
+                </select>
             </form>
+
             <!-- Block: Back Button -->
-            <button class="w-100 btn btn-lg btn-light" onclick="history.back()">
+            <button class="w-100 btn btn-lg btn-light mb-3" onclick="history.back()">
                 <i class="bi bi-arrow-left"></i>
                 <a th:text=" #{back}"></a>
             </button>
+
         </main>
     </th:block>
 </body>

@@ -16,13 +16,14 @@
             <form th:action="@{'/transaction/' + ${transactionID} + '/addAction'}" th:object="${action}" method="post">
                 <!-- Block: Header -->
                 <div class="form-floating mb-3 w-100">
-                    <h1 th:text="${action.name}"></h1>
+                    <!-- <h1 th:text="${action.name}"></h1> -->
+                    <h1>Specialaction</h1>
                 </div>
                 <!-- Block: Message -->
                 <div class="form-floating mb-3 w-100">
-                    <input th:field="*{text}" type="text" class="form-control" id="actionText" placeholder="text"
+                    <input th:field="*{message}" type="text" class="form-control" id="actionText" placeholder="message"
                         name="Action_Text" required autofocus>
-                    <label for="floatingReqMessage" th:field="*{text}" th:text="#{text}"></label>
+                    <label for="floatingReqMessage" th:field="*{message}" th:text="#{text}"></label>
                 </div>
                 <!-- Block: Submit Button -->
                 <div class="form-group">

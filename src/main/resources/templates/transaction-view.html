@@ -8,7 +8,7 @@
 
 <body>
 	<th:block th:fragment="content">
-		<h1>Actions</h1>
+		<!-- <h1>Actions</h1>
 		<p></p>
 		<table th:unless="${actions.isEmpty()}">
 			<thead>
@@ -44,7 +44,7 @@
 
 		<a th:href="@{'/transaction/' + ${transactionID} + '/addSpeacialAction'}">
 			<button type="submit">Add new special  action</button>
-		</a>
+		</a> -->
 
 		<h1 th:text="#{transactionProgress}"></h1>
 		<h3 class="mb-3" th:text="|${actions[0].transaction.buyer.name} #{buying} ${actions[0].transaction.product} #{from} ${actions[0].transaction.seller.name}|"></h3>
@@ -127,6 +127,12 @@
 				</div> -->
 			</div>
 		</div>
+		<a th:href="@{'/transaction/' + ${transactionID} + '/addOffer'}">
+			<button type="submit">Add new action</button>
+		</a>
+		<a th:href="@{'/transaction/' + ${transactionID} + '/addSpecialAction'}">
+			<button type="submit">Add new Specialaction</button>
+		</a>
 	</th:block>
 </body>
 </html>

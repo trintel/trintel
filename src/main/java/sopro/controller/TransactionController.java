@@ -92,24 +92,6 @@ public class TransactionController {
         return "transaction-view";
     }
     
-    @PostMapping("/transaction/{transactionID}/addAction")
-    public String createAction(Action action, @PathVariable Long transactionID, @AuthenticationPrincipal User user, Model model) {
-        // ActionType actionType = actionTypeRepository.findByName(actionTypeName);
-
-        // action.setActiontype(actionType);
-        action.setTransaction(transactionRepository.findById(transactionID).get());
-        action.setInitiator(user);
-        //added by @philo because actiontype should be prededined 
-        action.setActiontype(actionTypeRepository.findByName("Offer"));
-
-        actionRepository.save(action);
-
-
-        return "redirect:/transaction/" + transactionID;
-
-    }
-
-
     @GetMapping("/transaction/{transactionID}/addAction")
     public String showAction(Action action, @PathVariable Long transactionID, @AuthenticationPrincipal User user, Model model) {
         InitiatorType initiatorType = InitiatorType.SELLER;
@@ -123,9 +105,40 @@ public class TransactionController {
         model.addAttribute("actiontypes", actionTypeRepository.findByInitiatorType(initiatorType));     //only find the available actiontypes for that user.
         model.addAttribute("action", newAction);
         model.addAttribute("transactionID", transactionID);
+        return "transaction-addSpecialAction";
+    }
+
+    @GetMapping("/transaction/{transactionID}/addOffer")
+    public String showOffer(Action action, @PathVariable Long transactionID, @AuthenticationPrincipal User user, Model model) {
+        InitiatorType initiatorType = InitiatorType.SELLER;
+        // ActionType actionType = actionTypeRepository.findByName(actionTypeName);
+
+        if(user.getCompany().equals(transactionRepository.findById(transactionID).get().getBuyer())) {      //findout if current user is Buyer or seller.
+            initiatorType = InitiatorType.BUYER;
+        } 
+        
+        Action newAction = new Action();
+        //newAction.setActiontype(actionTypeRepository.findByName("Offer"));
+        model.addAttribute("actiontypes", actionTypeRepository.findByInitiatorType(initiatorType));     //only find the available actiontypes for that user.
+        model.addAttribute("action", newAction);
+        model.addAttribute("transactionID", transactionID);
         return "transaction-addOffer";
     }
 
+    @PostMapping("/transaction/{transactionID}/addAction")
+    public String createAction(Action action, @PathVariable Long transactionID, @AuthenticationPrincipal User user, Model model) {
+        // ActionType actionType = actionTypeRepository.findByName(actionTypeName);
+
+        // action.setActiontype(actionType);
+        action.setTransaction(transactionRepository.findById(transactionID).get());
+        action.setInitiator(user);
+
+        actionRepository.save(action);
+
+
+        return "redirect:/transaction/" + transactionID;
+
+    }
 
     @GetMapping("/actions")
     public String showActions(Model model) {
