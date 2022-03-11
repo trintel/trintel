@@ -55,9 +55,9 @@ public class TransactionController {
     @GetMapping("/transaction/{companyID}/create")
     public String createTransaction(@PathVariable Long companyID, @AuthenticationPrincipal User user, Model model) {
 
-        if(user.getCompany().getId() != companyID && user.getRole() != "ADMIN") {
-            return "redirect:/transactions";
-        }
+        //if(user.getCompany().getId() != companyID && user.getRole() != "ADMIN") {
+        //    return "redirect:/transactions";
+        //}
 
         Transaction newTransaction = new Transaction();
 
@@ -125,6 +125,16 @@ public class TransactionController {
 
         return "redirect:/transaction/" + transactionID;
 
+    }
+
+    @PostMapping("/transaction/{transactionID}/accept")
+    public String createAcceptAction(@PathVariable Long transactionID, @AuthenticationPrincipal User user){
+        Transaction transaction = transactionRepository.findById(transactionID).get();
+        Action accept = new Action("message", actionTypeRepository.findByName("ACCEPT"), transaction);
+        transaction.setConfirmed(true);
+        accept.setInitiator(user);
+        actionRepository.save(accept);
+        return "redirect:/transaction/" + transactionID;
     }
 
     @GetMapping("/actions")
