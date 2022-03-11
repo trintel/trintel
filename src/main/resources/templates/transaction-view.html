@@ -90,11 +90,11 @@
 							<div class="accordion-body d-flex">
 								<div class="me-5">
 									<span class="text-muted" style="font-size: 15px" th:text="#{amount}"></span>
-									<span class="text-black"><h5 th:text="${action.amount}"></h5></span>
+									<span class="text-black"><h5 th:text="${action.transaction.amount}"></h5></span>
 								</div>
 								<div th:unless="${action.actiontype.name} == 'Request'" class="me-5">
 									<div class="text-muted" style="font-size: 15px" th:text="#{pricePerPiece}"></div>
-									<div class="text-black"><h5 th:text="${action.pricePerPiece}"></h5></div>
+									<div class="text-black"><h5 th:text="${action.transaction.pricePerPiece}"></h5></div>
 								</div>
 								<div>
 									<span class="text-muted" style="font-size: 15px" th:text="#{message}"></span>
@@ -106,33 +106,23 @@
 				</div>
 			</div>
 			<!-- Buttons to react to last action for student -->
-			<div class="d-flex justify-content-center" sec:authorize="hasRole('STUDENT')">
-				<div th:each="actiontype: ${actiontypes}">
-					<div th:switch="${actiontype.name}">
-						<a th:case="Offer" class="btn btn-primary btn-lg me-3" th:text="#{offerNA}" th:href="@{'/transaction/' + ${transactionID} + '/addOffer'}"></a>
-						<a th:case="Accept" class="btn btn-primary btn-lg me-3" th:text="#{acceptNA}" th:href="@{'/transaction/' + ${transactionID} + '/accept'}"></a>
-						<!-- <a th:case="End" class="btn btn-danger btn-lg me-3" th:text="#{endNA}" th:href="@{'/transaction/' + ${transactionID} + '/cancel'}"></a> -->
-						<!-- <a th:case="Delivery" class="btn btn-primary btn-lg me-3" th:text="#{deliveryNA}" th:href="@{'/transaction/' + ${transactionID} + '/addAction'}"></a> -->
-						<!-- <a th:case="Invoicing" class="btn btn-primary btn-lg me-3" th:text="#{invoicingNA}" th:href="@{'/transaction/' + ${transactionID} + '/addAction'}"></a> -->
-						<!-- <a th:case="Paid" class="btn btn-primary btn-lg me-3" th:text="#{paidNA}" th:href="@{'/transaction/' + ${transactionID} + '/addAction'}"></a> -->
-						<a th:case="*" class="btn btn-primary btn-lg me-3" th:text="${actiontype.name}" th:href="@{'/transaction/' + ${transactionID} + '/addAction'}"></a>
+			<div sec:authorize="hasRole('STUDENT')">
+				<div class="d-flex justify-content-center">
+					<div th:each="actiontype: ${actiontypes}">
+						<div th:switch="${actiontype.name}">
+							<a th:case="Offer" class="btn btn-primary btn-lg me-3" th:text="#{offerNA}" th:href="@{'/transaction/' + ${transactionID} + '/addOffer'}"></a>
+							<a th:case="Accept" class="btn btn-success btn-lg me-3" th:text="#{acceptNA}" th:href="@{'/transaction/' + ${transactionID} + '/accept'}" method="post"></a>
+							<!-- <a th:case="End" class="btn btn-danger btn-lg me-3" th:text="#{endNA}" th:href="@{'/transaction/' + ${transactionID} + '/cancel'}"></a> -->
+							<!-- <a th:case="Delivery" class="btn btn-primary btn-lg me-3" th:text="#{deliveryNA}" th:href="@{'/transaction/' + ${transactionID} + '/addAction'}"></a> -->
+							<!-- <a th:case="Invoicing" class="btn btn-primary btn-lg me-3" th:text="#{invoicingNA}" th:href="@{'/transaction/' + ${transactionID} + '/addAction'}"></a> -->
+							<!-- <a th:case="Paid" class="btn btn-primary btn-lg me-3" th:text="#{paidNA}" th:href="@{'/transaction/' + ${transactionID} + '/addAction'}"></a> -->
+						</div>
 					</div>
+					<a class="btn btn-primary btn-lg me-3" th:href="@{'/transaction/' + ${transactionID} + '/addAction'}" th:text="#{specialActions}"></a>
 				</div>
-				<!-- For "Paid" check button (for the case that we don't make Paid as Action in the end) -->
-				<!-- <div th:each="action: ${actions}">
-					<div th:if="${action.actiontype.name} == 'Invoicing'">
-						<input type="checkbox" class="btn-check" id="checkPaid" autocomplete="off">
-						<label class="btn btn-outline-success btn-lg" for="checkPaid" th:text="#{paidNA}"></button>
-					</div>
-				</div> -->
 			</div>
 		</div>
-		<!-- <a th:href="@{'/transaction/' + ${transactionID} + '/addOffer'}">
-			<button type="submit">Add new action</button>
-		</a>
-		<a th:href="@{'/transaction/' + ${transactionID} + '/addAction'}">
-			<button type="submit">Add new Specialaction</button>
-		</a> -->
+		<a name="n"></a>
 	</th:block>
 </body>
 </html>

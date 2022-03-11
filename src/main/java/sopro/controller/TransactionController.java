@@ -181,6 +181,16 @@ public class TransactionController {
         return "redirect:/transaction/" + transactionID;
     }
 
+    @PostMapping("/transaction/{transactionID}/accept")
+    public String createAcceptAction(@PathVariable Long transactionID, @AuthenticationPrincipal User user){
+        Transaction transaction = transactionRepository.findById(transactionID).get();
+        Action accept = new Action("message", actionTypeRepository.findByName("ACCEPT"), transaction);
+        transaction.setConfirmed(true);
+        accept.setInitiator(user);
+        actionRepository.save(accept);
+        return "redirect:/transaction/" + transactionID;
+    }
+
     @GetMapping("/actions")
     public String showActions(Model model) {
         model.addAttribute("actionTypes", actionTypeRepository.findAll());
