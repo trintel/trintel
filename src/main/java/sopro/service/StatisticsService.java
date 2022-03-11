@@ -30,23 +30,74 @@ public class StatisticsService {
     @Autowired
     ActionTypeRepository actionTypeRepository;
 
+    /**
+     * 
+     * @param buyer the buying company
+     * @return the total volume of all transactions, where the company was buyer
+     */
     public Double getTotalTransactionBuyerVolume(Company buyer) {
         List<Transaction> transactions = transactionRepository.findByBuyer(buyer);
         Double volume = 0.0;
         for(Transaction transaction : transactions) {
-            transaction.getActions().
+            if(transaction.getConfirmed()) volume += transaction.getAmount() * transaction.getPricePerPiece();     //0 if transcation doesnt have an offer yet.
         }
+        return volume;
+    }
+
+    /**
+     * 
+     * @param seller the seller company
+     * @return the total volume of all transactions, where the company was seller
+     */
+    public Double getTotalTransactionSellerVolume(Company seller) {
+        List<Transaction> transactions = transactionRepository.findBySeller(seller);
+        Double volume = 0.0;
+        for(Transaction transaction : transactions) {
+            if(transaction.getConfirmed()) volume += transaction.getAmount() * transaction.getPricePerPiece();     //0 if transcation doesnt have an offer yet.
+        }
+        return volume;
     }
     
 
-
-    public Integer getAmountTransactionBuyer(Company buyer){
+    /**
+     * 
+     * @param buyer the buying company
+     * @return the number of transactions, where the company has bought products
+     */
+    public Integer getNumberNonConfirmedTransactionBuyer(Company buyer){
         List<Transaction> transactions = transactionRepository.findByBuyer(buyer);
         return transactions.size();
     }
 
-    public Integer getAmountTransactionSeller(Company seller){
-        List<Transaction> transactions = transactionRepository.findByBuyer(seller);
+    /**
+     * 
+     * @param seller the selling company
+     * @return the number of transactions, where the company has sold products
+     */
+    public Integer getNumberNonConfirmedTransactionSeller(Company seller){
+        List<Transaction> transactions = transactionRepository.findBySeller(seller);
         return transactions.size();
+    }
+
+    /**
+     * 
+     * @param seller the selling company
+     * @return the number of different companies, that have bought from the selling company
+     */
+    public Long getNumberDistinctBuyers(Company seller) {
+        return transactionRepository.countDistinctBuyers(seller);
+    }
+
+    /**
+     * 
+     * @param buyer the buying company
+     * @return the number of different companies, that have sold to the buying company
+     */
+    public Long getNumberDistinctSellers(Company buyer) {
+        return transactionRepository.countDistinctSellers(buyer);
+    }
+
+    public Long getNumberConfirmedTransactions(Company company) {
+        return transactionRepository.countConfirmedTransactions(company);
     }
 }

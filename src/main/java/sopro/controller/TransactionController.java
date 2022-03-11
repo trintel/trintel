@@ -102,13 +102,15 @@ public class TransactionController {
     public String createAction(Action action, @PathVariable Long transactionID, @AuthenticationPrincipal User user, Model model) {
         // ActionType actionType = actionTypeRepository.findByName(actionTypeName);
         // action.setActiontype(actionType);
-
+        Transaction transaction = transactionRepository.findById(transactionID).get();
+        
         if (action.getActiontype().getName().equals("ACCEPT")){
-            transactionRepository.findById(transactionID).get().setConfirmed(true);
+            transaction.setConfirmed(true);
         }else if(action.getActiontype().getName().equals("PAID")){
-            transactionRepository.findById(transactionID).get().setPaid(true);
+            transaction.setPaid(true);
         }
-        action.setTransaction(transactionRepository.findById(transactionID).get());
+
+        action.setTransaction(transaction);
         action.setInitiator(user);
         actionRepository.save(action);
 

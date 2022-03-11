@@ -3,19 +3,18 @@ package sopro.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.websocket.server.PathParam;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
-import sopro.repository.ActionRepository;
-import sopro.repository.ActionTypeRepository;
 import sopro.repository.CompanyRepository;
-import sopro.repository.TransactionRepository;
 import sopro.repository.UserRepository;
-import sopro.model.Action;
-
-import sopro.model.Transaction;
+import sopro.service.StatisticsService;
+import sopro.model.Company;
 import sopro.model.User;
 import org.springframework.ui.Model;
 
@@ -23,44 +22,35 @@ import org.springframework.ui.Model;
 public class StatisticController {
     
     @Autowired
-    CompanyRepository companyRepository;
-
-    @Autowired
     UserRepository userRepository;
 
     @Autowired
-    TransactionRepository transactionRepository;
+    CompanyRepository companyRepository;
 
     @Autowired
-    ActionRepository actionRepository;
-
-    @Autowired
-    ActionTypeRepository actionTypeRepository;
+    StatisticsService statisticsService;
 
 
+    @GetMapping("/statistics/{companyID}")
+    public String showStatistics(Model model, @AuthenticationPrincipal User user, @PathVariable Long companyID){
 
-    @GetMapping("/statistics")
-    public String showStatistics(Model model, @AuthenticationPrincipal User user){
-        
-        if(user.getRole().equals("ADMIN")){
-            
-        }else{
-            int amount = 0;
-            double totalCost = 0;
-            List<Transaction> transactions = new ArrayList<>();
-            List <Action> actions = new ArrayList<>();
-            transactions.addAll(transactionRepository.findByBuyer(user.getCompany()));
-            transactions.addAll(transactionRepository.findBySeller(user.getCompany()));
-            for (Transaction transaction : transactions) {
-                actions.addAll(transaction.getActions());
+        if(user.getRole().equals("STUDENT")) {  //TODO Admin
+            if(user.getCompany().getId() != companyID) {
+                return "redirect:/home";        //not allowed
             }
-            for (Action action : actions) {
-                amount += action.getAmount();
-                totalCost += action.getPricePerPiece()*action.getAmount();
-            }
-            model.addAttribute("amount",amount);
-            model.addAttribute("totalCost", totalCost);
         }
+
+        Company company = companyRepository.findById(companyID).get();      //TODO: deal with possibilty of non existing company
+        model.addAttribute("company", company);
+
+        
+        model.addAttribute("numberDistinctBuyers", statisticsService.getNumberDistinctBuyers(company));
+        model.addAttribute("numberDistinctSellers", statisticsService.getNumberDistinctSellers(company));
+        model.addAttribute("totalTransationBuyerVolume", statisticsService.getTotalTransactionBuyerVolume(company));
+        model.addAttribute("totalTransationSellerVolume", statisticsService.getTotalTransactionSellerVolume(company));
+        model.addAttribute("numberNonConfirmedBuyer", statisticsService.getNumberNonConfirmedTransactionBuyer(company));
+        model.addAttribute("numberNonConfirmedSeller", statisticsService.getNumberNonConfirmedTransactionSeller(company));
+        model.addAttribute("numberConfirmed", statisticsService.getNumberConfirmedTransactions(company));
         
         return "statistics";
     }
