@@ -23,7 +23,7 @@ public class Transaction {
     @Getter @Setter @NotNull @OneToOne private Company buyer;
     @Getter @Setter @NotNull @OneToOne private Company seller;
     @Getter @Setter private String product;
-    @Getter @Setter private Boolean completed = false;
+    @Getter @Setter private Boolean paid = false;
     @Getter @Setter private Boolean shipped = false;
     @Getter @Setter private Boolean confirmed = false;
 
@@ -33,6 +33,35 @@ public class Transaction {
         this.actions = new ArrayList<>();
         this.buyer = buyer;
         this.seller = seller;
+    }
+
+
+    /**
+     *
+     * @return the amount of the transaction, if set.
+     */
+    public Integer getAmount() {
+        Integer amount = 0;
+        for(Action action : actions) {
+            if(action.getAmount() != null) {        //null if not an offer
+                amount = action.getAmount();
+            }
+        }
+        return amount;
+    }
+
+    /**
+     *
+     * @return the price per piece of the transaction, if set.
+     */
+    public Double getPricePerPiece() {
+        Double pricePerPiece = 0.0;
+        for(Action action : actions) {
+            if(action.getPricePerPiece() != null) {        //null if not an offer
+                pricePerPiece = action.getPricePerPiece();
+            }
+        }
+        return pricePerPiece;
     }
 
 }

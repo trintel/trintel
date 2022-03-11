@@ -55,6 +55,10 @@ public class TransactionController {
     @GetMapping("/transaction/{companyID}/create")
     public String createTransaction(@PathVariable Long companyID, @AuthenticationPrincipal User user, Model model) {
 
+        //if(user.getCompany().getId() != companyID && user.getRole() != "ADMIN") {
+        //    return "redirect:/transactions";
+        //}
+
         Transaction newTransaction = new Transaction();
 
         Action newAction = new Action();
@@ -85,13 +89,17 @@ public class TransactionController {
     //TODO enums berücksichtigen
     @GetMapping("/transaction/{id}")
     public String transactionDetail(Model model, @PathVariable Long id, @AuthenticationPrincipal User user) {
-        Transaction transaction = transactionRepository.findById(id).get();
-        InitiatorType initiatorType = InitiatorType.SELLER;
-        if(user.getCompany().equals(transaction.getBuyer())) {      //findout if current user is Buyer or seller.
-            initiatorType = InitiatorType.BUYER;
-        }
         Action newAction = new Action();
-        model.addAttribute("actiontypes", actionTypeRepository.findByInitiatorType(initiatorType));     //only find the available actiontypes for that user.
+        Transaction transaction = transactionRepository.findById(id).get();
+        List<ActionType> actionTypes = new ArrayList<>();
+        if(!user.getRole().equals("ADMIN")){
+            InitiatorType initiatorType = InitiatorType.SELLER;
+            if(user.getCompany().equals(transaction.getBuyer())) {      //findout if current user is Buyer or seller.
+                initiatorType = InitiatorType.BUYER;
+            }
+            actionTypes = actionTypeRepository.findByInitiatorType(initiatorType);
+        }
+        model.addAttribute("actiontypes", actionTypes);     //only find the available actiontypes for that user.
         model.addAttribute("action", newAction);
         model.addAttribute("actions", actionRepository.findByTransaction(transaction));
         model.addAttribute("transactionID", id);
@@ -101,16 +109,32 @@ public class TransactionController {
     @PostMapping("/transaction/{transactionID}/addAction")
     public String createAction(Action action, @PathVariable Long transactionID, @AuthenticationPrincipal User user, Model model) {
         // ActionType actionType = actionTypeRepository.findByName(actionTypeName);
-
         // action.setActiontype(actionType);
-        action.setTransaction(transactionRepository.findById(transactionID).get());
-        action.setInitiator(user);
+        Transaction transaction = transactionRepository.findById(transactionID).get();
 
+        if (action.getActiontype().getName().equals("ACCEPT")){
+            transaction.setConfirmed(true);
+        }else if(action.getActiontype().getName().equals("PAID")){
+            transaction.setPaid(true);
+        }
+
+        action.setTransaction(transaction);
+        action.setInitiator(user);
         actionRepository.save(action);
 
 
         return "redirect:/transaction/" + transactionID;
 
+    }
+
+    @PostMapping("/transaction/{transactionID}/accept")
+    public String createAcceptAction(@PathVariable Long transactionID, @AuthenticationPrincipal User user){
+        Transaction transaction = transactionRepository.findById(transactionID).get();
+        Action accept = new Action("message", actionTypeRepository.findByName("ACCEPT"), transaction);
+        transaction.setConfirmed(true);
+        accept.setInitiator(user);
+        actionRepository.save(accept);
+        return "redirect:/transaction/" + transactionID;
     }
 
     @GetMapping("/actions")
