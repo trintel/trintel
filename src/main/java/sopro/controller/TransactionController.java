@@ -55,10 +55,10 @@ public class TransactionController {
     @GetMapping("/transaction/{companyID}/create")
     public String createTransaction(@PathVariable Long companyID, @AuthenticationPrincipal User user, Model model) {
 
-        if(user.getCompany().getId() != companyID && user.getRole() != "ADMIN") {
-            return "redirect:/transactions";
-        }
-
+        //if(user.getCompany().getId() != companyID && user.getRole() != "ADMIN") {
+        //    return "redirect:/transactions";
+        //}
+ 
         Transaction newTransaction = new Transaction();
         //added by @philo to pre set the seller known by the id to print the name in the formular
         newTransaction.setSeller(companyRepository.findById(companyID).get());
@@ -91,44 +91,7 @@ public class TransactionController {
     //TODO enums berücksichtigen
     @GetMapping("/transaction/{id}")
     public String transactionDetail(Model model, @PathVariable Long id, @AuthenticationPrincipal User user) {
-        model.addAttribute("actions", actionRepository.findByTransaction(transactionRepository.findById(id).get()));
-        model.addAttribute("transactionID", id);
-        return "transaction-view";
-    }
-    
-    @GetMapping("/transaction/{transactionID}/addAction")
-    public String showAction(Action action, @PathVariable Long transactionID, @AuthenticationPrincipal User user, Model model) {
         Action newAction = new Action();
-        InitiatorType initiatorType = InitiatorType.SELLER;
-        // ActionType actionType = actionTypeRepository.findByName(actionTypeName);
-
-        if(user.getCompany().equals(transactionRepository.findById(transactionID).get().getBuyer())) {      //findout if current user is Buyer or seller.
-            initiatorType = InitiatorType.BUYER;
-        }
-
-        //model.addAttribute("actiontypes", actionTypeRepository.findByName("Accept"));     //set specific Actiontype Offer
-        
-        //a ArrayList for all available actions for the current Initiator
-        ArrayList<ActionType> availableActions = new ArrayList<ActionType>(0);
-
-        //check on all available actions to exclude the standart actions to only have the special actions
-        for(int i = 0; i < actionTypeRepository.findByInitiatorType(initiatorType).size(); i++){
-            if(actionTypeRepository.findByInitiatorType(initiatorType).get(i).equals(actionTypeRepository.findByName("Offer")) 
-            || actionTypeRepository.findByInitiatorType(initiatorType).get(i).equals(actionTypeRepository.findByName("Accept")) 
-            || actionTypeRepository.findByInitiatorType(initiatorType).get(i).equals(actionTypeRepository.findByName("Shipped")) 
-            || actionTypeRepository.findByInitiatorType(initiatorType).get(i).equals(actionTypeRepository.findByName("Paid"))
-            || actionTypeRepository.findByInitiatorType(initiatorType).get(i).equals(actionTypeRepository.findByName("Completed"))
-            || actionTypeRepository.findByInitiatorType(initiatorType).get(i).equals(actionTypeRepository.findByName("Invoicing"))){
-                //model.addAttribute("actiontypes", actionTypeRepository.findByInitiatorType(initiatorType).get(i));
-            }
-            else{
-                availableActions.add(actionTypeRepository.findByInitiatorType(initiatorType).get(i));  
-            }
-        } 
-
-        //add the list of special actions
-        model.addAttribute("actiontypes", availableActions);
-        //model.addAttribute("actiontypes", actionTypeRepository.findByInitiatorType(initiatorType));     //only find the available actiontypes for that user.
         Transaction transaction = transactionRepository.findById(id).get();
         List<ActionType> actionTypes = new ArrayList<>();
         if(!user.getRole().equals("ADMIN")){
@@ -139,6 +102,44 @@ public class TransactionController {
             actionTypes = actionTypeRepository.findByInitiatorType(initiatorType);
         }
         model.addAttribute("actiontypes", actionTypes);     //only find the available actiontypes for that user.
+        model.addAttribute("action", newAction);
+        model.addAttribute("actions", actionRepository.findByTransaction(transaction));
+        model.addAttribute("transactionID", id);
+        return "transaction-view";
+
+    }
+    
+    @GetMapping("/transaction/{transactionID}/addAction")
+    public String showAction(Action action, @PathVariable Long transactionID, @AuthenticationPrincipal User user, Model model) {
+        Action newAction = new Action();
+        InitiatorType initiatorType = InitiatorType.SELLER;
+
+        if(user.getCompany().equals(transactionRepository.findById(transactionID).get().getBuyer())) {      //findout if current user is Buyer or seller.
+            initiatorType = InitiatorType.BUYER;
+        }
+        
+        //a ArrayList for all available actions for the current Initiator
+        List<ActionType> availableActions = new ArrayList<>();
+
+        //check on all available actions to exclude the standart actions to only have the special actions
+        for(int i = 0; i < actionTypeRepository.findByInitiatorType(initiatorType).size(); i++){
+            if(actionTypeRepository.findByInitiatorType(initiatorType).get(i).equals(actionTypeRepository.findByName("Offer")) 
+            || actionTypeRepository.findByInitiatorType(initiatorType).get(i).equals(actionTypeRepository.findByName("Accept")) 
+            || actionTypeRepository.findByInitiatorType(initiatorType).get(i).equals(actionTypeRepository.findByName("Shipped")) 
+            || actionTypeRepository.findByInitiatorType(initiatorType).get(i).equals(actionTypeRepository.findByName("Paid"))
+            || actionTypeRepository.findByInitiatorType(initiatorType).get(i).equals(actionTypeRepository.findByName("Completed"))
+            || actionTypeRepository.findByInitiatorType(initiatorType).get(i).equals(actionTypeRepository.findByName("Invoicing"))
+            || actionTypeRepository.findByInitiatorType(initiatorType).get(i).equals(actionTypeRepository.findByName("End"))){
+            }
+            else{
+                //if the type is none of the standard Actiontypes it will be tranmitted to the available List of special actions
+                availableActions.add(actionTypeRepository.findByInitiatorType(initiatorType).get(i));  
+            }
+        } 
+
+        //add the list of special actions
+        model.addAttribute("actiontypes", availableActions);
+        //model.addAttribute("actiontypes", actionTypeRepository.findByInitiatorType(initiatorType));     //only find the available actiontypes for that user.
         model.addAttribute("action", newAction);
         model.addAttribute("transactionID", transactionID);
         return "transaction-addSpecialAction";
@@ -155,8 +156,8 @@ public class TransactionController {
 
         Action newAction = new Action();
         //model.addAttribute("actiontypes", actionTypeRepository.findByInitiatorType(initiatorType));     //only find the available actiontypes for that user.
-        model.addAttribute("actiontypes", actionTypeRepository.findByName("Offer"));     //set specific Actiontype Offer
-
+        //set specific Actiontype Offer because in the case of an Offer Action it can only be the Offertype
+        model.addAttribute("actiontypes", actionTypeRepository.findByName("Offer"));     
         model.addAttribute("action", newAction);
         model.addAttribute("transactionID", transactionID);
         return "transaction-addOffer";
@@ -180,7 +181,6 @@ public class TransactionController {
 
 
         return "redirect:/transaction/" + transactionID;
-
     }
 
     @GetMapping("/actions")

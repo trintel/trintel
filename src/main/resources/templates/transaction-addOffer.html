@@ -17,9 +17,8 @@ AVIALABLE as long as no offer is accepted-->
             <!-- <h3 class="mb-3" th:object="${seller}" th:text="${company.name}"></h3> -->
             <form th:action="@{'/transaction/' + ${transactionID} + '/addAction'}" th:object="${action}" method="post">
                 <!-- Block: Header -->
-                <!-- <div class="form-floating mb-3">
-                    <h1 th:text="#{offer}"></h1>
-                </div> -->
+                <!-- Hidden input field to pass the actiontype offer without asking the user because he already clicked on create Offer. In 
+                this case its clear for the the user but the value has to be passed because behind the UI -->
                 <div class="form-floating mb-3">
                     <select class="disabled w-100" style="appearance: none; border: none;" th:field="*{actiontype}">
                         <option th:each="actiontype : ${actiontypes}" th:value="${actiontype.id}">
