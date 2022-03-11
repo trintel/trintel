@@ -33,6 +33,6 @@ public class ActionType {
         this.initiatorType = initiatorType;
     }
 
-    
+
 
 }
