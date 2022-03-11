@@ -94,6 +94,8 @@ public class TransactionController {
     
     @GetMapping("/transaction/{transactionID}/addAction")
     public String showAction(Action action, @PathVariable Long transactionID, @AuthenticationPrincipal User user, Model model) {
+        Action newAction = new Action();
+        Transaction transaction = transactionRepository.findById(id).get();
         InitiatorType initiatorType = InitiatorType.SELLER;
         // ActionType actionType = actionTypeRepository.findByName(actionTypeName);
 
@@ -102,6 +104,7 @@ public class TransactionController {
         } 
         
         Action newAction = new Action();
+        }
         model.addAttribute("actiontypes", actionTypeRepository.findByInitiatorType(initiatorType));     //only find the available actiontypes for that user.
         model.addAttribute("action", newAction);
         model.addAttribute("transactionID", transactionID);
@@ -128,11 +131,15 @@ public class TransactionController {
     @PostMapping("/transaction/{transactionID}/addAction")
     public String createAction(Action action, @PathVariable Long transactionID, @AuthenticationPrincipal User user, Model model) {
         // ActionType actionType = actionTypeRepository.findByName(actionTypeName);
-
         // action.setActiontype(actionType);
+
+        if (action.getActiontype().getName().equals("ACCEPT")){
+            transactionRepository.findById(transactionID).get().setConfirmed(true);
+        }else if(action.getActiontype().getName().equals("PAID")){
+            transactionRepository.findById(transactionID).get().setPaid(true);
+        }
         action.setTransaction(transactionRepository.findById(transactionID).get());
         action.setInitiator(user);
-
         actionRepository.save(action);
 
 

@@ -227,3 +227,7 @@ main {
   border-bottom-left-radius: .8rem !important;
   border-bottom-right-radius: .8rem !important;
 }
+
+.badge {
+  border-radius: .8rem !important;
+}

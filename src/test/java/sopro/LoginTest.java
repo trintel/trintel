@@ -22,6 +22,7 @@ public class LoginTest {
     @Autowired
     private MockMvc mockMvc;
 
+
     /**
      * Tests, if the login screen is served on /login.
      *
