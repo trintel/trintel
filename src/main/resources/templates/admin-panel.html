@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:include="layout :: page">
+
+<head>
+    <title th:fragment="title">Admin Panel</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+<body>
+    <th:block th:fragment="content">
+        <h1>Admin Panel</h1>
+        <div class="row align-items-center">
+            <div class="col-md-4">
+                <h5 th:text="#{inviteLink}"></h5>
+                <p th:text="#{inviteLinkDescr}"></p>
+            </div>
+            <div class="col-md">
+                <input onclick="this.select()" class="form-control copybtn" placeholder="Input group"
+                    aria-label="Input group" aria-describedby="btnGroupAddon2" value="hier link einfügen"
+                    readonly></input>
+            </div>
+        </div>
+        <hr class="dropdown-divider">
+        <div class="row align-items-center mt-4">
+            <div class="col-md-4">
+                <h5 th:text="#{exIm}"></h5>
+                <p th:text="#{exImDescr}"></p>
+            </div>
+            <div class="col-md">
+                <button class="btn btn-primary">
+                    <i class="bi bi-box-arrow-up"></i>
+                    <span th:text="#{export}"></span>
+                </button>
+                <button class="btn btn-primary">
+                    <i class="bi bi-box-arrow-in-down"></i>
+                    <span th:text="#{import}"></span>
+                </button>
+            </div>
+        </div>
+    </th:block>
+</body>
+
+</html>

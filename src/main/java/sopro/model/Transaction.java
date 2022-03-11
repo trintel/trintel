@@ -35,4 +35,33 @@ public class Transaction {
         this.seller = seller;
     }
 
+
+    /**
+     *
+     * @return the amount of the transaction, if set.
+     */
+    public Integer getAmount() {
+        Integer amount = 0;
+        for(Action action : actions) {
+            if(action.getAmount() != null) {        //null if not an offer
+                amount = action.getAmount();
+            }
+        }
+        return amount;
+    }
+
+    /**
+     *
+     * @return the price per piece of the transaction, if set.
+     */
+    public Double getPricePerPiece() {
+        Double pricePerPiece = 0.0;
+        for(Action action : actions) {
+            if(action.getPricePerPiece() != null) {        //null if not an offer
+                pricePerPiece = action.getPricePerPiece();
+            }
+        }
+        return pricePerPiece;
+    }
+
 }
