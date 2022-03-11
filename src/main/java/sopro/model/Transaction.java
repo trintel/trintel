@@ -23,9 +23,7 @@ public class Transaction {
     @Getter @Setter @NotNull @OneToOne private Company buyer;
     @Getter @Setter @NotNull @OneToOne private Company seller;
     @Getter @Setter private String product;
-    @Getter @Setter private Integer amount;
-    @Getter @Setter private Double pricePerPiece;
-    @Getter @Setter private Boolean completed = false;
+    @Getter @Setter private Boolean paid = false;
     @Getter @Setter private Boolean shipped = false;
     @Getter @Setter private Boolean confirmed = false;
 

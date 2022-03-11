@@ -85,12 +85,12 @@ public class TransactionController {
     //TODO enums berücksichtigen
     @GetMapping("/transaction/{id}")
     public String transactionDetail(Model model, @PathVariable Long id, @AuthenticationPrincipal User user) {
+        Action newAction = new Action();
         Transaction transaction = transactionRepository.findById(id).get();
         InitiatorType initiatorType = InitiatorType.SELLER;
         if(user.getCompany().equals(transaction.getBuyer())) {      //findout if current user is Buyer or seller.
             initiatorType = InitiatorType.BUYER;
         }
-        Action newAction = new Action();
         model.addAttribute("actiontypes", actionTypeRepository.findByInitiatorType(initiatorType));     //only find the available actiontypes for that user.
         model.addAttribute("action", newAction);
         model.addAttribute("actions", actionRepository.findByTransaction(transaction));
@@ -101,11 +101,15 @@ public class TransactionController {
     @PostMapping("/transaction/{transactionID}/addAction")
     public String createAction(Action action, @PathVariable Long transactionID, @AuthenticationPrincipal User user, Model model) {
         // ActionType actionType = actionTypeRepository.findByName(actionTypeName);
-
         // action.setActiontype(actionType);
+
+        if (action.getActiontype().getName().equals("ACCEPT")){
+            transactionRepository.findById(transactionID).get().setConfirmed(true);
+        }else if(action.getActiontype().getName().equals("PAID")){
+            transactionRepository.findById(transactionID).get().setPaid(true);
+        }
         action.setTransaction(transactionRepository.findById(transactionID).get());
         action.setInitiator(user);
-
         actionRepository.save(action);
 
 
