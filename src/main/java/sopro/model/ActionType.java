@@ -23,6 +23,7 @@ public class ActionType {
     @Getter @Setter @NotEmpty @Column(unique = true) private String name;
     @Getter @Setter @NotNull private InitiatorType initiatorType;
     @Getter @Setter private String text;
+    @Getter @Setter private boolean standartAction = false;
 
     public ActionType() {}
 
@@ -31,5 +32,7 @@ public class ActionType {
         this.text = text;
         this.initiatorType = initiatorType;
     }
+
+    
 
 }
