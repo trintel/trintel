@@ -73,7 +73,7 @@ public class InitDatabaseService {
 
 
             // Create demo Students
-            User student1 = new User(true, true, true, true,"Schniedelus", "Maximilius", "m@m", passwordEncoder.encode("password"), null);
+            User student1 = new User(true, true, true, true,"Windlelus", "Maximilius", "m@m", passwordEncoder.encode("password"), null);
             student1.setRole("STUDENT");
             User student2 = new User(true, true, true, true,"Speckmann", "Jonas", "j@j", passwordEncoder.encode("password"), company1);
             student2.setRole("STUDENT");
@@ -93,17 +93,41 @@ public class InitDatabaseService {
             ActionType accept = new ActionType("Accept", "Demo offer text.", InitiatorType.SELLER);
 
             Transaction transaction1 = new Transaction(company1, company2);
+            transaction1.setProduct("Product 1");
 
             Action trans1Request = new Action("Test message", request, transaction1);
-            transaction1.setProduct("Product 1");
             trans1Request.setAmount(10);
             trans1Request.setPricePerPiece(0.5);
+            trans1Request.setInitiator(company1.getStudents().get(0));
+
+            Action trans1Offer = new Action("Test message", offer, transaction1);   
+            trans1Offer.setAmount(20);
+            trans1Offer.setPricePerPiece(0.4);
+            trans1Offer.setInitiator(company2.getStudents().get(0));
+
+            Action trans1Accept = new Action("Test message", accept, transaction1); 
+            trans1Accept.setInitiator(company1.getStudents().get(0));
 
             actionTypeRepository.save(request);
             actionTypeRepository.save(offer);
             actionTypeRepository.save(accept);
+
             transactionRepository.save(transaction1);
             actionRepository.save(trans1Request);
+
+
+
+
+            Transaction transaction2 = new Transaction(company3,company1 );
+            transaction1.setProduct("Product 2");
+
+            Action trans2Request = new Action("Test message", request, transaction1);
+            trans2Request.setAmount(80);
+            trans2Request.setPricePerPiece(32.5);
+            trans2Request.setInitiator(company3.getStudents().get(0));
+
+            transactionRepository.save(transaction2);
+            actionRepository.save(trans2Request);
 
             //save the default companylogo in database
             // ClassLoader classLoader = getClass().getClassLoader();

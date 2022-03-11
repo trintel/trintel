@@ -3,6 +3,7 @@ package sopro.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +55,10 @@ public class TransactionController {
 
     @GetMapping("/transaction/{companyID}/create")
     public String createTransaction(@PathVariable Long companyID, @AuthenticationPrincipal User user, Model model) {
+
+        if(user.getCompany().getId() != companyID && user.getRole() != "ADMIN") {
+            return "redirect:/transactions";
+        }
 
         Transaction newTransaction = new Transaction();
 
