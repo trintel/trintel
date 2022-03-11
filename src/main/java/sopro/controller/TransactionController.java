@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import sopro.model.Action;
 import sopro.model.ActionType;
+import sopro.model.Company;
 import sopro.model.InitiatorType;
 import sopro.model.Transaction;
 import sopro.model.User;
@@ -95,17 +96,14 @@ public class TransactionController {
     @GetMapping("/transaction/{transactionID}/addAction")
     public String showAction(Action action, @PathVariable Long transactionID, @AuthenticationPrincipal User user, Model model) {
         Action newAction = new Action();
-        Transaction transaction = transactionRepository.findById(id).get();
         InitiatorType initiatorType = InitiatorType.SELLER;
         // ActionType actionType = actionTypeRepository.findByName(actionTypeName);
 
         if(user.getCompany().equals(transactionRepository.findById(transactionID).get().getBuyer())) {      //findout if current user is Buyer or seller.
             initiatorType = InitiatorType.BUYER;
         } 
-        
-        Action newAction = new Action();
-        }
-        model.addAttribute("actiontypes", actionTypeRepository.findByInitiatorType(initiatorType));     //only find the available actiontypes for that user.
+        model.addAttribute("actiontypes", actionTypeRepository.findByName("Accept"));     //set specific Actiontype Offer
+        //model.addAttribute("actiontypes", actionTypeRepository.findByInitiatorType(initiatorType));     //only find the available actiontypes for that user.
         model.addAttribute("action", newAction);
         model.addAttribute("transactionID", transactionID);
         return "transaction-addSpecialAction";
@@ -119,10 +117,11 @@ public class TransactionController {
         if(user.getCompany().equals(transactionRepository.findById(transactionID).get().getBuyer())) {      //findout if current user is Buyer or seller.
             initiatorType = InitiatorType.BUYER;
         } 
-        
+
         Action newAction = new Action();
-        //newAction.setActiontype(actionTypeRepository.findByName("Offer"));
-        model.addAttribute("actiontypes", actionTypeRepository.findByInitiatorType(initiatorType));     //only find the available actiontypes for that user.
+        //model.addAttribute("actiontypes", actionTypeRepository.findByInitiatorType(initiatorType));     //only find the available actiontypes for that user.
+        model.addAttribute("actiontypes", actionTypeRepository.findByName("Offer"));     //set specific Actiontype Offer
+
         model.addAttribute("action", newAction);
         model.addAttribute("transactionID", transactionID);
         return "transaction-addOffer";
