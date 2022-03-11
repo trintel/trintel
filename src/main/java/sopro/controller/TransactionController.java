@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import sopro.model.Action;
 import sopro.model.ActionType;
-import sopro.model.Company;
 import sopro.model.InitiatorType;
 import sopro.model.Transaction;
 import sopro.model.User;
@@ -101,8 +100,30 @@ public class TransactionController {
 
         if(user.getCompany().equals(transactionRepository.findById(transactionID).get().getBuyer())) {      //findout if current user is Buyer or seller.
             initiatorType = InitiatorType.BUYER;
+        }
+
+        //model.addAttribute("actiontypes", actionTypeRepository.findByName("Accept"));     //set specific Actiontype Offer
+        
+        //a ArrayList for all available actions for the current Initiator
+        ArrayList<ActionType> availableActions = new ArrayList<ActionType>(0);
+
+        //check on all available actions to exclude the standart actions to only have the special actions
+        for(int i = 0; i < actionTypeRepository.findByInitiatorType(initiatorType).size(); i++){
+            if(actionTypeRepository.findByInitiatorType(initiatorType).get(i).equals(actionTypeRepository.findByName("Offer")) 
+            || actionTypeRepository.findByInitiatorType(initiatorType).get(i).equals(actionTypeRepository.findByName("Accept")) 
+            || actionTypeRepository.findByInitiatorType(initiatorType).get(i).equals(actionTypeRepository.findByName("Shipped")) 
+            || actionTypeRepository.findByInitiatorType(initiatorType).get(i).equals(actionTypeRepository.findByName("Paid"))
+            || actionTypeRepository.findByInitiatorType(initiatorType).get(i).equals(actionTypeRepository.findByName("Completed"))
+            || actionTypeRepository.findByInitiatorType(initiatorType).get(i).equals(actionTypeRepository.findByName("Invoicing"))){
+                //model.addAttribute("actiontypes", actionTypeRepository.findByInitiatorType(initiatorType).get(i));
+            }
+            else{
+                availableActions.add(actionTypeRepository.findByInitiatorType(initiatorType).get(i));  
+            }
         } 
-        model.addAttribute("actiontypes", actionTypeRepository.findByName("Accept"));     //set specific Actiontype Offer
+
+        //add the list of special actions
+        model.addAttribute("actiontypes", availableActions);
         //model.addAttribute("actiontypes", actionTypeRepository.findByInitiatorType(initiatorType));     //only find the available actiontypes for that user.
         model.addAttribute("action", newAction);
         model.addAttribute("transactionID", transactionID);

@@ -15,13 +15,17 @@
         <main class="form-small">
             <form th:action="@{'/transaction/' + ${transactionID} + '/addAction'}" th:object="${action}" method="post">
                 <!-- Block: Header -->
+                <div class="form-floating mb-3">
+                    <h1 class="mb-3" th:text="#{actiontype}"></h1>
+                </div>
 
                 <div class="form-floating mb-3">
-                    <h1 th:each="actiontype : ${actiontypes}" th:text="'New' + ' ' + ${actiontype.name}"></h1>
-                    <select class="disabled w-100" style="appearance: none; border: none;" th:field="*{actiontype}">
-                        <option th:each="actiontype : ${actiontypes}" th:value="${actiontype.id}">
-                        </option>
+                    
+                    <select class="custom-select-lg w-100 btn btn-lg btn-primary" th:field="*{actiontype}">
+                        <option th:each="actiontype : ${actiontypes}"
+                            th:text="${actiontype.name} + ': ' + ${actiontype.text}" th:value="${actiontype.id}">
                     </select>
+
                 </div>
 
                 <!-- Block: Message -->

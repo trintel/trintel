@@ -20,14 +20,16 @@ AVIALABLE as long as no offer is accepted-->
                 <!-- <div class="form-floating mb-3">
                     <h1 th:text="#{offer}"></h1>
                 </div> -->
-
-                <!-- Not really clean solution -->
                 <div class="form-floating mb-3">
-                    <h1 th:text="#{offer}"></h1>
                     <select class="disabled w-100" style="appearance: none; border: none;" th:field="*{actiontype}">
                         <option th:each="actiontype : ${actiontypes}" th:value="${actiontype.id}">
                         </option>
                     </select>
+                </div>
+
+                <!-- Not really clean solution -->
+                <div class="form-floating mb-3">
+                    <h1 th:text="#{offer}"></h1>
                 </div>
 
                 <!-- Block: Price & Amount -->
