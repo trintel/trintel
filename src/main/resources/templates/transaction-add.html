@@ -26,7 +26,7 @@ ONLY AVAILABLE whenn Transaction is created as first action.-->
                         <label for="floatingReqProduct" th:text="#{product}"></label>
                     </div>
                     <div class="form-floating mb-3 ms-3">
-                        <input th:field="*{amount}" type="number" class="form-control" id="reqAmount"
+                        <input th:field="*{amount}" min="0" type="number" class="form-control" id="reqAmount"
                             placeholder="amount" name="Request_Amount" required>
                         <label for="floatingReqAmount" th:text="#{amount}"></label>
                     </div>
