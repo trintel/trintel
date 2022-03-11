@@ -18,7 +18,7 @@ ONLY AVAILABLE whenn Transaction is created as first action.-->
             <h1 class="mb-3" th:text="#{request}"></h1>
             <h3 class="mb-3" th:object="${newTransaction}" th:text="#{requTo} + ' ' + ${transaction.seller.name}"></h3>
             <form th:action="@{'/transaction/' + ${companyID} + '/save'}" th:object="${action}" method="post">
-                <!-- Block: Produkt & Amount -->
+                <!-- Block: Product & Amount -->
                 <div class="d-flex">
                     <div class="form-floating mb-3" th:object="${transaction}">
                         <input th:field="*{product}" type="text" class="form-control" id="reqProduct"

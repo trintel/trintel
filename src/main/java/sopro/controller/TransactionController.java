@@ -132,14 +132,14 @@ public class TransactionController {
             || actionTypeRepository.findByInitiatorType(initiatorType).get(i).equals(actionTypeRepository.findByName("End"))){
             }
             else{
-                //if the type is none of the standard Actiontypes it will be tranmitted to the available List of special actions
+                //if the type is none of the standard actiontypes it will be transmitted to the List of available special actions
                 availableActions.add(actionTypeRepository.findByInitiatorType(initiatorType).get(i));  
             }
         } 
 
         //add the list of special actions
         model.addAttribute("actiontypes", availableActions);
-        //model.addAttribute("actiontypes", actionTypeRepository.findByInitiatorType(initiatorType));     //only find the available actiontypes for that user.
+
         model.addAttribute("action", newAction);
         model.addAttribute("transactionID", transactionID);
         return "transaction-addSpecialAction";
@@ -148,14 +148,12 @@ public class TransactionController {
     @GetMapping("/transaction/{transactionID}/addOffer")
     public String showOffer(Action action, @PathVariable Long transactionID, @AuthenticationPrincipal User user, Model model) {
         InitiatorType initiatorType = InitiatorType.SELLER;
-        // ActionType actionType = actionTypeRepository.findByName(actionTypeName);
+        Action newAction = new Action();
 
         if(user.getCompany().equals(transactionRepository.findById(transactionID).get().getBuyer())) {      //findout if current user is Buyer or seller.
             initiatorType = InitiatorType.BUYER;
         } 
 
-        Action newAction = new Action();
-        //model.addAttribute("actiontypes", actionTypeRepository.findByInitiatorType(initiatorType));     //only find the available actiontypes for that user.
         //set specific Actiontype Offer because in the case of an Offer Action it can only be the Offertype
         model.addAttribute("actiontypes", actionTypeRepository.findByName("Offer"));     
         model.addAttribute("action", newAction);
