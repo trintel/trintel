@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
@@ -382,7 +383,7 @@ public class CompanyTest {
      */
     @Test
     @WithUserDetails(value = "admin@admin", userDetailsServiceBeanName = "userDetailsService")
-    public void editOwnCompanyAdminTest() throws Exception {
+    public void editOwnCompanyTestAdmin() throws Exception {
         // Deletes Company if it is allready in the database from other tests
         if (companyRepository.findByName(companyName) != null) {
             companyRepository.delete(companyRepository.findByName(companyName));
@@ -405,10 +406,50 @@ public class CompanyTest {
     @WithUserDetails(value = "j@j", userDetailsServiceBeanName = "userDetailsService")
     public void editOwnCompanyStudentTest() throws Exception {
         mockMvc.perform(get("/company/" + userRepository.findByEmail("j@j").getCompany().getId() + "/edit"))
-                .andExpect(view().name("company-edit")); // TODO: Kommt in den else Fall
+                .andExpect(view().name("company-edit"));
     }
 
-    // TODO saveOwnCompany
+
+    /**
+     * Tests if the Admin can edit an existing company
+     * @throws Exception
+     */
+    @Test
+    @WithUserDetails(value = "admin@admin", userDetailsServiceBeanName = "userDetailsService")
+    public void saveOwnCompanyTestAdmin() throws Exception {
+        if (companyRepository.findByName(companyName) != null) {
+            companyRepository.delete(companyRepository.findByName(companyName));
+        }
+        Company testCompany = new Company(companyName);
+        companyRepository.save(testCompany);
+        long companyId = testCompany.getId();
+
+        MockMultipartFile file = new MockMultipartFile("formFile", "".getBytes());
+
+        mockMvc.perform(multipart("/company/" + companyId + "/edit").file(file).with(csrf())
+               .flashAttr("company", companyId))
+               .andExpect(status().is3xxRedirection())
+               .andExpect(redirectedUrl("/companies/" + companyId));
+
+    }
+
+
+    /**
+     *
+     * Tests if the Student can save his company
+     * @throws Exception
+     */
+    @Test
+    @WithUserDetails(value = "j@j", userDetailsServiceBeanName = "userDetailsService")
+    public void saveOwnCompanyTestStudent() throws Exception {
+        MockMultipartFile file = new MockMultipartFile("formFile", "".getBytes());
+
+        mockMvc.perform(multipart("/company/" + userRepository.findByEmail("j@j").getCompany().getId() + "/edit").file(file).with(csrf())
+               .flashAttr("company", userRepository.findByEmail("j@j").getCompany().getId()))
+               .andExpect(status().is3xxRedirection())
+               .andExpect(redirectedUrl("/companies/" + userRepository.findByEmail("j@j").getCompany().getId()));
+
+    }
 
     // #######################################################################################
     // ----------------------------------- Integration Tests
