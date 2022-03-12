@@ -72,11 +72,37 @@
 				<div class="d-flex justify-content-center">
 					<div th:each="actiontype: ${actiontypes}">
 						<div th:switch="${actiontype.name}">
+							<!-- "Offer" button -->
 							<a th:case="Offer" class="btn btn-primary btn-lg me-3" th:text="#{offerNA}" th:href="@{'/transaction/' + ${transactionID} + '/addOffer'}"></a>
-							<a th:case="Accept" class="btn btn-success btn-lg me-3" th:text="#{acceptNA}" th:href="@{'/transaction/' + ${transactionID} + '/accept'}" method="post"></a>
+							<!-- Modal for "Accept" button -->
+							<div th:case="Accept">
+								<button type="button" class="btn btn-success btn-lg me-3" data-bs-toggle="modal" data-bs-target="#exampleModal" th:text="#{acceptNA}"></button>
+								<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+									<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+										<div class="modal-content">
+											<div class="modal-header">
+												<h5 class="modal-title" id="exampleModalLabel" th:text="#{acceptNA}"></h5>
+												<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+											</div>
+											<div class="modal-body">
+												<form class="mb-3" th:object="${action}" >
+													<textarea class="form-control" th:field="*{message}" th:placeholder="#{message}"></textarea>
+												</form>
+											</div>
+											<div class="modal-footer">
+												<a type="submit" th:href="@{'/transaction/' + ${transactionID} + '/accept'}" method="post" class="w-100 btn btn-lg btn-primary">Send message</a>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- Modal for "Abort" button -->
 							<a th:case="Abort" class="btn btn-danger btn-lg me-3" th:text="#{abortNA}" th:href="@{'/transaction/' + ${transactionID} + '/abort'}" method="post"></a>
+							<!-- Modal for "Delivery" button -->
 							<a th:case="Delivery" class="btn btn-primary btn-lg me-3" th:text="#{deliveryNA}" th:href="@{'/transaction/' + ${transactionID} + '/delivery'}" method="post"></a>
+							<!-- Modal for "Invoicing" button -->
 							<a th:case="Invoicing" class="btn btn-primary btn-lg me-3" th:text="#{invoicingNA}" th:href="@{'/transaction/' + ${transactionID} + '/invoicing'}" method="post"></a>
+							<!-- Modal for "Paid" button -->
 							<a th:case="Paid" class="btn btn-primary btn-lg me-3" th:text="#{paidNA}" th:href="@{'/transaction/' + ${transactionID} + '/paid'}" method="post"></a>
 						</div>
 					</div>
