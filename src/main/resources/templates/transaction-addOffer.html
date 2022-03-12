@@ -14,9 +14,7 @@ AVIALABLE as long as no offer is accepted-->
     <th:block th:fragment="content">
         <style th:replace="fragments/small-content :: content"></style>
         <main class="form-small">
-            <!-- <h3 class="mb-3" th:object="${seller}" th:text="${company.name}"></h3> -->
             <form th:action="@{'/transaction/' + ${transactionID} + '/addAction'}" th:object="${action}" method="post">
-                <!-- Block: Header -->
                 <!-- Hidden input field to pass the actiontype offer without asking the user because he already clicked on create Offer. In 
                 this case its clear for the the user but the value has to be passed because behind the UI -->
                 <div class="form-floating mb-3">
@@ -26,18 +24,12 @@ AVIALABLE as long as no offer is accepted-->
                                 <option th:value="${actiontype.id}"> </option>
                             </div>
                         </div>
-                    </select>  
-                    <!-- <select class="disabled w-100" style="appearance: none; border: none;" th:field="*{actiontype}">
-                        <option th:each="actiontype : ${actiontypes}" th:value="${actiontype.id}">
-                        </option>
-                    </select> -->
+                    </select>
                 </div>
-
-                <!-- Not really clean solution -->
+                <!-- Block: Header -->
                 <div class="form-floating mb-3">
                     <h1 th:text="#{offer}"></h1>
                 </div>
-
                 <!-- Block: Price & Amount -->
                 <div class="d-flex">
                     <div class="form-floating mb-3" th:object="${action}">
@@ -63,20 +55,12 @@ AVIALABLE as long as no offer is accepted-->
                         <button type="submit" class="w-100 btn btn-lg btn-primary mb-3"><a
                                 th:text=" #{send}"></a></button>
                     </a>
-
-                    <!-- DEBUG BUTTON -->
-                    <!-- </div>
-                <select th:field="*{actiontype}">
-                    <option th:each="actiontype : ${actiontypes}" th:text="${actiontype.name}" th:value="${actiontype.id}">
-                </select> -->
             </form>
-
             <!-- Block: Back Button -->
             <button class="w-100 btn btn-lg btn-light mb-3" onclick="history.back()">
                 <i class="bi bi-arrow-left"></i>
                 <a th:text=" #{back}"></a>
             </button>
-
         </main>
     </th:block>
 </body>

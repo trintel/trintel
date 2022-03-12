@@ -18,19 +18,17 @@
                 <div class="form-floating mb-3">
                     <h1 class="mb-3" th:text="#{actiontype}"></h1>
                 </div>
-
+                <!-- Block: Drop Down menu for the special action type -->
                 <div class="form-floating mb-3">
-                    
                     <select class="custom-select-lg w-100 btn btn-lg btn-primary" th:field="*{actiontype}">
                         <div th:each="actiontype : ${actiontypes}">
                             <div th:unless="${actiontype.standartAction}">
-                                <option th:text="${actiontype.name} + ': ' + ${actiontype.text}" th:value="${actiontype.id}"> </option>
+                                <option th:text="${actiontype.name} + ': ' + ${actiontype.text}"
+                                    th:value="${actiontype.id}"> </option>
                             </div>
                         </div>
                     </select>
-
                 </div>
-
                 <!-- Block: Message -->
                 <div class="form-floating mb-3 w-100">
                     <input th:field="*{message}" type="text" class="form-control" id="actionText" placeholder="message"
