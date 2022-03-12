@@ -29,10 +29,10 @@
 									<h4 th:case="Accept" class="mb-0">
 										<div class="badge bg-success me-3" th:text="#{acceptTL}"></div>
 									</h4>
-									<!-- <h4 th:case="End" class="mb-0"><div class="badge bg-light text-dark me-3" th:text="#{endTL}"></div></h4> -->
-									<!-- <h4 th:case="Delivery" class="mb-0"><div class="badge bg-primary me-3" th:text="#{deliveryTL}"></div></h4> -->
-									<!-- <h4 th:case="Invoicing" class="mb-0"><div class="badge bg-dark me-3" th:text="#{invoicingTL}"></div></h4> -->
-									<!-- <h4 th:case="Paid" class="mb-0"><div class="badge bg-primary me-3" th:text="#{paidTL}"></div></h4> -->
+									<h4 th:case="Abort" class="mb-0"><div class="badge bg-light text-dark me-3" th:text="#{endTL}"></div></h4>
+									<h4 th:case="Delivery" class="mb-0"><div class="badge bg-primary me-3" th:text="#{deliveryTL}"></div></h4>
+									<h4 th:case="Invoicing" class="mb-0"><div class="badge bg-dark me-3" th:text="#{invoicingTL}"></div></h4>
+									<h4 th:case="Paid" class="mb-0"><div class="badge bg-primary me-3" th:text="#{paidTL}"></div></h4>
 									<h4 th:case="*" class="mb-0">
 										<div class="badge bg-secondary me-3"
 											th:text="${transaction.actions[#lists.size(transaction.actions) - 1].actiontype.name}">
