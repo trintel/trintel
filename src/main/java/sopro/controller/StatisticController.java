@@ -51,4 +51,9 @@ public class StatisticController {
 
         return "statistics";
     }
+    
+    @GetMapping("/statistic")
+    public String viewOwnCompany(Model model, @AuthenticationPrincipal User user) {
+        return "redirect:/statistics/" + user.getCompany().getId();
+    }
 }

@@ -120,40 +120,138 @@
 
 
         <div class="container">
-            <h3 class="mb-3" th:text="#{transactionStatistics}"></h3>
+            <h3 class="mb-3" th:text="#{transactionStatisticsOther}"></h3>
             <!-- <div class="card shadow"> -->
-                <table class="table">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th scope="col" th:text="#{company}"></th>
-                            <th scope="col" th:text="#{amountTransactions}"></th>
-                            <th scope="col" th:text="#{offers}"></th>
-                            <th scope="col" th:text="#{products}"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Company1</td>
-                            <td>99</td>
-                            <td>235</td>
-                            <td>433</td>
-                        </tr>
-                        <tr>
-                            <td>Company2</td>
-                            <td>80</td>
-                            <td>232</td>
-                            <td>333</td>
-                        </tr>
-                        <tr>
-                            <td>Company3</td>
-                            <td>68</td>
-                            <td>222</td>
-                            <td>255</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <table class="table">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col" th:text="#{company}"></th>
+                        <th scope="col" th:text="#{amountTransactions}"></th>
+                        <th scope="col" th:text="#{offers}"></th>
+                        <th scope="col" th:text="#{products}"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Company1</td>
+                        <td>99</td>
+                        <td>235</td>
+                        <td>433</td>
+                    </tr>
+                    <tr>
+                        <td>Company2</td>
+                        <td>80</td>
+                        <td>232</td>
+                        <td>333</td>
+                    </tr>
+                    <tr>
+                        <td>Company3</td>
+                        <td>68</td>
+                        <td>222</td>
+                        <td>255</td>
+                    </tr>
+                </tbody>
+            </table>
             <!-- </div> -->
         </div>
+
+        <div class="container mb-3">
+
+            <div class="row">
+                <h3 class="mb-3" th:text="#{transactionStatistics}"></h3>
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="col mr-2 d-flex">
+                                        <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1"
+                                            th:text="#{totalTransationSellerVolume}">
+                                        </div>
+                                        <i class="bi bi-info-circle" data-toggle="tooltip" title="first tooltip"
+                                            id='example'></i>
+                                    </div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800" th:text="${totalTransationSellerVolume} + '€'">
+                                    </div>
+                                </div>
+                                <div class="col-auto">
+                                    <span class="bi bi-arrow-up-right-circle" style="font-size:30px;"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="col mr-2 d-flex">
+                                        <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1"
+                                            th:text="#{totalTransationBuyerVolume}">
+                                        </div>
+                                        <i class="bi bi-info-circle" data-toggle="tooltip" title="second tooltip"
+                                            id='example'></i>
+                                    </div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800"
+                                        th:text="${totalTransationBuyerVolume} + '€'">
+                                    </div>
+                                </div>
+                                <div class="col-auto">
+                                    <span class="bi bi-arrow-down-right-circle" style="font-size:30px;"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="col mr-2 d-flex">
+                                        <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1"
+                                            th:text="#{numberDistinctSellers}">
+                                        </div>
+                                        <i class="bi bi-info-circle" data-toggle="tooltip" title="third tooltip"
+                                            id='example'></i>
+                                    </div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800"
+                                        th:text="${numberDistinctSellers}"></div>
+                                </div>
+                                <div class="col-auto">
+                                    <span class="bi bi-bag-fill"  style="font-size:30px;"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="col mr-2 d-flex">
+                                        <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1"
+                                            th:text="#{numberDistinctBuyers}">
+                                        </div>
+                                        <i class="bi bi-info-circle" data-toggle="tooltip" title="fourth tooltip"
+                                            id='example'></i>
+                                    </div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800"
+                                        th:text="${numberDistinctBuyers}"></div>
+                                </div>
+                                <div class="col-auto">
+                                    <span class="bi bi-bag" style="font-size:30px;"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    
 
         <!-- <div class="d-md-flex justify-content-md-between flex-md-row-reverse align-items-md-start">
 
