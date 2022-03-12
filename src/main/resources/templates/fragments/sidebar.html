@@ -39,7 +39,7 @@
                   <span th:text="#{transactions}"/>
                 </a>
               </li>
-              <li class="nav-item" th:with="companyID = ${#request.userPrincipal.principal.company.id}" sec:authorize="hasRole('STUDENT')">
+              <li class="nav-item" sec:authorize="hasRole('STUDENT')" th:with="companyID = ${#request.userPrincipal.principal.company.id}">
                 <a th:classappend="${#httpServletRequest.getRequestURI() == '/statistics/' + {companyID} ? 'active':''}" class="nav-link" th:href="@{/statistics/3}">
                   <i th:class="${#httpServletRequest.getRequestURI() == '/statistics/' + {companyID} ? 'bi bi-bar-chart-line-fill':'bi bi-bar-chart-line'}"></i>
                   <span th:text="#{statistics}"/>

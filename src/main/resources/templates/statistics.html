@@ -8,9 +8,10 @@
 
 <body>
     <th:block th:fragment="content" sec:authorize=”hasRole('STUDENT')”>
-        <div class="container mt-3 d-md-flex justify-content-md-between" style="align-items: center;">
+        <div class="container mt-3 d-md-flex " style="align-items: center;">
             <div class="col-10">
-                <h1 class="mb-5 mt-2" th:text="#{statistics}"></h1>
+                <h1 class="" th:text="#{statistics}"></h1>
+                <h3 class="" th:text="${company.name}"></h3>
             </div>
             <div class="col-2">
                 <div class="companylogo companylogo-lg float-md-end mb-3 mb-md-0 ms-md-3 mx-auto mx-md-0">
@@ -19,138 +20,152 @@
             </div>
         </div>
         <div class="container mb-3">
-            <h3 class="mb-3" th:text="#{generalStatistics}"></h3>
+
             <div class="row">
-                <div class="col">
-                    <ul class="list-group mb-3 mx-auto">
-                        <li class="list-group-item">
-                            <h5 th:text="#{amountTransactions}"></h5>
-                        </li>
-                        <li class="list-group-item" th:text="${numberConfirmed}">242</li>
-                    </ul>
+                <h3 class="mb-3" th:text="#{generalStatistics}"></h3>
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="col mr-2 d-flex">
+                                        <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1"
+                                            th:text="#{amountTransactions}">
+                                        </div>
+                                        <i class="bi bi-info-circle" data-toggle="tooltip" title="first tooltip"
+                                            id='example'></i>
+                                    </div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800" th:text="${numberConfirmed}">
+                                    </div>
+                                </div>
+                                <div class="col-auto">
+                                    <span class="bi bi-cart-check" style="font-size:30px;"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-
-                <div class="col">
-                    <ul class="list-group mb-3 mx-auto">
-                        <li class="list-group-item">
-                            <h5 th:text="#{turnover}"></h5>
-                        </li>
-                        <li class="list-group-item" th:text="${totalTransationSellerVolume - totalTransationBuyerVolume} + '€'"></li>
-                    </ul>
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="col mr-2 d-flex">
+                                        <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1"
+                                            th:text="#{turnover}">
+                                        </div>
+                                        <i class="bi bi-info-circle" data-toggle="tooltip" title="second tooltip"
+                                            id='example'></i>
+                                    </div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800"
+                                        th:text="${totalTransationSellerVolume - totalTransationBuyerVolume} + '€'">
+                                    </div>
+                                </div>
+                                <div class="col-auto">
+                                    <span class="bi bi-cash-coin" style="font-size:30px;"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-
-                <div class="col">
-                    <ul class="list-group mb-3 mx-auto">
-                        <li class="list-group-item">
-                            <h5 th:text="#{percentTurnover}"></h5>
-                        </li>
-                        <li class="list-group-item">12%</li>
-                    </ul>
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="col mr-2 d-flex">
+                                        <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1"
+                                            th:text="#{percentTurnover}">
+                                        </div>
+                                        <i class="bi bi-info-circle" data-toggle="tooltip" title="third tooltip"
+                                            id='example'></i>
+                                    </div>
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar" style="width: 12%;"
+                                            aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">12%</div>
+                                    </div>
+                                </div>
+                                <div class="col-auto">
+                                    <span class="bi bi-globe" style="font-size:30px;"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col">
-                    <ul class="list-group mb-3 mx-auto">
-                        <li class="list-group-item">
-                            <h5 th:text="#{numberDistinctBuyers}"></h5>
-                        </li>
-                        <li class="list-group-item" th:text="${numberDistinctBuyers}"></li>
-                    </ul>
-                </div>
-
-                <div class="col">
-                    <ul class="list-group mb-3 mx-auto">
-                        <li class="list-group-item">
-                            <h5 th:text="#{numberDistinctSellers}"></h5>
-                        </li>
-                        <li class="list-group-item" th:text="${numberDistinctSellers}"></li>
-                    </ul>
-                </div>
-
-                <div class="col">
-                    <ul class="list-group mb-3 mx-auto">
-                        <li class="list-group-item">
-                            <h5 th:text="#{totalTransationBuyerVolume}"></h5>
-                        </li>
-                        <li class="list-group-item" th:text="${totalTransationBuyerVolume} +'€'"></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col">
-                    <ul class="list-group mb-3 mx-auto">
-                        <li class="list-group-item">
-                            <h5 th:text="#{totalTransationSellerVolume}"></h5>
-                        </li>
-                        <li class="list-group-item" th:text="${totalTransationSellerVolume} +'€'"></li>
-                    </ul>
-                </div>
-
-                <div class="col">
-                    <ul class="list-group mb-3 mx-auto">
-                        <li class="list-group-item">
-                            <h5 th:text="#{numberNonConfirmedBuyer}"></h5>
-                        </li>
-                        <li class="list-group-item" th:text="${numberNonConfirmedBuyer}"></li>
-                    </ul>
-                </div>
-
-                <div class="col">
-                    <ul class="list-group mb-3 mx-auto">
-                        <li class="list-group-item">
-                            <h5 th:text="#{numberNonConfirmedSeller}"></h5>
-                        </li>
-                        <li class="list-group-item" th:text="${numberNonConfirmedSeller}"></li>
-                    </ul>
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="col mr-2 d-flex">
+                                        <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1"
+                                            th:text="#{numberDistinctBuyers}">
+                                        </div>
+                                        <i class="bi bi-info-circle" data-toggle="tooltip" title="fourth tooltip"
+                                            id='example'></i>
+                                    </div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800"
+                                        th:text="${numberDistinctBuyers}"></div>
+                                </div>
+                                <div class="col-auto">
+                                    <span class="bi bi-bag" style="font-size:30px;"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        
 
-        <div class="container mb-3">
+
+        <div class="container">
             <h3 class="mb-3" th:text="#{transactionStatistics}"></h3>
-            <table class="table">
-                <thead class="thead-dark">
-                    <tr>
-                        <th scope="col" th:text="#{company}"></th>
-                        <th scope="col" th:text="#{amountTransactions}"></th>
-                        <th scope="col" th:text="#{offers}"></th>
-                        <th scope="col" th:text="#{products}"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Company1</td>
-                        <td>99</td>
-                        <td>235</td>
-                        <td>433</td>
-                    </tr>
-                    <tr>
-                        <td>Company2</td>
-                        <td>80</td>
-                        <td>232</td>
-                        <td>333</td>
-                    </tr>
-                    <tr>
-                        <td>Company3</td>
-                        <td>68</td>
-                        <td>222</td>
-                        <td>255</td>
-                    </tr>
-                </tbody>
-            </table>
+            <!-- <div class="card shadow"> -->
+                <table class="table">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col" th:text="#{company}"></th>
+                            <th scope="col" th:text="#{amountTransactions}"></th>
+                            <th scope="col" th:text="#{offers}"></th>
+                            <th scope="col" th:text="#{products}"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Company1</td>
+                            <td>99</td>
+                            <td>235</td>
+                            <td>433</td>
+                        </tr>
+                        <tr>
+                            <td>Company2</td>
+                            <td>80</td>
+                            <td>232</td>
+                            <td>333</td>
+                        </tr>
+                        <tr>
+                            <td>Company3</td>
+                            <td>68</td>
+                            <td>222</td>
+                            <td>255</td>
+                        </tr>
+                    </tbody>
+                </table>
+            <!-- </div> -->
         </div>
 
-        <div class="d-md-flex justify-content-md-between flex-md-row-reverse align-items-md-start">
-           
+        <!-- <div class="d-md-flex justify-content-md-between flex-md-row-reverse align-items-md-start">
+
             <div class="col-md-9">
                 <h1 th:text="'Number confirmed:' + ${numberConfirmed}"></h1>
                 <h1 th:text="'numberDistinctBuyers:' + ${numberDistinctBuyers}"></h1>
                 <h1 th:text="'numberDistinctSellers:' + ${numberDistinctSellers}"></h1>
                 <h1 th:text="'totalTransationBuyerVolume:' + ${totalTransationBuyerVolume}"></h1>
                 <h1 th:text="'totalTransationSellerVolume:' + ${totalTransationSellerVolume}"></h1>
-                <h1 th:text="'totalTransationTotalVolume:' + ${totalTransationSellerVolume - totalTransationBuyerVolume}"></h1>
+                <h1
+                    th:text="'totalTransationTotalVolume:' + ${totalTransationSellerVolume - totalTransationBuyerVolume}">
+                </h1>
                 <h1 th:text="'numberNonConfirmedBuyer:' + ${numberNonConfirmedBuyer}"></h1>
                 <h1 th:text="'numberNonConfirmedSeller:' + ${numberNonConfirmedSeller}"></h1>
 
@@ -158,7 +173,7 @@
         </div>
         <a class="float-end" th:href="@{/company/{id}/edit(id=${company.id})}" th:if="${#request.userPrincipal.principal.role} == 'ADMIN' or ${#request.userPrincipal.principal.company.id} == ${company.id}">
             <button class="btn btn-primary mt-md-3" type="submit" th:text="#{edit}"></button>
-        </a>
+        </a> -->
     </th:block>
 </body>
 
