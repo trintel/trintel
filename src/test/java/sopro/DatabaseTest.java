@@ -6,7 +6,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.context.transaction.BeforeTransaction;
+import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+
+
 
 import sopro.model.Company;
 import sopro.model.User;
@@ -17,33 +23,26 @@ import sopro.repository.UserRepository;
 @Transactional
 public class DatabaseTest {
 
+
     @Autowired
     UserRepository userRepository;
 
     @Autowired
     CompanyRepository companyRepository;
 
-    private User user;
-    private Company company;
+    
+    @Autowired
+    BeforeTest beforeTest;
 
-    String forename = "forename";
-    String lastname = "lastname";
-    String email = "email@email.com";
-    String password = "password";
 
     /**
-     * Creates a User and a Company in the database.
+     * 
      *
      * @throws Exception
      */
-    @BeforeEach
-    public void addUserandCompany() {
-        user = new User(lastname, forename, email, password, null);
-        user.setRole("STUDENT"); // model -> user: Role not null
-        company = new Company("company");
-        companyRepository.save(company);
-        user.setCompany(company);
-        userRepository.save(user);
+    @BeforeTransaction
+    void setup() {
+        beforeTest.setup();
     }
 
     /**
@@ -53,16 +52,27 @@ public class DatabaseTest {
      */
     @Test
     public void isUserInDatabase() throws Exception {
-        assertEquals(user, userRepository.findById(user.getId()).get()); // .get(): optional<User> in User
+        User testUser = new User(true, true, true, true, "testUser", "testUser", "testUser@testUser", "password", null);
+        testUser.setRole("STUDENT");
+        userRepository.save(testUser);
+        assertEquals(testUser, userRepository.findById(testUser.getId()).get()); // .get(): optional<User> in User
     }
 
+
+
     /**
-     * Checks if the craeted user is assigned to the right company.
+     * Checks if the created user is assigned to the right company.
      *
      * @throws Exception
      */
     @Test
     public void isUserInCompany() throws Exception {
-        assertEquals(company, userRepository.findByEmail(email).getCompany());
+        Company testCompany = new Company("testCompany");
+        User testUser = new User(true, true, true, true, "testUser", "testUser", "testUser@testUser", "password", testCompany);
+        companyRepository.save(testCompany);
+        testUser.setRole("STUDENT");
+        userRepository.save(testUser);
+        assertEquals(testCompany, testUser.getCompany());
+    
     }
 }

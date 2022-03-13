@@ -6,21 +6,82 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.unauthenticated;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 
+import java.nio.charset.Charset;
+import java.util.Random;
+
+import javax.transaction.Transactional;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.event.annotation.AfterTestMethod;
+import org.springframework.test.context.transaction.BeforeTransaction;
 import org.springframework.test.web.servlet.MockMvc;
 
-// @RunWith(SpringRunner.class)
+import sopro.repository.UserRepository;
+
+
 @SpringBootTest
 @AutoConfigureMockMvc
+@Transactional
 public class LoginTest {
 
     @Autowired
+    UserRepository userRepository;
+
+    @Autowired
     private MockMvc mockMvc;
+
+
+    @Autowired
+    BeforeTest beforeTest;
+
+    @BeforeTransaction
+    void setup() {
+        beforeTest.setup();
+    }
+
+    //TODO: Error in User Controller getAdminUrl??? Luca fragen
+    /**
+     * Tests, if the login screen is served on /signup/randomUrl
+     *
+     * @throws Exception
+     */
+    @Test
+    public void signUpRedirectTest() throws Exception {
+        byte[] array = new byte[7]; // length is bounded by 7
+        new Random().nextBytes(array);
+        String generatedString = new String(array, Charset.forName("UTF-8"));
+
+        
+        mockMvc.perform(get("/signup/" + generatedString))
+               .andExpect(status().is3xxRedirection())
+               .andExpect(redirectedUrl("/login"));
+    }
+
+
+    /**
+     * Tests if a Student can Sign Up
+     *
+     * @throws Exception
+     */
+    // @Test
+    // @WithMockUser(username = "test@test", roles = { "Student" })
+    // public void signUpRoleAdminTest() throws Exception {
+    //     mockMvc.perform(post("/companies/student").param("forename", "testVorname")
+    //                                               .param("surname", "testSurname")
+    //                                               .param("email", "testEmail@test")
+    //                                               .param("password", "testPassword"))
+    //            .andExpect(view().name("verify-your-email"));
+    // }
+
 
 
     /**
@@ -35,26 +96,12 @@ public class LoginTest {
                 .andExpect(status().isOk());
     }
 
-    // TODO Rechteverwaltung?
-    /**
-     * Tests if the Admin can access the companies.
-     *
-     * @throws Exception
-     */
-    // @Test
-    // @WithMockUser(username = "admin@admin", roles = { "ADMIN" }) // Erstellt User
-    // ohne die Daternbank zu verwenden.
-    // public void adminCanSeeCompanies() throws Exception {
-    // mockMvc
-    // .perform(get("/companies"))
-    // .andExpect(status().is(200));
-    // }
 
     /**
      * Test if the Logout of the Admin works and if the admin is redirected to the
      * login page
      *
-     * @throcpti
+     * @throws Exception
      */
     @Test
     @AfterTestMethod
@@ -64,22 +111,6 @@ public class LoginTest {
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl("/login?logout"));
     }
-
-    // TODO Rechteverwaltung anpassen.
-    /**
-     * Tests if the Student can access the companies.
-     *
-     * @throws Exception
-     */
-    // @Test
-    // @WithMockUser(username = "student@student", roles = { "STUDENT" }) //
-    // Erstellt User ohne die Daternbank zu
-    // // verwenden.
-    // public void studentCanNotSeeCompanies() throws Exception {
-    // mockMvc
-    // .perform(get("/companies"))
-    // .andExpect(status().isForbidden());
-    // }
 
     /**
      * Test if the Logout of the Student works and he is redirected to the Login

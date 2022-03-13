@@ -5,6 +5,8 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+
+
 import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,12 +18,19 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.context.support.WithUserDetails;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.transaction.BeforeTransaction;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
+import sopro.model.Action;
+import sopro.model.ActionType;
 import sopro.model.Company;
 import sopro.model.Transaction;
 import sopro.model.User;
+import sopro.repository.ActionRepository;
+import sopro.repository.ActionTypeRepository;
 import sopro.repository.CompanyRepository;
 import sopro.repository.TransactionRepository;
 import sopro.repository.UserRepository;
@@ -32,7 +41,15 @@ import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TES
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Transactional
 public class CompanyTest {
+//////////////////////////
+    @Autowired
+    ActionTypeRepository actionTypeRepository;
+
+    @Autowired
+    ActionRepository actionRepository;
+///////////////////////////////
 
     @Autowired
     TransactionRepository transactionRepository;
@@ -52,39 +69,17 @@ public class CompanyTest {
     @Autowired
     PasswordEncoder passwordEncoder;
 
-    String companyName = "NewComp";
 
+    String companyName = "testCompany";
 
-/*     @BeforeEach
-    public void setup() {
-        //delete all Transactions
-        Iterable<Transaction> transactions = transactionRepository.findAll();
-        if (transactions != null) {
-            for (Transaction transaction : transactions) {
-                transactionRepository.delete(transaction);
-            }
-        //delete all User
-        Iterable<User> users = userRepository.findAll();
-        if (users != null) {
-            for (User user : users) {
-                userRepository.delete(user);
-            }
-        }
-            
-        }
-        //delete all Companies
-        Iterable<Company> companies = companyRepository.findAll();
-        if (companies != null) {
-            for (Company company : companies) {
-                companyRepository.delete(company);
-            }
-        }
+    @Autowired
+    BeforeTest beforeTest;
 
-        //Create demo Users
-        User student1 = new User(true, true, true, true,"Schniedelus", "Maximilius", "m@m", passwordEncoder.encode("password"), null);
-        student1.setRole("STUDENT");
-        userRepository.save(student1);
-    } */
+    @BeforeTransaction
+    void setup() {
+        beforeTest.setup();
+    }
+
 
     // #######################################################################################
     // ----------------------------------- Method Tests ADMIN
@@ -99,7 +94,7 @@ public class CompanyTest {
     @WithUserDetails(value = "admin@admin", userDetailsServiceBeanName = "userDetailsService")
     public void companiesReachable() throws Exception {
         mockMvc.perform(get("/companies"))
-                .andExpect(status().is(200));
+               .andExpect(status().is(200));
     }
 
     /**
@@ -162,11 +157,8 @@ public class CompanyTest {
     @Test
     @WithMockUser(username = "admin@admin", roles = { "ADMIN" })
     public void saveCompanieTestAdmin() throws Exception {
-        // Deletes Company if it is allready in the database from other tests
-        if (companyRepository.findByName(companyName) != null) {
-            companyRepository.delete(companyRepository.findByName(companyName));
-        }
-        Company testCompany = new Company(companyName);
+        // Deletes Company if it is allready in the database from other test    
+        Company testCompany = new Company("companyName");
         mockMvc.perform(post("/companies/save").flashAttr("company", testCompany).with(csrf()))
                 .andExpect(status().is(302))
                 .andExpect(redirectedUrl("/companies")); // Test with database check is down below
@@ -182,7 +174,7 @@ public class CompanyTest {
     @WithMockUser(username = "student@student", roles = { "STUDENT" })
     public void saveCompanieTestStudent() throws Exception {
         mockMvc.perform(get("/companies/save"))
-                .andExpect(status().isForbidden());
+               .andExpect(status().isForbidden());
     }
 
     /**
@@ -195,8 +187,8 @@ public class CompanyTest {
     @WithMockUser(username = "admin@admin", roles = { "ADMIN" })
     public void listAllStudentsTestAdmin() throws Exception {
         mockMvc.perform(get("/students"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("students-list"));
+               .andExpect(status().isOk())
+               .andExpect(view().name("students-list"));
     }
 
     /**
@@ -410,12 +402,12 @@ public class CompanyTest {
      *
      * @throws Exception
      */
-    @Test
-    @WithUserDetails(value = "studentTest@student", userDetailsServiceBeanName = "userDetailsService")
+    @Test //war vorher studentTest@student
+    @WithUserDetails(value = "m@m", userDetailsServiceBeanName = "userDetailsService")
     public void joinCompany2TestStudent() throws Exception {
-        mockMvc.perform(post("/company/join").param("name", companyName).with(csrf()))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/home"));
+        mockMvc.perform(post("/company/join").param("name", companyRepository.findAll().get(0).getName()).with(csrf()))
+               .andExpect(status().is3xxRedirection())
+               .andExpect(redirectedUrl("/home"));
     }
 
     /**
@@ -440,15 +432,15 @@ public class CompanyTest {
     }
 
     /**
-     * Tests if the Student can edit his own company (has one).
+     * Tests if the Student can edit his own company (has one). ... Funktioniert tatsächlich nicht, wenn es ausgeführt wird
      *
      * @throws Exception
      */
     @Test
     @WithUserDetails(value = "j@j", userDetailsServiceBeanName = "userDetailsService")
     public void editOwnCompanyStudentTest() throws Exception {
-        mockMvc.perform(get("/company/" + userRepository.findByEmail("j@j").getCompany().getId() + "/edit"))
-                .andExpect(view().name("company-edit"));
+        mockMvc.perform(get("/company/" + (userRepository.findByEmail("j@j").getCompany()).getId() + "/edit"))
+               .andExpect(view().name("company-edit"));
     }
 
 

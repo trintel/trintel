@@ -65,7 +65,7 @@ public class CompanyController {
         return "redirect:/companies";
     }
 
-    @GetMapping("/students")
+    @GetMapping("/students") //TODO handle unassigned in Frontend
     public String listAllStudents(Model model) {
         Company company = new Company("unassgined");
         for (User student : userRepository.findByRole("STUDENT")) {

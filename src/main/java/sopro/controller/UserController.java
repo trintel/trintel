@@ -57,7 +57,7 @@ public class UserController {
         return "redirect:/company/select"; // have students select a company if non is selected
     }
 
-    /**
+    /** 
      * Returns signup page for admins.
      *
      * @param model
