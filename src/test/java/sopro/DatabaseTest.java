@@ -2,17 +2,11 @@ package sopro;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Import;
 import org.springframework.test.context.transaction.BeforeTransaction;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
-
-
 
 import sopro.model.Company;
 import sopro.model.User;
@@ -30,13 +24,13 @@ public class DatabaseTest {
     @Autowired
     CompanyRepository companyRepository;
 
-    
+
     @Autowired
     BeforeTest beforeTest;
 
 
     /**
-     * 
+     *
      *
      * @throws Exception
      */
@@ -73,6 +67,6 @@ public class DatabaseTest {
         testUser.setRole("STUDENT");
         userRepository.save(testUser);
         assertEquals(testCompany, testUser.getCompany());
-    
+
     }
 }

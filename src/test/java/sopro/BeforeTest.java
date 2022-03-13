@@ -1,33 +1,25 @@
 package sopro;
 
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 
-import org.aspectj.lang.annotation.Before;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import javax.imageio.ImageIO;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.stereotype.Service;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.web.servlet.MockMvc;
 
 import sopro.model.Action;
 import sopro.model.ActionType;
 import sopro.model.Company;
 import sopro.model.CompanyLogo;
+import sopro.model.InitiatorType;
 import sopro.model.Transaction;
 import sopro.model.User;
 import sopro.repository.ActionRepository;
@@ -37,23 +29,7 @@ import sopro.repository.CompanyRepository;
 import sopro.repository.TransactionRepository;
 import sopro.repository.UserRepository;
 
-
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
-
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-
-import sopro.model.InitiatorType;
-
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.introspect.TypeResolutionContext.Empty;
-import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
 
 @Service
 public class BeforeTest {
@@ -85,16 +61,16 @@ public class BeforeTest {
     @Autowired
     CompanyLogoRepository companyLogoRepository;
 
-    
 
 
 
 
-    
+
+
     public void setup() {
 
         actionRepository.deleteAll();
-        actionTypeRepository.deleteAll(); 
+        actionTypeRepository.deleteAll();
         userRepository.deleteAll();
         transactionRepository.deleteAll();
         companyRepository.deleteAll();

@@ -5,29 +5,19 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-
-
-import org.aspectj.lang.annotation.Before;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.context.support.WithUserDetails;
-import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.transaction.BeforeTransaction;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
-import sopro.model.Action;
-import sopro.model.ActionType;
 import sopro.model.Company;
-import sopro.model.Transaction;
 import sopro.model.User;
 import sopro.repository.ActionRepository;
 import sopro.repository.ActionTypeRepository;
@@ -36,8 +26,6 @@ import sopro.repository.TransactionRepository;
 import sopro.repository.UserRepository;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.introspect.TypeResolutionContext.Empty;
-import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -157,7 +145,7 @@ public class CompanyTest {
     @Test
     @WithMockUser(username = "admin@admin", roles = { "ADMIN" })
     public void saveCompanieTestAdmin() throws Exception {
-        // Deletes Company if it is allready in the database from other test    
+        // Deletes Company if it is allready in the database from other test
         Company testCompany = new Company("companyName");
         mockMvc.perform(post("/companies/save").flashAttr("company", testCompany).with(csrf()))
                 .andExpect(status().is(302))
