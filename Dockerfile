@@ -1,6 +1,7 @@
 FROM openjdk:8-jdk-alpine
+WORKDIR .
 
-COPY /build/libs/trintel-0.0.1-SNAPSHOT.jar app.jar
+COPY /targe/app.jar app.jar
 
 EXPOSE 8080
 
