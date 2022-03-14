@@ -122,31 +122,40 @@
         <div class="container">
             <h3 class="mb-3" th:text="#{transactionStatisticsOther}"></h3>
             <!-- <div class="card shadow"> -->
-            <table class="table" id="table1">
+            <table class="table table-responsive" id="table1">
                 <thead class="thead-dark">
                     <tr>
                         <th scope="col">
-                            <div class="col d-flex align-items-center">
-                                <button class="btn" th:text="#{company}" onclick="sortTable(0)"></button>
-                                <i class="bi bi-filter"></i>
+                            <div class="col d-flex">
+                                <button class="w-100 btn btn-md" th:text="#{company}" onclick="sortTable(0)"></button>
+                                <div class="row align-items-center">
+                                    <i class="bi bi-filter"></i>
+                                </div>
+                            </div>
+                        </th>
+                        <th scope="col">
+                            <div class="col d-flex">
+                                <button class="w-100 btn btn-mdr" th:text="#{amountTransactions}"
+                                    onclick="sortTable(1)"></button>
+                                <div class="row align-items-center">
+                                    <i class="bi bi-filter"></i>
+                                </div>
                             </div>
                         </th>
                         <th scope="col">
                             <div class="col d-flex align-items-center">
-                                <button class="btn" th:text="#{amountTransactions}" onclick="sortTable(1)"></button>
-                                <i class="bi bi-filter"></i>
+                                <button class="w-100 btn btn-md" th:text="#{offers}" onclick="sortTable(2)"></button>
+                                <div class="row align-items-center">
+                                    <i class="bi bi-filter"></i>
+                                </div>
                             </div>
                         </th>
                         <th scope="col">
-                            <div class="col d-flex align-items-center">
-                                <button class="btn" th:text="#{offers}" onclick="sortTable(2)"></button>
-                                <i class="bi bi-filter"></i>
-                            </div>
-                        </th>
-                        <th scope="col">
-                            <div class="col d-flex align-items-center">
-                                <button class="btn" th:text="#{products}" onclick="sortTable(3)"></button>
-                                <i class="bi bi-filter"></i>
+                            <div class="col d-flex">
+                                <button class="w-100 btn btn-md" th:text="#{products}" onclick="sortTable(3)"></button>
+                                <div class="row align-items-center">
+                                    <i class="bi bi-filter"></i>
+                                </div>
                             </div>
 
                         </th>
@@ -154,30 +163,28 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <div>
-                            <td class="text-center">Company1</td>
-                            <td class="text-center">99</td>
-                            <td class="text-center">235</td>
-                            <td class="text-center">433</td>
-                        </div>
+                        <td class="text-center">Company1</td>
+                        <td class="text-center">1</td>
+                        <td class="text-center">1</td>
+                        <td class="text-center">2</td>
                     </tr>
                     <tr>
                         <td class="text-center">Company2</td>
-                        <td class="text-center">80</td>
-                        <td class="text-center">232</td>
-                        <td class="text-center">333</td>
+                        <td class="text-center">2</td>
+                        <td class="text-center">3</td>
+                        <td class="text-center">4</td>
                     </tr>
                     <tr>
                         <td class="text-center">Company3</td>
-                        <td class="text-center">68</td>
-                        <td class="text-center">222</td>
-                        <td class="text-center">255</td>
+                        <td class="text-center">3</td>
+                        <td class="text-center">2</td>
+                        <td class="text-center">1</td>
                     </tr>
                     <tr>
                         <td class="text-center">Company4</td>
-                        <td class="text-center">81</td>
-                        <td class="text-center">522</td>
-                        <td class="text-center">50</td>
+                        <td class="text-center">4</td>
+                        <td class="text-center">4</td>
+                        <td class="text-center">3</td>
                     </tr>
                 </tbody>
             </table>
