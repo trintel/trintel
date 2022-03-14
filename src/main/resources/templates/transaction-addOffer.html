@@ -33,7 +33,7 @@ AVIALABLE as long as no offer is accepted-->
                 <!-- Block: Price & Amount -->
                 <div class="d-flex">
                     <div class="form-floating mb-3" th:object="${action}">
-                        <input th:field="*{pricePerPiece}" min="0" type="number" class="form-control" id="offPrice"
+                        <input th:field="*{pricePerPiece}" min="0" type="number" step="0.01" class="form-control" id="offPrice"
                             placeholder="price" name="Offer_Price" required>
                         <label for="floatingOffPrice" th:text="#{offPrice}"></label>
                     </div>
