@@ -22,6 +22,7 @@ assemble:
     - ./gradlew assemble
     - mkdir -p target
     - mv build/libs/trintel-0.0.1-SNAPSHOT.jar target/app.jar
+    - ls target
 
   artifacts:
     paths:
@@ -48,10 +49,6 @@ test:
   stage: test
   image: adoptopenjdk/openjdk11
 
-  only:
-    - main
-    - deploy
-
   variables:
      GRADLE_USER_HOME: '.gradle-cache'
      GRADLE_OPTS: "-Dorg.gradle.daemon=false"
@@ -72,12 +69,13 @@ test:
       
 deployment:
   stage: build-docker
-  image: docker:19.03.1
+  image: docker:latest
   
   only: 
     - deploy
    
   script:
+    - ls target
     - docker build -t trintel .
     - docker stop trintel-container || true
     - docker rm trintel-container || true

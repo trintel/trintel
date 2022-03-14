@@ -90,7 +90,20 @@ public class InitDatabaseService {
             //Create demo Action_types
             ActionType request = new ActionType("Request", "Demo request text.", InitiatorType.BUYER);
             ActionType offer = new ActionType("Offer", "Demo offer text.", InitiatorType.SELLER);
-            ActionType accept = new ActionType("Accept", "Demo offer text.", InitiatorType.SELLER);
+            ActionType accept = new ActionType("Accept", "Demo accept text.", InitiatorType.SELLER);
+            ActionType cancelBuyer = new ActionType("Cancel", "Option to cancel transaction for buyer.", InitiatorType.BUYER);
+            ActionType cancelSeller = new ActionType("Cancel", "Option to cancel transaction for seller.", InitiatorType.SELLER);
+            ActionType delivery = new ActionType("Delivery", "Action to kick off delivery of goods to buyer.", InitiatorType.SELLER);
+            ActionType invoicing = new ActionType("Invoicing", "Action to send receipt to buyer.", InitiatorType.SELLER);
+            ActionType paid = new ActionType("Paid", "Action to mark transaction as completed.", InitiatorType.SELLER);
+            request.setStandartAction(true);
+            offer.setStandartAction(true);
+            accept.setStandartAction(true);
+            cancelBuyer.setStandartAction(true);
+            cancelSeller.setStandartAction(true);
+            delivery.setStandartAction(true);
+            invoicing.setStandartAction(true);
+            paid.setStandartAction(true);
 
             Transaction transaction1 = new Transaction(company1, company2);
             transaction1.setProduct("Product 1");
@@ -110,14 +123,16 @@ public class InitDatabaseService {
             actionTypeRepository.save(request);
             actionTypeRepository.save(offer);
             actionTypeRepository.save(accept);
+            actionTypeRepository.save(cancelBuyer);
+            actionTypeRepository.save(cancelSeller);
+            actionTypeRepository.save(delivery);
+            actionTypeRepository.save(invoicing);
+            actionTypeRepository.save(paid);
 
             transactionRepository.save(transaction1);
             actionRepository.save(trans1Accept);
             actionRepository.save(trans1Offer);
             actionRepository.save(trans1Request);
-
-
-
 
             Transaction transaction2 = new Transaction(company3,company1);
             transaction2.setProduct("Product 2");
