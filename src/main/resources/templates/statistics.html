@@ -7,108 +7,285 @@
 </head>
 
 <body>
-    <th:block th:fragment="content" sec:authorize="hasRole('Student')">
-        <div class="container mt-3 d-md-flex " style="align-items: center;">
-            <div class="col-10">
-                <h1 class="" th:text="#{statistics}"></h1>
-                <h3 class="" th:text="${company.name}"></h3>
-            </div>
-            <div class="col-2">
-                <div class="companylogo companylogo-lg float-md-end mb-3 mb-md-0 ms-md-3 mx-auto mx-md-0">
-                    <img th:src="@{'/company/logo/' + ${company.id}}" />
+    <th:block th:fragment="content">
+        <div sec:authorize="hasRole('STUDENT')">
+            <div class="container mt-3 d-md-flex " style="align-items: center;">
+                <div class="col-10">
+                    <h1 class="" th:text="#{statistics}"></h1>
+                    <h3 class="" th:text="${company.name}"></h3>
+                </div>
+                <div class="col-2">
+                    <div class="companylogo companylogo-lg float-md-end mb-3 mb-md-0 ms-md-3 mx-auto mx-md-0">
+                        <img th:src="@{'/company/logo/' + ${company.id}}" />
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="container mb-3">
+            <div class="container mb-3">
 
-            <div class="row">
-                <h3 class="mb-3" th:text="#{generalStatistics}"></h3>
-                <div class="col-xl-3 col-md-6 mb-4">
-                    <div class="card shadow h-100 py-2">
-                        <div class="card-body">
-                            <div class="row no-gutters align-items-center">
-                                <div class="col mr-2">
-                                    <div class="col mr-2 d-flex">
-                                        <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1"
-                                            th:text="#{amountTransactions}">
+                <div class="row">
+                    <h3 class="mb-3" th:text="#{generalStatistics}"></h3>
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="col mr-2 d-flex">
+                                            <div class="text-xs font-weight-bold text-secondary fs-6 mb-1"
+                                                th:text="#{amountTransactions}">
+                                            </div>
+                                            <i class="bi bi-info-circle" data-toggle="tooltip"
+                                                th:title="#{infoTransAmount}" id='example'></i>
                                         </div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800"
+                                            th:text="${numberConfirmed}">
+                                        </div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <span class="bi bi-cart-check" style="font-size:30px;"></span>
                                         <i class="bi bi-info-circle" data-toggle="tooltip" th:title="#{infoTransAmount}"
                                             id='example'></i>
                                     </div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800" th:text="${numberConfirmed}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="col mr-2 d-flex">
+                                            <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1"
+                                                th:text="#{turnover}">
+                                            </div>
+                                            <i class="bi bi-info-circle" data-toggle="tooltip"
+                                                th:title="#{infoTurnover}" id='example'></i>
+                                        </div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800"
+                                            th:text="${totalTransationSellerVolume - totalTransationBuyerVolume} + '€'">
+                                        </div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <span class="bi bi-cash-coin" style="font-size:30px;"></span>
                                     </div>
                                 </div>
-                                <div class="col-auto">
-                                    <span class="bi bi-cart-check" style="font-size:30px;"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="col mr-2 d-flex">
+                                            <div class="text-xs font-weight-bold text-secondary fs-6 mb-1"
+                                                th:text="#{percentTurnover}">
+                                            </div>
+                                            <i class="bi bi-info-circle" data-toggle="tooltip"
+                                                th:title="#{infoPercentTurnover}" id='example'></i>
+                                        </div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">6%
+                                        </div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <span class="bi bi-globe" style="font-size:30px;"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="col mr-2 d-flex">
+                                            <div class="text-xs font-weight-bold text-secondary fs-6 mb-1"
+                                                th:text="#{numberDistinctBuyers}">
+                                            </div>
+                                            <i class="bi bi-info-circle" data-toggle="tooltip"
+                                                th:title="#{infoNumberDistincBuyers}" id='example'></i>
+                                        </div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800"
+                                            th:text="${numberDistinctBuyers}"></div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <span class="bi bi-bag" style="font-size:30px;"></span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-3 col-md-6 mb-4">
-                    <div class="card shadow h-100 py-2">
-                        <div class="card-body">
-                            <div class="row no-gutters align-items-center">
-                                <div class="col mr-2">
-                                    <div class="col mr-2 d-flex">
-                                        <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1"
-                                            th:text="#{turnover}">
-                                        </div>
-                                        <i class="bi bi-info-circle" data-toggle="tooltip" th:title="#{infoTurnover}"
-                                            id='example'></i>
-                                    </div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800"
-                                        th:text="${totalTransationSellerVolume - totalTransationBuyerVolume} + '€'">
+            </div>
+
+
+
+            <div class="container">
+                <h3 class="mb-3" th:text="#{transactionStatisticsOther}"></h3>
+                <!-- <div class="card shadow"> -->
+                <table class="table table-responsive" id="table1">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">
+                                <div class="col d-flex">
+                                    <button class="w-100 btn btn-md" th:text="#{company}"
+                                        onclick="sortTable(0)"></button>
+                                    <div class="row align-items-center">
+                                        <i class="bi bi-filter"></i>
                                     </div>
                                 </div>
-                                <div class="col-auto">
-                                    <span class="bi bi-cash-coin" style="font-size:30px;"></span>
+                            </th>
+                            <th scope="col">
+                                <div class="col d-flex">
+                                    <button class="w-100 btn btn-mdr" th:text="#{amountTransactions}"
+                                        onclick="sortTable(1)"></button>
+                                    <div class="row align-items-center">
+                                        <i class="bi bi-filter"></i>
+                                    </div>
+                                </div>
+                            </th>
+                            <th scope="col">
+                                <div class="col d-flex align-items-center">
+                                    <button class="w-100 btn btn-md" th:text="#{offers}"
+                                        onclick="sortTable(2)"></button>
+                                    <div class="row align-items-center">
+                                        <i class="bi bi-filter"></i>
+                                    </div>
+                                </div>
+                            </th>
+                            <th scope="col">
+                                <div class="col d-flex">
+                                    <button class="w-100 btn btn-md" th:text="#{products}"
+                                        onclick="sortTable(3)"></button>
+                                    <div class="row align-items-center">
+                                        <i class="bi bi-filter"></i>
+                                    </div>
+                                </div>
+
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="text-center">Company1</td>
+                            <td class="text-center">1</td>
+                            <td class="text-center">1</td>
+                            <td class="text-center">2</td>
+                        </tr>
+                        <tr>
+                            <td class="text-center">Company2</td>
+                            <td class="text-center">2</td>
+                            <td class="text-center">3</td>
+                            <td class="text-center">4</td>
+                        </tr>
+                        <tr>
+                            <td class="text-center">Company3</td>
+                            <td class="text-center">3</td>
+                            <td class="text-center">2</td>
+                            <td class="text-center">1</td>
+                        </tr>
+                        <tr>
+                            <td class="text-center">Company4</td>
+                            <td class="text-center">4</td>
+                            <td class="text-center">4</td>
+                            <td class="text-center">3</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <!-- </div> -->
+            </div>
+
+            <div class="container mb-3">
+
+                <div class="row">
+                    <h3 class="mb-3" th:text="#{transactionStatistics}"></h3>
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="col mr-2 d-flex">
+                                            <div class="text-xs font-weight-bold text-secondary fs-6 mb-1"
+                                                th:text="#{totalTransationSellerVolume}">
+                                            </div>
+                                            <i class="bi bi-info-circle" data-toggle="tooltip"
+                                                th:title="#{infoTotalTransactionSellerVolume}" id='example'></i>
+                                        </div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800"
+                                            th:text="${totalTransationSellerVolume} + '€'">
+                                        </div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <span class="bi bi-arrow-up-right-circle" style="font-size:30px;"></span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-xl-3 col-md-6 mb-4">
-                    <div class="card shadow h-100 py-2">
-                        <div class="card-body">
-                            <div class="row no-gutters align-items-center">
-                                <div class="col mr-2">
-                                    <div class="col mr-2 d-flex">
-                                        <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1"
-                                            th:text="#{percentTurnover}">
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="col mr-2 d-flex">
+                                            <div class="text-xs font-weight-bold text-secondary fs-6 mb-1"
+                                                th:text="#{totalTransationBuyerVolume}">
+                                            </div>
+                                            <i class="bi bi-info-circle" data-toggle="tooltip"
+                                                th:title="#{infoTotalTransactionBuyerVolume}" id='example'></i>
                                         </div>
-                                        <i class="bi bi-info-circle" data-toggle="tooltip"
-                                            th:title="#{infoPercentTurnover}" id='example'></i>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800"
+                                            th:text="${totalTransationBuyerVolume} + '€'">
+                                        </div>
                                     </div>
-                                    <div class="progress">
-                                        <div class="progress-bar" role="progressbar" style="width: 12%;"
-                                            aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">12%</div>
+                                    <div class="col-auto">
+                                        <span class="bi bi-arrow-down-right-circle" style="font-size:30px;"></span>
                                     </div>
-                                </div>
-                                <div class="col-auto">
-                                    <span class="bi bi-globe" style="font-size:30px;"></span>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-xl-3 col-md-6 mb-4">
-                    <div class="card shadow h-100 py-2">
-                        <div class="card-body">
-                            <div class="row no-gutters align-items-center">
-                                <div class="col mr-2">
-                                    <div class="col mr-2 d-flex">
-                                        <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1"
-                                            th:text="#{numberDistinctBuyers}">
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="col mr-2 d-flex">
+                                            <div class="text-xs font-weight-bold text-secondary fs-6 mb-1"
+                                                th:text="#{numberDistinctSellers}">
+                                            </div>
+                                            <i class="bi bi-info-circle" data-toggle="tooltip"
+                                                th:title="#{infoNumberdistincsSellers}" id='example'></i>
                                         </div>
-                                        <i class="bi bi-info-circle" data-toggle="tooltip"
-                                            th:title="#{infoNumberDistincBuyers}" id='example'></i>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800"
+                                            th:text="${numberDistinctSellers}"></div>
                                     </div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800"
-                                        th:text="${numberDistinctBuyers}"></div>
+                                    <div class="col-auto">
+                                        <span class="bi bi-bag-fill" style="font-size:30px;"></span>
+                                    </div>
                                 </div>
-                                <div class="col-auto">
-                                    <span class="bi bi-bag" style="font-size:30px;"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="col mr-2 d-flex">
+                                            <div class="text-xs font-weight-bold text-secondary fs-6 mb-1"
+                                                th:text="#{numberDistinctBuyers}">
+                                            </div>
+                                            <i class="bi bi-info-circle" data-toggle="tooltip"
+                                                th:title="#{infoNumberDistincBuyers}" id='example'></i>
+                                        </div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800"
+                                            th:text="${numberDistinctBuyers}"></div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <span class="bi bi-bag" style="font-size:30px;"></span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -116,238 +293,92 @@
                 </div>
             </div>
         </div>
-
-
-
-        <div class="container">
-            <h3 class="mb-3" th:text="#{transactionStatisticsOther}"></h3>
-            <!-- <div class="card shadow"> -->
-            <table class="table table-responsive" id="table1">
-                <thead class="thead-dark">
-                    <tr>
-                        <th scope="col">
-                            <div class="col d-flex">
-                                <button class="w-100 btn btn-md" th:text="#{company}" onclick="sortTable(0)"></button>
-                                <div class="row align-items-center">
-                                    <i class="bi bi-filter"></i>
-                                </div>
-                            </div>
-                        </th>
-                        <th scope="col">
-                            <div class="col d-flex">
-                                <button class="w-100 btn btn-mdr" th:text="#{amountTransactions}"
-                                    onclick="sortTable(1)"></button>
-                                <div class="row align-items-center">
-                                    <i class="bi bi-filter"></i>
-                                </div>
-                            </div>
-                        </th>
-                        <th scope="col">
-                            <div class="col d-flex align-items-center">
-                                <button class="w-100 btn btn-md" th:text="#{offers}" onclick="sortTable(2)"></button>
-                                <div class="row align-items-center">
-                                    <i class="bi bi-filter"></i>
-                                </div>
-                            </div>
-                        </th>
-                        <th scope="col">
-                            <div class="col d-flex">
-                                <button class="w-100 btn btn-md" th:text="#{products}" onclick="sortTable(3)"></button>
-                                <div class="row align-items-center">
-                                    <i class="bi bi-filter"></i>
-                                </div>
-                            </div>
-
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="text-center">Company1</td>
-                        <td class="text-center">1</td>
-                        <td class="text-center">1</td>
-                        <td class="text-center">2</td>
-                    </tr>
-                    <tr>
-                        <td class="text-center">Company2</td>
-                        <td class="text-center">2</td>
-                        <td class="text-center">3</td>
-                        <td class="text-center">4</td>
-                    </tr>
-                    <tr>
-                        <td class="text-center">Company3</td>
-                        <td class="text-center">3</td>
-                        <td class="text-center">2</td>
-                        <td class="text-center">1</td>
-                    </tr>
-                    <tr>
-                        <td class="text-center">Company4</td>
-                        <td class="text-center">4</td>
-                        <td class="text-center">4</td>
-                        <td class="text-center">3</td>
-                    </tr>
-                </tbody>
-            </table>
-            <!-- </div> -->
-        </div>
-
-        <div class="container mb-3">
-
-            <div class="row">
-                <h3 class="mb-3" th:text="#{transactionStatistics}"></h3>
-                <div class="col-xl-3 col-md-6 mb-4">
-                    <div class="card shadow h-100 py-2">
-                        <div class="card-body">
-                            <div class="row no-gutters align-items-center">
-                                <div class="col mr-2">
-                                    <div class="col mr-2 d-flex">
-                                        <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1"
-                                            th:text="#{totalTransationSellerVolume}">
-                                        </div>
-                                        <i class="bi bi-info-circle" data-toggle="tooltip"
-                                            th:title="#{infoTotalTransactionSellerVolume}" id='example'></i>
-                                    </div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800"
-                                        th:text="${totalTransationSellerVolume} + '€'">
-                                    </div>
-                                </div>
-                                <div class="col-auto">
-                                    <span class="bi bi-arrow-up-right-circle" style="font-size:30px;"></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-3 col-md-6 mb-4">
-                    <div class="card shadow h-100 py-2">
-                        <div class="card-body">
-                            <div class="row no-gutters align-items-center">
-                                <div class="col mr-2">
-                                    <div class="col mr-2 d-flex">
-                                        <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1"
-                                            th:text="#{totalTransationBuyerVolume}">
-                                        </div>
-                                        <i class="bi bi-info-circle" data-toggle="tooltip"
-                                            th:title="#{infoTotalTransactionBuyerVolume}" id='example'></i>
-                                    </div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800"
-                                        th:text="${totalTransationBuyerVolume} + '€'">
-                                    </div>
-                                </div>
-                                <div class="col-auto">
-                                    <span class="bi bi-arrow-down-right-circle" style="font-size:30px;"></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-3 col-md-6 mb-4">
-                    <div class="card shadow h-100 py-2">
-                        <div class="card-body">
-                            <div class="row no-gutters align-items-center">
-                                <div class="col mr-2">
-                                    <div class="col mr-2 d-flex">
-                                        <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1"
-                                            th:text="#{numberDistinctSellers}">
-                                        </div>
-                                        <i class="bi bi-info-circle" data-toggle="tooltip"
-                                            th:title="#{infoNumberdistincsSellers}" id='example'></i>
-                                    </div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800"
-                                        th:text="${numberDistinctSellers}"></div>
-                                </div>
-                                <div class="col-auto">
-                                    <span class="bi bi-bag-fill" style="font-size:30px;"></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-3 col-md-6 mb-4">
-                    <div class="card shadow h-100 py-2">
-                        <div class="card-body">
-                            <div class="row no-gutters align-items-center">
-                                <div class="col mr-2">
-                                    <div class="col mr-2 d-flex">
-                                        <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1"
-                                            th:text="#{numberDistinctBuyers}">
-                                        </div>
-                                        <i class="bi bi-info-circle" data-toggle="tooltip"
-                                            th:title="#{infoNumberDistincBuyers}" id='example'></i>
-                                    </div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800"
-                                        th:text="${numberDistinctBuyers}"></div>
-                                </div>
-                                <div class="col-auto">
-                                    <span class="bi bi-bag" style="font-size:30px;"></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+        <div sec:authorize="hasRole('ADMIN')">
+            <div class="container mt-3 d-md-flex " style="align-items: center;">
+                <div class="col-10">
+                    <h1 class="" th:text="#{statistics}"></h1>
                 </div>
             </div>
+
+            <div class="container">
+                <h3 class="mb-3" th:text="#{transactionStatisticsOther}"></h3>
+                <!-- <div class="card shadow"> -->
+                <table class="table table-responsive" id="table1">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">
+                                <div class="col d-flex">
+                                    <button class="w-100 btn btn-md" th:text="#{company}"
+                                        onclick="sortTable(0)"></button>
+                                    <div class="row align-items-center">
+                                        <i class="bi bi-filter"></i>
+                                    </div>
+                                </div>
+                            </th>
+                            <th scope="col">
+                                <div class="col d-flex">
+                                    <button class="w-100 btn btn-mdr" th:text="#{amountTransactions}"
+                                        onclick="sortTable(1)"></button>
+                                    <div class="row align-items-center">
+                                        <i class="bi bi-filter"></i>
+                                    </div>
+                                </div>
+                            </th>
+                            <th scope="col">
+                                <div class="col d-flex align-items-center">
+                                    <button class="w-100 btn btn-md" th:text="#{offers}"
+                                        onclick="sortTable(2)"></button>
+                                    <div class="row align-items-center">
+                                        <i class="bi bi-filter"></i>
+                                    </div>
+                                </div>
+                            </th>
+                            <th scope="col">
+                                <div class="col d-flex">
+                                    <button class="w-100 btn btn-md" th:text="#{products}"
+                                        onclick="sortTable(3)"></button>
+                                    <div class="row align-items-center">
+                                        <i class="bi bi-filter"></i>
+                                    </div>
+                                </div>
+
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="text-center">Company1</td>
+                            <td class="text-center">1</td>
+                            <td class="text-center">1</td>
+                            <td class="text-center">2</td>
+                        </tr>
+                        <tr>
+                            <td class="text-center">Company2</td>
+                            <td class="text-center">2</td>
+                            <td class="text-center">3</td>
+                            <td class="text-center">4</td>
+                        </tr>
+                        <tr>
+                            <td class="text-center">Company3</td>
+                            <td class="text-center">3</td>
+                            <td class="text-center">2</td>
+                            <td class="text-center">1</td>
+                        </tr>
+                        <tr>
+                            <td class="text-center">Company4</td>
+                            <td class="text-center">4</td>
+                            <td class="text-center">4</td>
+                            <td class="text-center">3</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <!-- </div> -->
+            </div>
         </div>
-
-        <!-- Source: https://www.w3schools.com/howto/howto_js_sort_table.asp -->
-        <script>
-            function sortTable(n) {
-                var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
-                table = document.getElementById("table1");
-                switching = true;
-                // Set the sorting direction to ascending:
-                dir = "asc";
-                /* Make a loop that will continue until
-                no switching has been done: */
-                while (switching) {
-                    // Start by saying: no switching is done:
-                    switching = false;
-                    rows = table.rows;
-                    /* Loop through all table rows (except the
-                    first, which contains table headers): */
-                    for (i = 1; i < (rows.length - 1); i++) {
-                        // Start by saying there should be no switching:
-                        shouldSwitch = false;
-                        /* Get the two elements you want to compare,
-                        one from current row and one from the next: */
-                        x = rows[i].getElementsByTagName("TD")[n];
-                        y = rows[i + 1].getElementsByTagName("TD")[n];
-                        /* Check if the two rows should switch place,
-                        based on the direction, asc or desc: */
-                        if (dir == "asc") {
-                            if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
-                                // If so, mark as a switch and break the loop:
-                                shouldSwitch = true;
-                                break;
-                            }
-                        } else if (dir == "desc") {
-                            if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
-                                // If so, mark as a switch and break the loop:
-                                shouldSwitch = true;
-                                break;
-                            }
-                        }
-                    }
-                    if (shouldSwitch) {
-                        /* If a switch has been marked, make the switch
-                        and mark that a switch has been done: */
-                        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-                        switching = true;
-                        // Each time a switch is done, increase this count by 1:
-                        switchcount++;
-                    } else {
-                        /* If no switching has been done AND the direction is "asc",
-                        set the direction to "desc" and run the while loop again. */
-                        if (switchcount == 0 && dir == "asc") {
-                            dir = "desc";
-                            switching = true;
-                        }
-                    }
-                }
-            }
-        </script>
+    </th:block>
 
 
-        <!-- <div class="d-md-flex justify-content-md-between flex-md-row-reverse align-items-md-start">
+    <!-- <div class="d-md-flex justify-content-md-between flex-md-row-reverse align-items-md-start">
 
             <div class="col-md-9">
                 <h1 th:text="'Number confirmed:' + ${numberConfirmed}"></h1>
@@ -366,7 +397,7 @@
         <a class="float-end" th:href="@{/company/{id}/edit(id=${company.id})}" th:if="${#request.userPrincipal.principal.role} == 'ADMIN' or ${#request.userPrincipal.principal.company.id} == ${company.id}">
             <button class="btn btn-primary mt-md-3" type="submit" th:text="#{edit}"></button>
         </a> -->
-    </th:block>
+    <script th:src="@{/js/statistic.js}"></script>
 </body>
 
 </html>
