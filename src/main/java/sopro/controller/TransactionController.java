@@ -60,6 +60,8 @@ public class TransactionController {
         //}
 
         Transaction newTransaction = new Transaction();
+        //added by @philo to pre set the seller known by the id to print the name in the formular
+        newTransaction.setSeller(companyRepository.findById(companyID).get());
 
         Action newAction = new Action();
         model.addAttribute("companyID", companyID);
@@ -104,6 +106,45 @@ public class TransactionController {
         model.addAttribute("actions", actionRepository.findByTransaction(transaction));
         model.addAttribute("transactionID", id);
         return "transaction-view";
+
+    }
+
+    @GetMapping("/transaction/{transactionID}/addAction")
+    public String showAction(Action action, @PathVariable Long transactionID, @AuthenticationPrincipal User user, Model model) {
+        Action newAction = new Action();
+        InitiatorType initiatorType = InitiatorType.SELLER;
+
+        if(user.getCompany().equals(transactionRepository.findById(transactionID).get().getBuyer())) {      //findout if current user is Buyer or seller.
+            initiatorType = InitiatorType.BUYER;
+        }
+
+        //a ArrayList for all available actions for the current Initiator
+        //List<ActionType> actionTypes  = new ArrayList<>();
+        //actionTypes = actionTypeRepository.findByInitiatorType(initiatorType);
+
+        //add the list of special actions
+        model.addAttribute("actiontypes", actionTypeRepository.findByInitiatorType(initiatorType));
+        model.addAttribute("action", newAction);
+        model.addAttribute("transactionID", transactionID);
+        return "transaction-addSpecialAction";
+    }
+
+    @GetMapping("/transaction/{transactionID}/addOffer")
+    public String showOffer(Action action, @PathVariable Long transactionID, @AuthenticationPrincipal User user, Model model) {
+        Action newAction = new Action();
+        InitiatorType initiatorType = InitiatorType.SELLER;
+
+        if(user.getCompany().equals(transactionRepository.findById(transactionID).get().getBuyer())) {      //findout if current user is Buyer or seller.
+            initiatorType = InitiatorType.BUYER;
+        }
+
+        //set specific Actiontype Offer because in the case of an Offer Action it can only be the Offertype
+        //model.addAttribute("actiontypes", actionTypeRepository.findByName("Offer"));
+
+        model.addAttribute("actiontypes", actionTypeRepository.findByInitiatorType(initiatorType));
+        model.addAttribute("action", newAction);
+        model.addAttribute("transactionID", transactionID);
+        return "transaction-addOffer";
     }
 
     @PostMapping("/transaction/{transactionID}/addAction")
@@ -124,7 +165,6 @@ public class TransactionController {
 
 
         return "redirect:/transaction/" + transactionID;
-
     }
 
     @PostMapping("/transaction/{transactionID}/accept")
