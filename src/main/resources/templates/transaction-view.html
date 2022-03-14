@@ -2,14 +2,18 @@
 <html xmlns:th="http://www.thymeleaf.org" th:include="layout :: page">
 
 <head>
-	<th:block th:fragment="title"><title>Trintel</title></th:block>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<th:block th:fragment="title">
+		<title>Trintel</title>
+	</th:block>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 
 <body>
 	<th:block th:fragment="content">
 		<h1 th:text="#{transactionProgress}"></h1>
-		<h3 class="mb-3" th:text="|${actions[0].transaction.buyer.name} #{buying} ${actions[0].transaction.product} #{from} ${actions[0].transaction.seller.name}|"></h3>
+		<h3 class="mb-3"
+			th:text="|${actions[0].transaction.buyer.name} #{buying} ${actions[0].transaction.product} #{from} ${actions[0].transaction.seller.name}|">
+		</h3>
 		<!-- Accordion for every action in chosen transaction to visualize transaction progress -->
 		<div th:unless="${actions.isEmpty()}">
 			<div class="accordion" id="accordionPanelsStayOpenExample">
@@ -29,7 +33,7 @@
 									<h4 th:case="*"><div class="badge bg-secondary me-3" th:text="${transaction.actions[#lists.size(transaction.actions) - 1].actiontype.name}"></div></h4>
 								</div>
 								<div>
-									<div class="text-muted" style="font-size: 15px" th:text="#{initiatingCompany}"></div>
+									<div class="text-muted fs-6" th:text="#{initiatingCompany}"></div>
 									<div class="text-black"><h5 class="text-break" th:text="${action.initiator.company.name}"></h5></div>
 								</div>
 						</h4>
@@ -37,29 +41,29 @@
 						<div th:id="'panelsStayOpen-collapseOne'+${action.id}" class="accordion-collapse collapse" th:classappend="${{action.id == actions[#lists.size(actions)-1].id} ? 'show':''}" th:aria-labelledby="'panelsStayOpen-headingOne'+${action.id}">
 							<div class="accordion-body d-flex">
 								<div class="me-5" sec:authorize="hasRole('ADMIN')">
-									<span class="text-muted" style="font-size: 15px" th:text="#{initiatingStudent}"></span>
+									<span class="text-muted fs-6" th:text="#{initiatingStudent}"></span>
 									<span class="text-black"><h5 th:text="${action.initiator.forename} + ' ' + ${action.initiator.surname}"></h5></span>
 								</div>
 								<div class="me-5">
-									<span class="text-muted" style="font-size: 15px" th:text="#{date}"></span>
+									<span class="text-muted fs-6" th:text="#{date}"></span>
 									<span class="text-black"><h5 th:text="${#temporals.format(action.date, 'dd-MM-yyyy')}"></h5></span>
 								</div>
 								<div>
-									<span class="text-muted" style="font-size: 15px" th:text="#{time}"></span>
+									<span class="text-muted fs-6" th:text="#{time}"></span>
 									<span class="text-black"><h5 th:text="${action.time}"></h5></span>
 								</div>
 							</div>
 							<div class="accordion-body d-flex">
 								<div class="me-5">
-									<span class="text-muted" style="font-size: 15px" th:text="#{amount}"></span>
+									<span class="text-muted fs-6" th:text="#{amount}"></span>
 									<span class="text-black"><h5 th:text="${action.transaction.amount}"></h5></span>
 								</div>
 								<div th:unless="${action.actiontype.name} == 'Request'" class="me-5">
-									<div class="text-muted" style="font-size: 15px" th:text="#{pricePerPiece}"></div>
+									<div class="text-muted fs-6" th:text="#{pricePerPiece}"></div>
 									<div class="text-black"><h5 th:text="${action.transaction.pricePerPiece}"></h5></div>
 								</div>
 								<div>
-									<span class="text-muted" style="font-size: 15px" th:text="#{message}"></span>
+									<span class="text-muted fs-6" th:text="#{message}"></span>
 									<span class="text-black"><h5 th:text="${action.message}" class="text-break"></h5></span>
 								</div>
 							</div>
