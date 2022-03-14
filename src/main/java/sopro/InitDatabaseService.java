@@ -91,7 +91,9 @@ public class InitDatabaseService {
             ActionType request = new ActionType("Request", "Demo request text.", InitiatorType.BUYER);
             ActionType offer = new ActionType("Offer", "Demo offer text.", InitiatorType.SELLER);
             ActionType accept = new ActionType("Accept", "Demo offer text.", InitiatorType.SELLER);
-
+            request.setStandartAction(true);
+            offer.setStandartAction(true);
+            accept.setStandartAction(true);
             Transaction transaction1 = new Transaction(company1, company2);
             transaction1.setProduct("Product 1");
 
