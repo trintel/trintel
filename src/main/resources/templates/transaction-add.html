@@ -1,24 +1,55 @@
-<html>
+<!-- This file represents the creation of request 
+ONLY AVAILABLE whenn Transaction is created as first action.-->
+
+</html>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:include="layout-fullscreen :: page">
+
+<head>
+    <title th:text="#{request}"> </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
 <body>
-<h1>Create a new Request</h1>
-<form action="#" th:action="@{'/transaction/' + ${companyID} + '/save'}" th:object="${action}" method="post">
-    <div th:object="${transaction}">
-        <label>Product</label>
-        <input th:field="*{product}"/>
-    </div>
-    <div>
-        <label>Amount</label>
-        <input th:field="*{amount}"/>
-    </div>
-    <div>
-        <label>Price per piece</label>
-        <input th:field="*{pricePerPiece}"/>
-    </div>
-    <div>
-        <label>Message</label>
-        <input th:field="*{message}"/>
-    </div>
-    <button type="submit">submit</button>
-</form>
+    <th:block th:fragment="content">
+        <style th:replace="fragments/small-content :: content"></style>
+        <main class="form-small text-break">
+            <!-- Block: Header -->
+            <h1 class="mb-3" th:text="#{request} + ' ' + #{requTo} + ' ' + ${transaction.seller.name}"></h1>
+            <form th:action="@{'/transaction/' + ${companyID} + '/save'}" th:object="${action}" method="post">
+                <!-- Block: Product & Amount -->
+                <div class="d-flex">
+                    <div class="form-floating mb-3" th:object="${transaction}">
+                        <input th:field="*{product}" type="text" class="form-control" id="reqProduct"
+                            placeholder="product" name="Request_Product" required autofocus>
+                        <label for="floatingReqProduct" th:text="#{product}"></label>
+                    </div>
+                    <div class="form-floating mb-3 ms-3">
+                        <input th:field="*{amount}" min="0" type="number" class="form-control" id="reqAmount"
+                            placeholder="amount" name="Request_Amount" required>
+                        <label for="floatingReqAmount" th:text="#{amount}"></label>
+                    </div>
+                </div>
+                <!-- Block: Message -->
+                <div class="form-floating mb-3">
+                    <input th:field="*{message}" type="text" class="form-control" id="reqMessage" placeholder="message"
+                        name="Request_Message">
+                    <label for="floatingReqMessage" th:text="#{message}"></label>
+                </div>
+                <!-- Block: Submit Button -->
+                <div class="form-group">
+                    <button type="submit" class="w-100 btn btn-lg btn-primary">
+                        <a th:text=" #{send}"></a>
+                    </button>
+                </div>
+            </form>
+            <!-- Block: Back Button -->
+            <button class="w-100 btn btn-lg btn-light" onclick="history.back()">
+                <i class="bi bi-arrow-left"></i>
+                <a th:text=" #{back}"></a>
+            </button>
+        </main>
+    </th:block>
 </body>
+
 </html>

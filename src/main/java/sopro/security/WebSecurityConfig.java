@@ -51,6 +51,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     "/webjars/**",
                     "/css/*",
                     "/img/*",
+                    "/js/*",
                     "/login/**",
                     "/verify-your-email",
                     "/registrationConfirm/**").permitAll() // permit all to access those Mathes
