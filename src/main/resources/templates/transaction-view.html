@@ -50,7 +50,7 @@
 								</div>
 								<div>
 									<span class="text-muted fs-6" th:text="#{time}"></span>
-									<span class="text-black"><h5 th:text="${action.time}"></h5></span>
+									<span class="text-black"><h5 th:text="${#temporals.format(action.time, 'HH:mm')}"></h5></span>
 								</div>
 							</div>
 							<div class="accordion-body d-flex">
