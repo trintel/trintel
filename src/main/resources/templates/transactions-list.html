@@ -12,12 +12,14 @@
 	<th:block th:fragment="content">
 		<h1 th:text="#{transactions}"></h1>
 		<div th:unless="${transactions.isEmpty()}">
+			<!-- Card for every transaction -->
 			<div th:each="transaction: ${transactions}">
 				<a th:href="@{'/transaction/' + ${transaction.id} + '#n'}" class="text-decoration-none">
 					<div class="card mb-3">
 						<div class="card-body d-flex align-items-center justify-content-between">
 							<div class="text-br d-md-flex align-items-center justify-content-between"
 								style="width: 90%">
+								<!-- Badges for transaction status -->
 								<div
 									th:switch="${transaction.actions[#lists.size(transaction.actions) - 1].actiontype.name}">
 									<h4 th:case="Request" class="mb-0">
@@ -39,33 +41,29 @@
 										</div>
 									</h4>
 								</div>
-
+								<!-- Card text -->
 								<div class="col-md-3 me-3">
-									<span class="card-text text-muted" style="font-size: 15px"
-										th:text="#{buyer}"></span>
+									<span class="card-text text-muted fs-6" th:text="#{buyer}"></span>
 									<span class="card-text text-black">
 										<h5 th:text="${transaction.buyer.name}"></h5>
 									</span>
 								</div>
 								<div class="col-md-3 me-3">
-									<span class="card-text text-muted me-5" style="font-size: 15px"
-										th:text="#{seller}"></span>
+									<span class="card-text text-muted me-5 fs-6" th:text="#{seller}"></span>
 									<span class="card-text text-black">
 										<h5 th:text="${transaction.seller.name}"></h5>
 									</span>
 								</div>
 								<div class="col-md-3 me-3">
-									<span class="card-text text-muted" style="font-size: 15px"
-										th:text="#{product}"></span>
+									<span class="card-text text-muted fs-6" th:text="#{product}"></span>
 									<span class="card-text text-black">
 										<h5 th:text="${transaction.product}"></h5>
 									</span>
 								</div>
 								<div class="col-md-3">
-									<span class="card-text text-muted" style="font-size: 15px" th:text="#{lastUpdate}"></span>
+									<span class="card-text text-muted fs-6" th:text="#{lastUpdate}"></span>
 									<span class="card-text text-black">
-										<h5
-											th:text="${#temporals.format(transaction.actions[#lists.size(transaction.actions) - 1].date, 'dd-MM-yyyy')} + ' ' + ${transaction.actions[#lists.size(transaction.actions) - 1].time}">
+										<h5 th:text="${#temporals.format(transaction.actions[#lists.size(transaction.actions) - 1].date, 'dd-MM-yyyy')} + ' ' + ${transaction.actions[#lists.size(transaction.actions) - 1].time}">
 										</h5>
 									</span>
 								</div>
@@ -76,6 +74,7 @@
 				</a>
 			</div>
 		</div>
+		<!-- Button for new transaction -->
 		<div class="d-flex justify-content-center" sec:authorize="hasRole('STUDENT')">
 			<a class="btn btn-primary btn-lg" th:href="@{/companies}" th:text="#{newTransaction}"></a>
 		</div>
