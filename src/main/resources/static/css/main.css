@@ -232,6 +232,20 @@ main {
   border-radius: .8rem !important;
 }
 
+.modal-content {
+  border-radius: .8rem;
+}
+
+.modal-header {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.modal-footer {
+  border-top: 0;
+  padding-top: 0;
+}
+
 /* CUSTOM SELECT */
 
 /* The container must be positioned relative: */
