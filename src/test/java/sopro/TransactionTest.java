@@ -119,14 +119,14 @@ public class TransactionTest {
     }
 
     /**
-     * Tests if user can create transactions for another company.
+     * Tests if user can create transactions for another company. 
      * @throws Exception
      */
     @Test
     @WithUserDetails(value = "j@j", userDetailsServiceBeanName = "userDetailsService")
     public void createTransactionsTestStudent2() throws Exception {
         mockMvc.perform(get("/transaction/" + userRepository.findByEmail("f@f").getCompany().getId() + "/create"))
-               .andExpect(status().isForbidden());
+               .andExpect(status().isForbidden()); // is really working
     }
 
     /**
@@ -160,7 +160,7 @@ public class TransactionTest {
     //TODO: Same for admin!
 
 
-    /**Test before implementation
+    /**Test before implementation funktioniert auch in der Ausführung nicht
      * Tests if user can see the details of a transaction
      * @throws Exception
      */
