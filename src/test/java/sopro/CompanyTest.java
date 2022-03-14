@@ -31,13 +31,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @AutoConfigureMockMvc
 @Transactional
 public class CompanyTest {
-//////////////////////////
+
     @Autowired
     ActionTypeRepository actionTypeRepository;
 
     @Autowired
     ActionRepository actionRepository;
-///////////////////////////////
 
     @Autowired
     TransactionRepository transactionRepository;
@@ -74,7 +73,7 @@ public class CompanyTest {
     // #######################################################################################
 
     /**
-     * Tests if the Company page is reachable for the Admin
+     * Tests if the Company page is reachable for the Admin.
      *
      * @throws Exception
      */
@@ -433,7 +432,7 @@ public class CompanyTest {
 
 
     /**
-     * Tests if the Admin can edit an existing company
+     * Tests if the Admin can edit an existing company.
      * @throws Exception
      */
     @Test
@@ -458,7 +457,7 @@ public class CompanyTest {
 
     /**
      *
-     * Tests if the Student can save his company
+     * Tests if the Student can save his company.
      * @throws Exception
      */
     @Test

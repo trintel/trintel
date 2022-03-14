@@ -146,7 +146,7 @@ public class CompanyController {
     @GetMapping("/company/{companyID}/edit")
     public String editOwnCompany(Model model, @AuthenticationPrincipal User user, @PathVariable Long companyID) {
         try {
-            if (user.getRole().equals("ADMIN") || user.getCompany().getId() == companyID) {
+            if (user.getRole().equals("ADMIN") || user.getCompany().getId().equals(companyID)) {
                 model.addAttribute("company", companyRepository.findById(companyID).get());
                 return "company-edit";
             } else {

@@ -1,9 +1,5 @@
 package sopro;
 
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -34,13 +30,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Service
 public class BeforeTest {
 
-
     @Autowired
     ActionTypeRepository actionTypeRepository;
 
     @Autowired
     ActionRepository actionRepository;
-///////////////////////////////
 
     @Autowired
     TransactionRepository transactionRepository;
@@ -54,18 +48,11 @@ public class BeforeTest {
     @Autowired
     ObjectMapper objectMapper;
 
-
     @Autowired
     PasswordEncoder passwordEncoder;
 
     @Autowired
     CompanyLogoRepository companyLogoRepository;
-
-
-
-
-
-
 
     public void setup() {
 
@@ -95,7 +82,7 @@ public class BeforeTest {
          student1.setRole("STUDENT");
          User student2 = new User(true, true, true, true,"Speckmann", "Jonas", "j@j", passwordEncoder.encode("password"), company1);
          student2.setRole("STUDENT");
-         User student3 = new User(true, true, true, true,"Mayo", "Luca", "l@l", passwordEncoder.encode("password"), company1);
+         User student3 = new User(true, true, true, true,"Mayo", "Luca", "l@l", passwordEncoder.encode("password"), company2);
          student3.setRole("STUDENT");
          User student4 = new User(true, true, true, true,"Vielesorgen", "Felix", "f@f", passwordEncoder.encode("password"), company3);
          student4.setRole("STUDENT");
@@ -109,18 +96,33 @@ public class BeforeTest {
          ActionType request = new ActionType("Request", "Demo request text.", InitiatorType.BUYER);
          ActionType offer = new ActionType("Offer", "Demo offer text.", InitiatorType.SELLER);
          ActionType accept = new ActionType("Accept", "Demo offer text.", InitiatorType.SELLER);
-
+         request.setStandartAction(true);
+         offer.setStandartAction(true);
+         accept.setStandartAction(true);
+         
          Transaction transaction1 = new Transaction(company1, company2);
+         transaction1.setProduct("Product 1");
 
          Action trans1Request = new Action("Test message", request, transaction1);
-         transaction1.setProduct("Product 1");
-         trans1Request.setAmount(10);
-         trans1Request.setPricePerPiece(0.5);
+         trans1Request.setInitiator(student2);
+
+         Action trans1Offer = new Action("Test message", offer, transaction1);
+         trans1Offer.setAmount(20);
+         trans1Offer.setPricePerPiece(0.4);
+         trans1Offer.setInitiator(student3);
+
+         Action trans1Accept = new Action("Test message", accept, transaction1);
+         transaction1.setConfirmed(true);
+         trans1Accept.setInitiator(student2);
 
          actionTypeRepository.save(request);
          actionTypeRepository.save(offer);
          actionTypeRepository.save(accept);
+
          transactionRepository.save(transaction1);
+         
+         actionRepository.save(trans1Accept);
+         actionRepository.save(trans1Offer);
          actionRepository.save(trans1Request);
 
 

@@ -33,13 +33,11 @@ public class TransactionTest {
     @Autowired
     BeforeTest beforeTest;
 
-    //////////////////////////
     @Autowired
     ActionTypeRepository actionTypeRepository;
 
     @Autowired
     ActionRepository actionRepository;
-///////////////////////////////
 
     @Autowired
     TransactionRepository transactionRepository;
@@ -65,9 +63,6 @@ public class TransactionTest {
     void setup() {
         beforeTest.setup();
     }
-
-
-
 
     // #######################################################################################
     // ----------------------------------- Method Tests
@@ -119,7 +114,7 @@ public class TransactionTest {
     }
 
     /**
-     * Tests if user can create transactions for another company. 
+     * Tests if user can create transactions for another company.
      * @throws Exception
      */
     @Test
@@ -133,35 +128,34 @@ public class TransactionTest {
      * Tests if student can save transactions.
      * @throws Exception
      */
-    // @Test
-    // @WithUserDetails(value = "j@j", userDetailsServiceBeanName = "userDetailsService")
-    // public void saveTransactionsTestStudent() throws Exception {
+    @Test
+    @WithUserDetails(value = "j@j", userDetailsServiceBeanName = "userDetailsService")
+    public void saveTransactionsTestStudent() throws Exception {
 
-    //     //Create Transaction
-    //     ActionType request = new ActionType("Request", "Demo request text.", InitiatorType.BUYER);
-    //     Transaction transaction = new Transaction(companyRepository.findById(userRepository.findByEmail("j@j").getCompany().getId()).get(), companyRepository.findById(userRepository.findByEmail("f@f").getCompany().getId()).get());
-    //     Action transRequest = new Action("Test message", request, transaction);
+        //Create Transaction
+        ActionType request = new ActionType("Request", "Demo request text.", InitiatorType.BUYER);
+        Transaction transaction = new Transaction(companyRepository.findById(userRepository.findByEmail("j@j").getCompany().getId()).get(), companyRepository.findById(userRepository.findByEmail("f@f").getCompany().getId()).get());
+        Action transRequest = new Action("Test message", request, transaction);
 
-    //     transaction.setProduct("Product 1");
-    //     transRequest.setAmount(10);
-    //     transRequest.setPricePerPiece(0.5);
+        transaction.setProduct("Product 1");
+        transRequest.setAmount(10);
+        transRequest.setPricePerPiece(0.5);
 
-    //     actionTypeRepository.save(request);
-    //     transactionRepository.save(transaction);
-    //     actionRepository.save(transRequest);
+        actionTypeRepository.save(request);
+        transactionRepository.save(transaction);
+        actionRepository.save(transRequest);
 
 
-    //     mockMvc.perform(post("/transaction/" + companyRepository.findById(userRepository.findByEmail("j@j").getCompany().getId()) + "/save").flashAttr("action", transRequest).with(csrf())
-    //                                                                                                                                         .flashAttr("transaction", transaction).with(csrf()))
-    //            .andExpect(status().isOk())
-    //            .andExpect(redirectedUrl("/transactions"));
-    // }
+        mockMvc.perform(post("/transaction/" + companyRepository.findById(userRepository.findByEmail("j@j").getCompany().getId()) + "/save").flashAttr("action", transRequest).with(csrf()))                                                                                                                                     
+               .andExpect(status().isOk())
+               .andExpect(redirectedUrl("/transactions"));
+    }
 
     //TODO: Same for admin!
 
 
     /**Test before implementation funktioniert auch in der Ausführung nicht
-     * Tests if user can see the details of a transaction
+     * Tests if user can see the details of a transaction.
      * @throws Exception
      */
     @Test
@@ -175,7 +169,7 @@ public class TransactionTest {
     }
 
     /**Test before implementation
-     * Tests if admin can see the details of a transaction
+     * Tests if admin can see the details of a transaction.
      * @throws Exception
      */
     @Test
@@ -188,7 +182,7 @@ public class TransactionTest {
     }
 
     /**
-     * Tests if user can add an action to an transaction
+     * Tests if user can add an action to an transaction.
      * @throws Exception
      */
     @Test
@@ -209,7 +203,7 @@ public class TransactionTest {
 
 
     /**
-     * Tests if admin can not add an action to an transaction
+     * Tests if admin can not add an action to an transaction.
      * @throws Exception
      */
     @Test
@@ -229,7 +223,7 @@ public class TransactionTest {
 
 
     /**
-     * Tests if student can see all actionstypes
+     * Tests if student can see all actionstypes.
      * @throws Exception
      */
     @Test
@@ -241,7 +235,7 @@ public class TransactionTest {
     }
 
     /**
-     * Tests if admin can see all actionstypes
+     * Tests if admin can see all actionstypes.
      * @throws Exception
      */
     @Test
@@ -253,7 +247,7 @@ public class TransactionTest {
     }
 
     /**
-     * Tests if student can add an actionstype
+     * Tests if student can add an actionstype.
      * @throws Exception
      */
     @Test
@@ -264,7 +258,7 @@ public class TransactionTest {
     }
 
     /**
-     * Tests if admin can add an actionstype
+     * Tests if admin can add an actionstype.
      * @throws Exception
      */
     @Test
@@ -277,7 +271,7 @@ public class TransactionTest {
 
 
     /**
-     * Tests if student can not save a new actiontype
+     * Tests if student can not save a new actiontype.
      * @throws Exception
      */
     @Test
@@ -291,7 +285,7 @@ public class TransactionTest {
     }
 
     /**
-     * Tests if admin can save a new actiontype
+     * Tests if admin can save a new actiontype.
      * @throws Exception
      */
     @Test
@@ -307,7 +301,7 @@ public class TransactionTest {
 
 
    /**
-     * Tests if student can not edit an actiontype
+     * Tests if student can not edit an actiontype.
      * @throws Exception
      */
     @Test
@@ -322,7 +316,7 @@ public class TransactionTest {
     }
 
     /**
-     * Tests if student can not edit an actiontype
+     * Tests if student can not edit an actiontype.
      * @throws Exception
      */
     @Test
@@ -397,12 +391,9 @@ public class TransactionTest {
         ActionType actionType = actionTypes.iterator().next();
         long actionTypeId = actionType.getId();
 
-        mockMvc.perform(post("/action/edit/" + actionTypeId).param("name", "testType")                                   //.flashAttr("actionType", actionType)
-                                                            .param("test", "texto")
-                                                            .flashAttr("initiatorType", InitiatorType.BUYER))
+        mockMvc.perform(post("/action/edit/" + actionTypeId).flashAttr("actionType", actionType).with(csrf()))
                .andExpect(status().is3xxRedirection())
                .andExpect(redirectedUrl("/actions"));
     }
-    //TODO: Felix fragen
-}
 
+}
