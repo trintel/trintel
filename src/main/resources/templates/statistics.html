@@ -7,7 +7,7 @@
 </head>
 
 <body>
-    <th:block th:fragment="content" sec:authorize=”hasRole('STUDENT')”>
+    <th:block th:fragment="content" sec:authorize="hasRole('Student')">
         <div class="container mt-3 d-md-flex " style="align-items: center;">
             <div class="col-10">
                 <h1 class="" th:text="#{statistics}"></h1>
@@ -168,7 +168,7 @@
                                         <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1"
                                             th:text="#{totalTransationSellerVolume}">
                                         </div>
-                                        <i class="bi bi-info-circle" data-toggle="tooltip" title="first tooltip"
+                                        <i class="bi bi-info-circle" data-toggle="tooltip" th:title="#{infoTotalTransactionSellerVolume}"
                                             id='example'></i>
                                     </div>
                                     <div class="h5 mb-0 font-weight-bold text-gray-800" th:text="${totalTransationSellerVolume} + '€'">
@@ -190,7 +190,7 @@
                                         <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1"
                                             th:text="#{totalTransationBuyerVolume}">
                                         </div>
-                                        <i class="bi bi-info-circle" data-toggle="tooltip" title="second tooltip"
+                                        <i class="bi bi-info-circle" data-toggle="tooltip" th:title="#{infoTotalTransactionBuyerVolume}"
                                             id='example'></i>
                                     </div>
                                     <div class="h5 mb-0 font-weight-bold text-gray-800"
@@ -213,7 +213,7 @@
                                         <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1"
                                             th:text="#{numberDistinctSellers}">
                                         </div>
-                                        <i class="bi bi-info-circle" data-toggle="tooltip" title="third tooltip"
+                                        <i class="bi bi-info-circle" data-toggle="tooltip" th:title="#{infoNumberdistincsSellers}"
                                             id='example'></i>
                                     </div>
                                     <div class="h5 mb-0 font-weight-bold text-gray-800"
@@ -235,7 +235,7 @@
                                         <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1"
                                             th:text="#{numberDistinctBuyers}">
                                         </div>
-                                        <i class="bi bi-info-circle" data-toggle="tooltip" title="fourth tooltip"
+                                        <i class="bi bi-info-circle" data-toggle="tooltip" th:title="#{infoNumberDistincBuyers}"
                                             id='example'></i>
                                     </div>
                                     <div class="h5 mb-0 font-weight-bold text-gray-800"
