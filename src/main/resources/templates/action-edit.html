@@ -1,31 +1,50 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" th:include="layout :: page">
+<html xmlns:th="http://www.thymeleaf.org" th:include="layout-fullscreen :: page">
 
 <head>
-	<th:block th:fragment="title"><title> Company - Trintel</title></th:block>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:fragment="title">
+        <title> Company - Trintel</title>
+    </th:block>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 
 <body>
-	<th:block th:fragment="content">
-<h1>Edit action</h1>
-
-   <form action="#" th:action="@{'/action/edit/' + ${actionType.id}}" th:object="${actionType}" method="post">
-    <div>
-        <label>Name</label>
-        <input th:field="*{name}"/>
-    </div>
-    <div>
-        <label>Description</label>
-        <input type="text" th:field="*{text}"/>
-    </div>
-    <div>
-        <label>Available for</label>
-        <select th:field="*{initiatorType}">
-            <option th:each="initiatorType : ${initiatorTypes}" th:text="${initiatorType.name}" th:value="${initiatorType}"/>
-        </select>
-    </div>
-    <button type="submit">submit</button>
-</form>
+    <th:block th:fragment="content">
+        <style th:replace="fragments/small-content :: content"></style>
+        <main class="form-small">
+            <h1 th:text="#{editAction}"></h1>
+            <form action="#" th:action="@{'/action/edit/' + ${actionType.id}}" th:object="${actionType}" method="post">
+                <!-- Input for name -->
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="inputName" th:field="*{name}" value="Action name">
+                    <label for="inputName" th:text="#{name}"></label>
+                </div>
+                <!-- Input for description -->
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="inputDescription" th:field="*{text}" value="Description">
+                    <label for="inputDescription" th:text="#{description}"></label>
+                </div>
+                <!-- Radio buttons for company role input -->
+                <fieldset class="form-floating mb-3">
+                <legend class="fs-5" th:text="#{availableFor}"></legend>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="availableForRadios" id="gridRadios1" th:value="BUYER" th:field="*{initiatorType}">
+                        <label class="form-check-label" for="gridRadios1" th:text="#{buyer}"></label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="availableForRadios" id="gridRadios2" th:value="SELLER" th:field="*{initiatorType}">
+                        <label class="form-check-label" for="gridRadios2" th:text="#{seller}"></label>
+                    </div>
+                </fieldset>
+                <div class="form-group">
+                    <button type="submit" class="w-100 btn btn-lg btn-primary" th:text="#{confirm}"></button>
+                </div>
+            </form>
+            <button class="w-100 btn btn-lg btn-light mt-3" onclick="history.back()">
+                <i class="bi bi-arrow-left"></i> <a th:text=" #{back}"></a>
+            </button>
+        </main>
+    </th:block>
 </body>
+
 </html>
