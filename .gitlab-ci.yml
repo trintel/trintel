@@ -74,7 +74,7 @@ test:
       
 deployment:
   stage: build-docker
-  image: docker:19.03.1
+  image: adoptopenjdk/openjdk11
   
   only: 
     - deploy
