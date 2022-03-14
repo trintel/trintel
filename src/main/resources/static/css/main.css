@@ -21,6 +21,14 @@ a.icon-link:hover { text-decoration: none; }
   border-radius: .8rem !important;
 }
 
+a {
+  color: #53627e;
+}
+
+a:hover {
+  color: #627393;
+}
+
 input {
   border-radius: .8rem !important;
 }
@@ -188,6 +196,10 @@ main {
   height: 100%;
   object-fit: contain;
   object-position: center;
+}
+
+.companylogo-xs {
+  min-width: 2rem;
 }
 
 .companylogo-sm {
