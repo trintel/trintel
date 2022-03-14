@@ -165,6 +165,12 @@ main {
   border-color: #4c5672;
 }
 
+.btn-danger {
+  color: #dc3545;
+  background-color: #dc35452b;
+  border: 0;
+}
+
 .companylogo {
   position: relative;
   border-radius: .8rem;
