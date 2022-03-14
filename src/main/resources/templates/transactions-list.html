@@ -61,7 +61,7 @@
 								<div class="col">
 									<span class="card-text text-muted fs-6" th:text="#{lastUpdate}"></span>
 									<span class="card-text text-black">
-										<h5 th:text="${#temporals.format(transaction.actions[#lists.size(transaction.actions) - 1].date, 'dd-MM-yyyy')} + ' ' + ${transaction.actions[#lists.size(transaction.actions) - 1].time}">
+										<h5 th:text="${#temporals.format(transaction.actions[#lists.size(transaction.actions) - 1].date, 'dd-MM-yyyy')} + ' ' + ${#temporals.format(transaction.actions[#lists.size(transaction.actions) - 1].time, 'HH:mm')}">
 										</h5>
 									</span>
 								</div>
