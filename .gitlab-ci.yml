@@ -22,6 +22,8 @@ assemble:
     - ./gradlew assemble
     - mkdir -p target
     - mv build/libs/trintel-0.0.1-SNAPSHOT.jar target/app.jar
+    - ls
+    - ls target
 
   artifacts:
     paths:
@@ -50,7 +52,6 @@ test:
 
   only:
     - main
-    - deploy
 
   variables:
      GRADLE_USER_HOME: '.gradle-cache'
@@ -72,12 +73,13 @@ test:
       
 deployment:
   stage: build-docker
-  image: docker:19.03.1
+  image: docker:latest
   
   only: 
     - deploy
    
   script:
+    - ls target
     - docker build -t trintel .
     - docker stop trintel-container || true
     - docker rm trintel-container || true
