@@ -13,10 +13,9 @@ ONLY AVAILABLE whenn Transaction is created as first action.-->
 <body>
     <th:block th:fragment="content">
         <style th:replace="fragments/small-content :: content"></style>
-        <main class="form-small">
+        <main class="form-small text-break">
             <!-- Block: Header -->
-            <h1 class="mb-3" th:text="#{request}"></h1>
-            <h3 class="mb-3" th:object="${newTransaction}" th:text="#{requTo} + ' ' + ${transaction.seller.name}"></h3>
+            <h1 class="mb-3" th:text="#{request} + ' ' + #{requTo} + ' ' + ${transaction.seller.name}"></h1>
             <form th:action="@{'/transaction/' + ${companyID} + '/save'}" th:object="${action}" method="post">
                 <!-- Block: Product & Amount -->
                 <div class="d-flex">

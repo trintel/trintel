@@ -16,17 +16,18 @@
             <form th:action="@{'/transaction/' + ${transactionID} + '/addAction'}" th:object="${action}" method="post">
                 <!-- Block: Header -->
                 <div class="form-floating mb-3">
-                    <h1 class="mb-3" th:text="#{actiontype}"></h1>
+                    <h1 class="mb-3" th:text="#{specialActions}"></h1>
                 </div>
                 <!-- Block: Drop Down menu for the special action type -->
-                <div class="form-floating mb-3">
-                    <select class="custom-select-lg w-100 btn btn-lg btn-primary" th:field="*{actiontype}">
-                        <div th:each="actiontype : ${actiontypes}">
-                            <div th:unless="${actiontype.standartAction}">
+                <div class="custom-select w-100 mb-3">
+                    <select th:field="*{actiontype}">
+                        <option value="label" th:text="#{actiontype}"></option>
+                        <th:block th:each="actiontype : ${actiontypes}">
+                            <th:block th:unless="${actiontype.standartAction}">
                                 <option th:text="${actiontype.name} + ': ' + ${actiontype.text}"
                                     th:value="${actiontype.id}"> </option>
-                            </div>
-                        </div>
+                            </th:block>
+                        </th:block>
                     </select>
                 </div>
                 <!-- Block: Message -->
