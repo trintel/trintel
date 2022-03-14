@@ -20,7 +20,7 @@
 				<div th:each="action: ${actions}">
 					<div class="accordion-item mb-3">
 						<!-- Accordion header/button -->
-						<h4 class="accordion-header" th:id="'panelsStayOpen-headingOne'+${action.id}">
+						<h4 class="accordion-header mb-0" th:id="'panelsStayOpen-headingOne'+${action.id}">
 							<button class="accordion-button" th:classappend="${{action.id == actions[#lists.size(actions)-1].id} ? '':'collapsed'}" type="button" data-bs-toggle="collapse" th:data-bs-target="'#panelsStayOpen-collapseOne'+${action.id}" th:aria-labelledby="'panelsStayOpen-headingOne'+${action.id}"  aria-expanded="true" th:aria-controls="'panelsStayOpen-collapseOne'+${action.id}">
 								<div th:switch="${action.actiontype.name}">
 									<h4 th:case="Request"><div class="badge bg-danger me-3" th:text="#{requestTLV}"></div></h4>
