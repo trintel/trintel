@@ -404,9 +404,5 @@ public class TransactionTest {
                .andExpect(redirectedUrl("/actions"));
     }
     //TODO: Felix fragen
-
-=======
-public class TransactionTest {
->>>>>>> main
-
 }
+
