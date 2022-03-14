@@ -22,7 +22,7 @@
 									<h4 th:case="Request"><div class="badge bg-danger me-3" th:text="#{requestTLV}"></div></h4>
 									<h4 th:case="Offer"><div class="badge bg-warning me-3" th:text="#{offerTLV}"></div></h4>
 									<h4 th:case="Accept"><div class="badge bg-success me-3" th:text="#{acceptTV}"></div></h4>
-									<h4 th:case="Abort"><div class="badge bg-light text-dark me-3" th:text="#{abortTV}"></div></h4>
+									<h4 th:case="Cancel"><div class="badge bg-light text-dark me-3" th:text="#{cancelTV}"></div></h4>
 									<h4 th:case="Delivery"><div class="badge bg-primary me-3" th:text="#{deliveryTLV}"></div></h4>
 									<h4 th:case="Invoicing"><div class="badge bg-dark me-3" th:text="#{invoicingTLV}"></div></h4>
 									<h4 th:case="Paid"><div class="badge bg-primary me-3" th:text="#{paidTV}"></div></h4>
@@ -56,7 +56,7 @@
 								</div>
 								<div th:unless="${action.actiontype.name} == 'Request'" class="me-5">
 									<div class="text-muted" style="font-size: 15px" th:text="#{pricePerPiece}"></div>
-									<div class="text-black"><h5 th:text="${action.transaction.pricePerPiece}"></h5></div>
+									<div class="text-black"><h5 th:text="${action.transaction.pricePerPiece} + ' €'"></h5></div>
 								</div>
 								<div>
 									<span class="text-muted" style="font-size: 15px" th:text="#{message}"></span>
@@ -96,14 +96,14 @@
 									</div>
 								</div>
 							</div>
-							<!-- Modal for "Abort" button -->
-							<div th:case="Abort">
-								<button type="button" class="btn btn-success btn-lg me-3" data-bs-toggle="modal" data-bs-target="#abortModal" th:text="#{abortNA}"></button>
-								<div class="modal fade" id="abortModal" tabindex="-1" aria-labelledby="abortModalLabel" aria-hidden="true">
+							<!-- Modal for "Cancel" button -->
+							<div th:case="Cancel">
+								<button type="button" class="btn btn-danger btn-lg me-3" data-bs-toggle="modal" data-bs-target="#cancelModal" th:text="#{cancelNA}"></button>
+								<div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
 									<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
 										<div class="modal-content">
 											<div class="modal-header">
-												<h5 class="modal-title" id="abortModalLabel" th:text="#{abortNA}"></h5>
+												<h5 class="modal-title" id="cancelModalLabel" th:text="#{cancelNA}"></h5>
 												<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 											</div>
 											<div class="modal-body">
@@ -112,7 +112,7 @@
 												</form>
 											</div>
 											<div class="modal-footer">
-												<a type="submit" th:href="@{'/transaction/' + ${transactionID} + '/abort'}" method="post" class="w-100 btn btn-lg btn-primary" th:text="#{confirm}"></a>
+												<a type="submit" th:href="@{'/transaction/' + ${transactionID} + '/cancel'}" method="post" class="w-100 btn btn-lg btn-primary" th:text="#{confirm}"></a>
 											</div>
 										</div>
 									</div>
@@ -120,7 +120,7 @@
 							</div>
 							<!-- Modal for "Delivery" button -->
 							<div th:case="Delivery">
-								<button type="button" class="btn btn-success btn-lg me-3" data-bs-toggle="modal" data-bs-target="#deliveryModal" th:text="#{deliveryNA}"></button>
+								<button type="button" class="btn btn-primary btn-lg me-3" data-bs-toggle="modal" data-bs-target="#deliveryModal" th:text="#{deliveryNA}"></button>
 								<div class="modal fade" id="deliveryModal" tabindex="-1" aria-labelledby="deliveryModalLabel" aria-hidden="true">
 									<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
 										<div class="modal-content">
@@ -142,7 +142,7 @@
 							</div>
 							<!-- Modal for "Invoicing" button -->
 							<div th:case="Invoicing">
-								<button type="button" class="btn btn-success btn-lg me-3" data-bs-toggle="modal" data-bs-target="#invoicingModal" th:text="#{invoicingNA}"></button>
+								<button type="button" class="btn btn-primary btn-lg me-3" data-bs-toggle="modal" data-bs-target="#invoicingModal" th:text="#{invoicingNA}"></button>
 								<div class="modal fade" id="invoicingModal" tabindex="-1" aria-labelledby="invoicingModalLabel" aria-hidden="true">
 									<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
 										<div class="modal-content">
@@ -164,7 +164,7 @@
 							</div>
 							<!-- Modal for "Paid" button -->
 							<div th:case="Paid">
-								<button type="button" class="btn btn-success btn-lg me-3" data-bs-toggle="modal" data-bs-target="#paidModal" th:text="#{paidNA}"></button>
+								<button type="button" class="btn btn-primary btn-lg me-3" data-bs-toggle="modal" data-bs-target="#paidModal" th:text="#{paidNA}"></button>
 								<div class="modal fade" id="paidModal" tabindex="-1" aria-labelledby="paidModalLabel" aria-hidden="true">
 									<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
 										<div class="modal-content">
