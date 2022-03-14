@@ -42,7 +42,7 @@
 								</div>
 								<div class="me-5">
 									<span class="text-muted" style="font-size: 15px" th:text="#{date}"></span>
-									<span class="text-black"><h5 th:text="${action.date}"></h5></span>
+									<span class="text-black"><h5 th:text="${#temporals.format(action.date, 'dd-MM-yyyy')}"></h5></span>
 								</div>
 								<div>
 									<span class="text-muted" style="font-size: 15px" th:text="#{time}"></span>
