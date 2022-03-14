@@ -103,15 +103,15 @@ public class BeforeTest {
          Transaction transaction1 = new Transaction(company1, company2);
          transaction1.setProduct("Product 1");
 
-         Action trans1Request = new Action("Test message", request, transaction1);
+         Action trans1Request = new Action("Test message request", request, transaction1);
          trans1Request.setInitiator(student2);
 
-         Action trans1Offer = new Action("Test message", offer, transaction1);
+         Action trans1Offer = new Action("Test message offer", offer, transaction1);
          trans1Offer.setAmount(20);
          trans1Offer.setPricePerPiece(0.4);
          trans1Offer.setInitiator(student3);
 
-         Action trans1Accept = new Action("Test message", accept, transaction1);
+         Action trans1Accept = new Action("Test message accept", accept, transaction1);
          transaction1.setConfirmed(true);
          trans1Accept.setInitiator(student2);
 

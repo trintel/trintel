@@ -131,25 +131,27 @@ public class TransactionTest {
     @Test
     @WithUserDetails(value = "j@j", userDetailsServiceBeanName = "userDetailsService")
     public void saveTransactionsTestStudent() throws Exception {
-
         //Create Transaction
-        ActionType request = new ActionType("Request", "Demo request text.", InitiatorType.BUYER);
-        Transaction transaction = new Transaction(companyRepository.findById(userRepository.findByEmail("j@j").getCompany().getId()).get(), companyRepository.findById(userRepository.findByEmail("f@f").getCompany().getId()).get());
-        Action transRequest = new Action("Test message", request, transaction);
+        ActionType testActionType = new ActionType("Request", "Demo request text.", InitiatorType.BUYER);
+        testActionType.setStandartAction(true);
+        
+        Transaction testTransaction = new Transaction(companyRepository.findById(userRepository.findByEmail("j@j").getCompany().getId()).get(), companyRepository.findById(userRepository.findByEmail("f@f").getCompany().getId()).get());
+        testTransaction.setProduct("Product 1");
 
-        transaction.setProduct("Product 1");
-        transRequest.setAmount(10);
-        transRequest.setPricePerPiece(0.5);
+        Action testAction = new Action("Test message testAction", testActionType, testTransaction);
+        testAction.setInitiator(userRepository.findByEmail("j@j"));
 
-        actionTypeRepository.save(request);
-        transactionRepository.save(transaction);
-        actionRepository.save(transRequest);
+        actionTypeRepository.save(testActionType);
+        transactionRepository.save(testTransaction);
+        actionRepository.save(testAction);
 
+        Long companyIdSeller = userRepository.findByEmail("f@f").getCompany().getId();
 
-        mockMvc.perform(post("/transaction/" + companyRepository.findById(userRepository.findByEmail("j@j").getCompany().getId()) + "/save").flashAttr("action", transRequest).with(csrf()))                                                                                                                                     
+        mockMvc.perform(post("/transaction/" + companyIdSeller + "/save").flashAttr("action", testAction).with(csrf()))                                                                                                                                                                                                                                                                    
                .andExpect(status().isOk())
                .andExpect(redirectedUrl("/transactions"));
     }
+    //irgendwas ist glb. unsaved aber ich verstehe nicht was
 
     //TODO: Same for admin!
 
