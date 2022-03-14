@@ -184,6 +184,11 @@ main {
   border: 0;
 }
 
+.btn-danger:hover {
+  color: #dc3545;
+  background-color: #dc354559;
+}
+
 .companylogo {
   position: relative;
   border-radius: .8rem;
