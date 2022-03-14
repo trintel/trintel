@@ -76,17 +76,124 @@
 				<div class="d-md-flex justify-content-center">
 					<div th:each="actiontype: ${actiontypes}">
 						<div th:switch="${actiontype.name}">
+							<!-- "Offer" button -->
 							<a th:case="Offer" class="btn btn-primary btn-lg me-3 mb-3 mb-md-0" th:text="#{offerNA}" th:href="@{'/transaction/' + ${transactionID} + '/addOffer'}"></a>
-							<a th:case="Accept" class="btn btn-success btn-lg me-3 mb-3 mb-md-0" th:text="#{acceptNA}" th:href="@{'/transaction/' + ${transactionID} + '/accept'}" method="post"></a>
-							<a th:case="Cancel" class="btn btn-danger btn-lg me-3 mb-3 mb-md-0" th:text="#{cancelNA}" th:href="@{'/transaction/' + ${transactionID} + '/cancel'}" method="post"></a>
-							<a th:case="Delivery" class="btn btn-primary btn-lg me-3 mb-3 mb-md-0" th:text="#{deliveryNA}" th:href="@{'/transaction/' + ${transactionID} + '/delivery'}" method="post"></a>
-							<a th:case="Invoicing" class="btn btn-primary btn-lg me-3 mb-3 mb-md-0" th:text="#{invoicingNA}" th:href="@{'/transaction/' + ${transactionID} + '/invoicing'}" method="post"></a>
-							<a th:case="Paid" class="btn btn-primary btn-lg me-3 mb-3 mb-md-0" th:text="#{paidNA}" th:href="@{'/transaction/' + ${transactionID} + '/paid'}" method="post"></a>
+							<!-- Modal for "Accept" button -->
+							<div th:case="Accept">
+								<button type="button" class="btn btn-success btn-lg me-3 mb-3 mb-md-0" data-bs-toggle="modal" data-bs-target="#acceptModal" th:text="#{acceptNA}"></button>
+								<div class="modal fade" id="acceptModal" tabindex="-1" aria-labelledby="acceptModalLabel" aria-hidden="true">
+									<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+										<div class="modal-content">
+											<div class="modal-header">
+												<h5 class="modal-title" id="acceptModalLabel" th:text="#{acceptNA}"></h5>
+												<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+											</div>
+											<div class="modal-body">
+												<form th:object="${action}" >
+													<textarea class="form-control" th:field="*{message}" th:placeholder="#{optMessage}"></textarea>
+												</form>
+											</div>
+											<div class="modal-footer">
+												<a type="submit" th:href="@{'/transaction/' + ${transactionID} + '/accept'}" method="post" class="w-100 btn btn-lg btn-primary" th:text="#{confirm}"></a>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- Modal for "Cancel" button -->
+							<div th:case="Cancel">
+								<button type="button" class="btn btn-danger btn-lg me-3 mb-3 mb-md-0" data-bs-toggle="modal" data-bs-target="#cancelModal" th:text="#{cancelNA}"></button>
+								<div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
+									<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+										<div class="modal-content">
+											<div class="modal-header">
+												<h5 class="modal-title" id="cancelModalLabel" th:text="#{cancelNA}"></h5>
+												<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+											</div>
+											<div class="modal-body">
+												<form th:object="${action}" >
+													<textarea class="form-control" th:field="*{message}" th:placeholder="#{optMessage}"></textarea>
+												</form>
+											</div>
+											<div class="modal-footer">
+												<a type="submit" th:href="@{'/transaction/' + ${transactionID} + '/cancel'}" method="post" class="w-100 btn btn-lg btn-primary" th:text="#{confirm}"></a>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- Modal for "Delivery" button -->
+							<div th:case="Delivery">
+								<button type="button" class="btn btn-primary btn-lg me-3 mb-3 mb-md-0" data-bs-toggle="modal" data-bs-target="#deliveryModal" th:text="#{deliveryNA}"></button>
+								<div class="modal fade" id="deliveryModal" tabindex="-1" aria-labelledby="deliveryModalLabel" aria-hidden="true">
+									<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+										<div class="modal-content">
+											<div class="modal-header">
+												<h5 class="modal-title" id="deliveryModalLabel" th:text="#{deliveryNA}"></h5>
+												<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+											</div>
+											<div class="modal-body">
+												<form th:object="${action}" >
+													<textarea class="form-control" th:field="*{message}" th:placeholder="#{optMessage}"></textarea>
+												</form>
+											</div>
+											<div class="modal-footer">
+												<a type="submit" th:href="@{'/transaction/' + ${transactionID} + '/delivery'}" method="post" class="w-100 btn btn-lg btn-primary" th:text="#{confirm}"></a>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- Modal for "Invoicing" button -->
+							<div th:case="Invoicing">
+								<button type="button" class="btn btn-primary btn-lg me-3 mb-3 mb-md-0" data-bs-toggle="modal" data-bs-target="#invoicingModal" th:text="#{invoicingNA}"></button>
+								<div class="modal fade" id="invoicingModal" tabindex="-1" aria-labelledby="invoicingModalLabel" aria-hidden="true">
+									<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+										<div class="modal-content">
+											<div class="modal-header">
+												<h5 class="modal-title" id="invoicingModalLabel" th:text="#{invoicingNA}"></h5>
+												<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+											</div>
+											<div class="modal-body">
+												<form th:object="${action}" >
+													<textarea class="form-control" th:field="*{message}" th:placeholder="#{optMessage}"></textarea>
+												</form>
+											</div>
+											<div class="modal-footer">
+												<a type="submit" th:href="@{'/transaction/' + ${transactionID} + '/invoicing'}" method="post" class="w-100 btn btn-lg btn-primary" th:text="#{confirm}"></a>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- Modal for "Paid" button -->
+							<div th:case="Paid">
+								<button type="button" class="btn btn-primary btn-lg me-3 mb-3 mb-md-0" data-bs-toggle="modal" data-bs-target="#paidModal" th:text="#{paidNA}"></button>
+								<div class="modal fade" id="paidModal" tabindex="-1" aria-labelledby="paidModalLabel" aria-hidden="true">
+									<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+										<div class="modal-content">
+											<div class="modal-header">
+												<h5 class="modal-title" id="paidModalLabel" th:text="#{paidNA}"></h5>
+												<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+											</div>
+											<div class="modal-body">
+												<form th:object="${action}" >
+													<textarea class="form-control" th:field="*{message}" th:placeholder="#{optMessage}"></textarea>
+												</form>
+											</div>
+											<div class="modal-footer">
+												<a type="submit" th:href="@{'/transaction/' + ${transactionID} + '/paid'}" method="post" class="w-100 btn btn-lg btn-primary" th:text="#{confirm}"></a>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
-					<a class="btn btn-primary btn-lg me-3 mb-3 mb-md-0" th:href="@{'/transaction/' + ${transactionID} + '/addAction'}" th:text="#{specialActions}"></a>
+					<a class="btn btn-primary btn-lg me-3" th:href="@{'/transaction/' + ${transactionID} + '/addAction'}" th:text="#{specialActions}"></a>
 				</div>
 			</div>
+
 		</div>
 		<a name="n"></a>
 	</th:block>
