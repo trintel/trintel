@@ -52,7 +52,6 @@ test:
 
   only:
     - main
-    - deploy
 
   variables:
      GRADLE_USER_HOME: '.gradle-cache'
