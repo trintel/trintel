@@ -11,13 +11,13 @@
 <body>
 	<th:block th:fragment="content">
 
-		<div class="d-md-flex justify-content-between align-items-end mb-3">
+		<div class="d-lg-flex justify-content-between align-items-end mb-3">
 			<div>
 		<h1 th:text="#{companies}"></h1>
 		<p class="mb-0" th:text="#{cldescr}" sec:authorize="hasRole('ADMIN')"></p>
 	</div>
 	<div sec:authorize="hasRole('ADMIN')">
-		<a class="btn btn-primary btn-lg" th:href="@{companies/add}">
+		<a class="btn btn-primary btn mt-3 mt-lg-0" th:href="@{companies/add}">
 			<i class="bi bi-plus"></i>
 			<span th:text="#{registerCompany}"/>
 		</a>
