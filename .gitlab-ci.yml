@@ -79,8 +79,8 @@ deployment:
     - deploy
    
   script:
-    - ls
     - ls target
+    - java --version
     - docker build -t trintel .
     - docker stop trintel-container || true
     - docker rm trintel-container || true
