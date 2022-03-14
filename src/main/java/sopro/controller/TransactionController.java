@@ -140,7 +140,7 @@ public class TransactionController {
 
         //set specific Actiontype Offer because in the case of an Offer Action it can only be the Offertype
         //model.addAttribute("actiontypes", actionTypeRepository.findByName("Offer"));
-        
+
         model.addAttribute("actiontypes", actionTypeRepository.findByInitiatorType(initiatorType));
         model.addAttribute("action", newAction);
         model.addAttribute("transactionID", transactionID);
