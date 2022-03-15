@@ -9,10 +9,11 @@
 <body>
     <th:block th:fragment="content">
         <div sec:authorize="hasRole('STUDENT')">
+            <!-- Block: Header -->
             <div class="container mt-3 d-md-flex " style="align-items: center;">
                 <div class="col-10">
-                    <h1 class="" th:text="#{statistics}"></h1>
-                    <h3 class="" th:text="${company.name}"></h3>
+                    <h1 class="mb-3" th:text="#{statistics}"></h1>
+                    <h3 class="mb-3" th:text="${company.name}"></h3>
                 </div>
                 <div class="col-2">
                     <div class="companylogo companylogo-lg float-md-end mb-3 mb-md-0 ms-md-3 mx-auto mx-md-0">
@@ -20,12 +21,12 @@
                     </div>
                 </div>
             </div>
+            <!-- Block: Data Panels/Cards -->
             <div class="container mb-3">
-
                 <div class="row">
                     <h3 class="mb-3" th:text="#{generalStatistics}"></h3>
                     <div class="col-xl-3 col-md-6 mb-4">
-                        <div class="card shadow h-100 py-2">
+                        <div class="card  h-100 py-2">
                             <div class="card-body">
                                 <div class="row no-gutters align-items-center">
                                     <div class="col mr-2">
@@ -33,7 +34,6 @@
                                             <div class="text-xs font-weight-bold text-secondary fs-6 mb-1"
                                                 th:text="#{amountTransactions}">
                                             </div>
-
                                         </div>
                                         <div class="h5 mb-0 font-weight-bold text-gray-800"
                                             th:text="${numberConfirmed}">
@@ -53,7 +53,7 @@
                         </div>
                     </div>
                     <div class="col-xl-3 col-md-6 mb-4">
-                        <div class="card shadow h-100 py-2">
+                        <div class="card  h-100 py-2">
                             <div class="card-body">
                                 <div class="row no-gutters align-items-center">
                                     <div class="col mr-2">
@@ -71,7 +71,7 @@
                                         <div class="col-auto">
                                             <center>
                                                 <i class="bi bi-info-circle" data-toggle="tooltip"
-                                                th:title="#{infoTurnover}" id='example'></i>
+                                                    th:title="#{infoTurnover}" id='example'></i>
                                             </center>
                                         </div>
                                     </div>
@@ -80,7 +80,7 @@
                         </div>
                     </div>
                     <div class="col-xl-3 col-md-6 mb-4">
-                        <div class="card shadow h-100 py-2">
+                        <div class="card  h-100 py-2">
                             <div class="card-body">
                                 <div class="row no-gutters align-items-center">
                                     <div class="col mr-2">
@@ -89,15 +89,14 @@
                                                 th:text="#{percentTurnover}">
                                             </div>
                                         </div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800">6%
-                                        </div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">0%</div>
                                     </div>
                                     <div class="col-auto">
                                         <span class="bi bi-globe" style="font-size:30px;"></span>
                                         <div class="col-auto">
                                             <center>
                                                 <i class="bi bi-info-circle" data-toggle="tooltip"
-                                                th:title="#{infoPercentTurnover}" id='example'></i>
+                                                    th:title="#{infoPercentTurnover}" id='example'></i>
                                             </center>
                                         </div>
                                     </div>
@@ -106,7 +105,7 @@
                         </div>
                     </div>
                     <div class="col-xl-3 col-md-6 mb-4">
-                        <div class="card shadow h-100 py-2">
+                        <div class="card  h-100 py-2">
                             <div class="card-body">
                                 <div class="row no-gutters align-items-center">
                                     <div class="col mr-2">
@@ -123,7 +122,7 @@
                                         <div class="col-auto">
                                             <center>
                                                 <i class="bi bi-info-circle" data-toggle="tooltip"
-                                                th:title="#{infoNumberDistincBuyers}" id='example'></i>
+                                                    th:title="#{infoNumberDistincBuyers}" id='example'></i>
                                             </center>
                                         </div>
                                     </div>
@@ -133,12 +132,10 @@
                     </div>
                 </div>
             </div>
-
-
-
+            <!-- Block: Table -->
             <div class="container">
                 <h3 class="mb-3" th:text="#{transactionStatisticsOther}"></h3>
-                <!-- <div class="card shadow"> -->
+                <!-- <div class="card "> -->
                 <table class="table table-responsive" id="table1">
                     <thead class="thead-dark">
                         <tr>
@@ -177,7 +174,6 @@
                                         <i class="bi bi-filter"></i>
                                     </div>
                                 </div>
-
                             </th>
                         </tr>
                     </thead>
@@ -196,8 +192,8 @@
                         </tr>
                         <tr>
                             <td class="text-center">Company3</td>
-                            <td class="text-center">3</td>
-                            <td class="text-center">2</td>
+                            <td class="text-center">13</td>
+                            <td class="text-center" th:text="${totalTransationSellerVolume}"></td>
                             <td class="text-center">1</td>
                         </tr>
                         <tr>
@@ -208,15 +204,13 @@
                         </tr>
                     </tbody>
                 </table>
-                <!-- </div> -->
             </div>
 
             <div class="container mb-3">
-
                 <div class="row">
                     <h3 class="mb-3" th:text="#{transactionStatistics}"></h3>
                     <div class="col-xl-3 col-md-6 mb-4">
-                        <div class="card shadow h-100 py-2">
+                        <div class="card  h-100 py-2">
                             <div class="card-body">
                                 <div class="row no-gutters align-items-center">
                                     <div class="col mr-2">
@@ -234,7 +228,7 @@
                                         <div class="col-auto">
                                             <center>
                                                 <i class="bi bi-info-circle" data-toggle="tooltip"
-                                                th:title="#{infoTotalTransactionSellerVolume}" id='example'></i>
+                                                    th:title="#{infoTotalTransactionSellerVolume}" id='example'></i>
                                             </center>
                                         </div>
                                     </div>
@@ -243,7 +237,7 @@
                         </div>
                     </div>
                     <div class="col-xl-3 col-md-6 mb-4">
-                        <div class="card shadow h-100 py-2">
+                        <div class="card  h-100 py-2">
                             <div class="card-body">
                                 <div class="row no-gutters align-items-center">
                                     <div class="col mr-2">
@@ -261,7 +255,7 @@
                                         <div class="col-auto">
                                             <center>
                                                 <i class="bi bi-info-circle" data-toggle="tooltip"
-                                                th:title="#{infoTotalTransactionBuyerVolume}" id='example'></i>
+                                                    th:title="#{infoTotalTransactionBuyerVolume}" id='example'></i>
                                             </center>
                                         </div>
                                     </div>
@@ -270,7 +264,7 @@
                         </div>
                     </div>
                     <div class="col-xl-3 col-md-6 mb-4">
-                        <div class="card shadow h-100 py-2">
+                        <div class="card  h-100 py-2">
                             <div class="card-body">
                                 <div class="row no-gutters align-items-center">
                                     <div class="col mr-2">
@@ -287,7 +281,7 @@
                                         <div class="col-auto">
                                             <center>
                                                 <i class="bi bi-info-circle" data-toggle="tooltip"
-                                                th:title="#{infoNumberdistincsSellers}" id='example'></i>
+                                                    th:title="#{infoNumberdistincsSellers}" id='example'></i>
                                             </center>
                                         </div>
                                     </div>
@@ -296,7 +290,7 @@
                         </div>
                     </div>
                     <div class="col-xl-3 col-md-6 mb-4">
-                        <div class="card shadow h-100 py-2">
+                        <div class="card  h-100 py-2">
                             <div class="card-body">
                                 <div class="row no-gutters align-items-center">
                                     <div class="col mr-2">
@@ -313,7 +307,7 @@
                                         <div class="col-auto">
                                             <center>
                                                 <i class="bi bi-info-circle" data-toggle="tooltip"
-                                                th:title="#{infoNumberDistincBuyers}" id='example'></i>
+                                                    th:title="#{infoNumberDistincBuyers}" id='example'></i>
                                             </center>
                                         </div>
                                     </div>
@@ -324,6 +318,7 @@
                 </div>
             </div>
         </div>
+
         <div sec:authorize="hasRole('ADMIN')">
             <div class="container mt-3 d-md-flex " style="align-items: center;">
                 <div class="col-10">
@@ -333,14 +328,14 @@
 
             <div class="container">
                 <h3 class="mb-3" th:text="#{transactionStatisticsOther}"></h3>
-                <!-- <div class="card shadow"> -->
-                <table class="table table-responsive" id="table1">
+                <!-- <div class="card "> -->
+                <table class="table table-responsive" id="table2">
                     <thead class="thead-dark">
                         <tr>
                             <th scope="col">
                                 <div class="col d-flex">
-                                    <button class="w-100 btn btn-md" th:text="#{company}"
-                                        onclick="sortTable(0)"></button>
+                                    <!-- <button class="w-100 btn btn-md" th:text="#{company}"
+                                        onclick="sortTable(0)"></button> -->
                                     <div class="row align-items-center">
                                         <i class="bi bi-filter"></i>
                                     </div>
@@ -348,8 +343,8 @@
                             </th>
                             <th scope="col">
                                 <div class="col d-flex">
-                                    <button class="w-100 btn btn-mdr" th:text="#{amountTransactions}"
-                                        onclick="sortTable(1)"></button>
+                                    <!-- <button class="w-100 btn btn-mdr" th:text="#{amountTransactions}"
+                                        onclick="sortTable(1)"></button> -->
                                     <div class="row align-items-center">
                                         <i class="bi bi-filter"></i>
                                     </div>
@@ -357,8 +352,8 @@
                             </th>
                             <th scope="col">
                                 <div class="col d-flex align-items-center">
-                                    <button class="w-100 btn btn-md" th:text="#{offers}"
-                                        onclick="sortTable(2)"></button>
+                                    <!-- <button class="w-100 btn btn-md" th:text="#{offers}"
+                                        onclick="sortTable(2)"></button> -->
                                     <div class="row align-items-center">
                                         <i class="bi bi-filter"></i>
                                     </div>
@@ -366,8 +361,8 @@
                             </th>
                             <th scope="col">
                                 <div class="col d-flex">
-                                    <button class="w-100 btn btn-md" th:text="#{products}"
-                                        onclick="sortTable(3)"></button>
+                                    <!-- <button class="w-100 btn btn-md" th:text="#{products}"
+                                        onclick="sortTable(3)"></button> -->
                                     <div class="row align-items-center">
                                         <i class="bi bi-filter"></i>
                                     </div>
@@ -403,32 +398,11 @@
                         </tr>
                     </tbody>
                 </table>
-                <!-- </div> -->
             </div>
         </div>
+        <script type th:src="@{/js/statistic.js}"></script>
     </th:block>
 
-
-    <!-- <div class="d-md-flex justify-content-md-between flex-md-row-reverse align-items-md-start">
-
-            <div class="col-md-9">
-                <h1 th:text="'Number confirmed:' + ${numberConfirmed}"></h1>
-                <h1 th:text="'numberDistinctBuyers:' + ${numberDistinctBuyers}"></h1>
-                <h1 th:text="'numberDistinctSellers:' + ${numberDistinctSellers}"></h1>
-                <h1 th:text="'totalTransationBuyerVolume:' + ${totalTransationBuyerVolume}"></h1>
-                <h1 th:text="'totalTransationSellerVolume:' + ${totalTransationSellerVolume}"></h1>
-                <h1
-                    th:text="'totalTransationTotalVolume:' + ${totalTransationSellerVolume - totalTransationBuyerVolume}">
-                </h1>
-                <h1 th:text="'numberNonConfirmedBuyer:' + ${numberNonConfirmedBuyer}"></h1>
-                <h1 th:text="'numberNonConfirmedSeller:' + ${numberNonConfirmedSeller}"></h1>
-
-            </div>
-        </div>
-        <a class="float-end" th:href="@{/company/{id}/edit(id=${company.id})}" th:if="${#request.userPrincipal.principal.role} == 'ADMIN' or ${#request.userPrincipal.principal.company.id} == ${company.id}">
-            <button class="btn btn-primary mt-md-3" type="submit" th:text="#{edit}"></button>
-        </a> -->
-    <script th:src="@{/js/statistic.js}"></script>
 </body>
 
 </html>
