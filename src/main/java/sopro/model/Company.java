@@ -2,8 +2,10 @@ package sopro.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -87,5 +89,27 @@ public class Company {
             }
         }
         return nb_transactions;
+    }
+
+    public Integer getNumberOffers(Company company) {
+        Integer nb_offers = 0;
+        for(Transaction transaction : buyingTransactions) {
+            nb_offers += transaction.getActions().stream().filter(a -> a.getActiontype().getName().equals("Offer")).toArray(Action[] :: new).length;
+        }
+        for(Transaction transaction : sellingTransactions) {
+            nb_offers += transaction.getActions().stream().filter(a -> a.getActiontype().getName().equals("Offer")).toArray(Action[] :: new).length;
+        }
+        return nb_offers;
+    }
+
+    public Integer getNumberTradedProducts(Company company) {
+        Set<String> products = new HashSet<>();
+        for(Transaction transaction : buyingTransactions) {
+            products.add(transaction.getProduct());
+        }
+        for(Transaction transaction : sellingTransactions) {
+            products.add(transaction.getProduct());
+        }
+        return products.size();
     }
 }
