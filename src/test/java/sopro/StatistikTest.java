@@ -96,7 +96,7 @@ public class StatistikTest {
     public void listStatistikTestStudent1() throws Exception {
         
         mockMvc.perform(get("/statistics/" + userRepository.findByEmail("j@j").getCompany().getId()))
-               .andExpect(status().isOk()) 
+               .andExpect(status().isOk())
                .andExpect(view().name("statistics"));
     }
 
