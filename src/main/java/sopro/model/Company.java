@@ -80,12 +80,12 @@ public class Company {
         Integer nb_transactions = 0;
         for(Transaction transaction : buyingTransactions) {
             if(transaction.getConfirmed()) {
-                nb_transactions += 1;
+                if(transaction.getSeller().equals(company)) nb_transactions += 1;
             }
         }
         for(Transaction transaction : sellingTransactions) {
             if(transaction.getConfirmed()) {
-                nb_transactions += 1;
+                if(transaction.getBuyer().equals(company)) nb_transactions += 1;
             }
         }
         return nb_transactions;
@@ -94,10 +94,10 @@ public class Company {
     public Integer getNumberOffers(Company company) {
         Integer nb_offers = 0;
         for(Transaction transaction : buyingTransactions) {
-            nb_offers += transaction.getActions().stream().filter(a -> a.getActiontype().getName().equals("Offer")).toArray(Action[] :: new).length;
+            if(transaction.getSeller().equals(company)) nb_offers += transaction.getActions().stream().filter(a -> a.getActiontype().getName().equals("Offer")).toArray(Action[] :: new).length;
         }
         for(Transaction transaction : sellingTransactions) {
-            nb_offers += transaction.getActions().stream().filter(a -> a.getActiontype().getName().equals("Offer")).toArray(Action[] :: new).length;
+            if(transaction.getBuyer().equals(company)) nb_offers += transaction.getActions().stream().filter(a -> a.getActiontype().getName().equals("Offer")).toArray(Action[] :: new).length;
         }
         return nb_offers;
     }
@@ -105,10 +105,10 @@ public class Company {
     public Integer getNumberTradedProducts(Company company) {
         Set<String> products = new HashSet<>();
         for(Transaction transaction : buyingTransactions) {
-            products.add(transaction.getProduct());
+            if(transaction.getSeller().equals(company)) products.add(transaction.getProduct());
         }
         for(Transaction transaction : sellingTransactions) {
-            products.add(transaction.getProduct());
+            if(transaction.getBuyer().equals(company)) products.add(transaction.getProduct());
         }
         return products.size();
     }
