@@ -87,13 +87,13 @@ public class VerificationToken {
 
     /**
      * Returns a map of all fields.
-     * 
+     *
      * @return m map
      */
     public Map<String, Object> toMap() {
         Map<String, Object> m = new HashMap<String, Object>();
         m.put("token", this.token);
-        m.put("expiryDate", this.expiryDate); 
+        m.put("expiryDate", this.expiryDate);
         return m;
     }
 

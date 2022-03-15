@@ -1,6 +1,8 @@
 package sopro.model;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -30,6 +32,22 @@ public class ActionType {
         this.name = name;
         this.text = text;
         this.initiatorType = initiatorType;
+    }
+
+    /**
+     * Returns a map of all fields.
+     *
+     * @return m map
+     */
+    public Map<String, Object> toMap() {
+        Map<String, Object> m = new HashMap<String, Object>();
+        m.put("id", this.id);
+        // m.put("actions", this.actions); // TODO Felix selbers Problem
+        m.put("name", this.name);
+        m.put("initiatorType", this.initiatorType.toString());
+        m.put("text", this.text);
+        
+        return m;
     }
 
 }

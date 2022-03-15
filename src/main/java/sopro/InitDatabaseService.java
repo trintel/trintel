@@ -15,7 +15,7 @@ import sopro.repository.ActionTypeRepository;
 import sopro.repository.CompanyRepository;
 import sopro.repository.TransactionRepository;
 import sopro.repository.UserRepository;
-import sopro.service.BackupService;
+import sopro.service.ExportService;
 
 @Service
 public class InitDatabaseService {
@@ -39,7 +39,7 @@ public class InitDatabaseService {
     PasswordEncoder passwordEncoder;
 
     @Autowired
-    BackupService backupService;
+    ExportService backupService;
 
     public void init() {
 

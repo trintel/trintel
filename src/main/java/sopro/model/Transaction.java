@@ -1,7 +1,9 @@
 package sopro.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -35,4 +37,26 @@ public class Transaction {
         this.seller = seller;
     }
 
+    /**
+     * Returns a map of all fields.
+     *
+     * @return m map
+     */
+    public Map<String, Object> toMap() {
+        Map<String, Object> m = new HashMap<String, Object>();
+        m.put("id", this.id);
+        // TODO Felix fragen. 
+        // List<Long> li = new ArrayList<Long>();
+        // for(Action a : this.actions) 
+        //     li.add(a.getId());
+
+        // m.put("actions", li); 
+        m.put("buyer", this.buyer.getId());
+        m.put("seller", this.seller.getId());
+        m.put("product", this.product);
+        m.put("completed", this.completed);
+        m.put("shipped", this.shipped);
+        m.put("confirmed", this.confirmed);
+        return m;
+    }
 }
