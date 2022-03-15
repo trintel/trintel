@@ -45,7 +45,7 @@ public class ActionType {
         m.put("name", this.name);
         m.put("initiatorType", this.initiatorType.toString());
         m.put("text", this.text);
-        
+
         return m;
     }
 

@@ -10,10 +10,10 @@ import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import sopro.TrintelApplication;
 import sopro.model.Action;
 import sopro.model.ActionType;
 import sopro.model.Company;
-import sopro.TrintelApplication;
 import sopro.model.CompanyLogo;
 import sopro.model.Transaction;
 import sopro.model.User;
@@ -25,7 +25,6 @@ import sopro.repository.CompanyRepository;
 import sopro.repository.TransactionRepository;
 import sopro.repository.UserRepository;
 import sopro.repository.VerificationTokenRepository;
-
 
 @Service
 public class ExportService implements ExportInterface {
@@ -55,16 +54,16 @@ public class ExportService implements ExportInterface {
 
     /**
      * Exports all data to JSON.
-     * 
+     *
      * @return Path to json File.
      */
     public String export() {
         JSONObject export = new JSONObject();
         export.put("user", exportUsers());
         export.put("verificationToken", exportVerificationToken());
-        export.put("transaction", exportTransaction()); // TODO Felix wegen action list
+        export.put("transaction", exportTransaction());
         export.put("companyLogo", exportCompanyLogo());
-        export.put("company", exportCompany()); // TODO same wie oben -> Felix
+        export.put("company", exportCompany());
         export.put("actionType", exportActionType());
         export.put("action", exportAction());
 
@@ -80,14 +79,13 @@ public class ExportService implements ExportInterface {
         return EXPORT_PATH +"/"+ fileName ;
     }
 
-
     private JSONArray exportAction() {
         JSONArray a = new JSONArray();
         for (Action t : actionRepository.findAll())
             a.add(new JSONObject(t.toMap()));
         return a;
     }
-    
+
     private JSONArray exportActionType() {
         JSONArray a = new JSONArray();
         for (ActionType t : actionTypeRepository.findAll())

@@ -59,7 +59,7 @@ public class Action {
         m.put("pricePerPiece", this.pricePerPiece);
         m.put("date", this.date.toString());
         m.put("time", this.time.toString());
-        
+
         return m;
     }
 }
