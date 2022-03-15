@@ -134,7 +134,7 @@ public class TransactionTest {
     public void saveTransactionsTestStudent() throws Exception {
         //Create Transaction
         ActionType testActionType = new ActionType("TestActionType", "Demo request text.", InitiatorType.BUYER);
-        testActionType.setStandartAction(true);
+        testActionType.setStandardAction(true);
 
         Transaction testTransaction = new Transaction(companyRepository.findById(userRepository.findByEmail("j@j").getCompany().getId()).get(), companyRepository.findById(userRepository.findByEmail("f@f").getCompany().getId()).get());
         testTransaction.setProduct("Product 1");
@@ -161,7 +161,7 @@ public class TransactionTest {
     public void saveTransactionsTestAdmin() throws Exception {
         //Create Transaction
         ActionType testActionType = new ActionType("TestActionType", "Demo request text.", InitiatorType.BUYER);
-        testActionType.setStandartAction(true);
+        testActionType.setStandardAction(true);
 
         Transaction testTransaction = new Transaction(companyRepository.findById(userRepository.findByEmail("j@j").getCompany().getId()).get(), companyRepository.findById(userRepository.findByEmail("f@f").getCompany().getId()).get());
         testTransaction.setProduct("Product 1");

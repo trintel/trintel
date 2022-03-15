@@ -24,7 +24,8 @@ import sopro.repository.CompanyLogoRepository;
 import sopro.repository.CompanyRepository;
 import sopro.repository.TransactionRepository;
 import sopro.repository.UserRepository;
-import sopro.service.backup.ExportService;
+import sopro.service.backup.ExportInterface;
+import sopro.service.backup.ImportInterface;
 
 @Service
 public class InitDatabaseService {
@@ -51,7 +52,10 @@ public class InitDatabaseService {
     PasswordEncoder passwordEncoder;
 
     @Autowired
-    ExportService backupService;
+    ExportInterface exportService;
+
+    @Autowired
+    ImportInterface importService;
 
     public void init() {
         // If there is no data, add some initial values for testing the application.
@@ -97,13 +101,13 @@ public class InitDatabaseService {
             ActionType delivery = new ActionType("Delivery", "Action to kick off delivery of goods to buyer.", InitiatorType.SELLER);
             ActionType invoicing = new ActionType("Invoicing", "Action to send receipt to buyer.", InitiatorType.SELLER);
             ActionType paid = new ActionType("Paid", "Action to mark transaction as completed.", InitiatorType.SELLER);
-            request.setStandartAction(true);
-            offer.setStandartAction(true);
-            accept.setStandartAction(true);
-            cancelBuyer.setStandartAction(true);
-            delivery.setStandartAction(true);
-            invoicing.setStandartAction(true);
-            paid.setStandartAction(true);
+            request.setStandardAction(true);
+            offer.setStandardAction(true);
+            accept.setStandardAction(true);
+            cancelBuyer.setStandardAction(true);
+            delivery.setStandardAction(true);
+            invoicing.setStandardAction(true);
+            paid.setStandardAction(true);
 
             Transaction transaction1 = new Transaction(company1, company2);
             transaction1.setProduct("Product 1");
@@ -160,5 +164,8 @@ public class InitDatabaseService {
                 e.printStackTrace();
             }
         }
+        String e = exportService.export();
+        System.out.println(e);
+        System.out.println(importService.importJSON(e));
     }
 }

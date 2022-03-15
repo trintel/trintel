@@ -62,7 +62,7 @@
                                             <p th:if="${actionType.initiatorType == T(sopro.model.InitiatorType).SELLER}" class="card-text text-secondary" th:text="#{usedBySeller}"></p>
                                         </div>
                                         <!-- Buttons -->
-                                        <div class="float-lg-end mt-3 mt-lg-0" th:unless="${actionType.isStandartAction()}">
+                                        <div class="float-lg-end mt-3 mt-lg-0" th:unless="${actionType.isStandardAction()}">
                                             <a th:href="@{'/action/edit/' + ${actionType.id}}" class="btn btn-light">
                                                 <i class="bi bi-pencil-square"></i> <span th:text="#{edit}" />
                                             </a>
