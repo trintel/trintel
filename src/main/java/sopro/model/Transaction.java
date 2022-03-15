@@ -3,6 +3,7 @@ package sopro.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,7 +20,7 @@ import lombok.Setter;
 public class Transaction {
 
     @Getter @Setter @Id @GeneratedValue(strategy = GenerationType.AUTO)	private Long id;
-    @Getter @Setter @OneToMany(mappedBy = "transaction") List<Action> actions;
+    @Getter @Setter @OneToMany(mappedBy = "transaction", cascade = CascadeType.REMOVE) List<Action> actions;
     @Getter @Setter @NotNull @ManyToOne private Company buyer;
     @Getter @Setter @NotNull @ManyToOne private Company seller;
     @Getter @Setter private String product;

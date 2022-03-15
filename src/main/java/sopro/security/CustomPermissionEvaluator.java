@@ -23,13 +23,18 @@ public class CustomPermissionEvaluator implements PermissionEvaluator {
             return true;        //admin is always allowed
         }
 
-        if(targetObject instanceof Long) {
+        if(targetObject instanceof Long && permission.equals("transaction")) {
             List<Transaction> transactions = user.getCompany().getBuyingTransactions();
             transactions.addAll(user.getCompany().getSellingTransactions());
             if(transactions.stream().filter(t -> t.getId().equals(targetObject)).count() != 0) {        //only allow, if the users company is involved in the transaction
                 return true;
             }
         }
+
+        if(targetObject instanceof Long && permission.equals("company")) {
+            return user.getCompany().getId().equals(targetObject);
+        }
+
 
         return false;
     }

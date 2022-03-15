@@ -91,7 +91,7 @@ public class TransactionController {
     }
     //TODO rechte einstellen
     //TODO enums berücksichtigen
-    @PreAuthorize("hasPermission(#id, 'view')")
+    @PreAuthorize("hasPermission(#id, 'transaction')")
     @GetMapping("/transaction/{id}")
     public String transactionDetail(Model model, @PathVariable Long id, @AuthenticationPrincipal User user) {
         Action newAction = new Action();

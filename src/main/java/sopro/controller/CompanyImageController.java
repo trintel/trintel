@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import sopro.model.CompanyLogo;
 import sopro.repository.CompanyLogoRepository;
@@ -37,6 +38,15 @@ public class CompanyImageController {
 
         InputStream is = new ByteArrayInputStream(logo.getLogo());
         IOUtils.copy(is, response.getOutputStream());
+    }
+
+    //TODO: Security
+    @PostMapping("/company/logo/{companyID}/delete")
+    public String deleteCompanyLogo(@PathVariable Long companyID) {
+        if(companyLogoRepository.findByCompanyId(companyID) != null) {
+            companyLogoRepository.delete(companyLogoRepository.findByCompanyId(companyID));
+        }
+        return "redirect:/companies/" + companyID;
     }
 
 }
