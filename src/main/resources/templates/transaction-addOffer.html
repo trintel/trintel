@@ -14,7 +14,7 @@ AVIALABLE as long as no offer is accepted-->
     <th:block th:fragment="content">
         <style th:replace="fragments/small-content :: content"></style>
         <main class="form-small">
-            <form th:action="@{'/transaction/' + ${transactionID} + '/addAction'}" th:object="${action}" method="post">
+            <form th:action="@{'/transaction/' + ${transactionID} + '/addOffer'}" th:object="${action}" method="post">
                 <!-- Hidden input field to pass the actiontype offer without asking the user because he already clicked on create Offer. In 
                 this case its clear for the the user but the value has to be passed because behind the UI -->
                 <div class="form-floating mb-3">
