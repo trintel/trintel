@@ -102,7 +102,7 @@ public class TransactionTest {
     }
 
     /**
-     * Tests if user can create transactions for his company.
+     * Tests if user can create transactions with his own company.
      * @throws Exception
      */
     @Test
@@ -114,14 +114,15 @@ public class TransactionTest {
     }
 
     /**
-     * Tests if user can create transactions for another company.
+     * Tests if user can create transactions.
      * @throws Exception
      */
     @Test
     @WithUserDetails(value = "j@j", userDetailsServiceBeanName = "userDetailsService")
     public void createTransactionsTestStudent2() throws Exception {
         mockMvc.perform(get("/transaction/" + userRepository.findByEmail("f@f").getCompany().getId() + "/create"))
-               .andExpect(status().isForbidden()); // is really working
+               .andExpect(status().isOk())
+               .andExpect(view().name("transaction-add"));
     }
 
     /**
@@ -132,7 +133,7 @@ public class TransactionTest {
     @WithUserDetails(value = "j@j", userDetailsServiceBeanName = "userDetailsService")
     public void saveTransactionsTestStudent() throws Exception {
         //Create Transaction
-        ActionType testActionType = new ActionType("Request", "Demo request text.", InitiatorType.BUYER);
+        ActionType testActionType = new ActionType("TestActionType", "Demo request text.", InitiatorType.BUYER);
         testActionType.setStandartAction(true);
         
         Transaction testTransaction = new Transaction(companyRepository.findById(userRepository.findByEmail("j@j").getCompany().getId()).get(), companyRepository.findById(userRepository.findByEmail("f@f").getCompany().getId()).get());
@@ -143,17 +144,41 @@ public class TransactionTest {
 
         actionTypeRepository.save(testActionType);
         transactionRepository.save(testTransaction);
-        actionRepository.save(testAction);
 
         Long companyIdSeller = userRepository.findByEmail("f@f").getCompany().getId();
 
         mockMvc.perform(post("/transaction/" + companyIdSeller + "/save").flashAttr("action", testAction).with(csrf()))                                                                                                                                                                                                                                                                    
-               .andExpect(status().isOk())
+               .andExpect(status().is3xxRedirection())
                .andExpect(redirectedUrl("/transactions"));
     }
-    //irgendwas ist glb. unsaved aber ich verstehe nicht was
 
-    //TODO: Same for admin!
+    /**
+     * Tests if student can save transactions.
+     * @throws Exception
+     */
+    @Test
+    @WithUserDetails(value = "admin@admin", userDetailsServiceBeanName = "userDetailsService")
+    public void saveTransactionsTestAdmin() throws Exception {
+        //Create Transaction
+        ActionType testActionType = new ActionType("TestActionType", "Demo request text.", InitiatorType.BUYER);
+        testActionType.setStandartAction(true);
+        
+        Transaction testTransaction = new Transaction(companyRepository.findById(userRepository.findByEmail("j@j").getCompany().getId()).get(), companyRepository.findById(userRepository.findByEmail("f@f").getCompany().getId()).get());
+        testTransaction.setProduct("Product 1");
+
+        Action testAction = new Action("Test message testAction", testActionType, testTransaction);
+        testAction.setInitiator(userRepository.findByEmail("j@j"));
+
+        actionTypeRepository.save(testActionType);
+        transactionRepository.save(testTransaction);
+
+        Long companyIdSeller = userRepository.findByEmail("f@f").getCompany().getId();
+
+        mockMvc.perform(post("/transaction/" + companyIdSeller + "/save").flashAttr("action", testAction).with(csrf()))                                                                                                                                                                                                                                                                    
+               .andExpect(status().isForbidden());
+    }
+    
+    
 
 
     /**Test before implementation funktioniert auch in der Ausführung nicht

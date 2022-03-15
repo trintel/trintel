@@ -67,11 +67,11 @@ public class CompanyController {
 
     @GetMapping("/students") //TODO handle unassigned in Frontend
     public String listAllStudents(Model model) {
-        Company company = new Company("unassgined");
-        for (User student : userRepository.findByRole("STUDENT")) {
-            if (student.getCompany() == null)
-                student.setCompany(company);
-        }
+        // Company company = new Company("unassgined");
+        // for (User student : userRepository.findByRole("STUDENT")) {
+        //     if (student.getCompany() == null)
+        //         student.setCompany(company);
+        // }
         model.addAttribute("students", userRepository.findByRole("STUDENT")); // list all students
         return "students-list";
     }

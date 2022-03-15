@@ -165,7 +165,9 @@ public class CompanyTest {
     }
 
     /**
-     * Test before function - Controller has unsaved Company
+     * Test before function 
+     * Controller has unsaved Company -> fixed in Controller & Frontend
+     *
      * Tests if the Admin can acces the list of all students.
      *
      * @throws Exception
