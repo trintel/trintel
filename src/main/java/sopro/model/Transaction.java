@@ -17,7 +17,6 @@ import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
-
 @Entity
 public class Transaction {
 
@@ -31,7 +30,8 @@ public class Transaction {
     @Getter @Setter private Boolean confirmed = false;
     @Getter @Setter private Boolean active = true;
 
-    public Transaction() {}
+    public Transaction() {
+    }
 
     public Transaction(Company buyer, Company seller) {
         this.actions = new ArrayList<>();
@@ -40,13 +40,35 @@ public class Transaction {
     }
 
     /**
+     * @param id
+     * @param buyer
+     * @param seller
+     * @param product
+     * @param paid
+     * @param shipped
+     * @param confirmed
+     * @param active
+     */
+    public Transaction(Long id, @NotNull Company buyer, @NotNull Company seller, String product, Boolean paid,
+            Boolean shipped, Boolean confirmed, Boolean active) {
+        this.id = id;
+        this.buyer = buyer;
+        this.seller = seller;
+        this.product = product;
+        this.paid = paid;
+        this.shipped = shipped;
+        this.confirmed = confirmed;
+        this.active = active;
+    }
+
+    /**
      *
      * @return the amount of the transaction, if set.
      */
     public Integer getAmount() {
         Integer amount = 0;
-        for(Action action : actions) {
-            if(action.getAmount() != null) {        //null if not an offer
+        for (Action action : actions) {
+            if (action.getAmount() != null) { // null if not an offer
                 amount = action.getAmount();
             }
         }
@@ -59,8 +81,8 @@ public class Transaction {
      */
     public Double getPricePerPiece() {
         Double pricePerPiece = 0.0;
-        for(Action action : actions) {
-            if(action.getPricePerPiece() != null) {        //null if not an offer
+        for (Action action : actions) {
+            if (action.getPricePerPiece() != null) { // null if not an offer
                 pricePerPiece = action.getPricePerPiece();
             }
         }
@@ -69,6 +91,7 @@ public class Transaction {
 
     /**
      * get the last action from this transaction
+     * 
      * @return
      */
     public Action getLatestAction() {
@@ -77,6 +100,7 @@ public class Transaction {
 
     /**
      * get the Name of the latest action
+     * 
      * @return
      */
     public String getLatestActionName() {

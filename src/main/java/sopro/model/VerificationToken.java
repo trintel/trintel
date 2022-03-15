@@ -45,6 +45,19 @@ public class VerificationToken {
         this.expiryDate = calculateExpiryDate(EXPIRATION);
     }
 
+    /**
+     * @param id
+     * @param token
+     * @param user
+     * @param expiryDate
+     */
+    public VerificationToken(Long id, String token, User user, Date expiryDate) {
+        this.id = id;
+        this.token = token;
+        this.user = user;
+        this.expiryDate = expiryDate;
+    }
+
     public Long getId() {
         return id;
     }
@@ -92,7 +105,9 @@ public class VerificationToken {
      */
     public Map<String, Object> toMap() {
         Map<String, Object> m = new HashMap<String, Object>();
+        m.put("id", this.id);
         m.put("token", this.token);
+        m.put("user", this.user.getId());
         m.put("expiryDate", this.expiryDate);
         return m;
     }

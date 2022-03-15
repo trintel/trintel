@@ -22,6 +22,21 @@ public class CompanyLogo {
     @Getter @Setter @Lob byte[] logo;
     @Getter @Setter @OneToOne Company company;
 
+    public CompanyLogo() {
+        super();
+    }
+
+    /**
+     * @param id
+     * @param logo
+     * @param company
+     */
+    public CompanyLogo(Long id, byte[] logo, Company company) {
+        this.id = id;
+        this.logo = logo;
+        this.company = company;
+    }
+
     /**
      * Returns a map of all fields.
      *
@@ -31,6 +46,7 @@ public class CompanyLogo {
         Map<String, Object> m = new HashMap<String, Object>();
         m.put("id", this.id);
         m.put("logo", Base64.encodeBase64String(this.logo));
+        m.put("company", this.company);
         return m;
     }
 }

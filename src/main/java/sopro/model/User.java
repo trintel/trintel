@@ -22,10 +22,11 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
-  * Defines the class User with all needed entries for the Database.
-  */
+ * Defines the class User with all needed entries for the Database.
+ */
 @Entity
 public class User implements UserDetails {
+
     @Getter @Setter @Id @GeneratedValue(strategy = GenerationType.AUTO)	private Long id;
     @Getter @Setter	@NotEmpty @Column(unique = true) private String email;
     @Getter @Setter @NotEmpty private String surname;
@@ -39,46 +40,77 @@ public class User implements UserDetails {
     @Getter @Setter private boolean credentialsNonExpired = true;
     @Getter @Setter private boolean accountNonLocked = true;
 
-
-    public User() {}
-
-    public User(String surname,String forename, String email, String password, Company company) {
-       this.surname = surname;
-       this.forename = forename;
-       this.email = email;
-       this.password = password;
-       this.company = company;
+    public User() {
     }
 
-    public User(boolean enabled, boolean accountNonExpired, boolean credentialsNonExpired, boolean accountNonLocked, String surname,String forename, String email, String password, Company company) {
-      this.surname = surname;
-      this.forename = forename;
-      this.email = email;
-      this.password = password;
-      this.company = company;
-      this.enabled = enabled;
-      this.accountNonExpired = accountNonExpired;
-      this.credentialsNonExpired = credentialsNonExpired;
-      this. accountNonLocked = accountNonLocked;
-   }
+    public User(String surname, String forename, String email, String password, Company company) {
+        this.surname = surname;
+        this.forename = forename;
+        this.email = email;
+        this.password = password;
+        this.company = company;
+    }
+
+    public User(boolean enabled, boolean accountNonExpired, boolean credentialsNonExpired, boolean accountNonLocked,
+            String surname, String forename, String email, String password, Company company) {
+        this.surname = surname;
+        this.forename = forename;
+        this.email = email;
+        this.password = password;
+        this.company = company;
+        this.enabled = enabled;
+        this.accountNonExpired = accountNonExpired;
+        this.credentialsNonExpired = credentialsNonExpired;
+        this.accountNonLocked = accountNonLocked;
+    }
+
+    /**
+     * @param id
+     * @param email
+     * @param surname
+     * @param forename
+     * @param password
+     * @param role
+     * @param company
+     * @param enabled
+     * @param accountNonExpired
+     * @param credentialsNonExpired
+     * @param accountNonLocked
+     */
+    public User(Long id, @NotEmpty String email, @NotEmpty String surname, @NotEmpty String forename,
+            @NotEmpty String password, @NotEmpty String role, Company company, boolean enabled,
+            boolean accountNonExpired, boolean credentialsNonExpired, boolean accountNonLocked) {
+        this.id = id;
+        this.email = email;
+        this.surname = surname;
+        this.forename = forename;
+        this.password = password;
+        this.role = role;
+        this.company = company;
+        this.enabled = enabled;
+        this.accountNonExpired = accountNonExpired;
+        this.credentialsNonExpired = credentialsNonExpired;
+        this.accountNonLocked = accountNonLocked;
+    }
 
     /**
      * @return Collection<? extends GrantedAuthority>
      */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-      List<GrantedAuthority> grantedAuthorities = new ArrayList<GrantedAuthority>();
+        List<GrantedAuthority> grantedAuthorities = new ArrayList<GrantedAuthority>();
 
-      //authorities have to begin with "ROLE_", because Spring is stupid
-      grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_" + this.getRole()));   // assuming every user has only one role.
+        // authorities have to begin with "ROLE_", because Spring is stupid
+        grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_" + this.getRole())); // assuming every user has only
+                                                                                      // one role.
 
-      return grantedAuthorities;
+        return grantedAuthorities;
     }
 
     // Spring wants a username. We use email as username.
     @Override
     public String getUsername() {
-      return this.email;
+        return this.email;
     }
 
     /**
@@ -91,7 +123,7 @@ public class User implements UserDetails {
         m.put("accountNonExpired", accountNonExpired);
         m.put("accountNonLocked", accountNonLocked);
 
-        if(this.company != null)
+        if (this.company != null)
             m.put("company", company.getId());
         else
             m.put("company", null); // ! Careful with null.

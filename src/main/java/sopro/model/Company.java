@@ -23,6 +23,7 @@ import lombok.Setter;
 
 @Entity
 public class Company {
+
     @Getter @Setter @Id @GeneratedValue(strategy = GenerationType.AUTO)	private Long id;
     @Getter @Setter @NotEmpty @Column(unique = true) private String name;
     @Getter @Setter private String description;
@@ -31,14 +32,25 @@ public class Company {
     @Getter @Setter	@JsonIgnore	@OneToMany(mappedBy = "seller", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE) private List<Transaction> sellingTransactions;
     @Getter @Setter	@JsonIgnore	@OneToOne private CompanyLogo companyLogo;
 
-    public Company(){
+    public Company() {
         this.description = "";
     }
 
     public Company(String name) {
-       this.name = name;
-       this.students = new ArrayList<User>();
-       this.description = "";
+        this.name = name;
+        this.students = new ArrayList<User>();
+        this.description = "";
+    }
+
+    /**
+     * @param id
+     * @param name
+     * @param description
+     */
+    public Company(Long id, @NotEmpty String name, String description) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
     }
 
     @PreRemove
