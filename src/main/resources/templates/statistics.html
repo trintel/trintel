@@ -33,8 +33,7 @@
                                             <div class="text-xs font-weight-bold text-secondary fs-6 mb-1"
                                                 th:text="#{amountTransactions}">
                                             </div>
-                                            <i class="bi bi-info-circle" data-toggle="tooltip"
-                                                th:title="#{infoTransAmount}" id='example'></i>
+
                                         </div>
                                         <div class="h5 mb-0 font-weight-bold text-gray-800"
                                             th:text="${numberConfirmed}">
@@ -42,8 +41,12 @@
                                     </div>
                                     <div class="col-auto">
                                         <span class="bi bi-cart-check" style="font-size:30px;"></span>
-                                        <i class="bi bi-info-circle" data-toggle="tooltip" th:title="#{infoTransAmount}"
-                                            id='example'></i>
+                                        <div class="col-auto">
+                                            <center>
+                                                <i class="bi bi-info-circle" data-toggle="tooltip"
+                                                    th:title="#{infoTransAmount}" id='example'></i>
+                                            </center>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -58,8 +61,6 @@
                                             <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1"
                                                 th:text="#{turnover}">
                                             </div>
-                                            <i class="bi bi-info-circle" data-toggle="tooltip"
-                                                th:title="#{infoTurnover}" id='example'></i>
                                         </div>
                                         <div class="h5 mb-0 font-weight-bold text-gray-800"
                                             th:text="${totalTransationSellerVolume - totalTransationBuyerVolume} + '€'">
@@ -67,6 +68,12 @@
                                     </div>
                                     <div class="col-auto">
                                         <span class="bi bi-cash-coin" style="font-size:30px;"></span>
+                                        <div class="col-auto">
+                                            <center>
+                                                <i class="bi bi-info-circle" data-toggle="tooltip"
+                                                th:title="#{infoTurnover}" id='example'></i>
+                                            </center>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -81,14 +88,18 @@
                                             <div class="text-xs font-weight-bold text-secondary fs-6 mb-1"
                                                 th:text="#{percentTurnover}">
                                             </div>
-                                            <i class="bi bi-info-circle" data-toggle="tooltip"
-                                                th:title="#{infoPercentTurnover}" id='example'></i>
                                         </div>
                                         <div class="h5 mb-0 font-weight-bold text-gray-800">6%
                                         </div>
                                     </div>
                                     <div class="col-auto">
                                         <span class="bi bi-globe" style="font-size:30px;"></span>
+                                        <div class="col-auto">
+                                            <center>
+                                                <i class="bi bi-info-circle" data-toggle="tooltip"
+                                                th:title="#{infoPercentTurnover}" id='example'></i>
+                                            </center>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -103,14 +114,18 @@
                                             <div class="text-xs font-weight-bold text-secondary fs-6 mb-1"
                                                 th:text="#{numberDistinctBuyers}">
                                             </div>
-                                            <i class="bi bi-info-circle" data-toggle="tooltip"
-                                                th:title="#{infoNumberDistincBuyers}" id='example'></i>
                                         </div>
                                         <div class="h5 mb-0 font-weight-bold text-gray-800"
                                             th:text="${numberDistinctBuyers}"></div>
                                     </div>
                                     <div class="col-auto">
                                         <span class="bi bi-bag" style="font-size:30px;"></span>
+                                        <div class="col-auto">
+                                            <center>
+                                                <i class="bi bi-info-circle" data-toggle="tooltip"
+                                                th:title="#{infoNumberDistincBuyers}" id='example'></i>
+                                            </center>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -209,8 +224,6 @@
                                             <div class="text-xs font-weight-bold text-secondary fs-6 mb-1"
                                                 th:text="#{totalTransationSellerVolume}">
                                             </div>
-                                            <i class="bi bi-info-circle" data-toggle="tooltip"
-                                                th:title="#{infoTotalTransactionSellerVolume}" id='example'></i>
                                         </div>
                                         <div class="h5 mb-0 font-weight-bold text-gray-800"
                                             th:text="${totalTransationSellerVolume} + '€'">
@@ -218,6 +231,12 @@
                                     </div>
                                     <div class="col-auto">
                                         <span class="bi bi-arrow-up-right-circle" style="font-size:30px;"></span>
+                                        <div class="col-auto">
+                                            <center>
+                                                <i class="bi bi-info-circle" data-toggle="tooltip"
+                                                th:title="#{infoTotalTransactionSellerVolume}" id='example'></i>
+                                            </center>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -232,8 +251,6 @@
                                             <div class="text-xs font-weight-bold text-secondary fs-6 mb-1"
                                                 th:text="#{totalTransationBuyerVolume}">
                                             </div>
-                                            <i class="bi bi-info-circle" data-toggle="tooltip"
-                                                th:title="#{infoTotalTransactionBuyerVolume}" id='example'></i>
                                         </div>
                                         <div class="h5 mb-0 font-weight-bold text-gray-800"
                                             th:text="${totalTransationBuyerVolume} + '€'">
@@ -241,6 +258,12 @@
                                     </div>
                                     <div class="col-auto">
                                         <span class="bi bi-arrow-down-right-circle" style="font-size:30px;"></span>
+                                        <div class="col-auto">
+                                            <center>
+                                                <i class="bi bi-info-circle" data-toggle="tooltip"
+                                                th:title="#{infoTotalTransactionBuyerVolume}" id='example'></i>
+                                            </center>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -255,14 +278,18 @@
                                             <div class="text-xs font-weight-bold text-secondary fs-6 mb-1"
                                                 th:text="#{numberDistinctSellers}">
                                             </div>
-                                            <i class="bi bi-info-circle" data-toggle="tooltip"
-                                                th:title="#{infoNumberdistincsSellers}" id='example'></i>
                                         </div>
                                         <div class="h5 mb-0 font-weight-bold text-gray-800"
                                             th:text="${numberDistinctSellers}"></div>
                                     </div>
                                     <div class="col-auto">
                                         <span class="bi bi-bag-fill" style="font-size:30px;"></span>
+                                        <div class="col-auto">
+                                            <center>
+                                                <i class="bi bi-info-circle" data-toggle="tooltip"
+                                                th:title="#{infoNumberdistincsSellers}" id='example'></i>
+                                            </center>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -277,14 +304,18 @@
                                             <div class="text-xs font-weight-bold text-secondary fs-6 mb-1"
                                                 th:text="#{numberDistinctBuyers}">
                                             </div>
-                                            <i class="bi bi-info-circle" data-toggle="tooltip"
-                                                th:title="#{infoNumberDistincBuyers}" id='example'></i>
                                         </div>
                                         <div class="h5 mb-0 font-weight-bold text-gray-800"
                                             th:text="${numberDistinctBuyers}"></div>
                                     </div>
                                     <div class="col-auto">
                                         <span class="bi bi-bag" style="font-size:30px;"></span>
+                                        <div class="col-auto">
+                                            <center>
+                                                <i class="bi bi-info-circle" data-toggle="tooltip"
+                                                th:title="#{infoNumberDistincBuyers}" id='example'></i>
+                                            </center>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
