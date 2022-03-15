@@ -45,12 +45,6 @@ public class Transaction {
     public Map<String, Object> toMap() {
         Map<String, Object> m = new HashMap<String, Object>();
         m.put("id", this.id);
-        // TODO Felix fragen. 
-        // List<Long> li = new ArrayList<Long>();
-        // for(Action a : this.actions) 
-        //     li.add(a.getId());
-
-        // m.put("actions", li); 
         m.put("buyer", this.buyer.getId());
         m.put("seller", this.seller.getId());
         m.put("product", this.product);

@@ -42,7 +42,6 @@ public class ActionType {
     public Map<String, Object> toMap() {
         Map<String, Object> m = new HashMap<String, Object>();
         m.put("id", this.id);
-        // m.put("actions", this.actions); // TODO Felix selbers Problem
         m.put("name", this.name);
         m.put("initiatorType", this.initiatorType.toString());
         m.put("text", this.text);

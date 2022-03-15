@@ -43,12 +43,6 @@ public class Company {
         m.put("id", this.id);
         m.put("name", this.name);
         m.put("description", this.description);
-
-        // List<Long> studentList = new ArrayList<Long>(); // TODO Felix
-        // for(User s : this.students)
-        //     studentList.add(s.getId());
-
-        // m.put("students", studentList);
         return m;
     }
 }
