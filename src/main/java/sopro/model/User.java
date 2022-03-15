@@ -2,10 +2,16 @@ package sopro.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import javax.persistence.*;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotEmpty;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -73,5 +79,31 @@ public class User implements UserDetails {
     @Override
     public String getUsername() {
       return this.email;
+    }
+
+    /**
+     * Returns a map of all fields.
+     *
+     * @return m map
+     */
+    public Map<String, Object> toMap() {
+        Map<String, Object> m = new HashMap<String, Object>();
+        m.put("accountNonExpired", accountNonExpired);
+        m.put("accountNonLocked", accountNonLocked);
+
+        if(this.company != null)
+            m.put("company", company.getId());
+        else
+            m.put("company", null); // ! Careful with null.
+
+        m.put("credentialsNonExpired", credentialsNonExpired);
+        m.put("email", email);
+        m.put("enabled", enabled);
+        m.put("forename", forename);
+        m.put("id", id);
+        m.put("password", password);
+        m.put("role", role);
+        m.put("surname", surname);
+        return m;
     }
 }

@@ -33,6 +33,8 @@ dependencies {
 	implementation 'org.webjars.npm:bootstrap-icons:1.8.1'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'com.h2database:h2'
+	implementation 'com.googlecode.json-simple:json-simple:1.1.1'
+
 	//JUnit Tests
 	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'

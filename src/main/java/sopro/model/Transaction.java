@@ -1,7 +1,9 @@
 package sopro.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -36,7 +38,6 @@ public class Transaction {
         this.buyer = buyer;
         this.seller = seller;
     }
-
 
     /**
      *
@@ -74,7 +75,6 @@ public class Transaction {
         return actions.get(actions.size() - 1);
     }
 
-
     /**
      * get the Name of the latest action
      * @return
@@ -83,4 +83,20 @@ public class Transaction {
         return this.getLatestAction().getActiontype().getName();
     }
 
+    /**
+     * Returns a map of all fields.
+     *
+     * @return m map
+     */
+    public Map<String, Object> toMap() {
+        Map<String, Object> m = new HashMap<String, Object>();
+        m.put("id", this.id);
+        m.put("buyer", this.buyer.getId());
+        m.put("seller", this.seller.getId());
+        m.put("product", this.product);
+        m.put("completed", this.completed);
+        m.put("shipped", this.shipped);
+        m.put("confirmed", this.confirmed);
+        return m;
+    }
 }

@@ -2,6 +2,8 @@ package sopro.model;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -39,5 +41,25 @@ public class Action {
         this.transaction = transaction;
         this.date = LocalDate.now();
         this.time = LocalTime.now();
+    }
+
+    /**
+     * Returns a map of all fields.
+     *
+     * @return m map
+     */
+    public Map<String, Object> toMap() {
+        Map<String, Object> m = new HashMap<String, Object>();
+        m.put("id", this.id);
+        m.put("actionType", this.actiontype.getId());
+        m.put("transaction", this.transaction.getId());
+        m.put("initiator", this.initiator);
+        m.put("message", this.message);
+        m.put("amount", this.amount);
+        m.put("pricePerPiece", this.pricePerPiece);
+        m.put("date", this.date.toString());
+        m.put("time", this.time.toString());
+
+        return m;
     }
 }
