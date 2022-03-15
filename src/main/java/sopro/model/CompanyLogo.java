@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.OneToOne;
 
+import org.apache.tomcat.util.codec.binary.Base64;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -28,8 +30,7 @@ public class CompanyLogo {
     public Map<String, Object> toMap() {
         Map<String, Object> m = new HashMap<String, Object>();
         m.put("id", this.id);
-        m.put("logo", this.logo);
-        m.put("company", this.company);
+        m.put("logo", Base64.encodeBase64String(this.logo));
         return m;
     }
 }
