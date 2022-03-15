@@ -38,6 +38,9 @@
                     <button type="submit" class="w-100 btn btn-lg btn-primary" th:text="#{confirm}"></button>
                 </div>
             </form>
+            <button class="w-100 btn btn-lg btn-light mt-3" onclick="history.back()">
+                <i class="bi bi-arrow-left"></i> <a th:text=" #{back}"></a>
+            </button>
         </main>
     </th:block>
 </body>

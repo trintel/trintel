@@ -3,9 +3,8 @@ package sopro.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import sopro.model.Action;
-import sopro.model.ActionType;
 import sopro.model.InitiatorType;
 import sopro.model.Transaction;
 import sopro.model.User;
@@ -23,6 +21,7 @@ import sopro.repository.ActionRepository;
 import sopro.repository.ActionTypeRepository;
 import sopro.repository.CompanyRepository;
 import sopro.repository.TransactionRepository;
+import sopro.service.ActionTypeService;
 
 @Controller
 public class TransactionController {
@@ -32,9 +31,11 @@ public class TransactionController {
     @Autowired
     ActionRepository actionRepository;
     @Autowired
-    ActionTypeRepository actionTypeRepository;
+    ActionTypeRepository actionTypeRepository;      //TODO maybe own Controller
     @Autowired
     CompanyRepository companyRepository;
+    @Autowired
+    ActionTypeService actionTypeService;
 
     @GetMapping("/transactions")
     public String listTransactions(Model model, @AuthenticationPrincipal User user) {
@@ -79,7 +80,8 @@ public class TransactionController {
 
         action.setInitiator(user);
         action.setTransaction(transaction);
-        action.setActiontype(actionTypeRepository.findByName("Request"));
+        // action.setActiontype(actionTypeRepository.findByName("Request"));
+        action.setActiontype(actionTypeService.getInitialActionType());
 
         transactionRepository.save(transaction);
         actionRepository.save(action);
@@ -89,19 +91,20 @@ public class TransactionController {
     }
     //TODO rechte einstellen
     //TODO enums berücksichtigen
+    @PreAuthorize("hasPermission(#id, 'view')")
     @GetMapping("/transaction/{id}")
     public String transactionDetail(Model model, @PathVariable Long id, @AuthenticationPrincipal User user) {
         Action newAction = new Action();
         Transaction transaction = transactionRepository.findById(id).get();
-        List<ActionType> actionTypes = new ArrayList<>();
-        if(!user.getRole().equals("ADMIN")){
-            InitiatorType initiatorType = InitiatorType.SELLER;
-            if(user.getCompany().equals(transaction.getBuyer())) {      //findout if current user is Buyer or seller.
-                initiatorType = InitiatorType.BUYER;
-            }
-            actionTypes = actionTypeRepository.findByInitiatorType(initiatorType);
-        }
-        model.addAttribute("actiontypes", actionTypes);     //only find the available actiontypes for that user.
+        // List<ActionType> actionTypes = new ArrayList<>();
+        // if(!user.getRole().equals("ADMIN")){
+        //     InitiatorType initiatorType = InitiatorType.SELLER;
+        //     if(user.getCompany().equals(transaction.getBuyer())) {      //findout if current user is Buyer or seller.
+        //         initiatorType = InitiatorType.BUYER;
+        //     }
+        //     actionTypes = actionTypeRepository.findByInitiatorType(initiatorType);
+        // }
+        model.addAttribute("actiontypes", actionTypeService.getAvailableActions(transaction, user));     //only find the available actiontypes for that user.
         model.addAttribute("action", newAction);
         model.addAttribute("actions", actionRepository.findByTransaction(transaction));
         model.addAttribute("transactionID", id);
@@ -129,101 +132,103 @@ public class TransactionController {
         return "transaction-addSpecialAction";
     }
 
+    //TODO: Security
     @GetMapping("/transaction/{transactionID}/addOffer")
-    public String showOffer(Action action, @PathVariable Long transactionID, @AuthenticationPrincipal User user, Model model) {
+    public String showOffer(@PathVariable Long transactionID, Model model) {
         Action newAction = new Action();
-        InitiatorType initiatorType = InitiatorType.SELLER;
 
-        if(user.getCompany().equals(transactionRepository.findById(transactionID).get().getBuyer())) {      //findout if current user is Buyer or seller.
-            initiatorType = InitiatorType.BUYER;
-        }
-
-        //set specific Actiontype Offer because in the case of an Offer Action it can only be the Offertype
-        //model.addAttribute("actiontypes", actionTypeRepository.findByName("Offer"));
-
-        model.addAttribute("actiontypes", actionTypeRepository.findByInitiatorType(initiatorType));
         model.addAttribute("action", newAction);
         model.addAttribute("transactionID", transactionID);
         return "transaction-addOffer";
     }
 
-    @PostMapping("/transaction/{transactionID}/addAction")
-    public String createAction(Action action, @PathVariable Long transactionID, @AuthenticationPrincipal User user, Model model) {
-        // ActionType actionType = actionTypeRepository.findByName(actionTypeName);
-        // action.setActiontype(actionType);
-        Transaction transaction = transactionRepository.findById(transactionID).get();
-
-        if (action.getActiontype().getName().equals("ACCEPT")){
-            transaction.setConfirmed(true);
-        }else if(action.getActiontype().getName().equals("PAID")){
-            transaction.setPaid(true);
+    //TODO: Security
+    @PostMapping("/transaction/{transactionID}/addOffer")
+    public String addOffer(Action offer, @PathVariable Long transactionID, @AuthenticationPrincipal User user, BindingResult bindingResult, Model model) {
+        if(bindingResult.hasErrors()) {
+            model.addAttribute("action", offer);
+            model.addAttribute("transactionID", transactionID);
+            return "transaction-addOffer";
         }
-
-        action.setTransaction(transaction);
-        action.setInitiator(user);
-        actionRepository.save(action);
-
-
+        offer.setActiontype(actionTypeService.getOfferAction());        //to be sure.
+        offer.setTransaction(transactionRepository.findById(transactionID).get());
+        offer.setInitiator(user);
+        actionRepository.save(offer);       //save the new offer.
         return "redirect:/transaction/" + transactionID;
     }
 
+    // @PostMapping("/transaction/{transactionID}/addAction")
+    // public String createAction(Action action, @PathVariable Long transactionID, @AuthenticationPrincipal User user, Model model) {
+    //     // ActionType actionType = actionTypeRepository.findByName(actionTypeName);
+    //     // action.setActiontype(actionType);
+    //     Transaction transaction = transactionRepository.findById(transactionID).get();
+
+    //     if (action.getActiontype().getName().equals("ACCEPT")){
+    //         transaction.setConfirmed(true);
+    //     }else if(action.getActiontype().getName().equals("PAID")){
+    //         transaction.setPaid(true);
+    //     }
+
+    //     action.setTransaction(transaction);
+    //     action.setInitiator(user);
+    //     actionRepository.save(action);
+
+
+    //     return "redirect:/transaction/" + transactionID;
+    // }
+
     @PostMapping("/transaction/{transactionID}/accept")
-    public String createAcceptAction(@PathVariable Long transactionID, @AuthenticationPrincipal User user){
+    public String createAcceptAction(String message, @PathVariable Long transactionID, @AuthenticationPrincipal User user) {
         Transaction transaction = transactionRepository.findById(transactionID).get();
-        Action accept = new Action("message", actionTypeRepository.findByName("ACCEPT"), transaction);
+        Action accept = new Action(message, actionTypeService.getAcceptActionType(), transaction);
         transaction.setConfirmed(true);
         accept.setInitiator(user);
         actionRepository.save(accept);
+        transactionRepository.save(transaction);
         return "redirect:/transaction/" + transactionID;
     }
 
-    @GetMapping("/actions")
-    public String showActions(Model model) {
-        model.addAttribute("actionTypes", actionTypeRepository.findAll());
-        return "action-list";
+    @PostMapping("/transaction/{transactionID}/cancel")
+    public String createCancelAction(String message, @PathVariable Long transactionID, @AuthenticationPrincipal User user) {
+        Transaction transaction = transactionRepository.findById(transactionID).get();
+        Action cancel = new Action(message, actionTypeService.getAbortActionType(), transaction);
+        transaction.setActive(false);
+        cancel.setInitiator(user);
+        actionRepository.save(cancel);
+        transactionRepository.save(transaction);
+        return "redirect:/transaction/" + transactionID;
     }
 
-    @GetMapping("/action/add")
-    public String addAction(Model model) {
-        ActionType actionType = new ActionType();
-        model.addAttribute("actionType", actionType);
-        model.addAttribute("initiatorTypes", InitiatorType.values());
-        return "action-add";
-
+    @PostMapping("/transaction/{transactionID}/delivery")
+    public String createDeliveryAction(String message, @PathVariable Long transactionID, @AuthenticationPrincipal User user) {
+        Transaction transaction = transactionRepository.findById(transactionID).get();
+        Action delivered = new Action(message, actionTypeService.getDeliveryActionType(), transaction);
+        transaction.setShipped(true);
+        delivered.setInitiator(user);
+        actionRepository.save(delivered);
+        transactionRepository.save(transaction);
+        return "redirect:/transaction/" + transactionID;
     }
 
-    @PostMapping("/action/save")
-    public String saveAction(@Valid ActionType actionType, BindingResult bindingResult, Model model) {
-
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("actionType", actionType);
-            model.addAttribute("initiatorTypes", InitiatorType.values());
-            return "action-add";
-        }
-
-        actionTypeRepository.save(actionType);
-
-        return "redirect:/actions";
+    @PostMapping("/transaction/{transactionID}/invoicing")
+    public String createInvoiceAction(String message, @PathVariable Long transactionID, @AuthenticationPrincipal User user) {
+        Transaction transaction = transactionRepository.findById(transactionID).get();
+        Action invoice = new Action(message, actionTypeService.getInvoiceActionType(), transaction);
+        invoice.setInitiator(user);
+        actionRepository.save(invoice);
+        return "redirect:/transaction/" + transactionID;
     }
 
-    @GetMapping("action/edit/{actionTypeID}")
-    public String editActionType(Model model, @PathVariable Long actionTypeID) {
-        model.addAttribute("actionType", actionTypeRepository.findById(actionTypeID).get());
-        model.addAttribute("initiatorTypes", InitiatorType.values());
-        return "action-edit";
+    @PostMapping("/transaction/{transactionID}/paid")
+    public String createPaidAction(String message, @PathVariable Long transactionID, @AuthenticationPrincipal User user) {
+        Transaction transaction = transactionRepository.findById(transactionID).get();
+        Action paid = new Action(message, actionTypeService.getPaidActionType(), transaction);
+        transaction.setPaid(true);
+        paid.setInitiator(user);
+        actionRepository.save(paid);
+        transactionRepository.save(transaction);
+        return "redirect:/transaction/" + transactionID;
     }
 
-    @PostMapping("action/edit/{actionTypeID}")
-    public String editAction(@Valid ActionType actionType, @PathVariable Long actionTypeID, BindingResult bindingResult, Model model) {
-
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("actionType", actionType);
-            return "action-edit";
-        }
-        actionType.setId(actionTypeID);
-        actionTypeRepository.save(actionType);
-        return "redirect:/actions";
-
-    }
 
 }

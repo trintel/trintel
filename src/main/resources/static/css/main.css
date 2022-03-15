@@ -21,6 +21,14 @@ a.icon-link:hover { text-decoration: none; }
   border-radius: .8rem !important;
 }
 
+a {
+  color: #53627e;
+}
+
+a:hover {
+  color: #627393;
+}
+
 input {
   border-radius: .8rem !important;
 }
@@ -142,6 +150,11 @@ textarea {
   border-radius: .8rem !important;
 }
 
+.form-check-input:checked {
+  background-color:#556080;
+  border-color: #556080;
+}
+
 .nav-logo {
   height:2.5rem;
   margin-right: 0.5rem;
@@ -163,6 +176,17 @@ main {
 .btn-primary:hover {
   background-color: #4c5672;
   border-color: #4c5672;
+}
+
+.btn-danger {
+  color: #dc3545;
+  background-color: #dc35452b;
+  border: 0;
+}
+
+.btn-danger:hover {
+  color: #dc3545;
+  background-color: #dc354559;
 }
 
 .companylogo {
@@ -188,6 +212,10 @@ main {
   height: 100%;
   object-fit: contain;
   object-position: center;
+}
+
+.companylogo-xs {
+  min-width: 2rem;
 }
 
 .companylogo-sm {
@@ -221,6 +249,7 @@ main {
 .accordion-item .accordion-button.collapsed {
   border-bottom-left-radius: .8rem !important;
   border-bottom-right-radius: .8rem !important;
+  background-color: white;
 }
 
 .accordion-item .accordion-collapse {
