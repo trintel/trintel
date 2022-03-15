@@ -94,7 +94,7 @@ public class Transaction {
         m.put("buyer", this.buyer.getId());
         m.put("seller", this.seller.getId());
         m.put("product", this.product);
-        m.put("completed", this.completed);
+        m.put("active", this.active);
         m.put("shipped", this.shipped);
         m.put("confirmed", this.confirmed);
         return m;
