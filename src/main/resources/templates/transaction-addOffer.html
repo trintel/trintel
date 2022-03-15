@@ -18,7 +18,7 @@ AVIALABLE as long as no offer is accepted-->
                 <!-- Hidden input field to pass the actiontype offer without asking the user because he already clicked on create Offer. In 
                 this case its clear for the the user but the value has to be passed because behind the UI -->
                 <div class="form-floating mb-3">
-                    <select class="disabled w-100" style="appearance: none; border: none;" th:field="*{actiontype}">
+                    <select class="disabled w-100" hidden style="appearance: none; border: none;" th:field="*{actiontype}">
                         <div th:each="actiontype : ${actiontypes}">
                             <div th:if="${actiontype.name = 'Offer'}">
                                 <option th:value="${actiontype.id}"> </option>
@@ -52,13 +52,13 @@ AVIALABLE as long as no offer is accepted-->
                 <!-- Block: Submit Button -->
                 <div class="form-group">
                     <a th:href="@{'/transaction/' + ${transactionID} + '/addAction'}">
-                        <button type="submit" class="w-100 btn btn-lg btn-primary mb-3"><a
+                        <button type="submit" class="w-100 btn btn-lg btn-primary"><a
                                 th:text=" #{send}"></a></button>
                     </a>
                 </div>
             </form>
             <!-- Block: Back Button -->
-            <button class="w-100 btn btn-lg btn-light mb-3" onclick="history.back()">
+            <button class="w-100 btn btn-lg btn-light mt-3" onclick="history.back()">
                 <i class="bi bi-arrow-left"></i>
                 <a th:text=" #{back}"></a>
             </button>
