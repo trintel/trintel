@@ -53,7 +53,7 @@ public class Action {
         m.put("id", this.id);
         m.put("actionType", this.actiontype.getId());
         m.put("transaction", this.transaction.getId());
-        m.put("initiator", this.initiator);
+        m.put("initiator", this.initiator.getId());
         m.put("message", this.message);
         m.put("amount", this.amount);
         m.put("pricePerPiece", this.pricePerPiece);
