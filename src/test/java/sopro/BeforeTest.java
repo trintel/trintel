@@ -99,7 +99,7 @@ public class BeforeTest {
          request.setStandartAction(true);
          offer.setStandartAction(true);
          accept.setStandartAction(true);
-         
+
          Transaction transaction1 = new Transaction(company1, company2);
          transaction1.setProduct("Product 1");
 
@@ -120,7 +120,7 @@ public class BeforeTest {
          actionTypeRepository.save(accept);
 
          transactionRepository.save(transaction1);
-         
+
          actionRepository.save(trans1Accept);
          actionRepository.save(trans1Offer);
          actionRepository.save(trans1Request);

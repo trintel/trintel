@@ -165,7 +165,7 @@ public class CompanyTest {
     }
 
     /**
-     * Test before function 
+     * Test before function
      * Controller has unsaved Company -> fixed in Controller & Frontend
      *
      * Tests if the Admin can acces the list of all students.

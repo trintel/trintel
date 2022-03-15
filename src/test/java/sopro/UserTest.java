@@ -9,7 +9,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.nio.charset.Charset;
-
 import java.util.Random;
 
 import javax.transaction.Transactional;
@@ -62,7 +61,7 @@ public class UserTest {
     @Test
     public void signUpRedirectTestStudent() throws Exception {
         String generatedString = signupUrlService.generateStudentSignupURL();
-    
+
         mockMvc.perform(get("/signup/" + generatedString))
                .andExpect(status().isOk())
                .andExpect(view().name("sign-up-student"));
@@ -76,13 +75,13 @@ public class UserTest {
     @Test
     public void signUpRedirectTestAdmin() throws Exception {
         String generatedString = signupUrlService.generateAdminSignupURL();
-    
+
         mockMvc.perform(get("/signup/" + generatedString))
                .andExpect(status().isOk())
                .andExpect(view().name("sign-up-admin"));
     }
 
-    
+
     /**
      * Tests, if the login screen is served on /signup/randomUrl.
      *
@@ -93,7 +92,7 @@ public class UserTest {
         byte[] array = new byte[7]; // length is bounded by 7
         new Random().nextBytes(array);
         String generatedString = new String(array, Charset.forName("UTF-8"));
-    
+
         mockMvc.perform(get("/signup/" + generatedString))
                .andExpect(status().is3xxRedirection())
                .andExpect(redirectedUrl("/login"));

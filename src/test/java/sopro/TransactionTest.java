@@ -135,7 +135,7 @@ public class TransactionTest {
         //Create Transaction
         ActionType testActionType = new ActionType("TestActionType", "Demo request text.", InitiatorType.BUYER);
         testActionType.setStandartAction(true);
-        
+
         Transaction testTransaction = new Transaction(companyRepository.findById(userRepository.findByEmail("j@j").getCompany().getId()).get(), companyRepository.findById(userRepository.findByEmail("f@f").getCompany().getId()).get());
         testTransaction.setProduct("Product 1");
 
@@ -147,7 +147,7 @@ public class TransactionTest {
 
         Long companyIdSeller = userRepository.findByEmail("f@f").getCompany().getId();
 
-        mockMvc.perform(post("/transaction/" + companyIdSeller + "/save").flashAttr("action", testAction).with(csrf()))                                                                                                                                                                                                                                                                    
+        mockMvc.perform(post("/transaction/" + companyIdSeller + "/save").flashAttr("action", testAction).with(csrf()))
                .andExpect(status().is3xxRedirection())
                .andExpect(redirectedUrl("/transactions"));
     }
@@ -162,7 +162,7 @@ public class TransactionTest {
         //Create Transaction
         ActionType testActionType = new ActionType("TestActionType", "Demo request text.", InitiatorType.BUYER);
         testActionType.setStandartAction(true);
-        
+
         Transaction testTransaction = new Transaction(companyRepository.findById(userRepository.findByEmail("j@j").getCompany().getId()).get(), companyRepository.findById(userRepository.findByEmail("f@f").getCompany().getId()).get());
         testTransaction.setProduct("Product 1");
 
@@ -174,11 +174,11 @@ public class TransactionTest {
 
         Long companyIdSeller = userRepository.findByEmail("f@f").getCompany().getId();
 
-        mockMvc.perform(post("/transaction/" + companyIdSeller + "/save").flashAttr("action", testAction).with(csrf()))                                                                                                                                                                                                                                                                    
+        mockMvc.perform(post("/transaction/" + companyIdSeller + "/save").flashAttr("action", testAction).with(csrf()))
                .andExpect(status().isForbidden());
     }
-    
-    
+
+
 
 
     /**Test before implementation funktioniert auch in der Ausführung nicht
