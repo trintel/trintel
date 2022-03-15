@@ -1,5 +1,5 @@
 package sopro.model;
 
 public enum InitiatorType {
-    BUYER, SELLER;
+    BUYER, SELLER, BOTH;
 }
