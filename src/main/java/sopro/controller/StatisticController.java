@@ -2,8 +2,6 @@ package sopro.controller;
 
 
 
-import java.util.HashMap;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -56,10 +54,11 @@ public class StatisticController {
 
         return "statistics";
     }
-    
+
     //Only for debug needs to be created by @backend
     @GetMapping("/statistic")
     public String viewOwnCompany(Model model, @AuthenticationPrincipal User user) {
         return "redirect:/statistics/" + user.getCompany().getId();
     }
+
 }

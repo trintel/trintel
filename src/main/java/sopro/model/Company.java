@@ -33,7 +33,7 @@ public class Company {
     @Getter @Setter	@JsonIgnore	@OneToMany(mappedBy = "seller", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE) private List<Transaction> sellingTransactions;
     @Getter @Setter	@JsonIgnore	@OneToOne private CompanyLogo companyLogo;
 
-    public Company(){
+    public Company() {
         this.description = "";
     }
 
