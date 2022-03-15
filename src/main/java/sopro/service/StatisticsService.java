@@ -1,8 +1,6 @@
 package sopro.service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -108,7 +106,7 @@ public class StatisticsService {
     //     Map<Company, Double[]> relativeStatistics = new HashMap<>();
 
     //     List<Transaction> transactions = company.getBuyingTransactions();
-        
+
     //     for(Transaction transaction : transactions.stream().filter(t -> t.getConfirmed()).toArray(Transaction[] :: new)) {
     //         Double nb_transactions = relativeStatistics.get(transaction.getSeller())[0];
     //         relativeStatistics.put(transaction.getSeller(), nb_transactions == null ? 1 : nb_transactions + 1);
@@ -125,5 +123,5 @@ public class StatisticsService {
     //     return relativeStatistics;
     // }
 
-    
+
 }

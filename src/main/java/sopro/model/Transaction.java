@@ -99,4 +99,5 @@ public class Transaction {
         m.put("confirmed", this.confirmed);
         return m;
     }
+
 }
