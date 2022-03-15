@@ -52,6 +52,7 @@ public class StatisticController {
         return "statistics";
     }
     
+    //Only for debug needs to be created by @backend
     @GetMapping("/statistic")
     public String viewOwnCompany(Model model, @AuthenticationPrincipal User user) {
         return "redirect:/statistics/" + user.getCompany().getId();
