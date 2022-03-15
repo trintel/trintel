@@ -2,6 +2,9 @@ package sopro.controller;
 
 
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -39,6 +42,8 @@ public class StatisticController {
 
         Company company = companyRepository.findById(companyID).get();      //TODO: deal with possibilty of non existing company
         model.addAttribute("company", company);
+
+        // model.addAttribute("relativeStatistics", statisticsService.getRelativeStatistics(company));
 
 
         model.addAttribute("numberDistinctBuyers", statisticsService.getNumberDistinctBuyers(company));

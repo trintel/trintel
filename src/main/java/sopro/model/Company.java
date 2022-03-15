@@ -58,4 +58,34 @@ public class Company {
         m.put("description", this.description);
         return m;
     }
+
+    public List<Company> getRelatedCompanies() {
+        List<Company> companies = new ArrayList<>();
+        for(Transaction transaction : buyingTransactions) {
+            if(!companies.contains(transaction.getSeller())) {
+                companies.add(transaction.getSeller());
+            }
+        }
+        for(Transaction transaction : sellingTransactions) {
+            if(!companies.contains(transaction.getBuyer())) {
+                companies.add(transaction.getBuyer());
+            }
+        }
+        return companies;
+    }
+
+    public Integer getConfirmedTransactionsWith(Company company) {
+        Integer nb_transactions = 0;
+        for(Transaction transaction : buyingTransactions) {
+            if(transaction.getConfirmed()) {
+                nb_transactions += 1;
+            }
+        }
+        for(Transaction transaction : sellingTransactions) {
+            if(transaction.getConfirmed()) {
+                nb_transactions += 1;
+            }
+        }
+        return nb_transactions;
+    }
 }
