@@ -8,9 +8,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import java.nio.charset.Charset;
-import java.util.Random;
-
 import javax.transaction.Transactional;
 
 import org.junit.jupiter.api.Test;
@@ -83,17 +80,15 @@ public class UserTest {
 
 
     /**
-     * Tests, if the login screen is served on /signup/randomUrl.
+     * Tests, if the login screen is served on /signup/falseURL.
      *
      * @throws Exception
      */
     @Test
-    public void signUpRedirectTestRandomString() throws Exception {
-        byte[] array = new byte[7]; // length is bounded by 7
-        new Random().nextBytes(array);
-        String generatedString = new String(array, Charset.forName("UTF-8"));
+    public void signUpRedirectTestFalseString() throws Exception {
+        String test = "kjsadgusghsfgufhkjsdghushgughdagounadfh";
 
-        mockMvc.perform(get("/signup/" + generatedString))
+        mockMvc.perform(get("/signup/" + test))
                .andExpect(status().is3xxRedirection())
                .andExpect(redirectedUrl("/login"));
     }
