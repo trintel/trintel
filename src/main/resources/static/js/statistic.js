@@ -19,10 +19,10 @@ function sortTable(n, t) {
             shouldSwitch = false;
             /* Get the two elements you want to compare,
             one from current row and one from the next: */
-            x = rows[i].getElementsByTagName("TD")[n];
-            y = rows[i + 1].getElementsByTagName("TD")[n];
+            x = rows[i].getElementsByTagName("td")[n];
+            y = rows[i + 1].getElementsByTagName("td")[n];
 
-            if (t = 'T') {
+            if (t == 1) {
                 /* Check if the two rows should switch place,
                 based on the direction, asc or desc: */
                 if (dir == "asc") {
@@ -38,17 +38,17 @@ function sortTable(n, t) {
                         break;
                     }
                 }
-            } else if (t = 'N') {
+            } else if (t == 2) {
                 /* Check if the two rows should switch place,
             based on the direction, asc or desc: */
                 if (dir == "asc") {
-                    if (x > y) {
+                    if (parseFloat(x) > parseFloat(y)) {
                         // If so, mark as a switch and break the loop:
                         shouldSwitch = true;
                         break;
                     }
                 } else if (dir == "desc") {
-                    if (x < y) {
+                    if (parseFloat(x) < parseFloat(y)) {
                         // If so, mark as a switch and break the loop:
                         shouldSwitch = true;
                         break;
