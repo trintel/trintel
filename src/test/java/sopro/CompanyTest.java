@@ -56,7 +56,6 @@ public class CompanyTest {
     @Autowired
     PasswordEncoder passwordEncoder;
 
-
     String companyName = "testCompany";
 
     @Autowired
@@ -66,7 +65,6 @@ public class CompanyTest {
     void setup() {
         beforeTest.setup();
     }
-
 
     // #######################################################################################
     // ----------------------------------- Method Tests ADMIN
@@ -81,7 +79,7 @@ public class CompanyTest {
     @WithUserDetails(value = "admin@admin", userDetailsServiceBeanName = "userDetailsService")
     public void companiesReachable() throws Exception {
         mockMvc.perform(get("/companies"))
-               .andExpect(status().is(200));
+                .andExpect(status().is(200));
     }
 
     /**
@@ -161,7 +159,7 @@ public class CompanyTest {
     @WithMockUser(username = "student@student", roles = { "STUDENT" })
     public void saveCompanieTestStudent() throws Exception {
         mockMvc.perform(get("/companies/save"))
-               .andExpect(status().isForbidden());
+                .andExpect(status().isForbidden());
     }
 
     /**
@@ -176,8 +174,8 @@ public class CompanyTest {
     @WithMockUser(username = "admin@admin", roles = { "ADMIN" })
     public void listAllStudentsTestAdmin() throws Exception {
         mockMvc.perform(get("/students"))
-               .andExpect(status().isOk())
-               .andExpect(view().name("students-list"));
+                .andExpect(status().isOk())
+                .andExpect(view().name("students-list"));
     }
 
     /**
@@ -391,12 +389,12 @@ public class CompanyTest {
      *
      * @throws Exception
      */
-    @Test //war vorher studentTest@student
+    @Test // war vorher studentTest@student
     @WithUserDetails(value = "m@m", userDetailsServiceBeanName = "userDetailsService")
     public void joinCompany2TestStudent() throws Exception {
         mockMvc.perform(post("/company/join").param("name", companyRepository.findAll().get(0).getName()).with(csrf()))
-               .andExpect(status().is3xxRedirection())
-               .andExpect(redirectedUrl("/home"));
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/home"));
     }
 
     /**
@@ -421,7 +419,8 @@ public class CompanyTest {
     }
 
     /**
-     * Tests if the Student can edit his own company (has one). ... Funktioniert tatsächlich nicht, wenn es ausgeführt wird
+     * Tests if the Student can edit his own company (has one). ... Funktioniert
+     * tatsächlich nicht, wenn es ausgeführt wird
      *
      * @throws Exception
      */
@@ -429,12 +428,12 @@ public class CompanyTest {
     @WithUserDetails(value = "j@j", userDetailsServiceBeanName = "userDetailsService")
     public void editOwnCompanyStudentTest() throws Exception {
         mockMvc.perform(get("/company/" + (userRepository.findByEmail("j@j").getCompany()).getId() + "/edit"))
-               .andExpect(view().name("company-edit"));
+                .andExpect(view().name("company-edit"));
     }
-
 
     /**
      * Tests if the Admin can edit an existing company.
+     *
      * @throws Exception
      */
     @Test
@@ -450,16 +449,16 @@ public class CompanyTest {
         MockMultipartFile file = new MockMultipartFile("formFile", "".getBytes());
 
         mockMvc.perform(multipart("/company/" + companyId + "/edit").file(file).with(csrf())
-               .flashAttr("company", companyId))
-               .andExpect(status().is3xxRedirection())
-               .andExpect(redirectedUrl("/companies/" + companyId));
+                .flashAttr("company", companyId))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/companies/" + companyId));
 
     }
-
 
     /**
      *
      * Tests if the Student can save his company.
+     *
      * @throws Exception
      */
     @Test
@@ -467,11 +466,11 @@ public class CompanyTest {
     public void saveOwnCompanyTestStudent() throws Exception {
         MockMultipartFile file = new MockMultipartFile("formFile", "".getBytes());
 
-        mockMvc.perform(multipart("/company/" + userRepository.findByEmail("j@j").getCompany().getId() + "/edit").file(file).with(csrf())
-               .flashAttr("company", userRepository.findByEmail("j@j").getCompany().getId()))
-               .andExpect(status().is3xxRedirection())
-               .andExpect(redirectedUrl("/companies/" + userRepository.findByEmail("j@j").getCompany().getId()));
-
+        mockMvc.perform(multipart("/company/" + userRepository.findByEmail("j@j").getCompany().getId() + "/edit")
+                .file(file).with(csrf())
+                .flashAttr("company", userRepository.findByEmail("j@j").getCompany().getId()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/companies/" + userRepository.findByEmail("j@j").getCompany().getId()));
     }
 
     // #######################################################################################

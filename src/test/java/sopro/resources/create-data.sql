@@ -5,7 +5,6 @@ INSERT INTO USER(id, account_non_expired, account_non_locked, credentials_non_ex
 INSERT INTO USER(id, account_non_expired, account_non_locked, credentials_non_expired, email, enabled, forename, password, role, surname, company_id) VALUES (8, 'TRUE', 'TRUE', 'TRUE', "adminTest@admin", 'FALSE', "adminTest", "password", "ADMIN", "adminTest", null);
 INSERT INTO USER(id, account_non_expired, account_non_locked, credentials_non_expired, email, enabled, forename, password, role, surname, company_id) VALUES (8, 'TRUE', 'TRUE', 'TRUE', "studentTest@student", 'FALSE', "studentTest", "password", "STUDENT", "studentTest", null);
 
-
 INSERT INTO COMPANY(id, description, name, company_logo_id) VALUES (2,"","[187]Strassenbande", null)
 INSERT INTO COMPANY(id, description, name, company_logo_id) VALUES (3,"","Streber GmbH", null)
 INSERT INTO COMPANY(id, description, name, company_logo_id) VALUES (4,"","7Bags", null)
