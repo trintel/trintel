@@ -62,14 +62,17 @@
               hier können noch andere Links eingefügt werden, die nicht zur Nav gehören
             </ul> -->
             <ul class="logout-side nav flex-column mb-2" th:with="currentUser=${#httpServletRequest.userPrincipal?.name}">
-              <li class="nav-item">
-              <form class="navbar-form navbar-right" th:action="@{/logout}" method="post" th:if="${currentUser != null}">
-                  <p class="navbar-text navbar-right align-middle my-0" th:text="${currentUser}">
-                      example_user
-                  </p>
-                  <input type="submit" class="btn btn-dark" value="Logout" />
-              </form>
-            </li>
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="dropdown03" data-bs-toggle="dropdown" aria-expanded="false" th:text="${currentUser}" th:if="${currentUser != null}"></a>
+                  <ul class="dropdown-menu" aria-labelledby="dropdown03">
+                    <li>
+                      <a class="dropdown-item" href="/settings" th:text="#{uSettings}"></a>
+                    </li>
+                    <form th:action="@{/logout}" method="post">
+                      <input type="submit" class="dropdown-item p-0" th:value="#{logout}" />
+                    </form>
+                  </ul>
+                </li>
           </ul>
           </div>
     </nav>
