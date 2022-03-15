@@ -56,9 +56,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     "/verify-your-email",
                     "/registrationConfirm/**").permitAll() // permit all to access those Mathes
                 .antMatchers("/companies/", "/company/*/edit", "/company/logo/**").hasAnyRole("ADMIN", "STUDENT") // TODO: differentiate access of those two roles
-                .antMatchers("/companies/add/**", "/companies/save/**", "/students/**", "/student/{id}/reassign").hasRole("ADMIN")
                 .antMatchers("/company/select/**", "/company/join/**").hasRole("STUDENT")
                 // .antMatchers("/company/**", "/companies/{companyID}").hasRole("STUDENT")
+=======
+                .antMatchers("/companies/add/**", "/companies/save/**", "/students/**", "/student/{id}/reassign", "/action/**" ).hasRole("ADMIN")
                 // .antMatchers("/console/**").hasRole("ADMIN") // restrict to only ADMIN role is able to access /console
                 .anyRequest().authenticated()
                 .and()

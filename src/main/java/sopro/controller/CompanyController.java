@@ -66,13 +66,13 @@ public class CompanyController {
         return "redirect:/companies";
     }
 
-    @GetMapping("/students")
+    @GetMapping("/students") //TODO handle unassigned in Frontend
     public String listAllStudents(Model model) {
-        Company company = new Company("unassgined");
-        for (User student : userRepository.findByRole("STUDENT")) {
-            if (student.getCompany() == null)
-                student.setCompany(company);
-        }
+        // Company company = new Company("unassgined");
+        // for (User student : userRepository.findByRole("STUDENT")) {
+        //     if (student.getCompany() == null)
+        //         student.setCompany(company);
+        // }
         model.addAttribute("students", userRepository.findByRole("STUDENT")); // list all students
         return "students-list";
     }
@@ -148,7 +148,7 @@ public class CompanyController {
     @GetMapping("/company/{companyID}/edit")
     public String editOwnCompany(Model model, @AuthenticationPrincipal User user, @PathVariable Long companyID) {
         try {
-            if (user.getRole().equals("ADMIN") || user.getCompany().getId() == companyID) {
+            if (user.getRole().equals("ADMIN") || user.getCompany().getId().equals(companyID)) {
                 model.addAttribute("company", companyRepository.findById(companyID).get());
                 return "company-edit";
             } else {
