@@ -40,6 +40,6 @@ public class CustomPermissionEvaluator implements PermissionEvaluator {
         // TODO Auto-generated method stub
         return true;
     }
-    
-    
+
+
 }

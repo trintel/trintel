@@ -20,7 +20,7 @@ public class ActionTypeController {
     @Autowired
     ActionTypeRepository actionTypeRepository;
 
-    
+
     @GetMapping("/actions")
     public String showActions(Model model) {
         model.addAttribute("actionTypes", actionTypeRepository.findAll());
@@ -69,5 +69,5 @@ public class ActionTypeController {
         return "redirect:/actions";
 
     }
-    
+
 }

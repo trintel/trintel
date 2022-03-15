@@ -6,7 +6,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import sopro.model.Action;
 import sopro.model.ActionType;
 import sopro.model.InitiatorType;
 import sopro.model.Transaction;
@@ -80,7 +79,7 @@ public class ActionTypeService {
                     }
                 }
             }
-            
+
             //Add the Accept-Option if: the last action is an Offer from the other company
             if(actionType.getName().equals("Accept")) {
                 if(transaction.getLatestAction().getInitiator().getCompany().getId().equals(currentUser.getCompany().getId()) || !transaction.getLatestActionName().equals("Offer")) {
@@ -121,5 +120,5 @@ public class ActionTypeService {
         return actionTypes;
 
     }
-    
+
 }
