@@ -53,6 +53,7 @@ public class TransactionController {
     }
 
 
+    @PreAuthorize("hasRole('STUDENT')")
     @GetMapping("/transaction/{companyID}/create")
     public String createTransaction(@PathVariable Long companyID, @AuthenticationPrincipal User user, Model model) {
 
@@ -72,6 +73,7 @@ public class TransactionController {
 
     }
 
+    @PreAuthorize("hasRole('STUDENT')")
     @PostMapping("/transaction/{companyID}/save")
     public String createTransaction(Action action, Transaction transaction, @PathVariable Long companyID, @AuthenticationPrincipal User user, Model model) {
 
@@ -91,7 +93,7 @@ public class TransactionController {
     }
     //TODO rechte einstellen
     //TODO enums berücksichtigen
-    @PreAuthorize("hasPermission(#id, 'transaction')")
+    @PreAuthorize("hasPermission(#id, 'transaction') and hasRole('STUDENT')")
     @GetMapping("/transaction/{id}")
     public String transactionDetail(Model model, @PathVariable Long id, @AuthenticationPrincipal User user) {
         Action newAction = new Action();
@@ -157,6 +159,7 @@ public class TransactionController {
         return "redirect:/transaction/" + transactionID;
     }
 
+    @PreAuthorize("hasRole('STUDENT')")
     @PostMapping("/transaction/{transactionID}/addAction")
     public String createAction(Action action, @PathVariable Long transactionID, @AuthenticationPrincipal User user, Model model) {
         // ActionType actionType = actionTypeRepository.findByName(actionTypeName);
