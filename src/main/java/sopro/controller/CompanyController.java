@@ -3,6 +3,7 @@ package sopro.controller;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -59,9 +60,9 @@ public class CompanyController {
         //TODO maybe delete all transactions. so that companies with transactions can also be deleted.
         if(companyLogoRepository.findByCompanyId(companyID) != null) {
             companyLogoRepository.delete(companyLogoRepository.findByCompanyId(companyID));     //company gets deleted because of cascade.remove.
-        } else {
-            companyRepository.deleteById(companyID);                                            //if there is no custom logo just delete the company
         }
+
+        companyRepository.deleteById(companyID);                                            //if there is no custom logo just delete the company
         return "redirect:/companies";
     }
 
@@ -101,7 +102,7 @@ public class CompanyController {
         return "redirect:/students";
     }
 
-    // TODO Rechte einschränken
+    @PreAuthorize("hasPermission(#companyID, 'company')")
     @GetMapping("/companies/{companyID}")
     public String viewCompany(@PathVariable Long companyID, Model model) {
         model.addAttribute("company", companyRepository.findById(companyID).get());
@@ -143,6 +144,7 @@ public class CompanyController {
         return "redirect:/companies/" + user.getCompany().getId();
     }
 
+    @PreAuthorize("hasPermission(#companyID, 'company')")
     @GetMapping("/company/{companyID}/edit")
     public String editOwnCompany(Model model, @AuthenticationPrincipal User user, @PathVariable Long companyID) {
         try {
