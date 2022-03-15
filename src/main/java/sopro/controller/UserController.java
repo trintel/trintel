@@ -40,6 +40,8 @@ public class UserController {
 
     @Autowired
     private MessageSource messages;
+
+    @Autowired
     SignupUrlInterface signupUrlService;
 
     /**
