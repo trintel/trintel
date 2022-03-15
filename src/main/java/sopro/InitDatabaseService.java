@@ -24,7 +24,7 @@ import sopro.repository.CompanyLogoRepository;
 import sopro.repository.CompanyRepository;
 import sopro.repository.TransactionRepository;
 import sopro.repository.UserRepository;
-import sopro.service.ExportService;
+import sopro.service.backup.ExportService;
 
 @Service
 public class InitDatabaseService {
