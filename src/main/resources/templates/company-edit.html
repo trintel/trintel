@@ -19,12 +19,12 @@
                     <label for="formFile" class="form-label mb-0" th:text="#{upNewLogo}"></label>
                     <span class="mb-2 text-secondary" th:text="#{recSize}"></span>
                     <input name="formFile" placeholder="Company logo" class="form-control" type="file" id="formFile">
-                    <form action="#" method="post">
-                        <button class="btn btn-danger mt-3" type="submit">
+                    <!-- form th:action="@{/company/logo/{id}/delete(id=${company.id})}" method="post"> -->
+                        <button th:formaction="@{/company/logo/{id}/delete(id=${company.id})}" class="btn btn-danger mt-3" type="submit">
                             <i class="bi bi-trash3"></i>
                             <span th:text="#{deleteLogo}" />
                         </button>
-                    </form>
+                   <!-- </form> -->
                 </div>
                 <div class="form-floating mb-3">
                     <input type="text" class="form-control" id="floatingName" placeholder="Company name"

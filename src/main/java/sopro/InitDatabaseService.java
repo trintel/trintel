@@ -24,6 +24,8 @@ import sopro.repository.CompanyLogoRepository;
 import sopro.repository.CompanyRepository;
 import sopro.repository.TransactionRepository;
 import sopro.repository.UserRepository;
+import sopro.service.ExportService;
+
 @Service
 public class InitDatabaseService {
 
@@ -48,8 +50,10 @@ public class InitDatabaseService {
     @Autowired
     PasswordEncoder passwordEncoder;
 
-    public void init() {
+    @Autowired
+    ExportService backupService;
 
+    public void init() {
         // If there is no data, add some initial values for testing the application.
         // ATTENTION: If you change any model (i.e., the data scheme), you most likely
         // need to delete the .h2 database file in your file system first!
@@ -71,7 +75,6 @@ public class InitDatabaseService {
             companyRepository.save(company2);
             companyRepository.save(company3);
 
-
             // Create demo Students
             User student1 = new User(true, true, true, true,"Windlelus", "Maximilius", "m@m", passwordEncoder.encode("password"), company2);
             student1.setRole("STUDENT");
@@ -85,7 +88,6 @@ public class InitDatabaseService {
             userRepository.save(student2);
             userRepository.save(student3);
             userRepository.save(student4);
-
 
             //Create demo Action_types
             ActionType request = new ActionType("Request", "Demo request text.", InitiatorType.BUYER);
@@ -157,9 +159,6 @@ public class InitDatabaseService {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-
         }
     }
-
 }

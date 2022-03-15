@@ -2,6 +2,8 @@ package sopro.model;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -81,6 +83,18 @@ public class VerificationToken {
     public void updateToken(final String token) {
         this.token = token;
         this.expiryDate = calculateExpiryDate(EXPIRATION);
+    }
+
+    /**
+     * Returns a map of all fields.
+     *
+     * @return m map
+     */
+    public Map<String, Object> toMap() {
+        Map<String, Object> m = new HashMap<String, Object>();
+        m.put("token", this.token);
+        m.put("expiryDate", this.expiryDate);
+        return m;
     }
 
     @Override

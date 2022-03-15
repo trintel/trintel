@@ -1,8 +1,11 @@
 package sopro.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,7 +22,7 @@ import lombok.Setter;
 public class Transaction {
 
     @Getter @Setter @Id @GeneratedValue(strategy = GenerationType.AUTO)	private Long id;
-    @Getter @Setter @OneToMany(mappedBy = "transaction") List<Action> actions;
+    @Getter @Setter @OneToMany(mappedBy = "transaction", cascade = CascadeType.REMOVE) List<Action> actions;
     @Getter @Setter @NotNull @ManyToOne private Company buyer;
     @Getter @Setter @NotNull @ManyToOne private Company seller;
     @Getter @Setter private String product;
@@ -35,7 +38,6 @@ public class Transaction {
         this.buyer = buyer;
         this.seller = seller;
     }
-
 
     /**
      *
@@ -73,7 +75,6 @@ public class Transaction {
         return actions.get(actions.size() - 1);
     }
 
-
     /**
      * get the Name of the latest action
      * @return
@@ -82,4 +83,20 @@ public class Transaction {
         return this.getLatestAction().getActiontype().getName();
     }
 
+    /**
+     * Returns a map of all fields.
+     *
+     * @return m map
+     */
+    public Map<String, Object> toMap() {
+        Map<String, Object> m = new HashMap<String, Object>();
+        m.put("id", this.id);
+        m.put("buyer", this.buyer.getId());
+        m.put("seller", this.seller.getId());
+        m.put("product", this.product);
+        m.put("active", this.active);
+        m.put("shipped", this.shipped);
+        m.put("confirmed", this.confirmed);
+        return m;
+    }
 }
