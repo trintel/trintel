@@ -24,8 +24,6 @@ import sopro.repository.CompanyLogoRepository;
 import sopro.repository.CompanyRepository;
 import sopro.repository.TransactionRepository;
 import sopro.repository.UserRepository;
-import sopro.service.backup.ExportInterface;
-import sopro.service.backup.ImportInterface;
 
 @Service
 public class InitDatabaseService {
@@ -50,12 +48,6 @@ public class InitDatabaseService {
 
     @Autowired
     PasswordEncoder passwordEncoder;
-
-    @Autowired
-    ExportInterface exportService;
-
-    @Autowired
-    ImportInterface importService;
 
     public void init() {
         // If there is no data, add some initial values for testing the application.
@@ -164,8 +156,5 @@ public class InitDatabaseService {
                 e.printStackTrace();
             }
         }
-        String e = exportService.export();
-        System.out.println(e);
-        System.out.println(importService.importJSON(e));
     }
 }
