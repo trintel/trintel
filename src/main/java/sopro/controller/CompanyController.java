@@ -80,6 +80,7 @@ public class CompanyController {
     @GetMapping("/student/{id}/reassign")
     public String editStudent(Model model, @PathVariable Long id) {
         User student = userRepository.findById(id).get();
+        model.addAttribute("student", student);
         if (student.getCompany() == null) {
             model.addAttribute("companies", companyRepository.findAll());
         } else {
