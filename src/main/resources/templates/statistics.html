@@ -363,22 +363,20 @@
                                     <i class="bi bi-filter"></i>
                                 </div>
                             </div>
-
                         </th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="company : ${companies.getRelatedCompanies}">
-                        <td th:text="${company.name}"></td>
-                        <td th:text="${company.transactions}"></td>
-                        <td th:text="${company.offers}"></td>
-                        <td th:text="${company.soldProd}"></td>
+                    <tr th:each="company : ${company.getRelatedCompanies}">
+                        <td class="text-center" th:text="${company.name}"></td>
+                        <td class="text-center" th:text="${company.getConfirmedTransactionsWith(company)}"></td>
+                        <td class="text-center" th:text="${company.getNumberOffers(company)}"></td>
+                        <td class="text-center" th:text="${company.getNumberTradedProducts(company)}"></td> 
                     </tr>
                 </tbody>
             </table>
         </div>
         </div>
-
         <script type="text/javascript" th:src="@{/js/statistic.js}"></script>
     </th:block>
 
