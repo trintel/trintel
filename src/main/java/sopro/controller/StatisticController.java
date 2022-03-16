@@ -59,7 +59,7 @@ public class StatisticController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/admin-statistics")
+    @GetMapping("/statistics-Admin")
     public String showAdminStatistics(Model model) {
 
         List<Company> companies = companyRepository.findAll();
@@ -76,6 +76,6 @@ public class StatisticController {
         model.addAttribute("numberNonConfirmedSeller", companies.stream().map(c -> statisticsService.getNumberNonConfirmedTransactionSeller(c)).collect(Collectors.toList()));
         model.addAttribute("numberConfirmed", companies.stream().map(c -> statisticsService.getNumberConfirmedTransactions(c)).collect(Collectors.toList()));
 
-        return "statistics";
+        return "statistics-Admin";
     }
 }

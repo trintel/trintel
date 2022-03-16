@@ -23,8 +23,8 @@
                     <tr>
                         <th class="text-center">
                             <div class="col d-flex">
-                                <!-- <button class="w-100 btn btn-mdr" th:text="#{company}" onclick=""></button> -->
-                                <a class="btn btn-light" th:text="#{company}" th:href="@{#}" ></a>
+                                <button class="w-100 btn btn-mdr" th:text="#{company}" onclick=""></button>
+                                <!-- <a class="btn btn-light" th:text="#{company}" th:href="@{#}" ></a> -->
                                 <div class="row align-items-center">
                                     <i class="bi bi-filter"></i>
                                 </div>
@@ -32,7 +32,7 @@
                         </th>
                         <th class="text-center">
                             <div class="col d-flex">
-                                <button class="w-100 btn btn-mdr" th:text="#{offers}" onclick=""></button>
+                                <button class="w-100 btn btn-mdr" th:text="#{numberDistinctBuyers}" onclick=""></button>
                                 <div class="row align-items-center">
                                     <i class="bi bi-filter"></i>
                                 </div>
@@ -40,7 +40,7 @@
                         </th>
                         <th class="text-center">
                             <div class="col d-flex">
-                                <button class="w-100 btn btn-mdr" th:text="#{turnover}" onclick=""></button>
+                                <button class="w-100 btn btn-mdr" th:text="#{numberDistinctSellers}" onclick=""></button>
                                 <div class="row align-items-center">
                                     <i class="bi bi-filter"></i>
                                 </div>
@@ -48,7 +48,39 @@
                         </th>
                         <th class="text-center">
                             <div class="col d-flex">
-                                <button class="w-100 btn btn-mdr" th:text="#{amountUser}" onclick=""></button>
+                                <button class="w-100 btn btn-mdr" th:text="#{totalTransationBuyerVolume}" onclick=""></button>
+                                <div class="row align-items-center">
+                                    <i class="bi bi-filter"></i>
+                                </div>
+                            </div>
+                        </th>
+                        <th class="text-center">
+                            <div class="col d-flex">
+                                <button class="w-100 btn btn-mdr" th:text="#{totalTransationSellerVolume}" onclick=""></button>
+                                <div class="row align-items-center">
+                                    <i class="bi bi-filter"></i>
+                                </div>
+                            </div>
+                        </th>
+                        <th class="text-center">
+                            <div class="col d-flex">
+                                <button class="w-100 btn btn-mdr" th:text="#{numberNonConfirmedBuyer}" onclick=""></button>
+                                <div class="row align-items-center">
+                                    <i class="bi bi-filter"></i>
+                                </div>
+                            </div>
+                        </th>
+                        <th class="text-center">
+                            <div class="col d-flex">
+                                <button class="w-100 btn btn-mdr" th:text="#{numberNonConfirmedSeller}" onclick=""></button>
+                                <div class="row align-items-center">
+                                    <i class="bi bi-filter"></i>
+                                </div>
+                            </div>
+                        </th>
+                        <th class="text-center">
+                            <div class="col d-flex">
+                                <button class="w-100 btn btn-mdr" th:text="#{numberConfirmed}" onclick=""></button>
                                 <div class="row align-items-center">
                                     <i class="bi bi-filter"></i>
                                 </div>
@@ -57,10 +89,15 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="companyT : ${company.getRelatedCompanies}">
-                        <td class="text-center" th:text="${companyT.name}"></td>
-                        <td class="text-center" th:text="${company.getConfirmedTransactionsWith(companyT)}"></td>
-                        <td class="text-center" th:text="${company.getNumberOffers(companyT)}"></td>
+                    <tr th:each="company : ${companies}">
+                        <td class="text-center" th:text="${company.name}"></td>
+                        <td class="text-center" th:text="${company.numberDistinctBuyers}"></td>
+                        <td class="text-center" th:text="${company.numberDistinctSellers}"></td>
+                        <td class="text-center" th:text="${company.totalTransationBuyerVolume}"></td>
+                        <td class="text-center" th:text="${company.totalTransationSellerVolume}"></td>
+                        <td class="text-center" th:text="${company.numberNonConfirmedBuyer}"></td>
+                        <td class="text-center" th:text="${company.numberNonConfirmedSeller}"></td>
+                        <td class="text-center" th:text="${company.numberConfirmed}"></td>
                         <!-- <td class="text-center" th:text="${company.getNumberTradedProducts(companyT)}"></td> -->
                     </tr>
                 </tbody>
