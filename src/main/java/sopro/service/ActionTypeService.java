@@ -110,7 +110,7 @@ public class ActionTypeService {
 
             //Add the paid-Option if: the transaction is confirmed
             if(actionType.getName().equals("Paid")) {
-                if(!transaction.getConfirmed()) {
+                if(!transaction.getShipped()) {
                     actionTypes.remove(actionType);
                 }
             }
