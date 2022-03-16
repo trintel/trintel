@@ -1,5 +1,7 @@
 package sopro.model;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -76,6 +78,24 @@ public class Transaction {
      */
     public Action getLatestAction() {
         return actions.get(actions.size() - 1);
+    }
+
+    /**
+     * get the date of the newest action from this transaction
+     *
+     * @return
+     */
+    public LocalDate getLatestActionDate() {
+        return this.getLatestAction().getDate();
+    }
+
+    /**
+     * get the time of the newest action from this transaction
+     *
+     * @return
+     */
+    public LocalTime getLatestActionTime() {
+        return this.getLatestAction().getTime();
     }
 
     /**
