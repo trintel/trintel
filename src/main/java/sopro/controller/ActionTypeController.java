@@ -21,10 +21,10 @@ public class ActionTypeController {
     ActionTypeRepository actionTypeRepository;
 
 
-    @GetMapping("/actions")
+    @GetMapping("/admin-panel")
     public String showActions(Model model) {
         model.addAttribute("actionTypes", actionTypeRepository.findAll());
-        return "action-list";
+        return "admin-panel";
     }
 
     @GetMapping("/action/add")

@@ -65,7 +65,8 @@ public class ActionTypeService {
             initiatorType = InitiatorType.BUYER;
         }
 
-        List<ActionType> actionTypes = actionTypeRepository.findByInitiatorType(initiatorType);
+        List<ActionType> actionTypes = new ArrayList<>();
+        actionTypes.addAll(actionTypeRepository.findByInitiatorType(initiatorType));
         actionTypes.addAll(actionTypeRepository.findByInitiatorType(InitiatorType.BOTH));
         //Remove all actionTypes, that are not available
         for(ActionType actionType : actionTypes.stream().filter(t -> t.isStandardAction()).toArray(ActionType[] :: new)) {
