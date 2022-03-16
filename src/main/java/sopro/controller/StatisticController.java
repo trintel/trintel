@@ -55,9 +55,9 @@ public class StatisticController {
     public String showAdminStatistics(Model model) {
 
         List<Company> companies = companyRepository.findAll();
-        
+
         model.addAttribute("companies", companies);
-        
+
         // List<Long> distinctBuyers = companies.stream().map(c -> statisticsService.getNumberDistinctBuyers(c)).collect(Collectors.toList());
 
         model.addAttribute("numberDistinctBuyers", companies.stream().map(c -> statisticsService.getNumberDistinctBuyers(c)).collect(Collectors.toList()));
