@@ -227,6 +227,7 @@ public class TransactionController {
         Transaction transaction = transactionRepository.findById(transactionID).get();
         Action paid = new Action(message, actionTypeService.getPaidActionType(), transaction);
         transaction.setPaid(true);
+        transaction.setActive(false);
         paid.setInitiator(user);
         actionRepository.save(paid);
         transactionRepository.save(transaction);
