@@ -344,8 +344,6 @@ main {
   color: #000000 !important;
 }
 
-
-.table-responsive {
-  overflow: auto;
-  display:inline-block;
+.container {
+  padding: 0 !important;
 }
