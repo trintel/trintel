@@ -2,8 +2,10 @@ package sopro.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -60,6 +62,58 @@ public class Company {
         m.put("name", this.name);
         m.put("description", this.description);
         return m;
+    }
+
+    public List<Company> getRelatedCompanies() {
+        List<Company> companies = new ArrayList<>();
+        for(Transaction transaction : buyingTransactions) {
+            if(!companies.contains(transaction.getSeller())) {
+                companies.add(transaction.getSeller());
+            }
+        }
+        for(Transaction transaction : sellingTransactions) {
+            if(!companies.contains(transaction.getBuyer())) {
+                companies.add(transaction.getBuyer());
+            }
+        }
+        return companies;
+    }
+
+    public Integer getConfirmedTransactionsWith(Company company) {
+        Integer nb_transactions = 0;
+        for(Transaction transaction : buyingTransactions) {
+            if(transaction.getConfirmed()) {
+                if(transaction.getSeller().equals(company)) nb_transactions += 1;
+            }
+        }
+        for(Transaction transaction : sellingTransactions) {
+            if(transaction.getConfirmed()) {
+                if(transaction.getBuyer().equals(company)) nb_transactions += 1;
+            }
+        }
+        return nb_transactions;
+    }
+
+    public Integer getNumberOffers(Company company) {
+        Integer nb_offers = 0;
+        for(Transaction transaction : buyingTransactions) {
+            if(transaction.getSeller().equals(company)) nb_offers += transaction.getActions().stream().filter(a -> a.getActiontype().getName().equals("Offer")).toArray(Action[] :: new).length;
+        }
+        for(Transaction transaction : sellingTransactions) {
+            if(transaction.getBuyer().equals(company)) nb_offers += transaction.getActions().stream().filter(a -> a.getActiontype().getName().equals("Offer")).toArray(Action[] :: new).length;
+        }
+        return nb_offers;
+    }
+
+    public Integer getNumberTradedProducts(Company company) {
+        Set<String> products = new HashSet<>();
+        for(Transaction transaction : buyingTransactions) {
+            if(transaction.getSeller().equals(company)) products.add(transaction.getProduct());
+        }
+        for(Transaction transaction : sellingTransactions) {
+            if(transaction.getBuyer().equals(company)) products.add(transaction.getProduct());
+        }
+        return products.size();
     }
 
     /* (non-Javadoc)

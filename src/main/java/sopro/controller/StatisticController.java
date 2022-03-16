@@ -2,6 +2,7 @@ package sopro.controller;
 
 
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -40,6 +41,8 @@ public class StatisticController {
         Company company = companyRepository.findById(companyID).get();      //TODO: deal with possibilty of non existing company
         model.addAttribute("company", company);
 
+        // model.addAttribute("relativeStatistics", statisticsService.getRelativeStatistics(company));
+
 
         model.addAttribute("numberDistinctBuyers", statisticsService.getNumberDistinctBuyers(company));
         model.addAttribute("numberDistinctSellers", statisticsService.getNumberDistinctSellers(company));
@@ -51,4 +54,11 @@ public class StatisticController {
 
         return "statistics";
     }
+
+    //Only for debug needs to be created by @backend
+    @GetMapping("/statistic")
+    public String viewOwnCompany(Model model, @AuthenticationPrincipal User user) {
+        return "redirect:/statistics/" + user.getCompany().getId();
+    }
+
 }
