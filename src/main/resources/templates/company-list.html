@@ -50,11 +50,27 @@
 									<!-- Buttons -->
 									<div class="float-lg-end mt-3 mt-lg-0 ms-0 ms-lg-3">
 										<form action="#" th:action="@{'/companies/delete/' + ${company.id}}"
-											method="post" sec:authorize="hasRole('ADMIN')">
-											<button class="btn btn-danger" type="submit">
+										method="post" sec:authorize="hasRole('ADMIN')">
+											<button class="btn btn-danger" type="button" data-bs-toggle="modal" th:data-bs-target="'#deleteCompanyModal'+${company.id}">
 												<i class="bi bi-trash3"></i>
 												<span th:text="#{delete}" />
 											</button>
+											<div class="modal fade" th:id="'deleteCompanyModal'+${company.id}" tabindex="-1" th:aria-labelledby="'deleteCompanyModalLabel'+${company.id}" aria-hidden="true">
+												<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+												  <div class="modal-content">
+													<div class="modal-header">
+													  <h5 class="modal-title" th:id="'deleteCompanyModalLabel'+${company.id}" th:text="#{deleteCompany}"></h5>
+													  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+													</div>
+													<div class="modal-body">
+													  <p th:utext="#{deleteCompanyWarning}"></p>
+													</div>
+													<div class="modal-footer">
+													  <button type="submit" class="w-100 btn btn-lg btn-primary" th:text="#{confirm}"></button>
+													</div>
+												  </div>
+												</div>
+											  </div>
 										</form>
 										<a sec:authorize="hasRole('STUDENT')"
 											th:href="@{'/transaction/' + ${company.id}} + '/create'"
