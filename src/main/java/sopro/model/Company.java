@@ -115,7 +115,7 @@ public class Company {
         }
         return products.size();
     }
-    
+
     /* (non-Javadoc)
      * @see java.lang.Object#equals(java.lang.Object)
      */
