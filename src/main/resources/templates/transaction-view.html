@@ -20,7 +20,7 @@
 				<div th:each="action: ${actions}">
 					<div class="accordion-item mb-3">
 						<!-- Accordion header/button -->
-						<h4 class="accordion-header" th:id="'panelsStayOpen-headingOne'+${action.id}">
+						<div class="accordion-header" th:id="'panelsStayOpen-headingOne'+${action.id}">
 							<button class="accordion-button" th:classappend="${{action.id == actions[#lists.size(actions)-1].id} ? '':'collapsed'}" type="button" data-bs-toggle="collapse" th:data-bs-target="'#panelsStayOpen-collapseOne'+${action.id}" th:aria-labelledby="'panelsStayOpen-headingOne'+${action.id}"  aria-expanded="true" th:aria-controls="'panelsStayOpen-collapseOne'+${action.id}">
 								<div th:switch="${action.actiontype.name}">
 									<h4 th:case="Request" class="mb-0"><div class="badge bg-danger me-3" th:text="#{requestTLV}"></div></h4>
@@ -32,12 +32,26 @@
 									<h4 th:case="Paid" class="mb-0"><div class="badge bg-primary me-3" th:text="#{paidTV}"></div></h4>
 									<h4 th:case="*" class="mb-0"><div class="badge bg-secondary me-3" th:text="${transaction.actions[#lists.size(transaction.actions) - 1].actiontype.name}"></div></h4>
 								</div>
+								<div class="me-5">
+									<span class="text-muted fs-6" th:text="#{initiatingCompany}"></span>
+									<span class="text-black">
+										<h5 class="text-break" th:text="${action.initiator.company.name}"></h5>
+									</span>
+								</div>
+								<div class="me-5">
+									<span class="text-muted fs-6" th:text="#{date}"></span>
+									<span class="text-black">
+										<h5 th:text="${#temporals.format(action.date, 'dd-MM-yyyy')}"></h5>
+									</span>
+								</div>
 								<div>
-									<div class="text-muted fs-6" th:text="#{initiatingCompany}"></div>
-									<div class="text-black"><h5 class="text-break" th:text="${action.initiator.company.name}"></h5></div>
+									<span class="text-muted fs-6" th:text="#{time}"></span>
+									<span class="text-black">
+										<h5 th:text="${#temporals.format(action.time, 'HH:mm')}"></h5>
+									</span>
 								</div>
 							</button>
-						</h4>
+						</div>
 						<!-- Accordion body -->
 						<div th:id="'panelsStayOpen-collapseOne'+${action.id}" class="accordion-collapse collapse" th:classappend="${{action.id == actions[#lists.size(actions)-1].id} ? 'show':''}" th:aria-labelledby="'panelsStayOpen-headingOne'+${action.id}">
 							<div class="accordion-body d-flex">
