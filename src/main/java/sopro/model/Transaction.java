@@ -105,4 +105,63 @@ public class Transaction {
         return m;
     }
 
+    /* (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Transaction other = (Transaction) obj;
+        if (actions == null) {
+            if (other.actions != null)
+                return false;
+        } else if (!actions.equals(other.actions))
+            return false;
+        if (active == null) {
+            if (other.active != null)
+                return false;
+        } else if (!active.equals(other.active))
+            return false;
+        if (buyer == null) {
+            if (other.buyer != null)
+                return false;
+        } else if (!buyer.equals(other.buyer))
+            return false;
+        if (confirmed == null) {
+            if (other.confirmed != null)
+                return false;
+        } else if (!confirmed.equals(other.confirmed))
+            return false;
+        if (id == null) {
+            if (other.id != null)
+                return false;
+        } else if (!id.equals(other.id))
+            return false;
+        if (paid == null) {
+            if (other.paid != null)
+                return false;
+        } else if (!paid.equals(other.paid))
+            return false;
+        if (product == null) {
+            if (other.product != null)
+                return false;
+        } else if (!product.equals(other.product))
+            return false;
+        if (seller == null) {
+            if (other.seller != null)
+                return false;
+        } else if (!seller.equals(other.seller))
+            return false;
+        if (shipped == null) {
+            if (other.shipped != null)
+                return false;
+        } else if (!shipped.equals(other.shipped))
+            return false;
+        return true;
+    }
 }

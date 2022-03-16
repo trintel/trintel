@@ -63,4 +63,64 @@ public class Action {
 
         return m;
     }
+
+    /* (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Action other = (Action) obj;
+        if (actiontype == null) {
+            if (other.actiontype != null)
+                return false;
+        } else if (!actiontype.equals(other.actiontype))
+            return false;
+        if (amount == null) {
+            if (other.amount != null)
+                return false;
+        } else if (!amount.equals(other.amount))
+            return false;
+        if (date == null) {
+            if (other.date != null)
+                return false;
+        } else if (!date.equals(other.date))
+            return false;
+        if (id == null) {
+            if (other.id != null)
+                return false;
+        } else if (!id.equals(other.id))
+            return false;
+        if (initiator == null) {
+            if (other.initiator != null)
+                return false;
+        } else if (!initiator.equals(other.initiator))
+            return false;
+        if (message == null) {
+            if (other.message != null)
+                return false;
+        } else if (!message.equals(other.message))
+            return false;
+        if (pricePerPiece == null) {
+            if (other.pricePerPiece != null)
+                return false;
+        } else if (!pricePerPiece.equals(other.pricePerPiece))
+            return false;
+        if (time == null) {
+            if (other.time != null)
+                return false;
+        } else if (!time.equals(other.time))
+            return false;
+        if (transaction == null) {
+            if (other.transaction != null)
+                return false;
+        } else if (!transaction.equals(other.transaction))
+            return false;
+        return true;
+    }
 }

@@ -111,4 +111,62 @@ public class User implements UserDetails {
         m.put("surname", surname);
         return m;
     }
+
+    /* (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        User other = (User) obj;
+        if (accountNonExpired != other.accountNonExpired)
+            return false;
+        if (accountNonLocked != other.accountNonLocked)
+            return false;
+        if (company == null) {
+            if (other.company != null)
+                return false;
+        } else if (!company.equals(other.company))
+            return false;
+        if (credentialsNonExpired != other.credentialsNonExpired)
+            return false;
+        if (email == null) {
+            if (other.email != null)
+                return false;
+        } else if (!email.equals(other.email))
+            return false;
+        if (enabled != other.enabled)
+            return false;
+        if (forename == null) {
+            if (other.forename != null)
+                return false;
+        } else if (!forename.equals(other.forename))
+            return false;
+        if (id == null) {
+            if (other.id != null)
+                return false;
+        } else if (!id.equals(other.id))
+            return false;
+        if (password == null) {
+            if (other.password != null)
+                return false;
+        } else if (!password.equals(other.password))
+            return false;
+        if (role == null) {
+            if (other.role != null)
+                return false;
+        } else if (!role.equals(other.role))
+            return false;
+        if (surname == null) {
+            if (other.surname != null)
+                return false;
+        } else if (!surname.equals(other.surname))
+            return false;
+        return true;
+    }
 }
