@@ -56,7 +56,7 @@
                   <a class="nav-link dropdown-toggle" href="#" id="dropdown03" data-bs-toggle="dropdown" aria-expanded="false" th:text="${currentUser}" th:if="${currentUser != null}"></a>
                   <ul class="dropdown-menu" aria-labelledby="dropdown03">
                     <li>
-                      <a class="dropdown-item" href="/settings" th:text="#{uSettings}"></a>
+                      <a class="dropdown-item" href="/user/settings" th:text="#{uSettings}"></a>
                     </li>
                     <form th:action="@{/logout}" method="post">
                       <input type="submit" class="dropdown-item p-0" th:value="#{logout}" />

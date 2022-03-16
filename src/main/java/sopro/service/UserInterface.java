@@ -15,4 +15,8 @@ public interface UserInterface {
     String validateVerificationToken(String token);
 
     void createUser(User user, String role) throws Exception;
+
+    void changePassword(User user, String password);
+
+    void changeName(User user, String forename, String surname);
 }
