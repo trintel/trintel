@@ -33,7 +33,7 @@ public class StatisticController {
     public String showStatistics(Model model, @AuthenticationPrincipal User user, @PathVariable Long companyID){
 
         if(user.getRole().equals("STUDENT")) {  //TODO Admin
-            if(user.getCompany().getId() != companyID) {
+            if(!user.getCompany().getId().equals(companyID)) {
                 return "redirect:/home";        //not allowed
             }
         }

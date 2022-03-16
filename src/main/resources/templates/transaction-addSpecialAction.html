@@ -21,7 +21,7 @@
                     <select th:field="*{actiontype}">
                         <option value="label" th:text="#{actiontype}"></option>
                         <th:block th:each="actiontype : ${actiontypes}">
-                            <th:block th:unless="${actiontype.standartAction}">
+                            <th:block th:unless="${actiontype.standardAction}">
                                 <option th:text="${actiontype.name} + ': ' + ${actiontype.text}"
                                     th:value="${actiontype.id}"> </option>
                             </th:block>

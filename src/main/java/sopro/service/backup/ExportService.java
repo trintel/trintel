@@ -1,4 +1,4 @@
-package sopro.service;
+package sopro.service.backup;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -67,7 +67,6 @@ public class ExportService implements ExportInterface {
         export.put("actionType", exportActionType());
         export.put("action", exportAction());
 
-        TrintelApplication.logger.info("Export:\n\n" + export);
         String fileName = "trintel-export-" + new SimpleDateFormat("dd.MM.yyyy-HH:mm:ss").format(new Date()) + ".json";
 
         try (FileWriter file = new FileWriter(EXPORT_PATH + "/" + fileName)) {
@@ -76,7 +75,9 @@ public class ExportService implements ExportInterface {
             e.printStackTrace();
         }
 
-        return EXPORT_PATH +"/"+ fileName ;
+        TrintelApplication.logger.info("Exported Data as JSON to: "+ EXPORT_PATH +"/"+ fileName);
+
+        return EXPORT_PATH +"/"+ fileName;
     }
 
     private JSONArray exportAction() {
