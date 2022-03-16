@@ -2,7 +2,11 @@ package sopro.controller;
 
 
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,17 +31,11 @@ public class StatisticController {
     @Autowired
     StatisticsService statisticsService;
 
-
+    @PreAuthorize("isInCompany(#companyID)")
     @GetMapping("/statistics/{companyID}")
     public String showStatistics(Model model, @AuthenticationPrincipal User user, @PathVariable Long companyID){
 
-        if(user.getRole().equals("STUDENT")) {  //TODO Admin
-            if(!user.getCompany().getId().equals(companyID)) {
-                return "redirect:/home";        //not allowed
-            }
-        }
-
-        Company company = companyRepository.findById(companyID).get();      //TODO: deal with possibilty of non existing company
+        Company company = companyRepository.findById(companyID).get();      //user has to be in the correct company because of preauthorize.
         model.addAttribute("company", company);
 
 
@@ -48,6 +46,27 @@ public class StatisticController {
         model.addAttribute("numberNonConfirmedBuyer", statisticsService.getNumberNonConfirmedTransactionBuyer(company));
         model.addAttribute("numberNonConfirmedSeller", statisticsService.getNumberNonConfirmedTransactionSeller(company));
         model.addAttribute("numberConfirmed", statisticsService.getNumberConfirmedTransactions(company));
+
+        return "statistics";
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/admin-statistics")
+    public String showAdminStatistics(Model model) {
+
+        List<Company> companies = companyRepository.findAll();
+        
+        model.addAttribute("companies", companies);
+        
+        // List<Long> distinctBuyers = companies.stream().map(c -> statisticsService.getNumberDistinctBuyers(c)).collect(Collectors.toList());
+
+        model.addAttribute("numberDistinctBuyers", companies.stream().map(c -> statisticsService.getNumberDistinctBuyers(c)).collect(Collectors.toList()));
+        model.addAttribute("numberDistinctSellers", companies.stream().map(c -> statisticsService.getNumberDistinctSellers(c)).collect(Collectors.toList()));
+        model.addAttribute("totalTransationBuyerVolume", companies.stream().map(c -> statisticsService.getTotalTransactionBuyerVolume(c)).collect(Collectors.toList()));
+        model.addAttribute("totalTransationSellerVolume", companies.stream().map(c -> statisticsService.getTotalTransactionSellerVolume(c)).collect(Collectors.toList()));
+        model.addAttribute("numberNonConfirmedBuyer", companies.stream().map(c -> statisticsService.getNumberNonConfirmedTransactionBuyer(c)).collect(Collectors.toList()));
+        model.addAttribute("numberNonConfirmedSeller", companies.stream().map(c -> statisticsService.getNumberNonConfirmedTransactionSeller(c)).collect(Collectors.toList()));
+        model.addAttribute("numberConfirmed", companies.stream().map(c -> statisticsService.getNumberConfirmedTransactions(c)).collect(Collectors.toList()));
 
         return "statistics";
     }
