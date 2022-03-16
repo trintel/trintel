@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithUserDetails;
+import org.springframework.test.context.transaction.AfterTransaction;
 import org.springframework.test.context.transaction.BeforeTransaction;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,7 +32,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Transactional
 public class TransactionTest {
     @Autowired
-    BeforeTest beforeTest;
+    DatabaseService databaseService;
 
     @Autowired
     ActionTypeRepository actionTypeRepository;
@@ -61,7 +62,13 @@ public class TransactionTest {
 
     @BeforeTransaction
     void setup() {
-        beforeTest.setup();
+        databaseService.clearDatabase();
+        databaseService.setup();
+    }
+
+    @AfterTransaction
+    void clean() {
+        databaseService.clearDatabase();
     }
 
     // #######################################################################################

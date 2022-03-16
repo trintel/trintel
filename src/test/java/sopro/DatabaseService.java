@@ -24,11 +24,12 @@ import sopro.repository.CompanyLogoRepository;
 import sopro.repository.CompanyRepository;
 import sopro.repository.TransactionRepository;
 import sopro.repository.UserRepository;
+import sopro.repository.VerificationTokenRepository;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
-public class BeforeTest {
+public class DatabaseService {
 
     @Autowired
     ActionTypeRepository actionTypeRepository;
@@ -54,13 +55,22 @@ public class BeforeTest {
     @Autowired
     CompanyLogoRepository companyLogoRepository;
 
-    public void setup() {
+    @Autowired
+    VerificationTokenRepository verificationTokenRepository;
 
+    public void clearDatabase() {
         actionRepository.deleteAll();
         actionTypeRepository.deleteAll();
         userRepository.deleteAll();
         transactionRepository.deleteAll();
         companyRepository.deleteAll();
+        companyLogoRepository.deleteAll();
+        verificationTokenRepository.deleteAll();
+    }
+
+    public void setup() {
+
+    
 
         // Create demo Users
         User admin = new User(true, true, true, true, "admin", "admin", "admin@admin", passwordEncoder.encode("password"), null);
