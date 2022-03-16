@@ -1,7 +1,9 @@
 package sopro.controller;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -14,9 +16,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import sopro.model.Action;
-import sopro.model.InitiatorType;
+import sopro.model.ActionType;
 import sopro.model.Transaction;
 import sopro.model.User;
+import sopro.model.util.InitiatorType;
 import sopro.repository.ActionRepository;
 import sopro.repository.ActionTypeRepository;
 import sopro.repository.CompanyRepository;
@@ -46,6 +49,8 @@ public class TransactionController {
             List<Transaction> transactions = new ArrayList<>();
             transactions.addAll(transactionRepository.findByBuyer(user.getCompany()));
             transactions.addAll(transactionRepository.findBySeller(user.getCompany()));
+            //Sort transactions.
+            transactions = transactions.stream().sorted(Comparator.comparing(Transaction :: getLatestActionDate).reversed().thenComparing(Transaction :: getLatestActionTime).reversed()).collect(Collectors.toList());
             model.addAttribute("transactions", transactions);
         }
         return "transactions-list";
@@ -106,9 +111,11 @@ public class TransactionController {
         //     }
         //     actionTypes = actionTypeRepository.findByInitiatorType(initiatorType);
         // }
-        model.addAttribute("actiontypes", actionTypeService.getAvailableActions(transaction, user));     //only find the available actiontypes for that user.
+        List<ActionType> actionTypes = actionTypeService.getAvailableActions(transaction, user);
+        model.addAttribute("actiontypes", actionTypes);     //only find the available actiontypes for that user.
         model.addAttribute("action", newAction);
         model.addAttribute("actions", actionRepository.findByTransaction(transaction));
+        model.addAttribute("specialActionsAvailable", actionTypes.stream().filter(t -> t.isStandardAction()).toArray(ActionType[] :: new).length > 0); //get the info if there are specialActions.
         model.addAttribute("transactionID", id);
         return "transaction-view";
 
@@ -227,6 +234,7 @@ public class TransactionController {
         Transaction transaction = transactionRepository.findById(transactionID).get();
         Action paid = new Action(message, actionTypeService.getPaidActionType(), transaction);
         transaction.setPaid(true);
+        transaction.setActive(false);
         paid.setInitiator(user);
         actionRepository.save(paid);
         transactionRepository.save(transaction);

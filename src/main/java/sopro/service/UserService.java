@@ -118,4 +118,19 @@ public class UserService implements UserInterface {
         // saves the new user in userRepo
         userRepository.save(user);
     }
+
+    @Override
+    public void changePassword(User user, String password) {
+        User databaseUser = userRepository.findByEmail(user.getEmail());        //to be sure about the id
+        databaseUser.setPassword(passwordEncoder.encode(password));
+        userRepository.save(databaseUser);
+    }
+
+    @Override
+    public void changeName(User user, String forename, String surname) {
+        User databaseUser = userRepository.findByEmail(user.getEmail());        //to be sure about the id
+        databaseUser.setForename(forename);
+        databaseUser.setSurname(surname);
+        userRepository.save(databaseUser);
+    }
 }

@@ -15,20 +15,21 @@ import sopro.model.Action;
 import sopro.model.ActionType;
 import sopro.model.Company;
 import sopro.model.CompanyLogo;
-import sopro.model.InitiatorType;
 import sopro.model.Transaction;
 import sopro.model.User;
+import sopro.model.util.InitiatorType;
 import sopro.repository.ActionRepository;
 import sopro.repository.ActionTypeRepository;
 import sopro.repository.CompanyLogoRepository;
 import sopro.repository.CompanyRepository;
 import sopro.repository.TransactionRepository;
 import sopro.repository.UserRepository;
+import sopro.repository.VerificationTokenRepository;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
-public class BeforeTest {
+public class DatabaseService {
 
     @Autowired
     ActionTypeRepository actionTypeRepository;
@@ -54,13 +55,22 @@ public class BeforeTest {
     @Autowired
     CompanyLogoRepository companyLogoRepository;
 
-    public void setup() {
+    @Autowired
+    VerificationTokenRepository verificationTokenRepository;
 
+    public void clearDatabase() {
         actionRepository.deleteAll();
         actionTypeRepository.deleteAll();
         userRepository.deleteAll();
         transactionRepository.deleteAll();
         companyRepository.deleteAll();
+        companyLogoRepository.deleteAll();
+        verificationTokenRepository.deleteAll();
+    }
+
+    public void setup() {
+
+
 
         // Create demo Users
         User admin = new User(true, true, true, true, "admin", "admin", "admin@admin", passwordEncoder.encode("password"), null);
@@ -98,9 +108,9 @@ public class BeforeTest {
         ActionType offer = new ActionType("Offer", "Demo offer text.", InitiatorType.SELLER);
         ActionType accept = new ActionType("Accept", "Demo offer text.", InitiatorType.SELLER);
 
-        request.setStandartAction(true);
-        offer.setStandartAction(true);
-        accept.setStandartAction(true);
+        request.setStandardAction(true);
+        offer.setStandardAction(true);
+        accept.setStandardAction(true);
 
         Transaction transaction1 = new Transaction(company1, company2);
         transaction1.setProduct("Product 1");

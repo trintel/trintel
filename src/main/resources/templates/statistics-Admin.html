@@ -23,7 +23,8 @@
                     <tr>
                         <th class="text-center">
                             <div class="col d-flex">
-                                <button class="w-100 btn btn-mdr" th:text="#{company}" onclick=""></button>
+                                <!-- <button class="w-100 btn btn-mdr" th:text="#{company}" onclick=""></button> -->
+                                <a class="btn btn-light" th:text="#{company}" th:href="@{#}" ></a>
                                 <div class="row align-items-center">
                                     <i class="bi bi-filter"></i>
                                 </div>
@@ -31,7 +32,7 @@
                         </th>
                         <th class="text-center">
                             <div class="col d-flex">
-                                <button class="w-100 btn btn-mdr" th:text="#{offers}"onclick=""></button>
+                                <button class="w-100 btn btn-mdr" th:text="#{offers}" onclick=""></button>
                                 <div class="row align-items-center">
                                     <i class="bi bi-filter"></i>
                                 </div>

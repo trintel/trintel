@@ -5,15 +5,16 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.transaction.AfterTransaction;
 import org.springframework.test.context.transaction.BeforeTransaction;
 import org.springframework.transaction.annotation.Transactional;
 
 import sopro.model.Action;
 import sopro.model.ActionType;
 import sopro.model.Company;
-import sopro.model.InitiatorType;
 import sopro.model.Transaction;
 import sopro.model.User;
+import sopro.model.util.InitiatorType;
 import sopro.repository.ActionRepository;
 import sopro.repository.ActionTypeRepository;
 import sopro.repository.CompanyRepository;
@@ -42,11 +43,17 @@ public class DatabaseTest {
 
 
     @Autowired
-    BeforeTest beforeTest;
+    DatabaseService databaseService;
 
     @BeforeTransaction
     void setup() {
-        beforeTest.setup();
+        databaseService.clearDatabase();
+        databaseService.setup();
+    }
+
+    @AfterTransaction
+    void clean() {
+        databaseService.clearDatabase();
     }
 
     /**
@@ -59,7 +66,8 @@ public class DatabaseTest {
         User testUser = new User(true, true, true, true, "testUser", "testUser", "testUser@testUser", "password", null);
         testUser.setRole("STUDENT");
         userRepository.save(testUser);
-        assertEquals(testUser, userRepository.findById(testUser.getId()).get()); // .get(): optional<User> in User
+        User testUser2 = userRepository.findById(testUser.getId()).get();
+        assertEquals(testUser, testUser2); // .get(): optional<User> in User
     }
 
 
@@ -178,8 +186,6 @@ public class DatabaseTest {
         assertTrue(transactionRepository.findById(testTransaction.getId()).get().getShipped());
     }
 
-
-
     /**
      * Tests if the actionType is saved in the Repository.
      * @throws Exception
@@ -191,7 +197,6 @@ public class DatabaseTest {
 
         assertEquals(testActionType, actionTypeRepository.findById(testActionType.getId()).get());
     }
-
 
     /**
      * Tests if the action is saved in the Repository.
@@ -215,14 +220,6 @@ public class DatabaseTest {
 
         assertEquals(actionTest, actionRepository.findById(actionTest.getId()).get());
     }
-
-
     //test if company logo is saved in repository
     //test if paid can be set before confirmed
-
-
-
-
-
-
 }

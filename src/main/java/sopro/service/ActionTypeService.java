@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import sopro.model.ActionType;
-import sopro.model.InitiatorType;
 import sopro.model.Transaction;
 import sopro.model.User;
+import sopro.model.util.InitiatorType;
 import sopro.repository.ActionTypeRepository;
 
 @Service
@@ -68,7 +68,7 @@ public class ActionTypeService {
         List<ActionType> actionTypes = actionTypeRepository.findByInitiatorType(initiatorType);
         actionTypes.addAll(actionTypeRepository.findByInitiatorType(InitiatorType.BOTH));
         //Remove all actionTypes, that are not available
-        for(ActionType actionType : actionTypes.stream().filter(t -> t.isStandartAction()).toArray(ActionType[] :: new)) {
+        for(ActionType actionType : actionTypes.stream().filter(t -> t.isStandardAction()).toArray(ActionType[] :: new)) {
 
             //Add the Offer-Option if: the last action is a Request from the other company
             //                     OR: the last action is an Offer
@@ -114,7 +114,6 @@ public class ActionTypeService {
                     actionTypes.remove(actionType);
                 }
             }
-
         }
 
         return actionTypes;
