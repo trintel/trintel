@@ -14,10 +14,12 @@
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="dropdown03" data-bs-toggle="dropdown" aria-expanded="false" th:text="${currentUser}" th:if="${currentUser != null}">User</a>
         <ul class="dropdown-menu" aria-labelledby="dropdown03">
-          <li><a class="dropdown-item" href="#" th:text="#{uSettings}"></a></li>
-            <form th:action="@{/logout}" method="post">
-              <input type="submit" class="dropdown-item" th:value="#{logout}" />
-            </form>
+          <li>
+            <a class="dropdown-item" href="/settings" th:text="#{uSettings}"></a>
+          </li>
+          <form th:action="@{/logout}" method="post">
+            <input type="submit" class="dropdown-item" th:value="#{logout}" />
+          </form>
         </ul>
       </li>
     </ul>

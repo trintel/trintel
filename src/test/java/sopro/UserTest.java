@@ -87,15 +87,15 @@ public class UserTest {
 
 
     /**
-     * Tests, if the login screen is served on /signup/randomUrl.
+     * Tests, if the login screen is served on /signup/falseURL.
      *
      * @throws Exception
      */
     @Test
-    public void signUpRedirectTestRandomString() throws Exception {
-        String generatedString = "jafijaodjfioejfasaopkf";
+    public void signUpRedirectTestFalseString() throws Exception {
+        String test = "kjsadgusghsfgufhkjsdghushgughdagounadfh";
 
-        mockMvc.perform(get("/signup/" + generatedString))
+        mockMvc.perform(get("/signup/" + test))
                .andExpect(status().is3xxRedirection())
                .andExpect(redirectedUrl("/login"));
     }

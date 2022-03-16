@@ -5,7 +5,8 @@ import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 
 import sopro.model.ActionType;
-import sopro.model.InitiatorType;
+import sopro.model.util.InitiatorType;
+
 
 public interface ActionTypeRepository extends CrudRepository<ActionType, Long> {
     ActionType findByName(String name);
