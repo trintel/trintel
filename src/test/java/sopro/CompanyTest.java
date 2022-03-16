@@ -1,7 +1,6 @@
 package sopro;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -151,11 +150,11 @@ public class CompanyTest {
     @Test
     @WithMockUser(username = "admin@admin", roles = { "ADMIN" })
     public void saveCompanieTestAdmin() throws Exception {
-  
+
         Company testCompany = new Company("companyName");
         mockMvc.perform(post("/companies/save").flashAttr("company", testCompany).with(csrf()))
                 .andExpect(status().is(302))
-                .andExpect(redirectedUrl("/companies")); 
+                .andExpect(redirectedUrl("/companies"));
     }
 
     /**
@@ -379,7 +378,7 @@ public class CompanyTest {
     @Test
     @WithUserDetails(value = "admin@admin", userDetailsServiceBeanName = "userDetailsService")
     public void editOwnCompanyTestAdmin() throws Exception {
-    
+
         Company testCompany = new Company(companyName);
         companyRepository.save(testCompany);
         long companyId = testCompany.getId();
@@ -410,7 +409,7 @@ public class CompanyTest {
     @Test
     @WithUserDetails(value = "admin@admin", userDetailsServiceBeanName = "userDetailsService")
     public void saveOwnCompanyTestAdmin() throws Exception {
-      
+
         Company testCompany = new Company(companyName);
         companyRepository.save(testCompany);
         long companyId = testCompany.getId();

@@ -70,7 +70,7 @@ public class DatabaseService {
 
     public void setup() {
 
-    
+
 
         // Create demo Users
         User admin = new User(true, true, true, true, "admin", "admin", "admin@admin", passwordEncoder.encode("password"), null);
