@@ -20,7 +20,7 @@
 						<div sec:authorize="hasRole('STUDENT')">
 							<div th:if="${#request.userPrincipal.principal.company.id != transaction.actions[#lists.size(transaction.actions) - 1].initiator.company.id}">
 								<div th:unless="${transaction.actions[#lists.size(transaction.actions) - 1].actiontype.name == 'Paid' or transaction.actions[#lists.size(transaction.actions) - 1].actiontype.name == 'Cancel'}">
-									<span class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
+									<span class="position-absolute top-0 start-0 translate-middle p-2 bg-danger border border-light rounded-circle">
 										<span class="visually-hidden">New alerts</span>
 									</span>
 								</div>
