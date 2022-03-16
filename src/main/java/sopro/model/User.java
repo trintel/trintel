@@ -8,8 +8,6 @@ import java.util.Map;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotEmpty;
@@ -18,67 +16,74 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import sopro.model.util.IdHandler;
+
 import lombok.Getter;
 import lombok.Setter;
 
 /**
-  * Defines the class User with all needed entries for the Database.
-  */
+ * Defines the class User with all needed entries for the Database.
+ */
 @Entity
 public class User implements UserDetails {
-    @Getter @Setter @Id @GeneratedValue(strategy = GenerationType.AUTO)	private Long id;
+
+    @Getter @Setter @Id private Long id;
     @Getter @Setter	@NotEmpty @Column(unique = true) private String email;
     @Getter @Setter @NotEmpty private String surname;
     @Getter @Setter	@NotEmpty private String forename;
     @Getter @Setter	@NotEmpty private String password;
     @Getter @Setter	@NotEmpty private String role;
-    @Getter @Setter	@ManyToOne private Company company;
-
     @Getter @Setter private boolean enabled = false;
     @Getter @Setter private boolean accountNonExpired = true;
     @Getter @Setter private boolean credentialsNonExpired = true;
     @Getter @Setter private boolean accountNonLocked = true;
+    @Getter @Setter	@ManyToOne private Company company;
 
-
-    public User() {}
-
-    public User(String surname,String forename, String email, String password, Company company) {
-       this.surname = surname;
-       this.forename = forename;
-       this.email = email;
-       this.password = password;
-       this.company = company;
+    public User() {
+        this.id = IdHandler.generateId();
     }
 
-    public User(boolean enabled, boolean accountNonExpired, boolean credentialsNonExpired, boolean accountNonLocked, String surname,String forename, String email, String password, Company company) {
-      this.surname = surname;
-      this.forename = forename;
-      this.email = email;
-      this.password = password;
-      this.company = company;
-      this.enabled = enabled;
-      this.accountNonExpired = accountNonExpired;
-      this.credentialsNonExpired = credentialsNonExpired;
-      this. accountNonLocked = accountNonLocked;
-   }
+    public User(String surname, String forename, String email, String password, Company company) {
+        this.id = IdHandler.generateId();
+        this.surname = surname;
+        this.forename = forename;
+        this.email = email;
+        this.password = password;
+        this.company = company;
+    }
+
+    public User(boolean enabled, boolean accountNonExpired, boolean credentialsNonExpired, boolean accountNonLocked,
+            String surname, String forename, String email, String password, Company company) {
+        this.id = IdHandler.generateId();
+        this.surname = surname;
+        this.forename = forename;
+        this.email = email;
+        this.password = password;
+        this.company = company;
+        this.enabled = enabled;
+        this.accountNonExpired = accountNonExpired;
+        this.credentialsNonExpired = credentialsNonExpired;
+        this.accountNonLocked = accountNonLocked;
+    }
 
     /**
      * @return Collection<? extends GrantedAuthority>
      */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-      List<GrantedAuthority> grantedAuthorities = new ArrayList<GrantedAuthority>();
+        List<GrantedAuthority> grantedAuthorities = new ArrayList<GrantedAuthority>();
 
-      //authorities have to begin with "ROLE_", because Spring is stupid
-      grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_" + this.getRole()));   // assuming every user has only one role.
+        // authorities have to begin with "ROLE_", because Spring is stupid
+        grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_" + this.getRole())); // assuming every user has only
+                                                                                      // one role.
 
-      return grantedAuthorities;
+        return grantedAuthorities;
     }
 
     // Spring wants a username. We use email as username.
     @Override
     public String getUsername() {
-      return this.email;
+        return this.email;
     }
 
     /**
@@ -91,10 +96,10 @@ public class User implements UserDetails {
         m.put("accountNonExpired", accountNonExpired);
         m.put("accountNonLocked", accountNonLocked);
 
-        if(this.company != null)
+        if (this.company != null)
             m.put("company", company.getId());
         else
-            m.put("company", null); // ! Careful with null.
+            m.put("company", null);
 
         m.put("credentialsNonExpired", credentialsNonExpired);
         m.put("email", email);
@@ -105,5 +110,63 @@ public class User implements UserDetails {
         m.put("role", role);
         m.put("surname", surname);
         return m;
+    }
+
+    /* (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        User other = (User) obj;
+        if (accountNonExpired != other.accountNonExpired)
+            return false;
+        if (accountNonLocked != other.accountNonLocked)
+            return false;
+        if (company == null) {
+            if (other.company != null)
+                return false;
+        } else if (!company.equals(other.company))
+            return false;
+        if (credentialsNonExpired != other.credentialsNonExpired)
+            return false;
+        if (email == null) {
+            if (other.email != null)
+                return false;
+        } else if (!email.equals(other.email))
+            return false;
+        if (enabled != other.enabled)
+            return false;
+        if (forename == null) {
+            if (other.forename != null)
+                return false;
+        } else if (!forename.equals(other.forename))
+            return false;
+        if (id == null) {
+            if (other.id != null)
+                return false;
+        } else if (!id.equals(other.id))
+            return false;
+        if (password == null) {
+            if (other.password != null)
+                return false;
+        } else if (!password.equals(other.password))
+            return false;
+        if (role == null) {
+            if (other.role != null)
+                return false;
+        } else if (!role.equals(other.role))
+            return false;
+        if (surname == null) {
+            if (other.surname != null)
+                return false;
+        } else if (!surname.equals(other.surname))
+            return false;
+        return true;
     }
 }

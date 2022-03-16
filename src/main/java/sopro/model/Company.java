@@ -9,13 +9,13 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PreRemove;
 import javax.validation.constraints.NotEmpty;
+
+import sopro.model.util.IdHandler;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
@@ -23,22 +23,25 @@ import lombok.Setter;
 
 @Entity
 public class Company {
-    @Getter @Setter @Id @GeneratedValue(strategy = GenerationType.AUTO)	private Long id;
+
+    @Getter @Setter @Id private Long id;
     @Getter @Setter @NotEmpty @Column(unique = true) private String name;
     @Getter @Setter private String description;
     @Getter @Setter	@JsonIgnore	@OneToMany(mappedBy = "company") private List<User> students;
     @Getter @Setter	@JsonIgnore	@OneToMany(mappedBy = "buyer", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE) private List<Transaction> buyingTransactions;
     @Getter @Setter	@JsonIgnore	@OneToMany(mappedBy = "seller", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE) private List<Transaction> sellingTransactions;
-    @Getter @Setter	@JsonIgnore	@OneToOne private CompanyLogo companyLogo;
+    @Getter @Setter	@JsonIgnore	@OneToOne(mappedBy = "company") private CompanyLogo companyLogo;
 
-    public Company(){
+    public Company() {
+        this.id = IdHandler.generateId();
         this.description = "";
     }
 
     public Company(String name) {
-       this.name = name;
-       this.students = new ArrayList<User>();
-       this.description = "";
+        this.id = IdHandler.generateId();
+        this.name = name;
+        this.students = new ArrayList<User>();
+        this.description = "";
     }
 
     @PreRemove
@@ -57,5 +60,55 @@ public class Company {
         m.put("name", this.name);
         m.put("description", this.description);
         return m;
+    }
+
+    /* (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Company other = (Company) obj;
+        if (buyingTransactions == null) {
+            if (other.buyingTransactions != null)
+                return false;
+        } else if (!buyingTransactions.equals(other.buyingTransactions))
+            return false;
+        if (companyLogo == null) {
+            if (other.companyLogo != null)
+                return false;
+        } else if (!companyLogo.equals(other.companyLogo))
+            return false;
+        if (description == null) {
+            if (other.description != null)
+                return false;
+        } else if (!description.equals(other.description))
+            return false;
+        if (id == null) {
+            if (other.id != null)
+                return false;
+        } else if (!id.equals(other.id))
+            return false;
+        if (name == null) {
+            if (other.name != null)
+                return false;
+        } else if (!name.equals(other.name))
+            return false;
+        if (sellingTransactions == null) {
+            if (other.sellingTransactions != null)
+                return false;
+        } else if (!sellingTransactions.equals(other.sellingTransactions))
+            return false;
+        if (students == null) {
+            if (other.students != null)
+                return false;
+        } else if (!students.equals(other.students))
+            return false;
+        return true;
     }
 }

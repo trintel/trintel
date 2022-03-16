@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import sopro.model.Action;
-import sopro.model.InitiatorType;
 import sopro.model.Transaction;
 import sopro.model.User;
+import sopro.model.util.InitiatorType;
 import sopro.repository.ActionRepository;
 import sopro.repository.ActionTypeRepository;
 import sopro.repository.CompanyRepository;
