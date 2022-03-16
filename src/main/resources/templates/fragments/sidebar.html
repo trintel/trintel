@@ -39,16 +39,10 @@
                   <span th:text="#{transactions}"/>
                 </a>
               </li>
-              <li class="nav-item" sec:authorize="hasRole('STUDENT')" th:with="companyID = ${#request.userPrincipal.principal.company.id}">
-                <a th:classappend="${#httpServletRequest.getRequestURI() == '/statistics-Student/' + {companyID} ? 'active':''}" class="nav-link" th:href="@{/statistics-Student}">
-                  <i th:class="${#httpServletRequest.getRequestURI() == '/statistics-Student/' + {companyID} ? 'bi bi-bar-chart-line-fill':'bi bi-bar-chart-line'}"></i>
-                  <span th:text="#{statistics}"/>
-                </a>
-              </li>
 
-              <li class="nav-item" sec:authorize="hasRole('ADMIN')">
-                <a th:classappend="${#httpServletRequest.getRequestURI() == '/statistics-Admin' || #httpServletRequest.getRequestURI().startsWith('/statistics-Admin/') ? 'active':''}" class="nav-link" th:href="@{/statistics-Admin}">
-                  <i th:class="${#httpServletRequest.getRequestURI() == '/statistics-Admin' || #httpServletRequest.getRequestURI().startsWith('/statistics-Admin/') ? 'bi bi-bar-chart-line-fill':'bi bi-bar-chart-line'}"></i>
+              <li class="nav-item">
+                <a th:classappend="${#httpServletRequest.getRequestURI() == '/statistics' || #httpServletRequest.getRequestURI().startsWith('/statistics') ? 'active':''}" class="nav-link" th:href="@{/statistics}">
+                  <i th:class="${#httpServletRequest.getRequestURI() == '/statistics' || #httpServletRequest.getRequestURI().startsWith('/statistics') ? 'bi bi-bar-chart-line-fill':'bi bi-bar-chart-line'}"></i>
                   <span th:text="#{statistics}"/>
                 </a>
               </li>

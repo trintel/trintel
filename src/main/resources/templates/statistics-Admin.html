@@ -90,7 +90,7 @@
                 </thead>
                 <tbody>
                     <tr th:each="company, iter : ${companies}">
-                        <td><a th:text="${company.name}" th:href="${/statistics/company.id}"></a></td>
+                        <td><a th:text="${company.name}" th:href="'/statistics/' + ${company.id}"></a></td>
                         <td class="text-center" th:text="${numberDistinctBuyers[iter.index]}"></td>
                         <td class="text-center" th:text="${numberDistinctSellers[iter.index]}"></td>
                         <td class="text-center" th:text="${totalTransationBuyerVolume[iter.index]}"></td>
