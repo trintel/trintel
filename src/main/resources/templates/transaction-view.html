@@ -89,11 +89,17 @@
 				<div th:each="actiontype: ${actiontypes}">
 					<div th:switch="${actiontype.name}">
 						<!-- "Offer" button -->
-						<a th:case="Offer" class="btn btn-primary btn-lg me-3 mb-3 mb-md-0" th:text="#{offerNA}" th:href="@{'/transaction/' + ${transactionID} + '/addOffer'}"></a>
+						<a th:case="Offer" th:href="@{'/transaction/' + ${transactionID} + '/addOffer'}">
+							<button type="button" class="btn btn-primary me-3 mb-3 mb-md-0">
+								<i class="bi bi-clipboard2-plus"></i> <span th:text="#{offerNA}" ></span>
+							</button>
+						</a>
 						<!-- Modal for "Accept" button -->
 						<div th:case="Accept">
 							<form th:object="${action}" th:action="@{'/transaction/' + ${transactionID} + '/accept'}" method="post">
-								<button type="button" class="btn btn-success btn-lg me-3 mb-3 mb-md-0" data-bs-toggle="modal" data-bs-target="#acceptModal" th:text="#{acceptNA}"></button>
+								<button type="button" class="btn btn-success me-3 mb-3 mb-md-0" data-bs-toggle="modal" data-bs-target="#acceptModal">
+									<i class="bi bi-check2-circle"></i> <span th:text="#{acceptNA}"></span>
+								</button>
 								<div class="modal fade" id="acceptModal" tabindex="-1" aria-labelledby="acceptModalLabel" aria-hidden="true">
 									<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
 										<div class="modal-content">
@@ -115,7 +121,9 @@
 						<!-- Modal for "Cancel" button -->
 						<div th:case="Cancel">
 							<form th:object="${action}" th:action="@{'/transaction/' + ${transactionID} + '/cancel'}" method="post">
-								<button type="button" class="btn btn-danger btn-lg me-3 mb-3 mb-md-0" data-bs-toggle="modal" data-bs-target="#cancelModal" th:text="#{cancelNA}"></button>
+								<button type="button" class="btn btn-danger me-3 mb-3 mb-md-0" data-bs-toggle="modal" data-bs-target="#cancelModal">
+									<i class="bi bi-x-circle"></i> <span th:text="#{cancelNA}"></span>
+								</button>
 								<div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
 									<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
 										<div class="modal-content">
@@ -137,7 +145,9 @@
 						<!-- Modal for "Delivery" button -->
 						<div th:case="Delivery">
 							<form th:object="${action}" th:action="@{'/transaction/' + ${transactionID} + '/delivery'}" method="post">
-								<button type="button" class="btn btn-primary btn-lg me-3 mb-3 mb-md-0" data-bs-toggle="modal" data-bs-target="#deliveryModal" th:text="#{deliveryNA}"></button>
+								<button type="button" class="btn btn-primary me-3 mb-3 mb-md-0" data-bs-toggle="modal" data-bs-target="#deliveryModal">
+									<i class="bi bi-box-seam"></i> <span th:text=" #{deliveryNA}"></span>
+								</button>
 								<div class="modal fade" id="deliveryModal" tabindex="-1" aria-labelledby="deliveryModalLabel" aria-hidden="true">
 									<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
 										<div class="modal-content">
@@ -159,7 +169,9 @@
 						<!-- Modal for "Invoicing" button -->
 						<div th:case="Invoicing">
 							<form th:object="${action}" th:action="@{'/transaction/' + ${transactionID} + '/invoicing'}" method="post">
-								<button type="button" class="btn btn-primary btn-lg me-3 mb-3 mb-md-0" data-bs-toggle="modal" data-bs-target="#invoicingModal" th:text="#{invoicingNA}"></button>
+								<button type="button" class="btn btn-primary me-3 mb-3 mb-md-0" data-bs-toggle="modal" data-bs-target="#invoicingModal">
+									<i class="bi bi-receipt-cutoff"></i> <span th:text=" #{invoicingNA}"></span>
+								</button>
 								<div class="modal fade" id="invoicingModal" tabindex="-1" aria-labelledby="invoicingModalLabel" aria-hidden="true">
 									<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
 										<div class="modal-content">
@@ -181,7 +193,9 @@
 						<!-- Modal for "Paid" button -->
 						<div th:case="Paid">
 							<form th:object="${action}" th:action="@{'/transaction/' + ${transactionID} + '/paid'}" method="post">
-								<button type="button" class="btn btn-primary btn-lg me-3 mb-3 mb-md-0" data-bs-toggle="modal" data-bs-target="#paidModal" th:text="#{paidNA}"></button>
+								<button type="button" class="btn btn-primary me-3 mb-3 mb-md-0" data-bs-toggle="modal" data-bs-target="#paidModal">
+									<i class="bi bi-cash-coin"></i> <span th:text=" #{paidNA}"></span>
+								</button>
 								<div class="modal fade" id="paidModal" tabindex="-1" aria-labelledby="paidModalLabel" aria-hidden="true">
 									<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
 										<div class="modal-content">
@@ -203,7 +217,11 @@
 					</div>
 				</div>
 				<div th:if="${specialActionsAvailable}">
-					<a class="btn btn-primary btn-lg me-3 mb-md-0" th:href="@{'/transaction/' + ${transactionID} + '/addAction'}" th:text="#{specialActions}"></a>
+					<a th:href="@{'/transaction/' + ${transactionID} + '/addAction'}">
+						<button class="btn btn-primary me-3 mb-md-0">
+							<i class="bi bi-chat-square-dots"></i> <span th:text="#{specialActions}" ></span>
+						</button>
+					</a>
 				</div>
 			</div>
 		</div>
