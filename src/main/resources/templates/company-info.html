@@ -16,7 +16,7 @@
             <div class="col-md-9">
                 <h1 th:text="${company.name}"></h1>
                 <div th:unless="${company.getDescription() == null || company.getDescription().isEmpty()}">
-                    <h5 th:text="#{description}"></h5>
+                    <h5 th:text="#{signature}"></h5>
                     <p class="mb-3" th:text="${company.description}"></p>
                 </div>
 
