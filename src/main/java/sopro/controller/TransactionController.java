@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import sopro.model.Action;
+import sopro.model.ActionType;
 import sopro.model.Transaction;
 import sopro.model.User;
 import sopro.model.util.InitiatorType;
@@ -106,9 +107,11 @@ public class TransactionController {
         //     }
         //     actionTypes = actionTypeRepository.findByInitiatorType(initiatorType);
         // }
-        model.addAttribute("actiontypes", actionTypeService.getAvailableActions(transaction, user));     //only find the available actiontypes for that user.
+        List<ActionType> actionTypes = actionTypeService.getAvailableActions(transaction, user);
+        model.addAttribute("actiontypes", actionTypes);     //only find the available actiontypes for that user.
         model.addAttribute("action", newAction);
         model.addAttribute("actions", actionRepository.findByTransaction(transaction));
+        model.addAttribute("specialActionsAvailable", actionTypes.stream().filter(t -> t.isStandardAction()).toArray(ActionType[] :: new).length > 0); //get the info if there are specialActions.
         model.addAttribute("transactionID", id);
         return "transaction-view";
 
