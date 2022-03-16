@@ -114,7 +114,6 @@ public class ActionTypeService {
                     actionTypes.remove(actionType);
                 }
             }
-
         }
 
         return actionTypes;
