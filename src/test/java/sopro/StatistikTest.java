@@ -86,29 +86,29 @@ public class StatistikTest {
     //            }
     // }
 
-    /**
-     * Tests if the view with the Statistik is shown for the student.
-     * @throws Exception
-     */
-    @Test
-    @WithUserDetails(value = "j@j", userDetailsServiceBeanName = "userDetailsService")
-    public void listStatistikTestStudent1() throws Exception {
+    // /**
+    //  * Tests if the view with the Statistik is shown for the student.
+    //  * @throws Exception
+    //  */
+    // @Test
+    // @WithUserDetails(value = "j@j", userDetailsServiceBeanName = "userDetailsService")
+    // public void listStatistikTestStudent1() throws Exception {
 
-        mockMvc.perform(get("/statistics/" + userRepository.findByEmail("j@j").getCompany().getId()))
-               .andExpect(status().isOk())
-               .andExpect(view().name("statistics"));
-    }
+    //     mockMvc.perform(get("/statistics/" + userRepository.findByEmail("j@j").getCompany().getId()))
+    //            .andExpect(status().isOk())
+    //            .andExpect(view().name("statistics"));
+    // }
 
-    /**
-     * Tests if the student can not see the statistics from other companies.
-     * @throws Exception
-     */
-    @Test
-    @WithUserDetails(value = "j@j", userDetailsServiceBeanName = "userDetailsService")
-    public void listStatistikTestStudent2() throws Exception {
+    // /**
+    //  * Tests if the student can not see the statistics from other companies.
+    //  * @throws Exception
+    //  */
+    // @Test
+    // @WithUserDetails(value = "j@j", userDetailsServiceBeanName = "userDetailsService")
+    // public void listStatistikTestStudent2() throws Exception {
 
-        mockMvc.perform(get("/statistics/" + userRepository.findByEmail("f@f").getCompany().getId()))
-               .andExpect(status().is3xxRedirection())
-               .andExpect(redirectedUrl("/home"));
-    }
+    //     mockMvc.perform(get("/statistics/" + userRepository.findByEmail("f@f").getCompany().getId()))
+    //            .andExpect(status().is3xxRedirection())
+    //            .andExpect(redirectedUrl("/home"));
+    // }
 }
