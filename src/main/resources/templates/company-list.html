@@ -13,61 +13,65 @@
 
 		<div class="d-lg-flex justify-content-between align-items-end mb-3">
 			<div>
-		<h1 th:text="#{companies}"></h1>
-		<p class="mb-0" th:text="#{cldescr}" sec:authorize="hasRole('ADMIN')"></p>
-	</div>
-	<div sec:authorize="hasRole('ADMIN')">
-		<a class="btn btn-primary btn mt-3 mt-lg-0" th:href="@{companies/add}">
-			<i class="bi bi-plus"></i>
-			<span th:text="#{registerCompany}"/>
-		</a>
-	</div>
+				<h1 th:text="#{companies}"></h1>
+				<p class="mb-0" th:text="#{cldescr}" sec:authorize="hasRole('ADMIN')"></p>
+			</div>
+			<div sec:authorize="hasRole('ADMIN')">
+				<a class="btn btn-primary btn mt-3 mt-lg-0" th:href="@{companies/add}">
+					<i class="bi bi-plus"></i>
+					<span th:text="#{registerCompany}" />
+				</a>
+			</div>
 		</div>
 
 		<div th:unless="${companies.isEmpty()}">
 			<div class="row row-cols-1 row-cols-lg-2 g-3">
-			<th:block th:each="company : ${companies}">
-				<div class="col">
-					<div class="card">
-						<!-- Card base with arrow on the right -->
-						<div class="card-body d-flex align-items-center justify-content-between">
-							<!-- Card content -->
-							<div class="w-100 d-lg-flex align-items-center">
-								<!-- Company name, logo and description -->
-								<div class="col d-flex align-items-center">
-									<div class="companylogo companylogo-md me-3">
-										<img th:src="@{'/company/logo/' + ${company.id}}" />
+				<th:block th:each="company : ${companies}">
+					<div class="col">
+						<div class="card">
+							<!-- Card base with arrow on the right -->
+							<div class="card-body d-flex align-items-center justify-content-between">
+								<!-- Card content -->
+								<div class="w-100 d-lg-flex align-items-center">
+									<!-- Company name, logo and description -->
+									<div class="col d-flex align-items-center">
+										<div class="companylogo companylogo-md me-3">
+											<img th:src="@{'/company/logo/' + ${company.id}}" />
+										</div>
+										<div>
+											<a th:href="@{'/companies/' + ${company.id}}"
+												class="text-decoration-none text-black">
+												<h5 class="card-title" th:text="${company.name}"></h5>
+											</a>
+											<p class="card-text text-secondary" th:text="${company.description}"></p>
+										</div>
 									</div>
-									<div>
-										<a th:href="@{'/companies/' + ${company.id}}" class="text-decoration-none text-black">
-										<h5 class="card-title" th:text="${company.name}"></h5></a>
-										<p class="card-text text-secondary" th:text="${company.description}"></p>
+
+									<!-- Buttons -->
+									<div class="float-lg-end mt-3 mt-lg-0 ms-0 ms-lg-3">
+										<form action="#" th:action="@{'/companies/delete/' + ${company.id}}"
+											method="post" sec:authorize="hasRole('ADMIN')">
+											<button class="btn btn-danger" type="submit">
+												<i class="bi bi-trash3"></i>
+												<span th:text="#{delete}" />
+											</button>
+										</form>
+										<a sec:authorize="hasRole('STUDENT')"
+											th:href="@{'/transaction/' + ${company.id}} + '/create'"
+											class="btn btn-light">
+											<i class="bi bi-cart-plus"></i> <span th:text="#{createTransaction}" />
+										</a>
 									</div>
 								</div>
-								
-								<!-- Buttons -->
-								<div class="float-lg-end mt-3 mt-lg-0 ms-0 ms-lg-3">
-									<form action="#" th:action="@{'/companies/delete/' + ${company.id}}" method="post"
-										sec:authorize="hasRole('ADMIN')">
-										<button class="btn btn-danger" type="submit">
-											<i class="bi bi-trash3"></i>
-											<span th:text="#{delete}" />
-										</button>
-									</form>
-									<a sec:authorize="hasRole('STUDENT')" th:href="@{'/transaction/' + ${company.id}} + '/create'" class="btn btn-light">
-										<i class="bi bi-cart-plus"></i> <span th:text="#{createTransaction}" />
-									</a>
-								</div>
+								<a th:href="@{'/companies/' + ${company.id}}" class="text-decoration-none">
+									<i class="bi bi-chevron-right text-black ms-3" style="font-size:2rem;"></i>
+								</a>
 							</div>
-							<a th:href="@{'/companies/' + ${company.id}}" class="text-decoration-none">
-								<i class="bi bi-chevron-right text-black ms-3" style="font-size:2rem;"></i>
-							</a>
 						</div>
+						</a>
 					</div>
-				</a>
+				</th:block>
 			</div>
-			</th:block>
-		</div>
 		</div>
 
 		<p th:if="${companies.isEmpty()}" th:text="#{noCompaniesFound}"></p>

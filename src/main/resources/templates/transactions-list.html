@@ -10,7 +10,15 @@
 
 <body>
 	<th:block th:fragment="content">
-		<h1 th:text="#{transactions}"></h1>
+		<div class="d-lg-flex justify-content-between align-items-end mb-3">
+			<h1 th:text="#{transactions}"></h1>
+			<div sec:authorize="hasRole('STUDENT')">
+				<a class="btn btn-primary btn mt-3 mt-lg-0" th:href="@{/companies}">
+					<i class="bi bi-plus"></i>
+					<span th:text="#{newTransaction}" />
+				</a>
+			</div>
+		</div>
 		<div th:unless="${transactions.isEmpty()}">
 			<!-- Card for every transaction -->
 			<div th:each="transaction: ${transactions}">
@@ -84,11 +92,6 @@
 				</a>
 			</div>
 		</div>
-		<!-- Button for new transaction -->
-		<div class="d-flex justify-content-center" sec:authorize="hasRole('STUDENT')">
-			<a class="btn btn-primary btn-lg" th:href="@{/companies}" th:text="#{newTransaction}"></a>
-		</div>
-		<p th:if="${transactions.isEmpty()}" th:text="#{noTransactionFound}"></p>
 	</th:block>
 </body>
 
