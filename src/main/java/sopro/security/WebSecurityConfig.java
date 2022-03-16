@@ -54,7 +54,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     "/js/*",
                     "/login/**",
                     "/verify-your-email",
-                    "/registrationConfirm/**").permitAll() // permit all to access those Mathes
+                    "/registrationConfirm/**",
+                    "/backup/**/**").permitAll() // permit all to access those Mathes
                 .antMatchers("/companies/", "/company/*/edit", "/company/logo/**").hasAnyRole("ADMIN", "STUDENT") // TODO: differentiate access of those two roles
                 .antMatchers("/company/select/**", "/company/join/**").hasRole("STUDENT")
                 // .antMatchers("/company/**", "/companies/{companyID}").hasRole("STUDENT")
@@ -68,7 +69,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
             .logout()
                 .permitAll();
-        http.csrf().ignoringAntMatchers("/console/**")
+        http.csrf().ignoringAntMatchers("/console/**", "/backup/import")
             .and().headers().frameOptions().sameOrigin();
     }
 

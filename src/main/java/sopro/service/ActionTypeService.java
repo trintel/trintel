@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import sopro.model.ActionType;
-import sopro.model.InitiatorType;
 import sopro.model.Transaction;
 import sopro.model.User;
+import sopro.model.util.InitiatorType;
 import sopro.repository.ActionTypeRepository;
 
 @Service

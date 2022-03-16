@@ -6,20 +6,21 @@ import java.util.Map;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+
+import sopro.model.util.IdHandler;
+import sopro.model.util.InitiatorType;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
 public class ActionType {
-    
-    @Getter @Setter @Id @GeneratedValue(strategy = GenerationType.AUTO)	private Long id;
+
+    @Getter @Setter @Id private Long id;
     @Getter @Setter @OneToMany(mappedBy = "actiontype") private List<Action> actions;
     @Getter @Setter @NotEmpty @Column(unique = true) private String name;
     @Getter @Setter @NotNull private InitiatorType initiatorType;
@@ -27,28 +28,14 @@ public class ActionType {
     @Getter @Setter private boolean standardAction = false;
 
     public ActionType() {
+        this.id = IdHandler.generateId();
     }
 
     public ActionType(String name, String text, InitiatorType initiatorType) {
+        this.id = IdHandler.generateId();
         this.name = name;
         this.text = text;
         this.initiatorType = initiatorType;
-    }
-
-    /**
-     * @param id
-     * @param name
-     * @param initiatorType
-     * @param text
-     * @param standardAction
-     */
-    public ActionType(Long id, @NotEmpty String name, @NotNull InitiatorType initiatorType, String text,
-            boolean standardAction) {
-        this.id = id;
-        this.name = name;
-        this.initiatorType = initiatorType;
-        this.text = text;
-        this.standardAction = standardAction;
     }
 
     /**

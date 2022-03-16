@@ -16,8 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import sopro.model.Action;
 import sopro.model.ActionType;
-import sopro.model.InitiatorType;
 import sopro.model.Transaction;
+import sopro.model.util.InitiatorType;
 import sopro.repository.ActionRepository;
 import sopro.repository.ActionTypeRepository;
 import sopro.repository.CompanyRepository;

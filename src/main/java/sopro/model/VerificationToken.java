@@ -6,17 +6,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+
+import sopro.model.util.IdHandler;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 public class VerificationToken {
     private static final int EXPIRATION = 60 * 24;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Getter
+    @Setter
     private Long id;
 
     private String token;
@@ -27,39 +31,20 @@ public class VerificationToken {
     private Date expiryDate;
 
     public VerificationToken() {
-        super();
+        this.id = IdHandler.generateId();
     }
 
     public VerificationToken(final String token) {
-        super();
-
+        this.id = IdHandler.generateId();
         this.token = token;
         this.expiryDate = calculateExpiryDate(EXPIRATION);
     }
 
     public VerificationToken(final String token, final User user) {
-        super();
-
+        this.id = IdHandler.generateId();
         this.token = token;
         this.user = user;
         this.expiryDate = calculateExpiryDate(EXPIRATION);
-    }
-
-    /**
-     * @param id
-     * @param token
-     * @param user
-     * @param expiryDate
-     */
-    public VerificationToken(Long id, String token, User user, Date expiryDate) {
-        this.id = id;
-        this.token = token;
-        this.user = user;
-        this.expiryDate = expiryDate;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public String getToken() {

@@ -20,10 +20,10 @@ import sopro.model.Action;
 import sopro.model.ActionType;
 import sopro.model.Company;
 import sopro.model.CompanyLogo;
-import sopro.model.InitiatorType;
 import sopro.model.Transaction;
 import sopro.model.User;
 import sopro.model.VerificationToken;
+import sopro.model.util.InitiatorType;
 import sopro.repository.ActionRepository;
 import sopro.repository.ActionTypeRepository;
 import sopro.repository.CompanyLogoRepository;
@@ -69,8 +69,8 @@ public class ImportService implements ImportInterface {
             JSONObject o = (JSONObject) parser.parse(new FileReader(path));
 
             importCompany((JSONArray) o.get("company"));
-            importUser((JSONArray) o.get("user"));
             importCompanyLogo((JSONArray) o.get("companyLogo"));
+            importUser((JSONArray) o.get("user"));
             importVerificationToken((JSONArray) o.get("verificationToken"));
             importTransaction((JSONArray) o.get("transaction"));
             importActionType((JSONArray) o.get("actionType"));
@@ -94,92 +94,146 @@ public class ImportService implements ImportInterface {
     private void importAction(JSONArray arr) {
         for (Object obj : arr) {
             JSONObject o = (JSONObject) obj;
-            actionRepository.save(new Action(
-                    (Long) o.get("id"),
-                    actionTypeRepository.findById((Long) o.get("actionType")).get(),
-                    transactionRepository.findById((Long) o.get("transaction")).get(),
-                    userRepository.findById((Long) o.get("initiator")).get(),
-                    (String) o.get("message"),
-                    (Integer) o.get("amount"),
-                    (Double) o.get("pricePerPiece"),
-                    (LocalDate) o.get("date"),
-                    (LocalTime) o.get("time")));
+            System.out.println(obj);
+            Action a = new Action();
+
+            a.setId((Long) o.get("id"));
+            a.setMessage((String) o.get("message"));
+            a.setDate((LocalDate) LocalDate.parse((String)o.get("date")));
+            a.setTime((LocalTime) LocalTime.parse((String)o.get("time")));
+
+            if(o.get("amount") != null)
+                a.setAmount((Integer) ((Long)o.get("amount")).intValue());
+
+            if(o.get("pricePerPiece") != null)
+                a.setPricePerPiece((Double) o.get("pricePerPiece"));
+
+            a.setActiontype(actionTypeRepository.findById((Long) o.get("actionType")).get());
+            a.setTransaction(transactionRepository.findById((Long) o.get("transaction")).get());
+            a.setInitiator(userRepository.findById((Long) o.get("initiator")).get());
+
+            actionRepository.save(a);
         }
     }
 
     private void importActionType(JSONArray arr) {
         for (Object obj : arr) {
             JSONObject o = (JSONObject) obj;
-            actionTypeRepository.save(new ActionType(
-                    (Long) o.get("id"),
-                    (String) o.get("name"),
-                    (InitiatorType) o.get("initiatorType"), // TODO geht das?
-                    (String) o.get("text"),
-                    (boolean) o.get("standardAction")));
+            System.out.println(obj);
+
+            ActionType at = new ActionType();
+
+            at.setId((Long) o.get("id"));
+            at.setName((String) o.get("name"));
+            at.setInitiatorType(InitiatorType.valueOf((String)o.get("initiatorType")));
+            at.setText((String) o.get("text"));
+            at.setStandardAction((boolean) o.get("standardAction"));
+
+            actionTypeRepository.save(at);
         }
     }
 
     private void importTransaction(JSONArray arr) {
         for (Object obj : arr) {
             JSONObject o = (JSONObject) obj;
-            transactionRepository.save(new Transaction(
-                    (Long) o.get("id"),
-                    companyRepository.findById((long) o.get("buyer")).get(),
-                    companyRepository.findById((long) o.get("seller")).get(),
-                    (String) o.get("product"),
-                    (boolean) o.get("paid"),
-                    (boolean) o.get("shipped"),
-                    (boolean) o.get("confirmed"),
-                    (boolean) o.get("active")));
+            System.out.println(obj);
+
+            Transaction t = new Transaction();
+
+            t.setId((Long) o.get("id"));
+            t.setPaid((boolean) o.get("paid"));
+            t.setShipped((boolean) o.get("shipped"));
+            t.setConfirmed((boolean) o.get("confirmed"));
+            t.setActive((boolean) o.get("active"));
+            t.setProduct((String) o.get("product"));
+
+            // Probably need Exception Handling here. Not sure yet.
+            t.setBuyer(companyRepository.findById((long) o.get("buyer")).get());
+            t.setSeller(companyRepository.findById((long) o.get("seller")).get());
+
+            transactionRepository.save(t);
         }
     }
 
     private void importVerificationToken(JSONArray arr) {
         for (Object obj : arr) {
             JSONObject o = (JSONObject) obj;
-            verificationTokenRepository.save(new VerificationToken(
-                    (Long) o.get("id"),
-                    (String) o.get("token"),
-                    userRepository.findById((Long) o.get("user")).get(),
-                    (Date) o.get("expiryDate")));
+            System.out.println(obj);
+
+            VerificationToken vt = new VerificationToken();
+
+            vt.setId((Long) o.get("id"));
+            vt.setToken((String) o.get("token"));
+            vt.setExpiryDate((Date) o.get("expiryDate"));
+
+            try {
+                vt.setUser(userRepository.findById((Long) o.get("user")).get());
+            } catch (Exception e) {
+                TrintelApplication.logger.info("VerificationToken Import: User Skipped. This is BAD!");
+            }
+
+            verificationTokenRepository.save(vt);
         }
     }
 
     private void importCompanyLogo(JSONArray arr) {
         for (Object obj : arr) {
             JSONObject o = (JSONObject) obj;
-            companyLogoRepository.save(new CompanyLogo(
-                    (Long) o.get("id"),
-                    Base64.decodeBase64((String) o.get("logo")),
-                    companyRepository.findById((long) o.get("company")).get()));
+            System.out.println(obj);
+
+            CompanyLogo cl = new CompanyLogo();
+
+            cl.setId((Long) o.get("id"));
+            cl.setLogo(Base64.decodeBase64((String) o.get("logo")));
+
+            try {
+                cl.setCompany(companyRepository.findById((long) o.get("company")).get());
+            } catch (Exception e) {
+                TrintelApplication.logger.info("CompanyLogo Import: Company skipped.");
+            }
+
+            companyLogoRepository.save(cl);
         }
     }
 
     private void importCompany(JSONArray arr) {
         for (Object obj : arr) {
             JSONObject o = (JSONObject) obj;
-            companyRepository.save(new Company(
-                    (Long) o.get("id"),
-                    (String) o.get("name"),
-                    (String) o.get("description")));
+            System.out.println(obj);
+            Company c = new Company();
+
+            c.setId((Long) o.get("id"));
+            c.setName((String) o.get("name"));
+            c.setDescription((String) o.get("description"));
+
+            companyRepository.save(c);
         }
     }
 
     private void importUser(JSONArray arr) {
         for (Object obj : arr) {
             JSONObject o = (JSONObject) obj;
-            userRepository.save(new User(
-                    (Long) o.get("id"),
-                    (String) o.get("email"),
-                    (String) o.get("surname"),
-                    (String) o.get("forename"),
-                    (String) o.get("password"),
-                    (String) o.get("role"),
-                    companyRepository.findById((long) o.get("company")).get(),
-                    (boolean) o.get("enabled"),
-                    (boolean) o.get("accountNonExpired"),
-                    (boolean) o.get("credentialsNonExpired"),
-                    (boolean) o.get("accountNonLocked")));
+            System.out.println(obj);
+            User u = new User();
+
+            u.setId((Long) o.get("id"));
+            u.setEmail((String) o.get("email"));
+            u.setSurname((String) o.get("surname"));
+            u.setForename((String) o.get("forename"));
+            u.setPassword((String) o.get("password"));
+            u.setRole((String) o.get("role"));
+            u.setEnabled((boolean) o.get("enabled"));
+            u.setAccountNonExpired((boolean) o.get("accountNonExpired"));
+            u.setAccountNonExpired((boolean) o.get("credentialsNonExpired"));
+            u.setAccountNonLocked((boolean) o.get("accountNonLocked"));
+
+            try {
+                u.setCompany(companyRepository.findById((Long) o.get("company")).get());
+            } catch (Exception e) {
+                TrintelApplication.logger.info("UserImport: Company skipped.");
+            }
+
+            userRepository.save(u);
         }
     }
 }

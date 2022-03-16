@@ -15,9 +15,9 @@ import sopro.model.Action;
 import sopro.model.ActionType;
 import sopro.model.Company;
 import sopro.model.CompanyLogo;
-import sopro.model.InitiatorType;
 import sopro.model.Transaction;
 import sopro.model.User;
+import sopro.model.util.InitiatorType;
 import sopro.repository.ActionRepository;
 import sopro.repository.ActionTypeRepository;
 import sopro.repository.CompanyLogoRepository;
@@ -129,7 +129,7 @@ public class InitDatabaseService {
             actionRepository.save(trans1Offer);
             actionRepository.save(trans1Accept);
 
-            Transaction transaction2 = new Transaction(company3,company1);
+            Transaction transaction2 = new Transaction(company3, company1);
             transaction2.setProduct("Product 2");
 
             Action trans2Request = new Action("Test message", request, transaction2);

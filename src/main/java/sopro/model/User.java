@@ -8,8 +8,6 @@ import java.util.Map;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotEmpty;
@@ -17,6 +15,8 @@ import javax.validation.constraints.NotEmpty;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import sopro.model.util.IdHandler;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -27,23 +27,24 @@ import lombok.Setter;
 @Entity
 public class User implements UserDetails {
 
-    @Getter @Setter @Id @GeneratedValue(strategy = GenerationType.AUTO)	private Long id;
+    @Getter @Setter @Id private Long id;
     @Getter @Setter	@NotEmpty @Column(unique = true) private String email;
     @Getter @Setter @NotEmpty private String surname;
     @Getter @Setter	@NotEmpty private String forename;
     @Getter @Setter	@NotEmpty private String password;
     @Getter @Setter	@NotEmpty private String role;
-    @Getter @Setter	@ManyToOne private Company company;
-
     @Getter @Setter private boolean enabled = false;
     @Getter @Setter private boolean accountNonExpired = true;
     @Getter @Setter private boolean credentialsNonExpired = true;
     @Getter @Setter private boolean accountNonLocked = true;
+    @Getter @Setter	@ManyToOne private Company company;
 
     public User() {
+        this.id = IdHandler.generateId();
     }
 
     public User(String surname, String forename, String email, String password, Company company) {
+        this.id = IdHandler.generateId();
         this.surname = surname;
         this.forename = forename;
         this.email = email;
@@ -53,39 +54,11 @@ public class User implements UserDetails {
 
     public User(boolean enabled, boolean accountNonExpired, boolean credentialsNonExpired, boolean accountNonLocked,
             String surname, String forename, String email, String password, Company company) {
+        this.id = IdHandler.generateId();
         this.surname = surname;
         this.forename = forename;
         this.email = email;
         this.password = password;
-        this.company = company;
-        this.enabled = enabled;
-        this.accountNonExpired = accountNonExpired;
-        this.credentialsNonExpired = credentialsNonExpired;
-        this.accountNonLocked = accountNonLocked;
-    }
-
-    /**
-     * @param id
-     * @param email
-     * @param surname
-     * @param forename
-     * @param password
-     * @param role
-     * @param company
-     * @param enabled
-     * @param accountNonExpired
-     * @param credentialsNonExpired
-     * @param accountNonLocked
-     */
-    public User(Long id, @NotEmpty String email, @NotEmpty String surname, @NotEmpty String forename,
-            @NotEmpty String password, @NotEmpty String role, Company company, boolean enabled,
-            boolean accountNonExpired, boolean credentialsNonExpired, boolean accountNonLocked) {
-        this.id = id;
-        this.email = email;
-        this.surname = surname;
-        this.forename = forename;
-        this.password = password;
-        this.role = role;
         this.company = company;
         this.enabled = enabled;
         this.accountNonExpired = accountNonExpired;
@@ -126,7 +99,7 @@ public class User implements UserDetails {
         if (this.company != null)
             m.put("company", company.getId());
         else
-            m.put("company", null); // ! Careful with null.
+            m.put("company", -1);
 
         m.put("credentialsNonExpired", credentialsNonExpired);
         m.put("email", email);
