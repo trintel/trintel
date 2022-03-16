@@ -1,7 +1,9 @@
 package sopro.controller;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -46,6 +48,8 @@ public class TransactionController {
             List<Transaction> transactions = new ArrayList<>();
             transactions.addAll(transactionRepository.findByBuyer(user.getCompany()));
             transactions.addAll(transactionRepository.findBySeller(user.getCompany()));
+            //Sort transactions.
+            transactions = transactions.stream().sorted(Comparator.comparing(Transaction :: getLatestActionDate).reversed().thenComparing(Transaction :: getLatestActionTime).reversed()).collect(Collectors.toList());
             model.addAttribute("transactions", transactions);
         }
         return "transactions-list";
