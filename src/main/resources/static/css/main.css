@@ -343,9 +343,3 @@ main {
 .select-items div:hover, .same-as-selected {
   color: #000000 !important;
 }
-
-
-.table-responsive {
-  overflow: auto;
-  display:inline-block;
-}

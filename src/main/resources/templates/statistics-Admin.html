@@ -11,19 +11,19 @@
         <div class="container mt-3 d-md-flex " style="align-items: center;">
             <div class="col-10">
                 <h1 class="mb-3" th:text="#{totalstatistics}"></h1>
-                <h3 class="mb-3" th:text="${company.name}"></h3>
+                <!-- <h3 class="mb-3" th:text="${company.name}"></h3> -->
             </div>
         </div>
 
         <!-- TODO: Font weight bold -->
         <div class="container">
             <h3 class="mb-3" th:text="#{overview}"></h3>
-            <table class="table table-responsive" id="table2">
+            <table class="table table-responsive" id="table1">
                 <thead class="thead-dark">
                     <tr>
                         <th class="text-center">
                             <div class="col d-flex">
-                                <button class="w-100 btn btn-mdr" th:text="#{company}" onclick=""></button>
+                                <button class="w-100 btn btn-mdr" th:text="#{company}" onclick="sortTable(0,1)"></button>
                                 <!-- <a class="btn btn-light" th:text="#{company}" th:href="@{#}" ></a> -->
                                 <div class="row align-items-center">
                                     <i class="bi bi-filter"></i>
@@ -32,7 +32,7 @@
                         </th>
                         <th class="text-center">
                             <div class="col d-flex">
-                                <button class="w-100 btn btn-mdr" th:text="#{numberDistinctBuyers}" onclick=""></button>
+                                <button class="w-100 btn btn-mdr" th:text="#{numberDistinctBuyers}" onclick="sortTable(1,2)"></button>
                                 <div class="row align-items-center">
                                     <i class="bi bi-filter"></i>
                                 </div>
@@ -40,7 +40,7 @@
                         </th>
                         <th class="text-center">
                             <div class="col d-flex">
-                                <button class="w-100 btn btn-mdr" th:text="#{numberDistinctSellers}" onclick=""></button>
+                                <button class="w-100 btn btn-mdr" th:text="#{numberDistinctSellers}" onclick="sortTable(2,2)"></button>
                                 <div class="row align-items-center">
                                     <i class="bi bi-filter"></i>
                                 </div>
@@ -48,7 +48,7 @@
                         </th>
                         <th class="text-center">
                             <div class="col d-flex">
-                                <button class="w-100 btn btn-mdr" th:text="#{totalTransationBuyerVolume}" onclick=""></button>
+                                <button class="w-100 btn btn-mdr" th:text="#{totalTransationBuyerVolume}" onclick="sortTable(3,2)"></button>
                                 <div class="row align-items-center">
                                     <i class="bi bi-filter"></i>
                                 </div>
@@ -56,7 +56,7 @@
                         </th>
                         <th class="text-center">
                             <div class="col d-flex">
-                                <button class="w-100 btn btn-mdr" th:text="#{totalTransationSellerVolume}" onclick=""></button>
+                                <button class="w-100 btn btn-mdr" th:text="#{totalTransationSellerVolume}" onclick="sortTable(4,2)"></button>
                                 <div class="row align-items-center">
                                     <i class="bi bi-filter"></i>
                                 </div>
@@ -64,7 +64,7 @@
                         </th>
                         <th class="text-center">
                             <div class="col d-flex">
-                                <button class="w-100 btn btn-mdr" th:text="#{numberNonConfirmedBuyer}" onclick=""></button>
+                                <button class="w-100 btn btn-mdr" th:text="#{numberNonConfirmedBuyer}" onclick="sortTable(5,2)"></button>
                                 <div class="row align-items-center">
                                     <i class="bi bi-filter"></i>
                                 </div>
@@ -72,7 +72,7 @@
                         </th>
                         <th class="text-center">
                             <div class="col d-flex">
-                                <button class="w-100 btn btn-mdr" th:text="#{numberNonConfirmedSeller}" onclick=""></button>
+                                <button class="w-100 btn btn-mdr" th:text="#{numberNonConfirmedSeller}" onclick="sortTable(6,2)"></button>
                                 <div class="row align-items-center">
                                     <i class="bi bi-filter"></i>
                                 </div>
@@ -80,7 +80,7 @@
                         </th>
                         <th class="text-center">
                             <div class="col d-flex">
-                                <button class="w-100 btn btn-mdr" th:text="#{numberConfirmed}" onclick=""></button>
+                                <button class="w-100 btn btn-mdr" th:text="#{numberConfirmed}" onclick="sortTable(7,2)"></button>
                                 <div class="row align-items-center">
                                     <i class="bi bi-filter"></i>
                                 </div>
@@ -89,21 +89,24 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="company : ${companies}">
-                        <td class="text-center" th:text="${company.name}"></td>
-                        <td class="text-center" th:text="${company.numberDistinctBuyers}"></td>
-                        <td class="text-center" th:text="${company.numberDistinctSellers}"></td>
-                        <td class="text-center" th:text="${company.totalTransationBuyerVolume}"></td>
-                        <td class="text-center" th:text="${company.totalTransationSellerVolume}"></td>
-                        <td class="text-center" th:text="${company.numberNonConfirmedBuyer}"></td>
-                        <td class="text-center" th:text="${company.numberNonConfirmedSeller}"></td>
-                        <td class="text-center" th:text="${company.numberConfirmed}"></td>
+                    <tr th:each="company, iter : ${companies}">
+                        <td><a th:text="${company.name}" th:href="${/statistics/company.id}"></a></td>
+                        <td class="text-center" th:text="${numberDistinctBuyers[iter.index]}"></td>
+                        <td class="text-center" th:text="${numberDistinctSellers[iter.index]}"></td>
+                        <td class="text-center" th:text="${totalTransationBuyerVolume[iter.index]}"></td>
+                        <td class="text-center" th:text="${totalTransationSellerVolume[iter.index]}"></td>
+                        <td class="text-center" th:text="${numberNonConfirmedBuyer[iter.index]}"></td>
+                        <td class="text-center" th:text="${numberNonConfirmedSeller[iter.index]}"></td>
+                        <td class="text-center" th:text="${numberConfirmed[iter.index]}"></td> 
+                        
                         <!-- <td class="text-center" th:text="${company.getNumberTradedProducts(companyT)}"></td> -->
                     </tr>
                 </tbody>
             </table>
         </div>
+        <script type="text/javascript"  th:src="@{/js/sortTable.js}"></script>
     </th:block>
+   
 </body>
 
 </html>
