@@ -31,9 +31,9 @@ public class StatisticController {
     @Autowired
     StatisticsService statisticsService;
 
-    @PreAuthorize("isInCompany(#companyID)")
+    @PreAuthorize("isInCompany(#companyID) or hasRole('ADMIN')")
     @GetMapping("/statistics/{companyID}")
-    public String showStatistics(Model model, @AuthenticationPrincipal User user, @PathVariable Long companyID){
+    public String showStatistics(Model model, @PathVariable Long companyID) {
 
         Company company = companyRepository.findById(companyID).get();      //user has to be in the correct company because of preauthorize.
         model.addAttribute("company", company);
@@ -53,9 +53,12 @@ public class StatisticController {
     }
 
     //Only for debug needs to be created by @backend
-    @GetMapping("/statistics-Student")
+    @GetMapping("/statistics")
     public String viewOwnCompany(Model model, @AuthenticationPrincipal User user) {
-        return "redirect:/statistics-Student/" + user.getCompany().getId();
+        if(user.getRole().equals("ADMIN")) {
+            return "redirect:/statistics-Admin";
+        }
+        return "redirect:/statistics/" + user.getCompany().getId();
     }
 
     @PreAuthorize("hasRole('ADMIN')")
