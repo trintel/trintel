@@ -16,9 +16,16 @@
 			<div th:each="transaction: ${transactions}">
 				<a th:href="@{'/transaction/' + ${transaction.id} + '#n'}" class="text-decoration-none">
 					<div class="card mb-3">
-						<span sec:authorize="hasRole('STUDENT')" th:if="${#request.userPrincipal.principal.company.id != transaction.actions[#lists.size(transaction.actions) - 1].initiator.company.id}" class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
-							<span class="visually-hidden">New alerts</span>
-						</span>
+						<!-- Alert marker if opposing company performed last action -->
+						<div sec:authorize="hasRole('STUDENT')">
+							<div th:if="${#request.userPrincipal.principal.company.id != transaction.actions[#lists.size(transaction.actions) - 1].initiator.company.id}">
+								<div th:unless="${transaction.actions[#lists.size(transaction.actions) - 1].actiontype.name == 'Paid' or transaction.actions[#lists.size(transaction.actions) - 1].actiontype.name == 'Cancel'}">
+									<span class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
+										<span class="visually-hidden">New alerts</span>
+									</span>
+								</div>
+							</div>
+						</div>
 						<div class="card-body d-flex align-items-center justify-content-between">
 							<div class="w-100">
 								<!-- Badges for transaction status -->
