@@ -39,7 +39,7 @@ public class CompanyLogo {
         if (this.company != null)
             m.put("company", company.getId());
         else
-            m.put("company", -1); // ! Careful with null.
+            m.put("company", null); // ! Careful with null.
 
         return m;
     }

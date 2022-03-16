@@ -99,7 +99,7 @@ public class User implements UserDetails {
         if (this.company != null)
             m.put("company", company.getId());
         else
-            m.put("company", -1);
+            m.put("company", null);
 
         m.put("credentialsNonExpired", credentialsNonExpired);
         m.put("email", email);
