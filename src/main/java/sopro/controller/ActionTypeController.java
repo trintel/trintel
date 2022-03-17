@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import sopro.model.ActionType;
 import sopro.model.util.InitiatorType;
 import sopro.repository.ActionTypeRepository;
+import sopro.service.SignupUrlService;
 
 @Controller
 @PreAuthorize("hasRole('ADMIN')")
@@ -23,10 +24,11 @@ public class ActionTypeController {
     ActionTypeRepository actionTypeRepository;
 
 
-    @GetMapping("/actions")
+    @GetMapping("/admin-panel")
     public String showActions(Model model) {
+        model.addAttribute("signupUrl", SignupUrlService.STUDENT_SIGNUP_URL);
         model.addAttribute("actionTypes", actionTypeRepository.findAll());
-        return "action-list";
+        return "admin-panel";
     }
 
     @GetMapping("/action/add")
@@ -49,7 +51,7 @@ public class ActionTypeController {
 
         actionTypeRepository.save(actionType);
 
-        return "redirect:/actions";
+        return "redirect:/admin-panel";
     }
 
     @GetMapping("action/edit/{actionTypeID}")
@@ -68,7 +70,7 @@ public class ActionTypeController {
         }
         actionType.setId(actionTypeID);
         actionTypeRepository.save(actionType);
-        return "redirect:/actions";
+        return "redirect:/admin-panel";
 
     }
 
