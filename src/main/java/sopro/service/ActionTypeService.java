@@ -65,7 +65,8 @@ public class ActionTypeService {
             initiatorType = InitiatorType.BUYER;
         }
 
-        List<ActionType> actionTypes = actionTypeRepository.findByInitiatorType(initiatorType);
+        List<ActionType> actionTypes = new ArrayList<>();
+        actionTypes.addAll(actionTypeRepository.findByInitiatorType(initiatorType));
         actionTypes.addAll(actionTypeRepository.findByInitiatorType(InitiatorType.BOTH));
         //Remove all actionTypes, that are not available
         for(ActionType actionType : actionTypes.stream().filter(t -> t.isStandardAction()).toArray(ActionType[] :: new)) {
@@ -73,16 +74,17 @@ public class ActionTypeService {
             //Add the Offer-Option if: the last action is a Request from the other company
             //                     OR: the last action is an Offer
             if(actionType.getName().equals("Offer")) {
-                if(transaction.getLatestAction().getInitiator().getCompany().getId().equals(currentUser.getCompany().getId()) || !transaction.getLatestActionName().equals("Request")) {
-                    if(!transaction.getLatestActionName().equals("Offer")) {
+                if(transaction.getLatestAction().getInitiator().getCompany().getId().equals(currentUser.getCompany().getId()) && transaction.getLatestActionName().equals("Request")) {
+                    if(!transaction.getLatestStandardAction().getActiontype().getName().equals("Offer")) {
                         actionTypes.remove(actionType);
                     }
+                    // actionTypes.remove(actionType);
                 }
             }
 
             //Add the Accept-Option if: the last action is an Offer from the other company
             if(actionType.getName().equals("Accept")) {
-                if(transaction.getLatestAction().getInitiator().getCompany().getId().equals(currentUser.getCompany().getId()) || !transaction.getLatestActionName().equals("Offer")) {
+                if(transaction.getLatestStandardAction().getInitiator().getCompany().getId().equals(currentUser.getCompany().getId()) || !transaction.getLatestStandardAction().getActiontype().getName().equals("Offer")) {
                     actionTypes.remove(actionType);
                 }
             }

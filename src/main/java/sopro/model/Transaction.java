@@ -81,6 +81,19 @@ public class Transaction {
     }
 
     /**
+     * get the last standard action from this transaction
+     *
+     * @return
+     */
+    public Action getLatestStandardAction() {
+        int index = actions.size() - 1;
+        while(!actions.get(index).getActiontype().isStandardAction()) {
+            index--;
+        }
+        return actions.get(index);
+    }
+
+    /**
      * get the date of the newest action from this transaction
      *
      * @return
