@@ -24,14 +24,13 @@ assemble:
     - mkdir -p target/resources 
     - mv build/libs/trintel-0.0.1-SNAPSHOT.jar target/app.jar
     - ls build/resources
-    - cp -r build/resources target/resources
+    - cp -r build/resources target/
     - ls target
     - ls target/resources
 
   artifacts:
     paths:
-      - target/app.jar
-      - target/resources
+      - target
 
 style-check:
   stage: style-check
