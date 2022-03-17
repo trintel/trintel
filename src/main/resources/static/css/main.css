@@ -21,8 +21,38 @@ a.icon-link:hover { text-decoration: none; }
   border-radius: .8rem !important;
 }
 
+i {
+  margin-right: .2rem;
+}
+
+a {
+  color: #53627e;
+}
+
+a:hover {
+  color: #627393;
+}
+
 input {
   border-radius: .8rem !important;
+}
+
+.btn-outline-secondary {
+  border-color: #ced4da;
+}
+
+.inputandbutton {
+  display:flex;
+}
+
+.inputandbutton button {
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+}
+
+.inputandbutton input {
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
 }
 
 textarea {
@@ -35,6 +65,10 @@ textarea {
 
 .list-group{
   border-radius: .8rem !important;
+}
+
+.text-primary {
+  color: #53627e;
 }
 
 /*
@@ -142,6 +176,11 @@ textarea {
   border-radius: .8rem !important;
 }
 
+.form-check-input:checked {
+  background-color:#556080;
+  border-color: #556080;
+}
+
 .nav-logo {
   height:2.5rem;
   margin-right: 0.5rem;
@@ -163,6 +202,28 @@ main {
 .btn-primary:hover {
   background-color: #4c5672;
   border-color: #4c5672;
+}
+
+.btn-outline-primary {
+  color: #556080;
+  border-color: #556080;
+}
+
+.btn-outline-primary:hover {
+  background-color: #4c5672;
+  border-color: #4c5672;
+}
+
+.btn-danger {
+  color: #dc3545;
+  background-color: #f9dde0;
+  border-color: #f9dde0;
+}
+
+.btn-danger:hover {
+  color: #dc3545;
+  background-color: #f3b8be;
+  border-color: #f3b8be;
 }
 
 .companylogo {
@@ -188,6 +249,10 @@ main {
   height: 100%;
   object-fit: contain;
   object-position: center;
+}
+
+.companylogo-xs {
+  min-width: 2rem;
 }
 
 .companylogo-sm {
@@ -221,6 +286,7 @@ main {
 .accordion-item .accordion-button.collapsed {
   border-bottom-left-radius: .8rem !important;
   border-bottom-right-radius: .8rem !important;
+  background-color: white;
 }
 
 .accordion-item .accordion-collapse {
@@ -313,4 +379,8 @@ main {
 
 .select-items div:hover, .same-as-selected {
   color: #000000 !important;
+}
+
+.container {
+  padding: 0 !important;
 }

@@ -1,5 +1,4 @@
-
-/* DROPDOWN MENU */
+/* DROPDOWN MENU BY W3SCHOOLS */
 
 var x, i, j, l, ll, selElmnt, a, b, c;
 /* Look for any elements with the class "custom-select": */
@@ -70,6 +69,7 @@ function closeAllSelect(elmnt) {
             arrNo.push(i)
         } else {
             y[i].classList.remove("select-arrow-active");
+            y[i].classList.remove("select-button-active");
         }
     }
     for (i = 0; i < xl; i++) {
@@ -82,3 +82,8 @@ function closeAllSelect(elmnt) {
 /* If the user clicks anywhere outside the select box,
 then close all select boxes: */
 document.addEventListener("click", closeAllSelect);
+
+var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+  return new bootstrap.Tooltip(tooltipTriggerEl)
+})

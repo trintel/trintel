@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:include="layout :: page">
+
+<head>
+    <title th:fragment="title">TITEL</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+<body>
+    <th:block th:fragment="content">
+        <!-- Block: Header -->
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="col-md-9">
+                    <h1 th:text="#{statistics}"></h1>
+                    <h5 class="text-secondary" th:text="${company.name}"></h5>
+                </div>
+                <div class="companylogo companylogo-lg ms-3">
+                    <img th:src="@{'/company/logo/' + ${company.id}}" />
+                </div>
+            </div>
+        </div>
+
+        <!-- Block: Data Panels/Cards -->
+        <div class="container mb-5">
+            <h3 class="mb-3" th:text="#{finances}"></h3>
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
+
+                <!-- Turnover -->
+                <div class="col flex-grow-1">
+                    <div class="card h-100">
+                        <div class="card-body h-100 d-flex align-items-center justify-content-between">
+                            <div>
+                                <p class="text-xs font-weight-bold text-secondary mb-1" th:text="#{turnover}">
+                                </p>
+                                <h5 class="h5 mb-0 font-weight-bold text-gray-800"
+                                    th:text="${totalTransationSellerVolume - totalTransationBuyerVolume} + '€'">
+                                </h5>
+                            </div>
+                            <div class="d-flex align-items-center flex-column">
+                                <i class="bi bi-cash-coin" style="font-size:30px;"></i>
+                                <i class="bi bi-info-circle" data-bs-toggle="tooltip" data-bs-placement="top"
+                                    th:title="#{infoTurnover}" id='example'></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Total seller volume -->
+                <div class="col flex-grow-1">
+                    <div class="card h-100">
+                        <div class="card-body h-100 d-flex align-items-center justify-content-between">
+                            <div>
+                                <p class="text-xs font-weight-bold text-secondary fs-6 mb-1"
+                                    th:text="#{totalTransationSellerVolume}">
+                                </p>
+                                <h5 class="mb-0 font-weight-bold text-gray-800"
+                                    th:text="${totalTransationSellerVolume} + '€'">
+                                </h5>
+                            </div>
+                            <div class="d-flex align-items-center flex-column">
+                                <i class="bi bi-arrow-up-right-circle" style="font-size:30px;"></i>
+                                <i class="bi bi-info-circle" data-bs-toggle="tooltip" data-bs-placement="top"
+                                    th:title="#{infoTotalTransactionSellerVolume}" id='example'></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Total buyer volume -->
+                <div class="col flex-grow-1">
+                    <div class="card h-100">
+                        <div class="card-body h-100 d-flex align-items-center justify-content-between">
+                            <div>
+                                <p class="text-xs font-weight-bold text-secondary fs-6 mb-1"
+                                    th:text="#{totalTransationBuyerVolume}">
+                                </p>
+                                <h5 class="mb-0 font-weight-bold text-gray-800"
+                                    th:text="${totalTransationBuyerVolume} + '€'">
+                                </h5>
+                            </div>
+                            <div class="d-flex align-items-center flex-column">
+                                <i class="bi bi-arrow-down-right-circle" style="font-size:30px;"></i>
+                                <i class="bi bi-info-circle" data-bs-toggle="tooltip" data-bs-placement="top"
+                                    th:title="#{infoTotalTransactionBuyerVolume}" id='example'></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card  h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="col mr-2 d-flex">
+                                            <div class="text-xs font-weight-bold text-secondary fs-6 mb-1"
+                                                th:text="#{percentTurnover}">
+                                            </div>
+                                        </div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">0%</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <span class="bi bi-globe" style="font-size:30px;"></span>
+                                        <div class="col-auto">
+                                            <center>
+                                                <i class="bi bi-info-circle" data-toggle="tooltip"
+                                                    th:title="#{infoPercentTurnover}" id='example'></i>
+                                            </center>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+            </div>
+        </div>
+
+        <!-- Table -->
+        <div class="container">
+            <h3 class="mb-0" th:text="#{transactionStatisticsOther}"></h3>
+            <div class="table-responsive">
+                <!-- sortTable(column,inputType): the first parameter sets the column to be sorted. 
+                    The second argument is 1 for Text input and 2 for numeric input.-->
+                <table class="table table-hover" id="table1">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>
+                                <div class="col d-flex">
+                                    <button class="w-100 btn btn-mdr shadow-none" th:text="#{company}"
+                                        onclick="sortTable(0,1)"></button>
+                                    <div class="row align-items-center">
+                                        <i class="bi bi-filter"></i>
+                                    </div>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="col d-flex">
+                                    <button class="w-100 btn btn-mdr shadow-none" th:text="#{amountTransactions}"
+                                        onclick="sortTable(1,2)"></button>
+                                    <div class="row align-items-center">
+                                        <i class="bi bi-filter"></i>
+                                    </div>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="col d-flex">
+                                    <button class="w-100 btn btn-mdr shadow-none" th:text="#{offers}"
+                                        onclick="sortTable(2,2)"></button>
+                                    <div class="row align-items-center">
+                                        <i class="bi bi-filter"></i>
+                                    </div>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="col d-flex">
+                                    <button class="w-100 btn btn-mdr shadow-none" th:text="#{products}"
+                                        onclick="sortTable(3,2)"></button>
+                                    <div class="row align-items-center">
+                                        <i class="bi bi-filter"></i>
+                                    </div>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="companyT : ${company.getRelatedCompanies}">
+                            <td class="text-center" th:text="${companyT.name}"></td>
+                            <td class="text-center" th:text="${company.getConfirmedTransactionsWith(companyT)}"></td>
+                            <td class="text-center" th:text="${company.getNumberOffers(companyT)}"></td>
+                            <td class="text-center" th:text="${company.getNumberTradedProducts(companyT)}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Transaction statistics -->
+        <div class="container mb-5">
+            <h3 class="mb-3" th:text="#{transactionStatistics}"></h3>
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
+
+                <!-- Transaction amount -->
+                <div class="col flex-grow-1">
+                    <div class="card h-100">
+                        <div class="card-body h-100 d-flex align-items-center justify-content-between">
+                            <div>
+                                <p class="text-xs font-weight-bold text-secondary fs-6 mb-1"
+                                    th:text="#{amountTransactions}">
+                                </p>
+                                <h5 class="mb-0 font-weight-bold text-gray-800" th:text="${numberConfirmed}"></h5>
+                            </div>
+                            <div class="d-flex align-items-center flex-column">
+                                <i class="bi bi-cart-check" style="font-size:30px;"></i>
+                                <i class="bi bi-info-circle" data-bs-toggle="tooltip" data-bs-placement="top"
+                                    th:title="#{infoTransAmount}" id='example'></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Number distinct sellers -->
+                <div class="col flex-grow-1">
+                    <div class="card h-100">
+                        <div class="card-body h-100 d-flex align-items-center justify-content-between">
+                            <div>
+                                <p class="text-xs font-weight-bold text-secondary fs-6 mb-1"
+                                    th:text="#{numberDistinctSellers}">
+                                </p>
+                                <h5 class="mb-0 font-weight-bold text-gray-800" th:text="${numberDistinctSellers}">
+                                </h5>
+                            </div>
+                            <div class="d-flex align-items-center flex-column">
+                                <i class="bi bi-bag-fill" style="font-size:30px;"></i>
+                                <i class="bi bi-info-circle" data-bs-toggle="tooltip" data-bs-placement="top"
+                                    th:title="#{infoNumberdistincsSellers}" id='example'></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Distinct Buyers -->
+                <div class="col flex-grow-1">
+                    <div class="card h-100">
+                        <div class="card-body h-100 d-flex align-items-center justify-content-between">
+                            <div>
+                                <p class="text-xs font-weight-bold text-secondary fs-6 mb-1"
+                                    th:text="#{numberDistinctBuyers}">
+                                </p>
+                                <h5 class="mb-0 font-weight-bold text-gray-800" th:text="${numberDistinctBuyers}">
+                                </h5>
+                            </div>
+                            <div class="d-flex align-items-center flex-column">
+                                <i class="bi bi-bag" style="font-size:30px;"></i>
+                                <i class="bi bi-info-circle" data-bs-toggle="tooltip" data-bs-placement="top"
+                                    th:title="#{infoNumberDistincBuyers}" id='example'></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card  h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="col mr-2 d-flex">
+                                            <div class="text-xs font-weight-bold text-secondary fs-6 mb-1"
+                                                th:text="#{numberDistinctBuyers}">
+                                            </div>
+                                        </div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800"
+                                            th:text="${numberDistinctBuyers}"></div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <span class="bi bi-bag" style="font-size:30px;"></span>
+                                        <div class="col-auto">
+                                            <center>
+                                                <i class="bi bi-info-circle" data-toggle="tooltip"
+                                                    th:title="#{infoNumberDistincBuyers}" id='example'></i>
+                                            </center>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+            </div>
+        </div>
+        </div>
+        <script type="text/javascript" th:src="@{/js/sortTable.js}"></script>
+    </th:block>
+</body>
+
+</html>

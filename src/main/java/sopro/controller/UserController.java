@@ -40,6 +40,8 @@ public class UserController {
 
     @Autowired
     private MessageSource messages;
+
+    @Autowired
     SignupUrlInterface signupUrlService;
 
     /**
@@ -139,6 +141,24 @@ public class UserController {
 
         model.addAttribute("invalidLogin", "Registration token expired.");
         return new ModelAndView("redirect:/login?error", model); // Bad user, agelaufen.
+    }
+
+    @GetMapping("/user/settings")
+    public String viewUserDetails(@AuthenticationPrincipal User user, Model model) {
+        model.addAttribute("user", userRepository.findById(user.getId()));
+        return "settings";
+    }
+
+    @PostMapping("/user/change-password")
+    public String changePassword(String password, @AuthenticationPrincipal User user) {
+        userService.changePassword(user, password);
+        return "redirect:/user/settings?password";
+    }
+
+    @PostMapping("/user/change-name")
+    public String changeName(String forename, String surname, @AuthenticationPrincipal User user) {
+        userService.changeName(user, forename, surname);
+        return "redirect:/user/settings?name";
     }
 
 }

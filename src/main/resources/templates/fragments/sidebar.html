@@ -1,12 +1,18 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org">
-    <nav th:fragment="sidebar" id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
-        <div class="sidebar-sticky px-3">
-            <ul class="nav flex-column">
-              <li class="nav-item">
-                <a th:classappend="${#httpServletRequest.getRequestURI() == '/home' ? 'active':''}" class="nav-link" th:href="@{/home}">
+<nav th:fragment="sidebar" id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+  <div class="sidebar-sticky px-3">
+    <ul class="nav flex-column">
+      <li class="nav-item">
+        <a th:classappend="${#httpServletRequest.getRequestURI() == '/home' ? 'active':''}" class="nav-link" th:href="@{/home}">
                     <i th:class="${#httpServletRequest.getRequestURI() == '/home' ? 'bi bi-house-fill':'bi bi-house'}"></i>
                     <span th:text="#{home}"/>
+                </a>
+              </li>
+              <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                <a th:classappend="${#httpServletRequest.getRequestURI() == '/admin-panel' ? 'active':''}" class="nav-link" th:href="@{/admin-panel}">
+                  <i th:class="${#httpServletRequest.getRequestURI() == '/admin-panel' ? 'bi bi-grid-fill':'bi bi-grid'}"></i>
+                  <span th:text="#{adminPanel}"/>
                 </a>
               </li>
               <li class="nav-item" sec:authorize="hasRole('ADMIN')">
@@ -16,8 +22,8 @@
                 </a>
               </li>
               <li class="nav-item" sec:authorize="hasRole('ADMIN')">
-                <a th:classappend="${#httpServletRequest.getRequestURI() == '/students' ? 'active':''}" class="nav-link" th:href="@{/students}">
-                  <i th:class="${#httpServletRequest.getRequestURI() == '/students' ? 'bi bi-people-fill':'bi bi-people'}"></i>
+                <a th:classappend="${#httpServletRequest.getRequestURI().startsWith('/students') ? 'active':''}" class="nav-link" th:href="@{/students}">
+                  <i th:class="${#httpServletRequest.getRequestURI().startsWith('/students') ? 'bi bi-people-fill':'bi bi-people'}"></i>
                   <span th:text="#{students}"/>
                 </a>
               </li>
@@ -39,11 +45,22 @@
                   <span th:text="#{transactions}"/>
                 </a>
               </li>
+
+              <li class="nav-item">
+                <a th:classappend="${#httpServletRequest.getRequestURI() == '/statistics' || #httpServletRequest.getRequestURI().startsWith('/statistics') ? 'active':''}" class="nav-link" th:href="@{/statistics}">
+                  <i th:class="${#httpServletRequest.getRequestURI() == '/statistics' || #httpServletRequest.getRequestURI().startsWith('/statistics') ? 'bi bi-bar-chart-line-fill':'bi bi-bar-chart-line'}"></i>
+                  <span th:text="#{statistics}"/>
+                </a>
+              </li>
+              
               <li class="nav-item">
                 <a class="nav-link" th:href="@{/console}">
                   <i class="bi bi-terminal"></i> H2 Console
               </a>
               </li>
+              
+              
+
             </ul>
             <!-- <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
               <span>Andere Links</span>
@@ -52,14 +69,17 @@
               hier können noch andere Links eingefügt werden, die nicht zur Nav gehören
             </ul> -->
             <ul class="logout-side nav flex-column mb-2" th:with="currentUser=${#httpServletRequest.userPrincipal?.name}">
-              <li class="nav-item">
-              <form class="navbar-form navbar-right" th:action="@{/logout}" method="post" th:if="${currentUser != null}">
-                  <p class="navbar-text navbar-right align-middle my-0" th:text="${currentUser}">
-                      example_user
-                  </p>
-                  <input type="submit" class="btn btn-dark" value="Logout" />
-              </form>
-            </li>
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="dropdown03" data-bs-toggle="dropdown" aria-expanded="false" th:text="${currentUser}" th:if="${currentUser != null}"></a>
+                  <ul class="dropdown-menu" aria-labelledby="dropdown03">
+                    <li>
+                      <a class="dropdown-item" href="/user/settings" th:text="#{uSettings}"></a>
+                    </li>
+                    <form th:action="@{/logout}" method="post">
+                      <input type="submit" class="dropdown-item p-0" th:value="#{logout}" />
+                    </form>
+                  </ul>
+                </li>
           </ul>
           </div>
     </nav>

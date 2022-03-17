@@ -10,57 +10,88 @@
 
 <body>
 	<th:block th:fragment="content">
-		<h1 th:text="#{companies}"></h1>
-		<p th:text="#{cldescr}" sec:authorize="hasRole('ADMIN')"></p>
-		<div th:unless="${companies.isEmpty()}">
-			<th:block th:each="company : ${companies}">
-				
-					<div class="card mb-3">
-						<!-- Card base with arrow on the right -->
-						<div class="card-body d-flex align-items-center justify-content-between">
-							<!-- Card content -->
-							<div class="w-100 d-lg-flex align-items-center">
-								<!-- Company name, logo and description -->
-								
-								<div class="col d-flex align-items-center">
-									<div class="companylogo companylogo-md me-3">
-										<img th:src="@{'/company/logo/' + ${company.id}}" />
-									</div>
-									<div>
-										<a th:href="@{'/companies/' + ${company.id}}" class="text-decoration-none text-black">
-										<h5 class="card-title" th:text="${company.name}"></h5></a>
-										<p class="card-text text-secondary" th:text="${company.description}"></p>
-									</div>
-								</div>
-								
-								<!-- Buttons -->
-								<div class="float-lg-end mt-3 mt-lg-0">
-									<form action="#" th:action="@{'/companies/delete/' + ${company.id}}" method="post"
-										sec:authorize="hasRole('ADMIN')">
-										<button class="btn btn-danger" type="submit">
-											<span th:text="#{delete}" />
-											<i class="bi bi-trash3"></i>
-										</button>
-									</form>
-									<a sec:authorize="hasRole('STUDENT')" th:href="@{'/transaction/' + ${company.id}} + '/create'" class="btn btn-light">
-										<i class="bi bi-cart-plus"></i> <span th:text="#{createTransaction}" />
-									</a>
-								</div>
-							</div>
-							<a th:href="@{'/companies/' + ${company.id}}" class="text-decoration-none">
-								<i class="bi bi-chevron-right text-black ms-3" style="font-size:2rem;"></i>
-							</a>
-						</div>
-					</div>
+
+		<div class="d-lg-flex justify-content-between align-items-end mb-3">
+			<div>
+				<h1 th:text="#{companies}"></h1>
+				<p class="mb-0" th:text="#{cldescr}" sec:authorize="hasRole('ADMIN')"></p>
+			</div>
+			<div sec:authorize="hasRole('ADMIN')">
+				<a class="btn btn-primary btn mt-3 mt-lg-0" th:href="@{companies/add}">
+					<i class="bi bi-plus"></i>
+					<span th:text="#{registerCompany}" />
 				</a>
-			</th:block>
+			</div>
+		</div>
+
+		<div th:unless="${companies.isEmpty()}">
+			<div class="row row-cols-1 row-cols-lg-2 g-3">
+				<th:block th:each="company : ${companies}">
+					<div class="col">
+						<div class="card">
+							<!-- Card base with arrow on the right -->
+							<div class="card-body d-flex align-items-center justify-content-between">
+								<!-- Card content -->
+								<div class="w-100 d-lg-flex align-items-center">
+									<!-- Company name, logo and description -->
+									<div class="col d-flex align-items-center">
+										<div class="companylogo companylogo-md me-3">
+											<img th:src="@{'/company/logo/' + ${company.id}}" />
+										</div>
+										<div>
+											<a th:href="@{'/companies/' + ${company.id}}"
+												class="text-decoration-none text-black">
+												<h5 class="card-title" th:text="${company.name}"></h5>
+											</a>
+											<p class="card-text text-secondary" th:text="${company.description}"></p>
+										</div>
+									</div>
+
+									<!-- Buttons -->
+									<div class="float-lg-end mt-3 mt-lg-0 ms-0 ms-lg-3">
+										<form action="#" th:action="@{'/companies/delete/' + ${company.id}}"
+										method="post" sec:authorize="hasRole('ADMIN')">
+											<button class="btn btn-danger" type="button" data-bs-toggle="modal" th:data-bs-target="'#deleteCompanyModal'+${company.id}">
+												<i class="bi bi-trash3"></i>
+												<span th:text="#{delete}" />
+											</button>
+											<div class="modal fade" th:id="'deleteCompanyModal'+${company.id}" tabindex="-1" th:aria-labelledby="'deleteCompanyModalLabel'+${company.id}" aria-hidden="true">
+												<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+												  <div class="modal-content">
+													<div class="modal-header">
+													  <h5 class="modal-title" th:id="'deleteCompanyModalLabel'+${company.id}" th:text="#{deleteCompany}"></h5>
+													  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+													</div>
+													<div class="modal-body">
+													  <p th:utext="#{deleteCompanyWarning}"></p>
+													</div>
+													<div class="modal-footer">
+													  <button type="submit" class="w-100 btn btn-lg btn-danger" th:text="#{confirm}"></button>
+													</div>
+												  </div>
+												</div>
+											  </div>
+										</form>
+										<a sec:authorize="hasRole('STUDENT')"
+											th:href="@{'/transaction/' + ${company.id}} + '/create'"
+											class="btn btn-light">
+											<i class="bi bi-cart-plus"></i> <span th:text="#{createTransaction}" />
+										</a>
+									</div>
+								</div>
+								<a th:href="@{'/companies/' + ${company.id}}" class="text-decoration-none">
+									<i class="bi bi-chevron-right text-black ms-3" style="font-size:2rem;"></i>
+								</a>
+							</div>
+						</div>
+						</a>
+					</div>
+				</th:block>
+			</div>
 		</div>
 
 		<p th:if="${companies.isEmpty()}" th:text="#{noCompaniesFound}"></p>
 
-		<div class="d-flex justify-content-center justify-content-md-end" sec:authorize="hasRole('ADMIN')">
-			<a class="btn btn-primary" th:href="@{companies/add}" th:text="#{registerCompany}"></a>
-		</div>
 	</th:block>
 </body>
 
