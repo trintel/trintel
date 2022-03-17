@@ -148,7 +148,8 @@ public class InitDatabaseService {
 
             try {
                 // byte[] defaultImg = Files.readAllBytes(Paths.get("src/main/ressources/static/img/onlyicon.png").normalize().toAbsolutePath());
-                File f = new File ("./src/main/resources/static/img/placeholder.jpg");
+                System.out.println(TrintelApplication.WORKDIR + "/bin/main/static/img/placeholder.jpg");
+                File f = new File (TrintelApplication.WORKDIR + "/bin/main/static/img/placeholder.jpg");
                 BufferedImage image = ImageIO.read(f);
                 CompanyLogo companyLogo = new CompanyLogo();
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
