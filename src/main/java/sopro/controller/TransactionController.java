@@ -1,18 +1,14 @@
 package sopro.controller;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -274,11 +270,11 @@ public class TransactionController {
     @GetMapping("/exportAction/{actionId}")
     public ResponseEntity<byte[]> exportAction(@PathVariable long actionId, HttpServletResponse response, Model model) {
         String pdfPath = pdfService.generatePdfFromAction(actionId);
-        
+
         byte[] contents;
         try {
             contents = Files.readAllBytes(new File(pdfPath).toPath());
-            
+
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_PDF);
             String [] soup = pdfPath.split("/"); // Last part is the filename
@@ -298,11 +294,11 @@ public class TransactionController {
     @GetMapping("/exportTransaction/{transactionId}")
     public ResponseEntity<byte[]> exportTransaction(@PathVariable long transactionId, HttpServletResponse response, Model model) {
         String pdfPath = pdfService.generatePdfFromTransaction(transactionId);
-        
+
         byte[] contents;
         try {
             contents = Files.readAllBytes(new File(pdfPath).toPath());
-            
+
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_PDF);
             String [] soup = pdfPath.split("/"); // Last part is the filename
