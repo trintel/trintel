@@ -21,6 +21,10 @@ a.icon-link:hover { text-decoration: none; }
   border-radius: .8rem !important;
 }
 
+i {
+  margin-right: .2rem;
+}
+
 a {
   color: #53627e;
 }
@@ -190,13 +194,14 @@ main {
 
 .btn-danger {
   color: #dc3545;
-  background-color: #dc35452b;
-  border: 0;
+  background-color: #f9dde0;
+  border-color: #f9dde0;
 }
 
 .btn-danger:hover {
   color: #dc3545;
-  background-color: #dc354559;
+  background-color: #f3b8be;
+  border-color: #f3b8be;
 }
 
 .companylogo {

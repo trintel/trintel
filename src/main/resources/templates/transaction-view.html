@@ -92,9 +92,11 @@
 									<span class="text-muted fs-6" th:text="#{message}"></span>
 									<span class="text-black"><h5 th:text="${action.message}" class="text-break"></h5></span>
 								</div>
-								<a class="ms-auto" th:href="@{'/pdfexport/action/' + ${action.id}}">
-									<button type="button" class="btn btn-outline-primary"><i class="bi bi-file-earmark-pdf"></i>PDF</button>
-								</a>
+								<div class="d-flex ms-auto align-items-end">
+									<a th:href="@{'/pdfexport/action/' + ${action.id}}">
+										<button type="button" class="btn btn-outline-primary"><i class="bi bi-file-earmark-pdf"></i>PDF</button>
+									</a>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -109,7 +111,7 @@
 						<!-- "Offer" button -->
 						<a th:case="Offer" th:href="@{'/transaction/' + ${transactionID} + '/addOffer'}">
 							<button type="button" class="btn btn-primary me-3 mb-3 mb-md-0">
-								<i class="bi bi-clipboard2-plus"></i> <span th:text="#{offerNA}" ></span>
+								<i class="bi bi-cart-plus"></i> <span th:text="#{offerNA}" ></span>
 							</button>
 						</a>
 						<!-- Modal for "Accept" button -->
@@ -164,7 +166,7 @@
 						<div th:case="Delivery">
 							<form th:object="${action}" th:action="@{'/transaction/' + ${transactionID} + '/delivery'}" method="post">
 								<button type="button" class="btn btn-primary me-3 mb-3 mb-md-0" data-bs-toggle="modal" data-bs-target="#deliveryModal">
-									<i class="bi bi-box-seam"></i> <span th:text=" #{deliveryNA}"></span>
+									<i class="bi bi-truck"></i> <span th:text=" #{deliveryNA}"></span>
 								</button>
 								<div class="modal fade" id="deliveryModal" tabindex="-1" aria-labelledby="deliveryModalLabel" aria-hidden="true">
 									<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
@@ -237,7 +239,7 @@
 				<div th:if="${specialActionsAvailable}">
 					<a th:href="@{'/transaction/' + ${transactionID} + '/addAction'}">
 						<button class="btn btn-primary me-3 mb-md-0">
-							<i class="bi bi-chat-square-dots"></i> <span th:text="#{specialActions}" ></span>
+							<i class="bi bi-three-dots"></i> <span th:text="#{specialActions}" ></span>
 						</button>
 					</a>
 				</div>
