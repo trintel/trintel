@@ -1,6 +1,6 @@
 package sopro.service;
 
 public interface PdfInterface {
-    String generatePdf(long actionId);
-    // void generateTransactionPdf(Transaction transaction);
+    String generatePdfFromAction(long actionId);
+    String generatePdfFromTransaction(long transactionId);
 }

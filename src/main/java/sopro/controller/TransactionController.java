@@ -271,9 +271,33 @@ public class TransactionController {
     }
 
     @PreAuthorize("hasRole('STUDENT')")
-    @GetMapping("/exportPdf/{actionId}")
-    public ResponseEntity<byte[]> exportPdf(@PathVariable long actionId, HttpServletResponse response, Model model) {
-        String pdfPath = pdfService.generatePdf(actionId);
+    @GetMapping("/exportAction/{actionId}")
+    public ResponseEntity<byte[]> exportAction(@PathVariable long actionId, HttpServletResponse response, Model model) {
+        String pdfPath = pdfService.generatePdfFromAction(actionId);
+        
+        byte[] contents;
+        try {
+            contents = Files.readAllBytes(new File(pdfPath).toPath());
+            
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            String [] soup = pdfPath.split("/"); // Last part is the filename
+            String filename =  soup[soup.length-1];
+            headers.setContentDispositionFormData(filename, filename);
+            headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+            ResponseEntity<byte[]> res = new ResponseEntity<>(contents, headers, HttpStatus.OK);
+            return res;
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @PreAuthorize("hasRole('STUDENT')")
+    @GetMapping("/exportTransaction/{transactionId}")
+    public ResponseEntity<byte[]> exportTransaction(@PathVariable long transactionId, HttpServletResponse response, Model model) {
+        String pdfPath = pdfService.generatePdfFromTransaction(transactionId);
         
         byte[] contents;
         try {
