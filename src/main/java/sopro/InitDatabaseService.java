@@ -161,4 +161,57 @@ public class InitDatabaseService {
             }
         }
     }
+
+
+    public void deployinit() {
+
+        if (userRepository.count() == 0 && companyRepository.count() == 0) {
+
+            //Create demo Users
+            User admin = new User(true, true, true, true, "admin", "admin", "admin@admin", passwordEncoder.encode("password"), null);
+            admin.setRole("ADMIN");
+            userRepository.save(admin);
+
+            //Create demo Action_types
+            ActionType request = new ActionType("Request", "Demo request text.", InitiatorType.BUYER);
+            ActionType offer = new ActionType("Offer", "Demo offer text.", InitiatorType.BOTH);
+            ActionType accept = new ActionType("Accept", "Demo accept text.", InitiatorType.BOTH);
+            ActionType cancelBuyer = new ActionType("Cancel", "Option to cancel transaction for buyer.", InitiatorType.BOTH);
+            ActionType delivery = new ActionType("Delivery", "Action to kick off delivery of goods to buyer.", InitiatorType.SELLER);
+            ActionType invoicing = new ActionType("Invoicing", "Action to send receipt to buyer.", InitiatorType.SELLER);
+            ActionType paid = new ActionType("Paid", "Action to mark transaction as completed.", InitiatorType.SELLER);
+            request.setStandardAction(true);
+            offer.setStandardAction(true);
+            accept.setStandardAction(true);
+            cancelBuyer.setStandardAction(true);
+            delivery.setStandardAction(true);
+            invoicing.setStandardAction(true);
+            paid.setStandardAction(true);
+            actionTypeRepository.save(request);
+            actionTypeRepository.save(offer);
+            actionTypeRepository.save(accept);
+            actionTypeRepository.save(cancelBuyer);
+            actionTypeRepository.save(delivery);
+            actionTypeRepository.save(invoicing);
+            actionTypeRepository.save(paid);
+
+            //save the default companylogo in database
+            // ClassLoader classLoader = getClass().getClassLoader();
+            // URL resource = classLoader.getResource("src/main/ressources/static/img/onlyicon.png");
+            // File img = new Imga(resource.toURI());
+
+            try {
+                // byte[] defaultImg = Files.readAllBytes(Paths.get("src/main/ressources/static/img/onlyicon.png").normalize().toAbsolutePath());
+                File f = new File ("./src/main/resources/static/img/placeholder.jpg");
+                BufferedImage image = ImageIO.read(f);
+                CompanyLogo companyLogo = new CompanyLogo();
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                ImageIO.write(image, "jpg", baos);
+                companyLogo.setLogo(baos.toByteArray());
+                companyLogoRepository.save(companyLogo);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }
