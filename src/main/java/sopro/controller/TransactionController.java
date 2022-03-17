@@ -276,7 +276,7 @@ public class TransactionController {
         transactionRepository.save(transaction);
         return "redirect:/transaction/" + transactionID;
     }
-    
+
     @GetMapping("/pdfexport/action/{actionId}")
     public ResponseEntity<byte[]> exportAction(@PathVariable long actionId, HttpServletResponse response, Model model) {
         String pdfPath = pdfService.generatePdfFromAction(actionId);
