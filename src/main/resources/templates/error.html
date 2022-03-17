@@ -10,12 +10,15 @@
     <th:block th:fragment="content">
         <style th:replace="fragments/small-content :: content"></style>
         <main class="form-small">
+            <!-- Block: Header -->
+            <img class="w-50 mx-auto mb-3" th:src="@{/img/warning.png}"/>
             <h1 class="mb-3" th:text="#{error}"></h1>
-            <div class="card mb-3">
-                <h5 class="m-2" th:text="#{errorType} + ': ' + ${error}"></h5>
-                <h5 class="m-2" thtext="#{status} + ': ' + ${status}"></h5>
-                <h5 class="m-2" th:text="${timestamp}"></h5>
-            </div>
+            <!-- Block: Info List -->
+            <ul class="list-group mb-3">
+                <li class="list-group-item"> <h5 th:text="#{errorType} + ': ' + ${error}"></h5></li>
+                <!-- <li class="list-group-item"><h5 thtext="#{status} + ': ' + ${status}"></h5></li> -->
+                <li class="list-group-item"><h5 th:text="${timestamp}"></h5></li>
+            </ul>
             <!-- Block: Back Button -->
             <button class="w-100 btn btn-lg btn-light" onclick="history.back()">
                 <i class="bi bi-arrow-left"></i>
