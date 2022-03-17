@@ -26,20 +26,7 @@
             <button class="w-100 btn btn-lg btn-light mt-3" onclick="history.back()"><i class="bi bi-arrow-left"></i> <a
                     th:text=" #{back}"></a></button>
         </main>
-        
-        <!-- Script for Restricting special Characters -->
-        <script>
-            $('input').on('input', function () {
-                var c = this.selectionStart,
-                    r = /[^a-z0-9 ]/gi,
-                    v = $(this).val();
-                if (r.test(v)) {
-                    $(this).val(v.replace(r, ''));
-                    c--;
-                }
-                this.setSelectionRange(c, c);
-            });
-        </script>
+        <script type="text/javascript" th:src="@{/js/inputRestrictor.js}"></script>
     </th:block>
 </body>
 
