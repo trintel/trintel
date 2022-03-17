@@ -22,7 +22,9 @@ function sortTable(n, t) {
             x = rows[i].getElementsByTagName("td")[n].innerHTML;
             y = rows[i + 1].getElementsByTagName("td")[n].innerHTML;
 
+            
             if (t == 1) {
+                //case 1 for text input
                 /* Check if the two rows should switch place,
                 based on the direction, asc or desc: */
                 if (dir == "asc") {
@@ -39,8 +41,10 @@ function sortTable(n, t) {
                     }
                 }
             } else if (t == 2) {
+                //case 2 for numeric input
                 /* Check if the two rows should switch place,
-            based on the direction, asc or desc: */
+                based on the direction, asc or desc: */
+                //parse String number to Int
                 y = parseInt(y)
 
                 if (dir == "asc") {
