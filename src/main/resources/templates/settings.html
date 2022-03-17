@@ -24,13 +24,13 @@
                 <div class="d-flex">
                     <!-- Forename input -->
                     <div class="form-floating mb-3">
-                        <input type="text" class="form-control" id="floatingForename" placeholder="forename"
+                        <input type="text" maxlength="50" class="form-control" id="floatingForename" placeholder="forename"
                             th:field="*{forename}" autofocus>
                         <label for="floatingInputUsername" th:text="#{forename}"></label>
                     </div>
                     <!-- Surname input -->
                     <div class="form-floating mb-3 ms-3">
-                        <input type="text" class="form-control" id="floatingSurname" placeholder="surname"
+                        <input type="text" maxlength="50" class="form-control" id="floatingSurname" placeholder="surname"
                             th:field="*{surname}">
                         <label for="floatingInputSurname" th:text="#{surname}"></label>
                     </div>
@@ -44,7 +44,7 @@
                 <h5 th:text="#{changePassword}"></h5>
                 <!-- Password input -->
                 <div class="form-floating mb-3">
-                    <input type="password" class="form-control" id="floatingPassword" placeholder="password"
+                    <input type="password" maxlength="255" class="form-control" id="floatingPassword" placeholder="password"
                         th:field="*{password}" required>
                     <label for="floatingPassword" th:text="#{password}"></label>
                 </div>
