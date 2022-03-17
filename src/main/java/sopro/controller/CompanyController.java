@@ -68,45 +68,6 @@ public class CompanyController {
         return "redirect:/companies";
     }
 
-    @GetMapping("/students") //TODO handle unassigned in Frontend
-    public String listAllStudents(Model model) {
-        // Company company = new Company("unassgined");
-        // for (User student : userRepository.findByRole("STUDENT")) {
-        //     if (student.getCompany() == null)
-        //         student.setCompany(company);
-        // }
-        model.addAttribute("students", userRepository.findByRole("STUDENT")); // list all students
-        return "students-list";
-    }
-
-    @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/student/{id}/reassign")
-    public String editStudent(Model model, @PathVariable Long id) {
-        User student = userRepository.findById(id).get();
-        model.addAttribute("student", student);
-        if (student.getCompany() == null) {
-            model.addAttribute("companies", companyRepository.findAll());
-        } else {
-            model.addAttribute("companies", companyRepository.findByIdNot(student.getCompany().getId())); // get all
-                                                                                                          // companies
-                                                                                                          // except for
-                                                                                                          // the current
-                                                                                                          // one
-        }
-        model.addAttribute("studentID", id); // add the student id to the model (for post-request navigation)
-        return "student-reassign";
-    }
-
-    @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/student/{id}/reassign")
-    public String moveToCompany(String companyName, @PathVariable Long id, Model model) {
-        User user = userRepository.findById(id).get(); // find the student to be editet
-        Company company2 = companyRepository.findByName(companyName); // find the new company
-        user.setCompany(company2);
-        userRepository.save(user);
-        return "redirect:/students";
-    }
-
     @PreAuthorize("hasPermission(#companyID, 'company')")
     @GetMapping("/companies/{companyID}")
     public String viewCompany(@PathVariable Long companyID, Model model) {
