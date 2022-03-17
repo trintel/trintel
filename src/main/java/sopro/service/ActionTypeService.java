@@ -74,7 +74,7 @@ public class ActionTypeService {
             //Add the Offer-Option if: the last action is a Request from the other company
             //                     OR: the last action is an Offer
             if(actionType.getName().equals("Offer")) {
-                if(transaction.getLatestAction().getInitiator().getCompany().getId().equals(currentUser.getCompany().getId()) && transaction.getLatestActionName().equals("Request") || transaction.getLatestActionName().equals("Accept")|| transaction.getBuyer().getId().equals(currentUser.getCompany().getId())) {
+                if(transaction.getLatestAction().getInitiator().getCompany().getId().equals(currentUser.getCompany().getId()) && transaction.getLatestActionName().equals("Request") || transaction.getConfirmed() ||  transaction.getBuyer().getId().equals(currentUser.getCompany().getId())) {
                     if(!transaction.getLatestStandardAction().getActiontype().getName().equals("Offer")) {
                         actionTypes.remove(actionType);
                     }
@@ -98,7 +98,7 @@ public class ActionTypeService {
 
             //Add the delivery-Option if: the transaction is confirmed
             if(actionType.getName().equals("Delivery")) {
-                if(!transaction.getConfirmed() || transaction.getBuyer().getId().equals(currentUser.getCompany().getId())) {
+                if(!transaction.getConfirmed() || transaction.getShipped() || transaction.getBuyer().getId().equals(currentUser.getCompany().getId())) {
                     actionTypes.remove(actionType);
                 }
             }
@@ -112,7 +112,7 @@ public class ActionTypeService {
 
             //Add the paid-Option if: the transaction is confirmed
             if(actionType.getName().equals("Paid")) {
-                if(!transaction.getShipped()) {
+                if(!transaction.getShipped() || transaction.getBuyer().getId().equals(currentUser.getCompany().getId())) {
                     actionTypes.remove(actionType);
                 }
             }
