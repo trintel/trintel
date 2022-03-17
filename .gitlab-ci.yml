@@ -21,12 +21,16 @@ assemble:
     - chmod +x gradlew
     - ./gradlew assemble
     - mkdir -p target
+    - mkdir -p target/resources 
     - mv build/libs/trintel-0.0.1-SNAPSHOT.jar target/app.jar
+    - ls build/resources
+    - cp -r build/resources target/
     - ls target
+    - ls target/resources
 
   artifacts:
     paths:
-      - target/app.jar
+      - target
 
 style-check:
   stage: style-check
@@ -48,6 +52,9 @@ style-check:
 test:
   stage: test
   image: adoptopenjdk/openjdk11
+
+  only:
+    - main
 
   variables:
      GRADLE_USER_HOME: '.gradle-cache'
@@ -76,6 +83,7 @@ deployment:
    
   script:
     - ls target
+    - ls target/resources
     - docker build -t trintel .
     - docker stop trintel-container || true
     - docker rm trintel-container || true
