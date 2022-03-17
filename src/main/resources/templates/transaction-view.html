@@ -202,9 +202,9 @@
 						</div>
 					</div>
 				</div>
-				<!-- <div th:unless="${standartActions.isEmpty()}"> -->
+				<div th:if="${specialActionsAvailable}">
 					<a class="btn btn-primary btn-lg me-3 mb-md-0" th:href="@{'/transaction/' + ${transactionID} + '/addAction'}" th:text="#{specialActions}"></a>
-				<!-- </div> -->
+				</div>
 			</div>
 		</div>
 		<a name="n"></a>
