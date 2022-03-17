@@ -143,9 +143,13 @@ public class TransactionController {
     @GetMapping("/transaction/{transactionID}/addOffer")
     public String showOffer(@PathVariable Long transactionID, Model model) {
         Action newAction = new Action();
+        Transaction transaction = transactionRepository.findById(transactionID).get();
+        newAction.setAmount(transaction.getAmount());
+        newAction.setPricePerPiece(transaction.getPricePerPiece());
 
         model.addAttribute("action", newAction);
         model.addAttribute("transactionID", transactionID);
+        model.addAttribute("transaction", transaction);
         return "transaction-addOffer";
     }
 
