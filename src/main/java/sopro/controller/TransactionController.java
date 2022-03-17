@@ -156,7 +156,7 @@ public class TransactionController {
         // actionTypes = actionTypeRepository.findByInitiatorType(initiatorType);
 
         // add the list of special actions
-        model.addAttribute("actiontypes", actionTypeRepository.findByInitiatorType(initiatorType));
+        model.addAttribute("actiontypes", actionTypeService.getAvailableActions(transactionRepository.findById(transactionID).get(), user));
         model.addAttribute("action", newAction);
         model.addAttribute("transactionID", transactionID);
         return "transaction-addSpecialAction";
