@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:include="layout-fullscreen :: page">
+
+<head>
+	<title th:fragment="title">[TITEL]</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+
+<body>
+	<th:block th:fragment="content">
+		<h1 th:text="#{error}"></h1>
+        <!-- Block: Back Button -->
+        <button class="w-100 btn btn-lg btn-light mt-3" onclick="history.back()">
+            <i class="bi bi-arrow-left"></i>
+            <a th:text=" #{back}"></a>
+        </button>
+	</th:block>
+</body>
+   
+</html>
