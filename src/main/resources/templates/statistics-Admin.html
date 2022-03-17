@@ -11,40 +11,22 @@
         <div class="container mt-3 d-md-flex " style="align-items: center;">
             <div class="col-10">
                 <h1 class="mb-3" th:text="#{totalstatistics}"></h1>
-                <!-- <h3 class="mb-3" th:text="${company.name}"></h3> -->
             </div>
         </div>
 
-        <!-- TODO: Font weight bold -->
+        <!-- Table -->
         <div class="container">
             <h3 class="mb-3" th:text="#{overview}"></h3>
-            <div class="table-responsive">
-                <table class="table table-responsive" id="table1">
+            <div class="table-responsive-xl">
+                <!-- sortTable(column,inputType): the first parameter sets the column to be sorted. 
+                    The second argument is 1 for Text input and 2 for numeric input.-->
+                <table class="table table-hover" id="table1">
                     <thead class="thead-dark">
                         <tr>
                             <th class="text-center">
                                 <div class="col d-flex">
                                     <button class="w-100 btn btn-mdr shadow-none" th:text="#{company}"
                                         onclick="sortTable(0,1)"></button>
-                                    <!-- <a class="btn btn-light" th:text="#{company}" th:href="@{#}" ></a> -->
-                                    <div class="row align-items-center">
-                                        <i class="bi bi-filter"></i>
-                                    </div>
-                                </div>
-                            </th>
-                            <th class="text-center">
-                                <div class="col d-flex">
-                                    <button class="w-100 btn btn-mdr shadow-none" th:text="#{numberDistinctBuyers}"
-                                        onclick="sortTable(1,2)"></button>
-                                    <div class="row align-items-center">
-                                        <i class="bi bi-filter"></i>
-                                    </div>
-                                </div>
-                            </th>
-                            <th class="text-center">
-                                <div class="col d-flex">
-                                    <button class="w-100 btn btn-mdr shadow-none" th:text="#{numberDistinctSellers}"
-                                        onclick="sortTable(2,2)"></button>
                                     <div class="row align-items-center">
                                         <i class="bi bi-filter"></i>
                                     </div>
@@ -53,60 +35,49 @@
                             <th class="text-center">
                                 <div class="col d-flex">
                                     <button class="w-100 btn btn-mdr shadow-none" th:text="#{turnover}"
+                                        onclick="sortTable(1,2)"></button>
+                                    <div class="row align-items-center">
+                                        <i class="bi bi-filter"></i>
+                                    </div>
+                                </div>
+                            </th>
+                            <th class="text-center">
+                                <div class="col d-flex">
+                                    <button class="w-100 btn btn-mdr shadow-none"
+                                        th:text="#{totalTransationBuyerVolume}" onclick="sortTable(2,2)"></button>
+                                    <div class="row align-items-center">
+                                        <i class="bi bi-filter"></i>
+                                    </div>
+                                </div>
+                            </th>
+                            <th class="text-center">
+                                <div class="col d-flex">
+                                    <button class="w-100 btn btn-mdr shadow-none"
+                                        th:text="#{totalTransationSellerVolume}" onclick="sortTable(3,2)"></button>
+                                    <div class="row align-items-center">
+                                        <i class="bi bi-filter"></i>
+                                    </div>
+                                </div>
+                            </th>
+                            <th class="text-center">
+                                <div class="col d-flex">
+                                    <button class="w-100 btn btn-mdr shadow-none" th:text="#{amountTransactions}"
                                         onclick="sortTable(3,2)"></button>
                                     <div class="row align-items-center">
                                         <i class="bi bi-filter"></i>
                                     </div>
                                 </div>
                             </th>
-                            <th class="text-center">
-                                <div class="col d-flex">
-                                    <button class="w-100 btn btn-mdr shadow-none"
-                                        th:text="#{totalTransationBuyerVolume}" onclick="sortTable(4,2)"></button>
-                                    <div class="row align-items-center">
-                                        <i class="bi bi-filter"></i>
-                                    </div>
-                                </div>
-                            </th>
-                            <th class="text-center">
-                                <div class="col d-flex">
-                                    <button class="w-100 btn btn-mdr shadow-none"
-                                        th:text="#{totalTransationSellerVolume}" onclick="sortTable(5,2)"></button>
-                                    <div class="row align-items-center">
-                                        <i class="bi bi-filter"></i>
-                                    </div>
-                                </div>
-                            </th>
-                            <th class="text-center">
-                                <div class="col d-flex">
-                                    <button class="w-100 btn btn-mdr shadow-none" th:text="#{numberNonConfirmedBuyer}"
-                                        onclick="sortTable(6,2)"></button>
-                                    <div class="row align-items-center">
-                                        <i class="bi bi-filter"></i>
-                                    </div>
-                                </div>
-                            </th>
-                            <th class="text-center">
-                                <div class="col d-flex">
-                                    <button class="w-100 btn btn-mdr shadow-none" th:text="#{numberNonConfirmedSeller}"
-                                        onclick="sortTable(7,2)"></button>
-                                    <div class="row align-items-center">
-                                        <i class="bi bi-filter"></i>
-                                    </div>
-                                </div>
-                            </th>
+
                         </tr>
                     </thead>
                     <tbody>
                         <tr th:each="company, iter : ${companies}">
                             <td><a th:text="${company.name}" th:href="'/statistics/' + ${company.id}"></a></td>
-                            <td class="text-center" th:text="${numberDistinctBuyers[iter.index]}"></td>
-                            <td class="text-center" th:text="${numberDistinctSellers[iter.index]}"></td>
                             <td class="text-center" th:text="${totalTransationSellerVolume[iter.index] - totalTransationBuyerVolume[iter.index]} + '€'"></td>
                             <td class="text-center" th:text="${totalTransationBuyerVolume[iter.index]} + '€'"></td>
                             <td class="text-center" th:text="${totalTransationSellerVolume[iter.index]} + '€'"></td>
-                            <td class="text-center" th:text="${numberNonConfirmedBuyer[iter.index]}"></td>
-                            <td class="text-center" th:text="${numberNonConfirmedSeller[iter.index]}"></td>
+                            <td class="text-center" th:text="${numberConfirmed[iter.index]}"></td>
                         </tr>
                     </tbody>
                 </table>
