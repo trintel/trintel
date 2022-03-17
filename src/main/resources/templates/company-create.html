@@ -14,7 +14,7 @@
 
             <form action="#" th:action="@{/companies/save}" th:object="${company}" method="post">
                 <div class="form-floating mb-3">
-                    <input type="text" maxlength="255" pattern="^[a-zA-Z0-9 ]+$" class="form-control" id="floatingName"
+                    <input type="text" maxlength="30" pattern="^[a-zA-Z0-9 ]+$" class="form-control" id="floatingName"
                         placeholder="name" name="name" th:title="#{allowedChars}" required autofocus>
                     <label for="floatingInputUsername" th:text="#{companyName}"></label>
                 </div>
