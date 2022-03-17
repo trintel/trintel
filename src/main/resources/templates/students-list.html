@@ -10,7 +10,20 @@
 	<th:block th:fragment="content">
 		<h1 th:text="#{students}"></h1>
 		<p th:text="#{sldescr}"></p>
-		<div th:unless="${students.isEmpty()}">
+
+		<!-- Search -->
+		<form th:object="${student}" th:action="@{/students/search(q=${searchString})}" method="get">
+			<div class="form-floating mb-3 inputandbutton">
+				<input type="search" name="q" class="form-control border-end-0" id="search" placeholder="Search"
+					th:value="${searchedStudent}">
+				<label for="search" th:text="#{search}"></label>
+				<button class="btn btn-outline-secondary border-start-0" type="submit">
+					<i class="bi bi-search"></i>
+				</button>
+			</div>
+		</form>
+
+		<th:block th:unless="${students.isEmpty()}">
 			<!-- Student list -->
 			<div class="row row-cols-1 row-cols-lg-2 row-cols-xxl-3 g-3">
 				<div class="col" th:each="student : ${students}">
@@ -52,7 +65,7 @@
 					</div>
 				</div>
 			</div>
-		</div>
+		</th:block>
 		<!-- If there aren't any students -->
 		<div class="alert alert-secondary" th:if="${students.isEmpty()}" th:text="#{noStudents}"></div>
 	</th:block>
