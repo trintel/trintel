@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import sopro.model.Action;
+import sopro.model.ActionType;
 import sopro.model.Transaction;
 import sopro.model.User;
 import sopro.model.util.InitiatorType;
@@ -63,13 +66,16 @@ public class TransactionController {
             List<Transaction> transactions = new ArrayList<>();
             transactions.addAll(transactionRepository.findByBuyer(user.getCompany()));
             transactions.addAll(transactionRepository.findBySeller(user.getCompany()));
+            //Sort transactions.
+            transactions = transactions.stream().sorted(Comparator.comparing(Transaction :: getLatestActionDate).reversed().thenComparing(Transaction :: getLatestActionTime).reversed()).collect(Collectors.toList());
             model.addAttribute("transactions", transactions);
         }
         return "transactions-list";
 
     }
 
-    @PreAuthorize("hasRole('STUDENT')")
+
+    @PreAuthorize("hasCompany()")
     @GetMapping("/transaction/{companyID}/create")
     public String createTransaction(@PathVariable Long companyID, @AuthenticationPrincipal User user, Model model) {
 
@@ -90,7 +96,7 @@ public class TransactionController {
 
     }
 
-    @PreAuthorize("hasRole('STUDENT')")
+    @PreAuthorize("hasCompany()")
     @PostMapping("/transaction/{companyID}/save")
     public String createTransaction(Action action, Transaction transaction, @PathVariable Long companyID,
             @AuthenticationPrincipal User user, Model model) {
@@ -110,33 +116,28 @@ public class TransactionController {
 
     }
 
-    // TODO rechte einstellen
-    // TODO enums berücksichtigen
-    @PreAuthorize("hasPermission(#id, 'transaction') and hasRole('STUDENT')")
+
+    @PreAuthorize("hasPermission(#id, 'transaction')")
     @GetMapping("/transaction/{id}")
     public String transactionDetail(Model model, @PathVariable Long id, @AuthenticationPrincipal User user) {
         Action newAction = new Action();
         Transaction transaction = transactionRepository.findById(id).get();
-        // List<ActionType> actionTypes = new ArrayList<>();
-        // if(!user.getRole().equals("ADMIN")){
-        // InitiatorType initiatorType = InitiatorType.SELLER;
-        // if(user.getCompany().equals(transaction.getBuyer())) { //findout if current
-        // user is Buyer or seller.
-        // initiatorType = InitiatorType.BUYER;
-        // }
-        // actionTypes = actionTypeRepository.findByInitiatorType(initiatorType);
-        // }
-        model.addAttribute("actiontypes", actionTypeService.getAvailableActions(transaction, user)); // only find the
-                                                                                                     // available
-                                                                                                     // actiontypes for
-                                                                                                     // that user.
+
+        List<ActionType> actionTypes = new ArrayList<>();
+        if(user.getRole().equals("STUDENT")) {
+            actionTypes = actionTypeService.getAvailableActions(transaction, user);
+        }
+        model.addAttribute("actiontypes", actionTypes);     //only find the available actiontypes for that user.
         model.addAttribute("action", newAction);
         model.addAttribute("actions", actionRepository.findByTransaction(transaction));
+        model.addAttribute("specialActionsAvailable", actionTypes.stream().filter(t -> !t.isStandardAction()).toArray(ActionType[] :: new).length > 0); //get the info if there are specialActions.
         model.addAttribute("transactionID", id);
         return "transaction-view";
 
     }
 
+    //TODO only othorize if user is seller/buyer in resprct to actiontype.initiatorType.
+    @PreAuthorize("hasPermission(#transactionID, 'transaction') and hasRole('STUDENT')")
     @GetMapping("/transaction/{transactionID}/addAction")
     public String showAction(Action action, @PathVariable Long transactionID, @AuthenticationPrincipal User user,
             Model model) {
@@ -161,7 +162,7 @@ public class TransactionController {
         return "transaction-addSpecialAction";
     }
 
-    // TODO: Security
+    @PreAuthorize("hasPermission(#transactionID, 'transaction') and hasRole('STUDENT')")
     @GetMapping("/transaction/{transactionID}/addOffer")
     public String showOffer(@PathVariable Long transactionID, Model model) {
         Action newAction = new Action();
@@ -171,7 +172,7 @@ public class TransactionController {
         return "transaction-addOffer";
     }
 
-    // TODO: Security
+    @PreAuthorize("hasPermission(#transactionID, 'transaction') and hasRole('STUDENT')")
     @PostMapping("/transaction/{transactionID}/addOffer")
     public String addOffer(Action offer, @PathVariable Long transactionID, @AuthenticationPrincipal User user,
             BindingResult bindingResult, Model model) {
@@ -187,7 +188,7 @@ public class TransactionController {
         return "redirect:/transaction/" + transactionID;
     }
 
-    @PreAuthorize("hasRole('STUDENT')")
+    @PreAuthorize("hasPermission(#transactionID, 'transaction') and hasRole('STUDENT')")
     @PostMapping("/transaction/{transactionID}/addAction")
     public String createAction(Action action, @PathVariable Long transactionID, @AuthenticationPrincipal User user,
             Model model) {
@@ -208,6 +209,7 @@ public class TransactionController {
         return "redirect:/transaction/" + transactionID;
     }
 
+    @PreAuthorize("hasPermission(#transactionID, 'transaction') and hasRole('STUDENT')")
     @PostMapping("/transaction/{transactionID}/accept")
     public String createAcceptAction(String message, @PathVariable Long transactionID,
             @AuthenticationPrincipal User user) {
@@ -220,6 +222,7 @@ public class TransactionController {
         return "redirect:/transaction/" + transactionID;
     }
 
+    @PreAuthorize("hasPermission(#transactionID, 'transaction') and hasRole('STUDENT')")
     @PostMapping("/transaction/{transactionID}/cancel")
     public String createCancelAction(String message, @PathVariable Long transactionID,
             @AuthenticationPrincipal User user) {
@@ -232,6 +235,7 @@ public class TransactionController {
         return "redirect:/transaction/" + transactionID;
     }
 
+    @PreAuthorize("hasPermission(#transactionID, 'transaction') and hasRole('STUDENT')")
     @PostMapping("/transaction/{transactionID}/delivery")
     public String createDeliveryAction(String message, @PathVariable Long transactionID,
             @AuthenticationPrincipal User user) {
@@ -244,6 +248,7 @@ public class TransactionController {
         return "redirect:/transaction/" + transactionID;
     }
 
+    @PreAuthorize("hasPermission(#transactionID, 'transaction') and hasRole('STUDENT')")
     @PostMapping("/transaction/{transactionID}/invoicing")
     public String createInvoiceAction(String message, @PathVariable Long transactionID,
             @AuthenticationPrincipal User user) {
@@ -254,12 +259,14 @@ public class TransactionController {
         return "redirect:/transaction/" + transactionID;
     }
 
+    @PreAuthorize("hasPermission(#transactionID, 'transaction') and hasRole('STUDENT')")
     @PostMapping("/transaction/{transactionID}/paid")
     public String createPaidAction(String message, @PathVariable Long transactionID,
             @AuthenticationPrincipal User user) {
         Transaction transaction = transactionRepository.findById(transactionID).get();
         Action paid = new Action(message, actionTypeService.getPaidActionType(), transaction);
         transaction.setPaid(true);
+        transaction.setActive(false);
         paid.setInitiator(user);
         actionRepository.save(paid);
         transactionRepository.save(transaction);

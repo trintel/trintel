@@ -9,7 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import sopro.controller.HomeController;
 
 @SpringBootTest
-class Main {
+class HomeTest {
 
     @Autowired
     private HomeController controller;

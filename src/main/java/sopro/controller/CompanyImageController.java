@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,7 +30,6 @@ public class CompanyImageController {
     @GetMapping("/company/logo/{companyID}")
     public void showCompanyImage(@PathVariable Long companyID, HttpServletResponse response) throws IOException {
         response.setContentType("image/png"); // Or whatever format you wanna use
-        //TODO default Image. If there is no custom logo. Now: NullPointerException.
         CompanyLogo logo;
         logo = companyLogoRepository.findByCompany(companyRepository.findById(companyID).get());
         if(logo == null) {
@@ -40,7 +40,7 @@ public class CompanyImageController {
         IOUtils.copy(is, response.getOutputStream());
     }
 
-    //TODO: Security
+    @PreAuthorize("hasRole('ADMIN') or isInCompany(#companyID)")
     @PostMapping("/company/logo/{companyID}/delete")
     public String deleteCompanyLogo(@PathVariable Long companyID) {
         if(companyLogoRepository.findByCompanyId(companyID) != null) {

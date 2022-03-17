@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.transaction.AfterTransaction;
 import org.springframework.test.context.transaction.BeforeTransaction;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,13 +41,18 @@ public class DatabaseTest {
     @Autowired
     TransactionRepository transactionRepository;
 
-
     @Autowired
-    BeforeTest beforeTest;
+    DatabaseService databaseService;
 
     @BeforeTransaction
     void setup() {
-        beforeTest.setup();
+        databaseService.clearDatabase();
+        databaseService.setup();
+    }
+
+    @AfterTransaction
+    void clean() {
+        databaseService.clearDatabase();
     }
 
     /**
@@ -215,4 +221,8 @@ public class DatabaseTest {
     }
     //test if company logo is saved in repository
     //test if paid can be set before confirmed
+
+
+
+
 }

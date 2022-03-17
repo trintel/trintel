@@ -1,6 +1,6 @@
 package sopro;
 
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -13,6 +13,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.context.support.WithUserDetails;
+import org.springframework.test.context.transaction.AfterTransaction;
 import org.springframework.test.context.transaction.BeforeTransaction;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
@@ -59,12 +60,19 @@ public class CompanyTest {
     String companyName = "testCompany";
 
     @Autowired
-    BeforeTest beforeTest;
+    DatabaseService databaseService;
 
     @BeforeTransaction
     void setup() {
-        beforeTest.setup();
+        databaseService.clearDatabase();
+        databaseService.setup();
     }
+
+    @AfterTransaction
+    void clean() {
+        databaseService.clearDatabase();
+    }
+
 
     // #######################################################################################
     // ----------------------------------- Method Tests ADMIN
@@ -142,11 +150,11 @@ public class CompanyTest {
     @Test
     @WithMockUser(username = "admin@admin", roles = { "ADMIN" })
     public void saveCompanieTestAdmin() throws Exception {
-        // Deletes Company if it is allready in the database from other test
+
         Company testCompany = new Company("companyName");
         mockMvc.perform(post("/companies/save").flashAttr("company", testCompany).with(csrf()))
                 .andExpect(status().is(302))
-                .andExpect(redirectedUrl("/companies")); // Test with database check is down below
+                .andExpect(redirectedUrl("/companies"));
     }
 
     /**
@@ -158,7 +166,7 @@ public class CompanyTest {
     @Test
     @WithMockUser(username = "student@student", roles = { "STUDENT" })
     public void saveCompanieTestStudent() throws Exception {
-        mockMvc.perform(get("/companies/save"))
+        mockMvc.perform(get("/companies/add"))
                 .andExpect(status().isForbidden());
     }
 
@@ -199,13 +207,6 @@ public class CompanyTest {
     @Test
     @WithMockUser(username = "adminTest@admin", roles = { "ADMIN" })
     public void editReassignStudentTestAdmin() throws Exception {
-        // Deletes Company if it is allready in the database from other tests.
-        if (companyRepository.findByName(companyName) != null)
-            companyRepository.delete(companyRepository.findByName(companyName));
-        // Deletes User if it is allready in the database from other tests.
-        if (userRepository.findByEmail("adminTest@admin") != null)
-            userRepository.delete(userRepository.findByEmail("adminTest@admin"));
-
         User testUser = new User("adminTest", "adminTest", "adminTest@admin", "password", null);
         testUser.setRole("ADMIN");
         userRepository.save(testUser);
@@ -225,12 +226,6 @@ public class CompanyTest {
     @Test
     @WithMockUser(username = "studentTest@student", roles = { "STUDENT" })
     public void editReassignStudentTestStudent() throws Exception {
-        // Deletes Company if it is allready in the database from other tests.
-        if (companyRepository.findByName(companyName) != null)
-            companyRepository.delete(companyRepository.findByName(companyName));
-        // Deletes User if it is allready in the database from other tests.
-        if (userRepository.findByEmail("studentTest@student") != null)
-            userRepository.delete(userRepository.findByEmail("studentTest@student"));
 
         User testUser = new User("studentTest", "studentTest", "studentTest@student", "password", null);
         testUser.setRole("STUDENT");
@@ -251,12 +246,6 @@ public class CompanyTest {
     @Test
     @WithMockUser(username = "adminTest@admin", roles = { "ADMIN" })
     public void moveToCompanyTestAdmin() throws Exception {
-        // Deletes Company if it is allready in the database from other tests.
-        if (companyRepository.findByName(companyName) != null)
-            companyRepository.delete(companyRepository.findByName(companyName));
-        // Deletes User if it is allready in the database from other tests.
-        if (userRepository.findByEmail("adminTest@admin") != null)
-            userRepository.delete(userRepository.findByEmail("adminTest@admin"));
 
         User testUser = new User("adminTest", "adminTest", "adminTest@admin", "password", null);
         testUser.setRole("ADMIN");
@@ -278,13 +267,6 @@ public class CompanyTest {
     @Test
     @WithMockUser(username = "studentTest@student", roles = { "STUDENT" })
     public void moveToCompanyTestStudent() throws Exception {
-        // Deletes Company if it is allready in the database from other tests.
-        if (companyRepository.findByName(companyName) != null)
-            companyRepository.delete(companyRepository.findByName(companyName));
-        // Deletes User if it is allready in the database from other tests.
-        if (userRepository.findByEmail("studentTest@student") != null)
-            userRepository.delete(userRepository.findByEmail("studentTest@student"));
-
         User testUser = new User("studentTest", "studentTest", "studentTest@student", "password", null);
         testUser.setRole("STUDENT");
         userRepository.save(testUser);
@@ -307,8 +289,21 @@ public class CompanyTest {
      * @throws Exception
      */
     @Test
-    @WithMockUser(username = "admin@admin", roles = { "ADMIN" })
+    @WithUserDetails(value = "admin@admin", userDetailsServiceBeanName = "userDetailsService")
     public void companySelectTestAdmin() throws Exception {
+        mockMvc.perform(get("/company/select"))
+                .andExpect(status().isForbidden());
+    }
+
+        /**
+     * Test before function
+     * Tests if an assigned student can not acces the company selection page.
+     *
+     * @throws Exception
+     */
+    @Test
+    @WithUserDetails(value = "j@j", userDetailsServiceBeanName = "userDetailsService")
+    public void companySelectTestAssignedStudent() throws Exception {
         mockMvc.perform(get("/company/select"))
                 .andExpect(status().isForbidden());
     }
@@ -320,7 +315,7 @@ public class CompanyTest {
      * @throws Exception
      */
     @Test
-    @WithMockUser(username = "student@student", roles = { "STUDENT" })
+    @WithUserDetails(value = "m@m", userDetailsServiceBeanName = "userDetailsService")
     public void companySelectTestStudent() throws Exception {
         mockMvc.perform(get("/company/select"))
                 .andExpect(status().isOk())
@@ -333,12 +328,8 @@ public class CompanyTest {
      * @throws Exception
      */
     @Test
-    @WithMockUser(username = "admin@admin", roles = { "ADMIN" })
+    @WithUserDetails(value = "admin@admin", userDetailsServiceBeanName = "userDetailsService")
     public void companySelectIdTestAdmin() throws Exception {
-        // Deletes Company if it is allready in the database from other tests
-        if (companyRepository.findByName(companyName) != null) {
-            companyRepository.delete(companyRepository.findByName(companyName));
-        }
         Company testCompany = new Company(companyName);
         companyRepository.save(testCompany);
         long id = testCompany.getId();
@@ -355,12 +346,8 @@ public class CompanyTest {
      * @throws Exception
      */
     @Test
-    @WithMockUser(username = "student@student", roles = { "STUDENT" })
+    @WithUserDetails(value = "m@m", userDetailsServiceBeanName = "userDetailsService")
     public void companySelectIdTestStudent() throws Exception {
-        // Deletes Company if it is allready in the database from other tests.
-        if (companyRepository.findByName(companyName) != null) {
-            companyRepository.delete(companyRepository.findByName(companyName));
-        }
         Company testCompany = new Company(companyName);
         companyRepository.save(testCompany);
         long id = testCompany.getId();
@@ -369,7 +356,6 @@ public class CompanyTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("company-view"));
 
-        companyRepository.delete(testCompany);
     }
 
     /**
@@ -389,7 +375,7 @@ public class CompanyTest {
      *
      * @throws Exception
      */
-    @Test // war vorher studentTest@student
+    @Test
     @WithUserDetails(value = "m@m", userDetailsServiceBeanName = "userDetailsService")
     public void joinCompany2TestStudent() throws Exception {
         mockMvc.perform(post("/company/join").param("name", companyRepository.findAll().get(0).getName()).with(csrf()))
@@ -405,10 +391,7 @@ public class CompanyTest {
     @Test
     @WithUserDetails(value = "admin@admin", userDetailsServiceBeanName = "userDetailsService")
     public void editOwnCompanyTestAdmin() throws Exception {
-        // Deletes Company if it is allready in the database from other tests
-        if (companyRepository.findByName(companyName) != null) {
-            companyRepository.delete(companyRepository.findByName(companyName));
-        }
+
         Company testCompany = new Company(companyName);
         companyRepository.save(testCompany);
         long companyId = testCompany.getId();
@@ -439,9 +422,7 @@ public class CompanyTest {
     @Test
     @WithUserDetails(value = "admin@admin", userDetailsServiceBeanName = "userDetailsService")
     public void saveOwnCompanyTestAdmin() throws Exception {
-        if (companyRepository.findByName(companyName) != null) {
-            companyRepository.delete(companyRepository.findByName(companyName));
-        }
+
         Company testCompany = new Company(companyName);
         companyRepository.save(testCompany);
         long companyId = testCompany.getId();
@@ -485,20 +466,16 @@ public class CompanyTest {
     @Test
     @WithMockUser(username = "admin@admin", roles = { "ADMIN" })
     public void adminAddCompany() throws Exception {
-        Company testCompany = companyRepository.findByName(companyName);
-
-        if (testCompany != null)
-            companyRepository.delete(testCompany);
+        Company testCompany = new Company("companyName");
 
         mockMvc.perform(get("/companies/add"))
                 .andExpect(status().is(200));
 
-        mockMvc.perform(post("/companies/save").param("name", companyName).with(csrf()))
-                .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/companies"))
-                .andExpect(status().isFound());
+        mockMvc.perform(post("/companies/save").flashAttr("company", testCompany).with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/companies"));
 
-        assertNotEquals(null, companyRepository.findByName(companyName));
+        assertEquals(testCompany, companyRepository.findByName("companyName"));
     }
 
     /**
@@ -510,9 +487,6 @@ public class CompanyTest {
     @Test
     @WithMockUser(username = "admin@admin", roles = { "ADMIN" })
     public void adminDeleteCompany() throws Exception {
-        // Deletes Company if it is allready in the database for some reason
-        if (companyRepository.findByName(companyName) != null)
-            companyRepository.delete(companyRepository.findByName(companyName));
 
         Company testCompany = new Company(companyName);
         companyRepository.save(testCompany);

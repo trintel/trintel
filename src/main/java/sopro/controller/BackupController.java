@@ -1,6 +1,7 @@
 package sopro.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +13,7 @@ import sopro.service.backup.ExportInterface;
 import sopro.service.backup.ImportInterface;
 
 @Controller
+@PreAuthorize("hasRole('ADMIN')")
 public class BackupController {
 
     @Autowired
@@ -32,6 +34,8 @@ public class BackupController {
 
         return "redirect:/home";  // Admin muss irgendwie datei hochladen können, dann post request mit Pfad zur datei and das hier.
     }
+
+
 
     /**
      * @param model

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org">
-    <nav th:fragment="sidebar" id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
-        <div class="sidebar-sticky px-3">
-            <ul class="nav flex-column">
-              <li class="nav-item">
-                <a th:classappend="${#httpServletRequest.getRequestURI() == '/home' ? 'active':''}" class="nav-link" th:href="@{/home}">
+<nav th:fragment="sidebar" id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+  <div class="sidebar-sticky px-3">
+    <ul class="nav flex-column">
+      <li class="nav-item">
+        <a th:classappend="${#httpServletRequest.getRequestURI() == '/home' ? 'active':''}" class="nav-link" th:href="@{/home}">
                     <i th:class="${#httpServletRequest.getRequestURI() == '/home' ? 'bi bi-house-fill':'bi bi-house'}"></i>
                     <span th:text="#{home}"/>
                 </a>
@@ -39,11 +39,22 @@
                   <span th:text="#{transactions}"/>
                 </a>
               </li>
+
+              <li class="nav-item">
+                <a th:classappend="${#httpServletRequest.getRequestURI() == '/statistics' || #httpServletRequest.getRequestURI().startsWith('/statistics') ? 'active':''}" class="nav-link" th:href="@{/statistics}">
+                  <i th:class="${#httpServletRequest.getRequestURI() == '/statistics' || #httpServletRequest.getRequestURI().startsWith('/statistics') ? 'bi bi-bar-chart-line-fill':'bi bi-bar-chart-line'}"></i>
+                  <span th:text="#{statistics}"/>
+                </a>
+              </li>
+              
               <li class="nav-item">
                 <a class="nav-link" th:href="@{/console}">
                   <i class="bi bi-terminal"></i> H2 Console
               </a>
               </li>
+              
+              
+
             </ul>
             <!-- <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
               <span>Andere Links</span>
@@ -56,7 +67,7 @@
                   <a class="nav-link dropdown-toggle" href="#" id="dropdown03" data-bs-toggle="dropdown" aria-expanded="false" th:text="${currentUser}" th:if="${currentUser != null}"></a>
                   <ul class="dropdown-menu" aria-labelledby="dropdown03">
                     <li>
-                      <a class="dropdown-item" href="/settings" th:text="#{uSettings}"></a>
+                      <a class="dropdown-item" href="/user/settings" th:text="#{uSettings}"></a>
                     </li>
                     <form th:action="@{/logout}" method="post">
                       <input type="submit" class="dropdown-item p-0" th:value="#{logout}" />

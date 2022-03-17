@@ -37,6 +37,7 @@ public class CompanyController {
     // ----------------------------------- ADMIN FUNCTIONS
     // #######################################################################################
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/companies/add")
     public String addCompany(Model model) {
         Company company = new Company(); // creating a new Company Object to be added to the database
@@ -44,6 +45,7 @@ public class CompanyController {
         return "company-create";
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/companies/save")
     public String saveCompany(@Valid Company company, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
@@ -54,7 +56,7 @@ public class CompanyController {
         return "redirect:/companies";
     }
 
-    // TODO Rechte einschränken
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/companies/delete/{companyID}")
     public String deleteCompany(@PathVariable Long companyID, Model model) {
         //TODO maybe delete all transactions. so that companies with transactions can also be deleted.
@@ -64,43 +66,6 @@ public class CompanyController {
 
         companyRepository.deleteById(companyID);                                            //if there is no custom logo just delete the company
         return "redirect:/companies";
-    }
-
-    @GetMapping("/students") //TODO handle unassigned in Frontend
-    public String listAllStudents(Model model) {
-        // Company company = new Company("unassgined");
-        // for (User student : userRepository.findByRole("STUDENT")) {
-        //     if (student.getCompany() == null)
-        //         student.setCompany(company);
-        // }
-        model.addAttribute("students", userRepository.findByRole("STUDENT")); // list all students
-        return "students-list";
-    }
-
-    @GetMapping("/student/{id}/reassign")
-    public String editStudent(Model model, @PathVariable Long id) {
-        User student = userRepository.findById(id).get();
-        model.addAttribute("student", student);
-        if (student.getCompany() == null) {
-            model.addAttribute("companies", companyRepository.findAll());
-        } else {
-            model.addAttribute("companies", companyRepository.findByIdNot(student.getCompany().getId())); // get all
-                                                                                                          // companies
-                                                                                                          // except for
-                                                                                                          // the current
-                                                                                                          // one
-        }
-        model.addAttribute("studentID", id); // add the student id to the model (for post-request navigation)
-        return "student-reassign";
-    }
-
-    @PostMapping("/student/{id}/reassign")
-    public String moveToCompany(String companyName, @PathVariable Long id, Model model) {
-        User user = userRepository.findById(id).get(); // find the student to be editet
-        Company company2 = companyRepository.findByName(companyName); // find the new company
-        user.setCompany(company2);
-        userRepository.save(user);
-        return "redirect:/students";
     }
 
     @PreAuthorize("hasPermission(#companyID, 'company')")
@@ -114,6 +79,7 @@ public class CompanyController {
     // ----------------------------------- STUDENT FUNCTIONS
     // #########################################################################################
 
+    @PreAuthorize("!hasCompany() and hasRole('STUDENT')")      //only if the company is not assigned and the user is student
     @GetMapping("/company/select")
     public String selectCompany(Model model) {
         // .findByOrderByNameAsc() statt .findAll()
@@ -121,12 +87,14 @@ public class CompanyController {
         return "company-select";
     }
 
+    @PreAuthorize("!hasCompany() and hasRole('STUDENT')")
     @GetMapping("/company/select/{id}")
     public String joinCompany(@PathVariable Long id, Model model) {
         model.addAttribute("company", companyRepository.findById(id).get());
         return "company-view";
     }
 
+    @PreAuthorize("!hasCompany() and hasRole('STUDENT')")
     @PostMapping("/company/join")
     public String joinCompany2(String companyName, @AuthenticationPrincipal User user, Model model) {
         // // //TODO schöner lösen
@@ -140,26 +108,20 @@ public class CompanyController {
         return "redirect:/home";
     }
 
+    @PreAuthorize("hasCompany()")   //to prevent NullPointer. Admins not allowed.
     @GetMapping("/company")
     public String viewOwnCompany(Model model, @AuthenticationPrincipal User user) {
         return "redirect:/companies/" + user.getCompany().getId();
     }
 
-    @PreAuthorize("hasPermission(#companyID, 'company')")
+    @PreAuthorize("hasRole('ADMIN') or isInCompany(#companyID)")
     @GetMapping("/company/{companyID}/edit")
-    public String editOwnCompany(Model model, @AuthenticationPrincipal User user, @PathVariable Long companyID) {
-        try {
-            if (user.getRole().equals("ADMIN") || user.getCompany().getId().equals(companyID)) {
-                model.addAttribute("company", companyRepository.findById(companyID).get());
-                return "company-edit";
-            } else {
-                return "redirect:/home"; // not allowed to edit that company
-            }
-        } catch (NullPointerException e) { // if company not assigned (should never happen...)
-            return "redirect:/home";
-        }
+    public String editOwnCompany(Model model, @PathVariable Long companyID) {
+        model.addAttribute("company", companyRepository.findById(companyID).get());
+        return "company-edit";
     }
 
+    @PreAuthorize("hasRole('ADMIN') or isInCompany(#companyID)")
     @PostMapping(consumes = "multipart/form-data", value = "/company/{companyID}/edit")
     public String saveOwnCompany(@RequestParam("formFile") MultipartFile companyLogo, @Valid Company company,
             BindingResult bindingResult, @PathVariable Long companyID, @AuthenticationPrincipal User user, Model model)
@@ -192,6 +154,7 @@ public class CompanyController {
     // company (reassign)
     // Admins can add new Companies
     // Students see only other companies. can click on one to start transaction.
+    //TODO difference between student and admin refactoring
     @GetMapping("/companies")
     public String listCompanies(Model model, @AuthenticationPrincipal User user) {
         if (user.getRole().equals("ADMIN")) {
