@@ -166,7 +166,7 @@ public class CompanyTest {
     @Test
     @WithMockUser(username = "student@student", roles = { "STUDENT" })
     public void saveCompanieTestStudent() throws Exception {
-        mockMvc.perform(get("/companies/save"))
+        mockMvc.perform(get("/companies/add"))
                 .andExpect(status().isForbidden());
     }
 
@@ -289,8 +289,21 @@ public class CompanyTest {
      * @throws Exception
      */
     @Test
-    @WithMockUser(username = "admin@admin", roles = { "ADMIN" })
+    @WithUserDetails(value = "admin@admin", userDetailsServiceBeanName = "userDetailsService")
     public void companySelectTestAdmin() throws Exception {
+        mockMvc.perform(get("/company/select"))
+                .andExpect(status().isForbidden());
+    }
+
+        /**
+     * Test before function
+     * Tests if an assigned student can not acces the company selection page.
+     *
+     * @throws Exception
+     */
+    @Test
+    @WithUserDetails(value = "j@j", userDetailsServiceBeanName = "userDetailsService")
+    public void companySelectTestAssignedStudent() throws Exception {
         mockMvc.perform(get("/company/select"))
                 .andExpect(status().isForbidden());
     }
@@ -302,7 +315,7 @@ public class CompanyTest {
      * @throws Exception
      */
     @Test
-    @WithMockUser(username = "student@student", roles = { "STUDENT" })
+    @WithUserDetails(value = "m@m", userDetailsServiceBeanName = "userDetailsService")
     public void companySelectTestStudent() throws Exception {
         mockMvc.perform(get("/company/select"))
                 .andExpect(status().isOk())
@@ -315,7 +328,7 @@ public class CompanyTest {
      * @throws Exception
      */
     @Test
-    @WithMockUser(username = "admin@admin", roles = { "ADMIN" })
+    @WithUserDetails(value = "admin@admin", userDetailsServiceBeanName = "userDetailsService")
     public void companySelectIdTestAdmin() throws Exception {
         Company testCompany = new Company(companyName);
         companyRepository.save(testCompany);
@@ -333,7 +346,7 @@ public class CompanyTest {
      * @throws Exception
      */
     @Test
-    @WithMockUser(username = "student@student", roles = { "STUDENT" })
+    @WithUserDetails(value = "m@m", userDetailsServiceBeanName = "userDetailsService")
     public void companySelectIdTestStudent() throws Exception {
         Company testCompany = new Company(companyName);
         companyRepository.save(testCompany);

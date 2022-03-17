@@ -33,6 +33,24 @@ input {
   border-radius: .8rem !important;
 }
 
+.btn-outline-secondary {
+  border-color: #ced4da;
+}
+
+.inputandbutton {
+  display:flex;
+}
+
+.inputandbutton button {
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+}
+
+.inputandbutton input {
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+
 textarea {
   border-radius: .8rem !important;
 }
@@ -43,6 +61,10 @@ textarea {
 
 .list-group{
   border-radius: .8rem !important;
+}
+
+.text-primary {
+  color: #53627e;
 }
 
 /*

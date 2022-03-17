@@ -25,6 +25,15 @@ public class CustomMethodSecurityExpressionRoot extends SecurityExpressionRoot i
         return user.getCompany().getId().equals(companyID);
     }
 
+    /**
+     * check if the user is assigned to a company.
+     * @return
+     */
+    public boolean hasCompany() {
+        User user = ((User) this.getPrincipal());
+        return user.getCompany() != null;
+    }
+
     @Override
     public void setFilterObject(Object filterObject) {
         // TODO Auto-generated method stub

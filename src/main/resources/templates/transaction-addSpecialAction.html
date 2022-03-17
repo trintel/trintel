@@ -18,8 +18,8 @@
                 </div>
                 <!-- Block: Drop Down menu for the special action type -->
                 <div class="custom-select w-100 mb-3">
-                    <select th:field="*{actiontype}">
-                        <option value="label" th:text="#{actiontype}"></option>
+                    <select th:field="*{actiontype}" required>
+                        <option value="" th:text="#{chooseActiontype}"></option>
                         <th:block th:each="actiontype : ${actiontypes}">
                             <th:block th:unless="${actiontype.standardAction}">
                                 <option th:text="${actiontype.name} + ': ' + ${actiontype.text}"
@@ -43,7 +43,7 @@
                 </div>
             </form>
             <!-- Block: Back Button -->
-            <button class="w-100 btn btn-lg btn-light" onclick="history.back()">
+            <button class="w-100 btn btn-lg btn-light mt-3" onclick="history.back()">
                 <i class="bi bi-arrow-left"></i>
                 <a th:text=" #{back}"></a>
             </button>

@@ -14,8 +14,8 @@
                 <h1 class="mb-3" th:text="${student.forename} + ' ' + #{reassign2}"></h1>
                 <!-- Dropdown company chooser -->
                 <div class="custom-select w-100 mb-3">
-                    <select name="companyName">
-                        <option value="label" th:text="#{chooseCompany}"></option>
+                    <select name="companyName" required>
+                        <option value="" th:text="#{chooseCompany}"></option>
                         <option th:each="company : ${companies}" th:text="${company.name}"></option>
                     </select>
                 </div>

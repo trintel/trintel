@@ -67,6 +67,9 @@ public class InitDatabaseService {
             Company company1 = new Company("[187]Strassenbande");
             Company company2 = new Company("Streber GmbH");
             Company company3 = new Company("7Bags");
+            company1.setDescription("Cooles 187 Unternehmen");
+            company2.setDescription("Wir sind die coolsten wie wir cruisen");
+            company3.setDescription("Wir verkaufen Rucksäcke");
             companyRepository.save(company1);
             companyRepository.save(company2);
             companyRepository.save(company3);
