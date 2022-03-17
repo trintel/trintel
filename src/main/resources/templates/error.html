@@ -11,14 +11,14 @@
         <style th:replace="fragments/small-content :: content"></style>
         <main class="form-small">
             <!-- Block: Header -->
-            <img class="w-50 mx-auto mb-3" th:src="@{/img/warning.png}"/>
-            <h1 class="mb-3" th:text="#{error}"></h1>
+            <h1 class="mb-3 text-danger" th:text="#{error}"></h1>
             <!-- Block: Info List -->
             <ul class="list-group mb-3">
-                <li class="list-group-item"> <h5 th:text="#{errorType} + ': ' + ${error}"></h5></li>
-                <li class="list-group-item"><h5 thtext="#{status} + ': ' + ${status}"></h5></li>
-                <li class="list-group-item"><h5 th:text="#{time} + ': ' +${timestamp}"></h5></li>
-                <li class="list-group-item"><h5 th:text="#{exception} + ': ' +${exception}"></h5></li>
+                <li class="list-group-item"><h5 th:text="#{errorType} + ': ' + ${error}"></h5></li>
+                <li class="list-group-item"><h5 th:text="#{status} + ': ' + ${status}"></h5></li>
+                <li class="list-group-item"><h5 th:text="#{exception} + ': ' + ${exception}"></h5></li>
+                <li class="list-group-item"><h5 th:text="#{time} + ': ' + ${timestamp}"></h5></li>
+                
             </ul>
             <!-- Block: Back Button -->
             <button class="w-100 btn btn-lg btn-light" onclick="history.back()">
