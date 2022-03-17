@@ -18,7 +18,7 @@ public class StudentController {
 
     @Autowired
     UserRepository userRepository;
-    
+
     @Autowired
     CompanyRepository companyRepository;
 
@@ -60,5 +60,5 @@ public class StudentController {
         model.addAttribute("students", userRepository.searchByString(searchString)); // add a list of all students based on the searchstring
         return "students-list";
     }
-    
+
 }
