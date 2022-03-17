@@ -14,7 +14,7 @@
             <form action="#" th:action="@{/action/save}" th:object="${actionType}" method="post">
                 <!-- Input for name -->
                 <div class="form-floating mb-3">
-                    <input type="text" maxlength="255" class="form-control" id="inputName" th:field="*{name}" placeholder="Action name">
+                    <input type="text" maxlength="30" class="form-control" id="inputName" th:field="*{name}" placeholder="Action name">
                     <label for="inputName" th:text="#{name}"></label>
                 </div>
                 <!-- Input for description -->

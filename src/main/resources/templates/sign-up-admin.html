@@ -15,23 +15,23 @@
             <form action="#" th:action="@{/signup/admin}" th:object="${user}" method="post">
                 <div class="d-flex">
                     <div class="form-floating mb-3">
-                        <input type="text" maxlength="255" class="form-control" id="floatingForename" placeholder="forename"
+                        <input type="text" maxlength="50" class="form-control" id="floatingForename" placeholder="forename"
                             name="forename" required autofocus>
                         <label for="floatingInputUsername" th:text="#{forename}"></label>
                     </div>
                     <div class="form-floating mb-3 ms-3">
-                        <input type="text" maxlength="255" class="form-control" id="floatingSurname" placeholder="surname"
+                        <input type="text" maxlength="50" class="form-control" id="floatingSurname" placeholder="surname"
                             name="surname" required>
                         <label for="floatingInputSurname" th:text="#{surname}"></label>
                     </div>
                 </div>
                 <div class="form-floating mb-3">
-                    <input type="email" class="form-control" id="floatingEmail" placeholder="email" name="email"
+                    <input type="email" maxlength="255" class="form-control" id="floatingEmail" placeholder="email" name="email"
                         required>
                     <label for="floatingEmail" th:text="#{email}"></label>
                 </div>
                 <div class="form-floating mb-3">
-                    <input type="password" class="form-control" id="floatingPassword" placeholder="password"
+                    <input type="password" maxlength="255" class="form-control" id="floatingPassword" placeholder="password"
                         name="password" required>
                     <label for="floatingPassword" th:text="#{password}"></label>
                 </div>

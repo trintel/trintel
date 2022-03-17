@@ -15,12 +15,12 @@
             <p class="alert alert-success" th:if="${param.logout}" th:text="#{successLogout}"></p>
             <form th:action="@{/login}" method="post">
                 <div class="form-floating mb-3">
-                    <input type="email" class="form-control" id="floatingInputUsername" placeholder="Email"
+                    <input type="email" maxlength="255" class="form-control" id="floatingInputUsername" placeholder="Email"
                         name="username" required autofocus>
                     <label for="floatingInputUsername" th:text="#{email}"></label>
                 </div>
                 <div class="form-floating mb-3">
-                    <input type="password" class="form-control" id="floatingPassword" placeholder="Password"
+                    <input type="password" maxlength="255" class="form-control" id="floatingPassword" placeholder="Password"
                         name="password">
                     <label for="floatingPassword" th:text="#{password}"></label>
                 </div>
