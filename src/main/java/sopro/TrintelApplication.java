@@ -9,6 +9,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
+import sopro.service.PdfInterface;
 import sopro.service.SignupUrlInterface;
 import sopro.storage.StorageProperties;
 
@@ -21,6 +22,9 @@ public class TrintelApplication implements CommandLineRunner {
 
     @Autowired
     SignupUrlInterface signupUrlService;
+
+    @Autowired
+    PdfInterface pdfService;
 
     public static final Logger logger = LoggerFactory.getLogger(TrintelApplication.class);
 

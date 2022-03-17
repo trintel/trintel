@@ -1,11 +1,20 @@
 package sopro.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -25,27 +34,35 @@ import sopro.repository.ActionTypeRepository;
 import sopro.repository.CompanyRepository;
 import sopro.repository.TransactionRepository;
 import sopro.service.ActionTypeService;
+import sopro.service.PdfInterface;
 
 @Controller
 public class TransactionController {
 
     @Autowired
     TransactionRepository transactionRepository;
+
     @Autowired
     ActionRepository actionRepository;
+
     @Autowired
-    ActionTypeRepository actionTypeRepository;      //TODO maybe own Controller
+    ActionTypeRepository actionTypeRepository;
+    // TODO maybe own Controller
     @Autowired
     CompanyRepository companyRepository;
+
     @Autowired
     ActionTypeService actionTypeService;
 
+    @Autowired
+    PdfInterface pdfService;
+
     @GetMapping("/transactions")
     public String listTransactions(Model model, @AuthenticationPrincipal User user) {
-        if (user.getRole().equals("ADMIN")) {   //Admins can see all transactions
+        if (user.getRole().equals("ADMIN")) { // Admins can see all transactions
             model.addAttribute("transactions", transactionRepository.findAll());
         }
-        if (user.getRole().equals("STUDENT")) { //Students can only see transactions, where they are involved
+        if (user.getRole().equals("STUDENT")) { // Students can only see transactions, where they are involved
             List<Transaction> transactions = new ArrayList<>();
             transactions.addAll(transactionRepository.findByBuyer(user.getCompany()));
             transactions.addAll(transactionRepository.findBySeller(user.getCompany()));
@@ -62,12 +79,13 @@ public class TransactionController {
     @GetMapping("/transaction/{companyID}/create")
     public String createTransaction(@PathVariable Long companyID, @AuthenticationPrincipal User user, Model model) {
 
-        //if(user.getCompany().getId() != companyID && user.getRole() != "ADMIN") {
-        //    return "redirect:/transactions";
-        //}
+        // if(user.getCompany().getId() != companyID && user.getRole() != "ADMIN") {
+        // return "redirect:/transactions";
+        // }
 
         Transaction newTransaction = new Transaction();
-        //added by @philo to pre set the seller known by the id to print the name in the formular
+        // added by @philo to pre set the seller known by the id to print the name in
+        // the formular
         newTransaction.setSeller(companyRepository.findById(companyID).get());
 
         Action newAction = new Action();
@@ -80,7 +98,8 @@ public class TransactionController {
 
     @PreAuthorize("hasCompany()")
     @PostMapping("/transaction/{companyID}/save")
-    public String createTransaction(Action action, Transaction transaction, @PathVariable Long companyID, @AuthenticationPrincipal User user, Model model) {
+    public String createTransaction(Action action, Transaction transaction, @PathVariable Long companyID,
+            @AuthenticationPrincipal User user, Model model) {
 
         transaction.setBuyer(user.getCompany());
         transaction.setSeller(companyRepository.findById(companyID).get());
@@ -120,19 +139,23 @@ public class TransactionController {
     //TODO only othorize if user is seller/buyer in resprct to actiontype.initiatorType.
     @PreAuthorize("hasPermission(#transactionID, 'transaction') and hasRole('STUDENT')")
     @GetMapping("/transaction/{transactionID}/addAction")
-    public String showAction(Action action, @PathVariable Long transactionID, @AuthenticationPrincipal User user, Model model) {
+    public String showAction(Action action, @PathVariable Long transactionID, @AuthenticationPrincipal User user,
+            Model model) {
         Action newAction = new Action();
         InitiatorType initiatorType = InitiatorType.SELLER;
 
-        if(user.getCompany().equals(transactionRepository.findById(transactionID).get().getBuyer())) {      //findout if current user is Buyer or seller.
+        if (user.getCompany().equals(transactionRepository.findById(transactionID).get().getBuyer())) { // findout if
+                                                                                                        // current user
+                                                                                                        // is Buyer or
+                                                                                                        // seller.
             initiatorType = InitiatorType.BUYER;
         }
 
-        //a ArrayList for all available actions for the current Initiator
-        //List<ActionType> actionTypes  = new ArrayList<>();
-        //actionTypes = actionTypeRepository.findByInitiatorType(initiatorType);
+        // a ArrayList for all available actions for the current Initiator
+        // List<ActionType> actionTypes = new ArrayList<>();
+        // actionTypes = actionTypeRepository.findByInitiatorType(initiatorType);
 
-        //add the list of special actions
+        // add the list of special actions
         model.addAttribute("actiontypes", actionTypeRepository.findByInitiatorType(initiatorType));
         model.addAttribute("action", newAction);
         model.addAttribute("transactionID", transactionID);
@@ -155,29 +178,31 @@ public class TransactionController {
 
     @PreAuthorize("hasPermission(#transactionID, 'transaction') and hasRole('STUDENT')")
     @PostMapping("/transaction/{transactionID}/addOffer")
-    public String addOffer(Action offer, @PathVariable Long transactionID, @AuthenticationPrincipal User user, BindingResult bindingResult, Model model) {
-        if(bindingResult.hasErrors()) {
+    public String addOffer(Action offer, @PathVariable Long transactionID, @AuthenticationPrincipal User user,
+            BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
             model.addAttribute("action", offer);
             model.addAttribute("transactionID", transactionID);
             return "transaction-addOffer";
         }
-        offer.setActiontype(actionTypeService.getOfferAction());        //to be sure.
+        offer.setActiontype(actionTypeService.getOfferAction()); // to be sure.
         offer.setTransaction(transactionRepository.findById(transactionID).get());
         offer.setInitiator(user);
-        actionRepository.save(offer);       //save the new offer.
+        actionRepository.save(offer); // save the new offer.
         return "redirect:/transaction/" + transactionID;
     }
 
     @PreAuthorize("hasPermission(#transactionID, 'transaction') and hasRole('STUDENT')")
     @PostMapping("/transaction/{transactionID}/addAction")
-    public String createAction(Action action, @PathVariable Long transactionID, @AuthenticationPrincipal User user, Model model) {
+    public String createAction(Action action, @PathVariable Long transactionID, @AuthenticationPrincipal User user,
+            Model model) {
         // ActionType actionType = actionTypeRepository.findByName(actionTypeName);
         // action.setActiontype(actionType);
         Transaction transaction = transactionRepository.findById(transactionID).get();
 
-        if (action.getActiontype().getName().equals("ACCEPT")){
+        if (action.getActiontype().getName().equals("ACCEPT")) {
             transaction.setConfirmed(true);
-        }else if(action.getActiontype().getName().equals("PAID")){
+        } else if (action.getActiontype().getName().equals("PAID")) {
             transaction.setPaid(true);
         }
 
@@ -185,13 +210,13 @@ public class TransactionController {
         action.setInitiator(user);
         actionRepository.save(action);
 
-
         return "redirect:/transaction/" + transactionID;
     }
 
     @PreAuthorize("hasPermission(#transactionID, 'transaction') and hasRole('STUDENT')")
     @PostMapping("/transaction/{transactionID}/accept")
-    public String createAcceptAction(String message, @PathVariable Long transactionID, @AuthenticationPrincipal User user) {
+    public String createAcceptAction(String message, @PathVariable Long transactionID,
+            @AuthenticationPrincipal User user) {
         Transaction transaction = transactionRepository.findById(transactionID).get();
         Action accept = new Action(message, actionTypeService.getAcceptActionType(), transaction);
         transaction.setConfirmed(true);
@@ -203,7 +228,8 @@ public class TransactionController {
 
     @PreAuthorize("hasPermission(#transactionID, 'transaction') and hasRole('STUDENT')")
     @PostMapping("/transaction/{transactionID}/cancel")
-    public String createCancelAction(String message, @PathVariable Long transactionID, @AuthenticationPrincipal User user) {
+    public String createCancelAction(String message, @PathVariable Long transactionID,
+            @AuthenticationPrincipal User user) {
         Transaction transaction = transactionRepository.findById(transactionID).get();
         Action cancel = new Action(message, actionTypeService.getAbortActionType(), transaction);
         transaction.setActive(false);
@@ -215,7 +241,8 @@ public class TransactionController {
 
     @PreAuthorize("hasPermission(#transactionID, 'transaction') and hasRole('STUDENT')")
     @PostMapping("/transaction/{transactionID}/delivery")
-    public String createDeliveryAction(String message, @PathVariable Long transactionID, @AuthenticationPrincipal User user) {
+    public String createDeliveryAction(String message, @PathVariable Long transactionID,
+            @AuthenticationPrincipal User user) {
         Transaction transaction = transactionRepository.findById(transactionID).get();
         Action delivered = new Action(message, actionTypeService.getDeliveryActionType(), transaction);
         transaction.setShipped(true);
@@ -227,7 +254,8 @@ public class TransactionController {
 
     @PreAuthorize("hasPermission(#transactionID, 'transaction') and hasRole('STUDENT')")
     @PostMapping("/transaction/{transactionID}/invoicing")
-    public String createInvoiceAction(String message, @PathVariable Long transactionID, @AuthenticationPrincipal User user) {
+    public String createInvoiceAction(String message, @PathVariable Long transactionID,
+            @AuthenticationPrincipal User user) {
         Transaction transaction = transactionRepository.findById(transactionID).get();
         Action invoice = new Action(message, actionTypeService.getInvoiceActionType(), transaction);
         invoice.setInitiator(user);
@@ -237,7 +265,8 @@ public class TransactionController {
 
     @PreAuthorize("hasPermission(#transactionID, 'transaction') and hasRole('STUDENT')")
     @PostMapping("/transaction/{transactionID}/paid")
-    public String createPaidAction(String message, @PathVariable Long transactionID, @AuthenticationPrincipal User user) {
+    public String createPaidAction(String message, @PathVariable Long transactionID,
+            @AuthenticationPrincipal User user) {
         Transaction transaction = transactionRepository.findById(transactionID).get();
         Action paid = new Action(message, actionTypeService.getPaidActionType(), transaction);
         transaction.setPaid(true);
@@ -248,5 +277,51 @@ public class TransactionController {
         return "redirect:/transaction/" + transactionID;
     }
 
+    @PreAuthorize("hasRole('STUDENT')")
+    @GetMapping("/exportAction/{actionId}")
+    public ResponseEntity<byte[]> exportAction(@PathVariable long actionId, HttpServletResponse response, Model model) {
+        String pdfPath = pdfService.generatePdfFromAction(actionId);
 
+        byte[] contents;
+        try {
+            contents = Files.readAllBytes(new File(pdfPath).toPath());
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            String [] soup = pdfPath.split("/"); // Last part is the filename
+            String filename =  soup[soup.length-1];
+            headers.setContentDispositionFormData(filename, filename);
+            headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+            ResponseEntity<byte[]> res = new ResponseEntity<>(contents, headers, HttpStatus.OK);
+            return res;
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @PreAuthorize("hasRole('STUDENT')")
+    @GetMapping("/exportTransaction/{transactionId}")
+    public ResponseEntity<byte[]> exportTransaction(@PathVariable long transactionId, HttpServletResponse response, Model model) {
+        String pdfPath = pdfService.generatePdfFromTransaction(transactionId);
+
+        byte[] contents;
+        try {
+            contents = Files.readAllBytes(new File(pdfPath).toPath());
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            String [] soup = pdfPath.split("/"); // Last part is the filename
+            String filename =  soup[soup.length-1];
+            headers.setContentDispositionFormData(filename, filename);
+            headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+            ResponseEntity<byte[]> res = new ResponseEntity<>(contents, headers, HttpStatus.OK);
+            return res;
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
