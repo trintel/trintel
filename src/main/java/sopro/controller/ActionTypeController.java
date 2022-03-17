@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import sopro.model.ActionType;
 import sopro.model.util.InitiatorType;
 import sopro.repository.ActionTypeRepository;
+import sopro.service.SignupUrlService;
 
 @Controller
 public class ActionTypeController {
@@ -23,6 +24,7 @@ public class ActionTypeController {
 
     @GetMapping("/admin-panel")
     public String showActions(Model model) {
+        model.addAttribute("signupUrl", SignupUrlService.STUDENT_SIGNUP_URL);
         model.addAttribute("actionTypes", actionTypeRepository.findAll());
         return "admin-panel";
     }
@@ -47,7 +49,7 @@ public class ActionTypeController {
 
         actionTypeRepository.save(actionType);
 
-        return "redirect:/actions";
+        return "redirect:/admin-panel";
     }
 
     @GetMapping("action/edit/{actionTypeID}")
@@ -66,7 +68,7 @@ public class ActionTypeController {
         }
         actionType.setId(actionTypeID);
         actionTypeRepository.save(actionType);
-        return "redirect:/actions";
+        return "redirect:/admin-panel";
 
     }
 

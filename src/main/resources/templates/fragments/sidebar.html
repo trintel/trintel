@@ -10,6 +10,12 @@
                 </a>
               </li>
               <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                <a th:classappend="${#httpServletRequest.getRequestURI() == '/admin-panel' ? 'active':''}" class="nav-link" th:href="@{/admin-panel}">
+                  <i th:class="${#httpServletRequest.getRequestURI() == '/admin-panel' ? 'bi bi-grid-fill':'bi bi-grid'}"></i>
+                  <span th:text="#{adminPanel}"/>
+                </a>
+              </li>
+              <li class="nav-item" sec:authorize="hasRole('ADMIN')">
                 <a th:classappend="${#httpServletRequest.getRequestURI().startsWith('/companies') ? 'active':''}" class="nav-link" th:href="@{/companies}">
                   <i th:class="${#httpServletRequest.getRequestURI().startsWith('/companies') ? 'bi bi-briefcase-fill':'bi bi-briefcase'}"></i>
                   <span th:text="#{companies}"/>
