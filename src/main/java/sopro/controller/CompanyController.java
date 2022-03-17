@@ -37,6 +37,7 @@ public class CompanyController {
     // ----------------------------------- ADMIN FUNCTIONS
     // #######################################################################################
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/companies/add")
     public String addCompany(Model model) {
         Company company = new Company(); // creating a new Company Object to be added to the database
@@ -44,6 +45,7 @@ public class CompanyController {
         return "company-create";
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/companies/save")
     public String saveCompany(@Valid Company company, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
@@ -54,7 +56,7 @@ public class CompanyController {
         return "redirect:/companies";
     }
 
-    // TODO Rechte einschränken
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/companies/delete/{companyID}")
     public String deleteCompany(@PathVariable Long companyID, Model model) {
         //TODO maybe delete all transactions. so that companies with transactions can also be deleted.
@@ -77,6 +79,7 @@ public class CompanyController {
         return "students-list";
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/student/{id}/reassign")
     public String editStudent(Model model, @PathVariable Long id) {
         User student = userRepository.findById(id).get();
@@ -94,6 +97,7 @@ public class CompanyController {
         return "student-reassign";
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/student/{id}/reassign")
     public String moveToCompany(String companyName, @PathVariable Long id, Model model) {
         User user = userRepository.findById(id).get(); // find the student to be editet
