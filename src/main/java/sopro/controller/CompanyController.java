@@ -79,6 +79,7 @@ public class CompanyController {
     // ----------------------------------- STUDENT FUNCTIONS
     // #########################################################################################
 
+    @PreAuthorize("!hasCompany() and hasRole('STUDENT')")      //only if the company is not assigned and the user is student
     @GetMapping("/company/select")
     public String selectCompany(Model model) {
         // .findByOrderByNameAsc() statt .findAll()
@@ -86,12 +87,14 @@ public class CompanyController {
         return "company-select";
     }
 
+    @PreAuthorize("!hasCompany() and hasRole('STUDENT')")
     @GetMapping("/company/select/{id}")
     public String joinCompany(@PathVariable Long id, Model model) {
         model.addAttribute("company", companyRepository.findById(id).get());
         return "company-view";
     }
 
+    @PreAuthorize("!hasCompany() and hasRole('STUDENT')")
     @PostMapping("/company/join")
     public String joinCompany2(String companyName, @AuthenticationPrincipal User user, Model model) {
         // // //TODO schöner lösen
@@ -105,26 +108,20 @@ public class CompanyController {
         return "redirect:/home";
     }
 
+    @PreAuthorize("hasCompany()")   //to prevent NullPointer. Admins not allowed.
     @GetMapping("/company")
     public String viewOwnCompany(Model model, @AuthenticationPrincipal User user) {
         return "redirect:/companies/" + user.getCompany().getId();
     }
 
-    @PreAuthorize("hasPermission(#companyID, 'company')")
+    @PreAuthorize("hasRole('ADMIN') or isInCompany(#companyID)")
     @GetMapping("/company/{companyID}/edit")
-    public String editOwnCompany(Model model, @AuthenticationPrincipal User user, @PathVariable Long companyID) {
-        try {
-            if (user.getRole().equals("ADMIN") || user.getCompany().getId().equals(companyID)) {
-                model.addAttribute("company", companyRepository.findById(companyID).get());
-                return "company-edit";
-            } else {
-                return "redirect:/home"; // not allowed to edit that company
-            }
-        } catch (NullPointerException e) { // if company not assigned (should never happen...)
-            return "redirect:/home";
-        }
+    public String editOwnCompany(Model model, @PathVariable Long companyID) {
+        model.addAttribute("company", companyRepository.findById(companyID).get());
+        return "company-edit";
     }
 
+    @PreAuthorize("isInCompany(#companyID)")
     @PostMapping(consumes = "multipart/form-data", value = "/company/{companyID}/edit")
     public String saveOwnCompany(@RequestParam("formFile") MultipartFile companyLogo, @Valid Company company,
             BindingResult bindingResult, @PathVariable Long companyID, @AuthenticationPrincipal User user, Model model)
@@ -157,6 +154,7 @@ public class CompanyController {
     // company (reassign)
     // Admins can add new Companies
     // Students see only other companies. can click on one to start transaction.
+    //TODO difference between student and admin refactoring
     @GetMapping("/companies")
     public String listCompanies(Model model, @AuthenticationPrincipal User user) {
         if (user.getRole().equals("ADMIN")) {
