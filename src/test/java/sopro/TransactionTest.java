@@ -211,7 +211,7 @@ public class TransactionTest {
     public void transactionDetailTestAdmin() throws Exception {
         Long transactionId = transactionRepository.findByBuyer(userRepository.findByEmail("j@j").getCompany()).get(0).getId();
         mockMvc.perform(get("/transaction/" + transactionId))
-               .andExpect(status().isForbidden());
+               .andExpect(status().isOk());
 
     }
 
@@ -264,9 +264,8 @@ public class TransactionTest {
     @WithUserDetails(value = "j@j", userDetailsServiceBeanName = "userDetailsService")
     public void showActionTypesTestStudent() throws Exception {
         mockMvc.perform(get("/actions"))
-               .andExpect(status().isOk())
-               .andExpect(view().name("action-list"));
-    } */
+               .andExpect(status().isForbidden());
+    }
 
     /**
      * Tests if admin can see all actionstypes.

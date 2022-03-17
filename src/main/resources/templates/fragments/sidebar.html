@@ -22,8 +22,8 @@
                 </a>
               </li>
               <li class="nav-item" sec:authorize="hasRole('ADMIN')">
-                <a th:classappend="${#httpServletRequest.getRequestURI() == '/students' ? 'active':''}" class="nav-link" th:href="@{/students}">
-                  <i th:class="${#httpServletRequest.getRequestURI() == '/students' ? 'bi bi-people-fill':'bi bi-people'}"></i>
+                <a th:classappend="${#httpServletRequest.getRequestURI().startsWith('/students') ? 'active':''}" class="nav-link" th:href="@{/students}">
+                  <i th:class="${#httpServletRequest.getRequestURI().startsWith('/students') ? 'bi bi-people-fill':'bi bi-people'}"></i>
                   <span th:text="#{students}"/>
                 </a>
               </li>

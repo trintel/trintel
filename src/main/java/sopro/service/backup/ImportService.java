@@ -68,6 +68,8 @@ public class ImportService implements ImportInterface {
         try {
             JSONObject o = (JSONObject) parser.parse(new FileReader(path));
 
+            clearDatabase(); // clear when JSON is found.
+
             importCompany((JSONArray) o.get("company"));
             importCompanyLogo((JSONArray) o.get("companyLogo"));
             importUser((JSONArray) o.get("user"));
@@ -235,5 +237,15 @@ public class ImportService implements ImportInterface {
 
             userRepository.save(u);
         }
+    }
+
+    private void clearDatabase() {
+        actionRepository.deleteAll();
+        actionTypeRepository.deleteAll();
+        userRepository.deleteAll();
+        transactionRepository.deleteAll();
+        companyRepository.deleteAll();
+        companyLogoRepository.deleteAll();
+        verificationTokenRepository.deleteAll();
     }
 }
