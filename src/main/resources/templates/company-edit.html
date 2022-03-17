@@ -26,7 +26,7 @@
                     </button>
                 </div>
                 <div class="form-floating mb-3">
-                    <input type="text" pattern="^[a-zA-Z0-9 ]+$" class="form-control" id="floatingName"
+                    <input type="text" maxlength="255" pattern="^[a-zA-Z0-9 ]+$" class="form-control" id="floatingName"
                         placeholder="Company name" th:field="*{name}">
                     <label for="floatingName" th:text="#{companyName}"></label>
                 </div>

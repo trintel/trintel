@@ -14,12 +14,12 @@
             <form action="#" th:action="@{/action/save}" th:object="${actionType}" method="post">
                 <!-- Input for name -->
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="inputName" th:field="*{name}" placeholder="Action name">
+                    <input type="text" maxlength="255" class="form-control" id="inputName" th:field="*{name}" placeholder="Action name">
                     <label for="inputName" th:text="#{name}"></label>
                 </div>
                 <!-- Input for description -->
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="inputDescription" th:field="*{text}" placeholder="Description">
+                    <input type="text" maxlength="255" class="form-control" id="inputDescription" th:field="*{text}" placeholder="Description">
                     <label for="inputDescription" th:text="#{description}"></label>
                 </div>
                 <!-- Radio buttons for company role input -->
