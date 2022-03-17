@@ -417,9 +417,9 @@ public class TransactionTest {
      * Tests if admin can edit and save an actiontype.
      * @throws Exception
      */
-    @Test
+    /* @Test
     @WithUserDetails(value = "admin@admin", userDetailsServiceBeanName = "userDetailsService")
-    /* public void saveEditActionTypeTestAdmin() throws Exception {
+    public void saveEditActionTypeTestAdmin() throws Exception {
 
         Iterable<ActionType> actionTypes =  actionTypeRepository.findAll();
         ActionType actionType = actionTypes.iterator().next();
