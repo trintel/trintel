@@ -16,54 +16,66 @@
 			<div th:each="transaction: ${transactions}">
 				<a th:href="@{'/transaction/' + ${transaction.id} + '#n'}" class="text-decoration-none">
 					<div class="card mb-3">
-						<div class="card-body d-flex align-items-center justify-content-between">
-							<!-- Badges for transaction status -->
-							<div th:switch="${transaction.actions[#lists.size(transaction.actions) - 1].actiontype.name}">
-								<h4 th:case="Request" class="mb-0">
-									<div class="badge bg-danger me-3" th:text="#{requestTLV}"></div>
-								</h4>
-								<h4 th:case="Offer" class="mb-0">
-									<div class="badge bg-warning me-3" th:text="#{offerTLV}"></div>
-								</h4>
-								<h4 th:case="Accept" class="mb-0">
-									<div class="badge bg-success me-3" th:text="#{acceptTL}"></div>
-								</h4>
-								<h4 th:case="Cancel" class="mb-0"><div class="badge bg-light text-dark me-3" th:text="#{cancelTL}"></div></h4>
-								<h4 th:case="Delivery" class="mb-0"><div class="badge bg-primary me-3" th:text="#{deliveryTLV}"></div></h4>
-								<h4 th:case="Invoicing" class="mb-0"><div class="badge bg-dark me-3" th:text="#{invoicingTLV}"></div></h4>
-								<h4 th:case="Paid" class="mb-0"><div class="badge bg-primary me-3" th:text="#{paidTL}"></div></h4>
-								<h4 th:case="*" class="mb-0">
-									<div class="badge bg-secondary me-3"
-										th:text="${transaction.actions[#lists.size(transaction.actions) - 1].actiontype.name}">
-									</div>
-								</h4>
+						<!-- Alert marker if opposing company performed last action -->
+						<div sec:authorize="hasRole('STUDENT')">
+							<div th:if="${#request.userPrincipal.principal.company.id != transaction.actions[#lists.size(transaction.actions) - 1].initiator.company.id}">
+								<div th:unless="${transaction.actions[#lists.size(transaction.actions) - 1].actiontype.name == 'Paid' or transaction.actions[#lists.size(transaction.actions) - 1].actiontype.name == 'Cancel'}">
+									<span class="position-absolute top-0 start-0 translate-middle p-2 bg-danger border border-light rounded-circle">
+										<span class="visually-hidden">New alerts</span>
+									</span>
+								</div>
 							</div>
-							<div class="row row-cols-1 row-cols-lg-4 row-cols-md-2 align-items-center" style="width: 90%">
-								<!-- Card text -->
-								<div class="col">
-									<span class="card-text text-muted fs-6" th:text="#{buyer}"></span>
-									<span class="card-text text-black">
-										<h5 th:text="${transaction.buyer.name}"></h5>
-									</span>
+						</div>
+						<div class="card-body d-flex align-items-center justify-content-between">
+							<div class="w-100">
+								<!-- Badges for transaction status -->
+								<div th:switch="${transaction.actions[#lists.size(transaction.actions) - 1].actiontype.name}">
+									<h4 th:case="Request">
+										<div class="badge bg-danger" th:text="#{requestTLV}"></div>
+									</h4>
+									<h4 th:case="Offer">
+										<div class="badge bg-warning" th:text="#{offerTLV}"></div>
+									</h4>
+									<h4 th:case="Accept">
+										<div class="badge bg-success" th:text="#{acceptTL}"></div>
+									</h4>
+									<h4 th:case="Cancel"><div class="badge bg-light text-dark" th:text="#{cancelTL}"></div></h4>
+									<h4 th:case="Delivery"><div class="badge bg-primary" th:text="#{deliveryTLV}"></div></h4>
+									<h4 th:case="Invoicing"><div class="badge bg-dark" th:text="#{invoicingTLV}"></div></h4>
+									<h4 th:case="Paid"><div class="badge bg-primary" th:text="#{paidTL}"></div></h4>
+									<h4 th:case="*">
+										<div class="badge bg-secondary"
+											th:text="${transaction.actions[#lists.size(transaction.actions) - 1].actiontype.name}">
+										</div>
+									</h4>
 								</div>
-								<div class="col">
-									<span class="card-text text-muted me-5 fs-6" th:text="#{seller}"></span>
-									<span class="card-text text-black">
-										<h5 th:text="${transaction.seller.name}"></h5>
-									</span>
-								</div>
-								<div class="col">
-									<span class="card-text text-muted fs-6" th:text="#{product}"></span>
-									<span class="card-text text-black">
-										<h5 th:text="${transaction.product}"></h5>
-									</span>
-								</div>
-								<div class="col">
-									<span class="card-text text-muted fs-6" th:text="#{lastUpdate}"></span>
-									<span class="card-text text-black">
-										<h5 th:text="${#temporals.format(transaction.actions[#lists.size(transaction.actions) - 1].date, 'dd-MM-yyyy')} + ' ' + ${#temporals.format(transaction.actions[#lists.size(transaction.actions) - 1].time, 'HH:mm')}">
-										</h5>
-									</span>
+								<div class="row row-cols-1 row-cols-lg-4 row-cols-md-2 align-items-center">
+									<!-- Card text -->
+									<div class="col">
+										<span class="card-text text-muted fs-6" th:text="#{buyer}"></span>
+										<span class="card-text text-black">
+											<h5 th:text="${transaction.buyer.name}"></h5>
+										</span>
+									</div>
+									<div class="col">
+										<span class="card-text text-muted me-5 fs-6" th:text="#{seller}"></span>
+										<span class="card-text text-black">
+											<h5 th:text="${transaction.seller.name}"></h5>
+										</span>
+									</div>
+									<div class="col">
+										<span class="card-text text-muted fs-6" th:text="#{product}"></span>
+										<span class="card-text text-black">
+											<h5 th:text="${transaction.product}"></h5>
+										</span>
+									</div>
+									<div class="col">
+										<span class="card-text text-muted fs-6" th:text="#{lastUpdate}"></span>
+										<span class="card-text text-black">
+											<h5 th:text="${#temporals.format(transaction.actions[#lists.size(transaction.actions) - 1].date, 'dd-MM-yyyy')} + ' ' + ${#temporals.format(transaction.actions[#lists.size(transaction.actions) - 1].time, 'HH:mm')}">
+											</h5>
+										</span>
+									</div>
 								</div>
 							</div>
 							<i class="bi bi-chevron-right text-black ms-3" style="font-size:2rem;"></i>
