@@ -53,7 +53,7 @@
 									<h4 th:case="Paid"><div class="badge bg-primary" th:text="#{paidTL}"></div></h4>
 									<h4 th:case="*">
 										<div class="badge bg-secondary"
-											th:text="${transaction.actions[#lists.size(transaction.actions) - 1].actiontype.name}">
+											th:text="${transaction.getLatestActionName()}">
 										</div>
 									</h4>
 								</div>
