@@ -142,7 +142,7 @@ public class TransactionController {
     public String showAction(Action action, @PathVariable Long transactionID, @AuthenticationPrincipal User user,
             Model model) {
         Action newAction = new Action();
-        InitiatorType initiatorType = InitiatorType.SELLER;
+        InitiatorType initiatorType = InitiatorType.SELLER; //TODO kann weg
 
         if (user.getCompany().equals(transactionRepository.findById(transactionID).get().getBuyer())) { // findout if
                                                                                                         // current user

@@ -37,6 +37,9 @@ public class TrintelApplication implements CommandLineRunner {
     public void run(String... arg0) throws Exception {
         signupUrlService.generateAdminSignupURL();
         signupUrlService.generateStudentSignupURL();
-        initDatabaseService.init();
+        //For tests
+        //initDatabaseService.init();
+        //For final deploy
+        initDatabaseService.deployinit();
     }
 }
