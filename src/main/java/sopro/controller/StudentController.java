@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import sopro.model.Company;
 import sopro.model.User;
@@ -55,9 +56,10 @@ public class StudentController {
         return "redirect:/students";
     }
 
-    @GetMapping("/students/search/{searchString}")
-    public String searchStudents(@PathVariable String searchString, Model model) {
-        model.addAttribute("students", userRepository.searchByString(searchString)); // add a list of all students based on the searchstring
+    @GetMapping("/students/search")
+    public String searchStudents(@RequestParam String q, Model model) {
+        model.addAttribute("students", userRepository.searchByString(q)); // add a list of all students based on the searchstring
+        model.addAttribute("searchedStudent", q);
         return "students-list";
     }
 

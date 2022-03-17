@@ -44,9 +44,14 @@ function sortTable(n, t) {
                 //case 2 for numeric input
                 /* Check if the two rows should switch place,
                 based on the direction, asc or desc: */
-                //parse String number to Int
-                y = parseInt(y)
-
+                //remove unwanted signs
+                y.replace('€', '');
+                x.replace('€', '');
+        
+                //parse String into Float
+                y = parseFloat(y);
+                x = parseFloat(x);
+                
                 if (dir == "asc") {
                     if (x > y) {
                         // If so, mark as a switch and break the loop:
@@ -60,6 +65,7 @@ function sortTable(n, t) {
                         break;
                     }
                 }
+
             }
         }
         if (shouldSwitch) {
