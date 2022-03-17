@@ -40,9 +40,15 @@ function sortTable(n, t) {
                 }
             } else if (t == 2) {
                 /* Check if the two rows should switch place,
-            based on the direction, asc or desc: */
-                y = parseInt(y)
-
+                based on the direction, asc or desc: */
+                //remove unwanted signs
+                y.replace('€', '');
+                x.replace('€', '');
+        
+                //parse String into Float
+                y = parseFloat(y);
+                x = parseFloat(x);
+                
                 if (dir == "asc") {
                     if (x > y) {
                         // If so, mark as a switch and break the loop:
@@ -56,6 +62,7 @@ function sortTable(n, t) {
                         break;
                     }
                 }
+
             }
         }
         if (shouldSwitch) {
