@@ -10,6 +10,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import sopro.TrintelApplication;
 import sopro.model.Action;
 import sopro.repository.ActionRepository;
 import sopro.repository.CompanyLogoRepository;
@@ -86,7 +87,7 @@ public class PdfService implements PdfInterface {
 
     private void buildPdf(long[] actionIdList, String path) throws DocumentException, IOException {
 
-        String FONT = "./src/main/resources/font/Segoe_UI.ttf";
+        String FONT = TrintelApplication.WORKDIR + "/bin/main/font/Segoe_UI.ttf";
         BaseFont bf = BaseFont.createFont(FONT, BaseFont.WINANSI, BaseFont.EMBEDDED);
         Font font8 = new Font(bf, 8);
         Font font10 = new Font(bf, 10);
@@ -116,7 +117,7 @@ public class PdfService implements PdfInterface {
             };
             // header
 
-            Image img = Image.getInstance("./src/main/resources/static/img/placeholder.jpg");
+            Image img = Image.getInstance(TrintelApplication.WORKDIR + "/bin/main/static/img/placeholder.jpg");
 
             try {
                 img = Image.getInstance(a.getInitiator().getCompany().getCompanyLogo().getLogo());
