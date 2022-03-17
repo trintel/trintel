@@ -10,7 +10,19 @@
 
 <body>
 	<th:block th:fragment="content">
-		<h1 th:text="#{transactions}"></h1>
+		<div class="d-lg-flex justify-content-between align-items-end mb-3">
+			<div>
+				<h1 th:text="#{transactions}"></h1>
+				<p sec:authorize="hasRole('STUDENT')" class="mb-0" th:text="#{tldescrStudent}"></p>
+				<p sec:authorize="hasRole('ADMIN')" class="mb-0" th:text="#{tldescrAdmin}"></p>
+			</div>
+			<div sec:authorize="hasRole('STUDENT')">
+				<a class="btn btn-primary btn mt-3 mt-lg-0" th:href="@{/companies}">
+					<i class="bi bi-plus"></i>
+					<span th:text="#{newTransaction}" />
+				</a>
+			</div>
+		</div>
 		<div th:unless="${transactions.isEmpty()}">
 			<!-- Card for every transaction -->
 			<div th:each="transaction: ${transactions}">
@@ -45,7 +57,7 @@
 									<h4 th:case="Paid"><div class="badge bg-primary" th:text="#{paidTL}"></div></h4>
 									<h4 th:case="*">
 										<div class="badge bg-secondary"
-											th:text="${transaction.actions[#lists.size(transaction.actions) - 1].actiontype.name}">
+											th:text="${transaction.getLatestActionName()}">
 										</div>
 									</h4>
 								</div>
@@ -84,11 +96,6 @@
 				</a>
 			</div>
 		</div>
-		<!-- Button for new transaction -->
-		<div class="d-flex justify-content-center" sec:authorize="hasRole('STUDENT')">
-			<a class="btn btn-primary btn-lg" th:href="@{/companies}" th:text="#{newTransaction}"></a>
-		</div>
-		<p th:if="${transactions.isEmpty()}" th:text="#{noTransactionFound}"></p>
 	</th:block>
 </body>
 
