@@ -11,9 +11,10 @@
 <body>
 	<th:block th:fragment="content">
 		<h1 th:text="#{transactionProgress}"></h1>
-		<h3 class="mb-3"
-			th:text="|${actions[0].transaction.buyer.name} #{buying} ${actions[0].transaction.product} #{from} ${actions[0].transaction.seller.name}|">
-		</h3>
+		<div class="d-lg-flex justify-content-between align-items-end mb-3">
+			<h3 class="mb-3"th:text="|${actions[0].transaction.buyer.name} #{buying} ${actions[0].transaction.product} #{from} ${actions[0].transaction.seller.name}|"></h3>
+			<a class="btn btn-outline-primary" th:href="@{'/pdfexport/transaction/' + ${transactionID}}"><i class="bi bi-file-earmark-pdf"></i>PDF</a>
+		</div>
 		<!-- Accordion for every action in chosen transaction to visualize transaction progress -->
 		<div th:unless="${actions.isEmpty()}">
 			<div class="accordion" id="accordionPanelsStayOpenExample">
@@ -91,6 +92,9 @@
 									<span class="text-muted fs-6" th:text="#{message}"></span>
 									<span class="text-black"><h5 th:text="${action.message}" class="text-break"></h5></span>
 								</div>
+								<a class="ms-auto" th:href="@{'/pdfexport/action/' + ${action.id}}">
+									<button type="button" class="btn btn-outline-primary"><i class="bi bi-file-earmark-pdf"></i>PDF</button>
+								</a>
 							</div>
 						</div>
 					</div>

@@ -178,6 +178,16 @@ main {
   border-color: #4c5672;
 }
 
+.btn-outline-primary {
+  color: #556080;
+  border-color: #556080;
+}
+
+.btn-outline-primary:hover {
+  background-color: #4c5672;
+  border-color: #4c5672;
+}
+
 .btn-danger {
   color: #dc3545;
   background-color: #dc35452b;
