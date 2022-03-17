@@ -41,7 +41,6 @@ public class DatabaseTest {
     @Autowired
     TransactionRepository transactionRepository;
 
-
     @Autowired
     DatabaseService databaseService;
 
@@ -222,4 +221,8 @@ public class DatabaseTest {
     }
     //test if company logo is saved in repository
     //test if paid can be set before confirmed
+
+
+
+
 }
