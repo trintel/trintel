@@ -14,6 +14,7 @@ import sopro.repository.CompanyRepository;
 import sopro.repository.UserRepository;
 
 @Controller
+@PreAuthorize("hasRole('ADMIN')")
 public class StudentController {
 
     @Autowired
@@ -54,7 +55,6 @@ public class StudentController {
         return "redirect:/students";
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/students/search/{searchString}")
     public String searchStudents(@PathVariable String searchString, Model model) {
         model.addAttribute("students", userRepository.searchByString(searchString)); // add a list of all students based on the searchstring
