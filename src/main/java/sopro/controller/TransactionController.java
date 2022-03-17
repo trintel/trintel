@@ -106,7 +106,7 @@ public class TransactionController {
 
         List<ActionType> actionTypes = new ArrayList<>();
         if(user.getRole().equals("STUDENT")) {
-            actionTypeService.getAvailableActions(transaction, user);
+            actionTypes = actionTypeService.getAvailableActions(transaction, user);
         }
         model.addAttribute("actiontypes", actionTypes);     //only find the available actiontypes for that user.
         model.addAttribute("action", newAction);
