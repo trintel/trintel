@@ -276,8 +276,7 @@ public class TransactionController {
         transactionRepository.save(transaction);
         return "redirect:/transaction/" + transactionID;
     }
-
-    @PreAuthorize("hasRole('STUDENT')")
+    
     @GetMapping("/pdfexport/action/{actionId}")
     public ResponseEntity<byte[]> exportAction(@PathVariable long actionId, HttpServletResponse response, Model model) {
         String pdfPath = pdfService.generatePdfFromAction(actionId);
@@ -301,7 +300,6 @@ public class TransactionController {
         return null;
     }
 
-    @PreAuthorize("hasRole('STUDENT')")
     @GetMapping("/pdfexport/transaction/{transactionId}")
     public ResponseEntity<byte[]> exportTransaction(@PathVariable long transactionId, HttpServletResponse response, Model model) {
         String pdfPath = pdfService.generatePdfFromTransaction(transactionId);

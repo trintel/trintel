@@ -68,7 +68,6 @@ public class CompanyController {
         return "redirect:/companies";
     }
 
-    @PreAuthorize("hasPermission(#companyID, 'company')")
     @GetMapping("/companies/{companyID}")
     public String viewCompany(@PathVariable Long companyID, Model model) {
         model.addAttribute("company", companyRepository.findById(companyID).get());
