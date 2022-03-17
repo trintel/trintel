@@ -20,10 +20,16 @@ import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.draw.LineSeparator;
-
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.*;
 @Service
 public class PdfService implements PdfInterface {
 
@@ -56,12 +62,13 @@ public class PdfService implements PdfInterface {
 
         String[] body = {
                 "Initiator: " + a.getInitiator().getCompany().getName(),
-                "Receiver: " + (a.getTransaction().getBuyer() == a.getInitiator().getCompany() ? a.getTransaction().getSeller().getName() :a.getTransaction().getBuyer().getName()),
+                "Receiver: " + (a.getTransaction().getBuyer() == a.getInitiator().getCompany() ? a.getTransaction().getSeller().getName() : a.getTransaction().getBuyer().getName()),
+                " ",
                 "Action: " + a.getActiontype().getName() + ": " + a.getActiontype().getText(),
                 " ",
-                "Amount: " + a.getAmount(),
-                "Price / Piece: " + a.getPricePerPiece()
-                // TODO restliche Felder.
+                "Amount: "+ a.getAmount(),
+                "Price per Piece: " + a.getPricePerPiece(),
+                "Message: " + a.getMessage()
         };
 
         String FONT = "./src/main/resources/font/Segoe_UI.ttf";
@@ -70,7 +77,7 @@ public class PdfService implements PdfInterface {
         Font font14 = new Font(bf, 14);
 
         Document document = new Document();
-        PdfWriter.getInstance(document, new FileOutputStream(path));
+        PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(path));
         document.open();
         // header
 
@@ -87,32 +94,43 @@ public class PdfService implements PdfInterface {
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss, dd.MM.uuuu");
         Paragraph p = new Paragraph(dtf.format(LocalDateTime.now()), font10);
+        Paragraph init = new Paragraph(a.getInitiator().getCompany().getName(),font10);
+        init.setAlignment(Element.ALIGN_RIGHT);
         p.setAlignment(Element.ALIGN_RIGHT);
+        document.add(init);
         document.add(p);
-
+        
+        //Horizantal line
         LineSeparator ls = new LineSeparator();
         document.add(new Chunk(ls));
-
+        //Footnotes
+        PdfPTable footer = new PdfPTable(3);
+        // set defaults
+        footer.setWidths(new int[]{24, 2, 1});
+        footer.setTotalWidth(527);
+        footer.setLockedWidth(true);
+        footer.getDefaultCell().setFixedHeight(40);
+        footer.getDefaultCell().setBorder(Rectangle.TOP);
+        footer.addCell(new Phrase(a.getInitiator().getCompany().getDescription()));
+        // add current page count
+        footer.getDefaultCell().setHorizontalAlignment(Element.ALIGN_RIGHT);
+        footer.addCell(new Phrase(String.format("Page %d of", writer.getPageNumber()), new Font(Font.FontFamily.HELVETICA, 8))); // TODO: unser font benutzen
+        // add placeholder for total page count
+        PdfPCell totalPageCount = new PdfPCell();
+        totalPageCount.setBorder(Rectangle.TOP);
+        footer.addCell(totalPageCount);
+         // write page
+        PdfContentByte canvas = writer.getDirectContent();
+        footer.writeSelectedRows(0, -1, 34, 50, canvas);
+        
         for (String elem : body) {
+            if (elem.contains("null")) // skip empty variables.
+                continue;
+
             p = new Paragraph(elem, font14);
             p.setAlignment(Element.ALIGN_LEFT);
             document.add(p);
         }
-
         document.close();
     }
-
-    // public void generateTransactionPdf(Transaction transaction) {
-
-    // for (Action action : transaction.getActions()) {
-    // try {
-    // buildPdf(action.getId());
-
-    // } catch (Exception e) {
-    // // TODO: handle exception
-    // }
-    // }
-
-    // }
-
 }

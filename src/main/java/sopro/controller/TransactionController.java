@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +12,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -266,21 +272,25 @@ public class TransactionController {
 
     @PreAuthorize("hasRole('STUDENT')")
     @GetMapping("/exportPdf/{actionId}")
-    public void exportPdf(@PathVariable long actionId, HttpServletResponse response, Model model) {
+    public ResponseEntity<byte[]> exportPdf(@PathVariable long actionId, HttpServletResponse response, Model model) {
         String pdfPath = pdfService.generatePdf(actionId);
-
+        
+        byte[] contents;
         try {
-            // get your file as InputStream
-            File f = new File(pdfPath);
-            InputStream is = new FileInputStream(f);
-
-            // copy it to response's OutputStream
-            IOUtils.copy(is, response.getOutputStream());
-            response.setContentType("application/pdf");
-
-            response.flushBuffer();
-        } catch (IOException ex) {
-            throw new RuntimeException("IOError writing file to output stream");
+            contents = Files.readAllBytes(new File(pdfPath).toPath());
+            
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            String [] soup = pdfPath.split("/"); // Last part is the filename
+            String filename =  soup[soup.length-1];
+            headers.setContentDispositionFormData(filename, filename);
+            headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+            ResponseEntity<byte[]> res = new ResponseEntity<>(contents, headers, HttpStatus.OK);
+            return res;
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
+        return null;
     }
 }
