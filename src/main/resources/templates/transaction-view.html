@@ -30,7 +30,7 @@
 									<h4 th:case="Delivery" class="mb-0"><div class="badge bg-primary me-3" th:text="#{deliveryTLV}"></div></h4>
 									<h4 th:case="Invoicing" class="mb-0"><div class="badge bg-dark me-3" th:text="#{invoicingTLV}"></div></h4>
 									<h4 th:case="Paid" class="mb-0"><div class="badge bg-primary me-3" th:text="#{paidTV}"></div></h4>
-									<h4 th:case="*" class="mb-0"><div class="badge bg-secondary me-3" th:text="${transaction.actions[#lists.size(transaction.actions) - 1].actiontype.name}"></div></h4>
+									<h4 th:case="*" class="mb-0"><div class="badge bg-secondary me-3" th:text="${action.actiontype.name}"></div></h4>
 								</div>
 								<div>
 									<div class="text-muted fs-6" th:text="#{initiatingCompany}"></div>
