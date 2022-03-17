@@ -14,8 +14,8 @@
 
             <form action="#" th:action="@{/companies/save}" th:object="${company}" method="post">
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="floatingName" placeholder="name" name="name" required
-                        autofocus>
+                    <input type="text" pattern="^[a-zA-Z0-9]+$" class="form-control" id="floatingName"
+                        placeholder="name" name="name" required autofocus>
                     <label for="floatingInputUsername" th:text="#{companyName}"></label>
                 </div>
                 <div class="form-group">
@@ -26,6 +26,20 @@
             <button class="w-100 btn btn-lg btn-light mt-3" onclick="history.back()"><i class="bi bi-arrow-left"></i> <a
                     th:text=" #{back}"></a></button>
         </main>
+        
+        <!-- Script for Restricting special Characters -->
+        <script>
+            $('input').on('input', function () {
+                var c = this.selectionStart,
+                    r = /[^a-z0-9]/gi,
+                    v = $(this).val();
+                if (r.test(v)) {
+                    $(this).val(v.replace(r, ''));
+                    c--;
+                }
+                this.setSelectionRange(c, c);
+            });
+        </script>
     </th:block>
 </body>
 
