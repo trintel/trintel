@@ -1,8 +1,11 @@
 package sopro;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,15 +18,20 @@ import org.springframework.test.context.transaction.BeforeTransaction;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
+
 import sopro.model.Action;
 import sopro.model.ActionType;
+import sopro.model.Company;
 import sopro.model.Transaction;
+import sopro.model.User;
 import sopro.model.util.InitiatorType;
 import sopro.repository.ActionRepository;
 import sopro.repository.ActionTypeRepository;
 import sopro.repository.CompanyRepository;
 import sopro.repository.TransactionRepository;
 import sopro.repository.UserRepository;
+import sopro.service.backup.ExportInterface;
+import sopro.service.backup.ImportInterface;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -58,6 +66,12 @@ public class BackUpTest {
     @Autowired
     PasswordEncoder passwordEncoder;
 
+    @Autowired
+    ImportInterface importService;
+
+    @Autowired
+    ExportInterface exportService;
+
     String companyName = "NewComp";
 
     @BeforeTransaction
@@ -80,18 +94,57 @@ public class BackUpTest {
     @Test
     @WithUserDetails(value = "admin@admin", userDetailsServiceBeanName = "userDetailsService")
     public void saveTransactionsTestAdmin() throws Exception {
-        //exportieren
-        mockMvc.perform(get("/backup/export"))
-               .andExpect(status().is3xxRedirection())
-               .andExpect(redirectedUrl("/home"));
+        int UserBefore = 0;
+        for (User user : userRepository.findAll()) {
+            UserBefore += 1;   
+        }
+        int CompaniesBefore = 0;
+        for (Company company : companyRepository.findAll()) {
+            CompaniesBefore += 1;   
+        }
+        int ActionTypeBefore = 0;
+        for (ActionType actionType : actionTypeRepository.findAll()) {
+            ActionTypeBefore += 1;
+        }
+        int ActionBefore = 0;
+        for (Action action : actionRepository.findAll()) {
+            ActionBefore += 1;
+        }
+        int TransactionBefore = 0;
+        for (Transaction transaction : transactionRepository.findAll()) {
+            TransactionBefore += 1;
+        }
+        
+        String path = exportService.export();
+        databaseService.clearDatabase();
+        importService.importJSON(path);
+         
+        int UserAfter = 0;
+        for (User user : userRepository.findAll()) {
+            UserAfter += 1;
+        }
+        int CompaniesAfter = 0;
+        for (Company company : companyRepository.findAll()) {
+            CompaniesAfter += 1;   
+        }
+        int ActionTypeAfter = 0;
+        for (ActionType actionType : actionTypeRepository.findAll()) {
+            ActionTypeAfter += 1;
+        }
+        int ActionAfter = 0;
+        for (Action action : actionRepository.findAll()) {
+            ActionAfter += 1;
+        }
+        int TransactionAfter = 0;
+        for (Transaction transaction : transactionRepository.findAll()) {
+            TransactionAfter += 1;
+        }
 
-        //importieren
-        mockMvc.perform(post("uriVars").param("path", "/cleanupBackups.sh").with(csrf()))
-               .andExpect(status().is3xxRedirection())
-               .andExpect(redirectedUrl("/home"));
-
-
-
+        assertEquals(UserBefore, UserAfter);
+        assertEquals(CompaniesAfter, CompaniesBefore);
+        assertEquals(ActionTypeBefore, ActionTypeAfter); 
+        assertEquals(ActionBefore, ActionAfter);    
+        assertEquals(TransactionBefore, TransactionAfter);
     }
     
 }
