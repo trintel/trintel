@@ -29,7 +29,6 @@ public class CompanyImageController {
     @GetMapping("/company/logo/{companyID}")
     public void showCompanyImage(@PathVariable Long companyID, HttpServletResponse response) throws IOException {
         response.setContentType("image/png"); // Or whatever format you wanna use
-        //TODO default Image. If there is no custom logo. Now: NullPointerException.
         CompanyLogo logo;
         logo = companyLogoRepository.findByCompany(companyRepository.findById(companyID).get());
         if(logo == null) {

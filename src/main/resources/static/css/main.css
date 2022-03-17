@@ -343,3 +343,7 @@ main {
 .select-items div:hover, .same-as-selected {
   color: #000000 !important;
 }
+
+.container {
+  padding: 0 !important;
+}

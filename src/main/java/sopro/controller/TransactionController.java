@@ -115,7 +115,7 @@ public class TransactionController {
         model.addAttribute("actiontypes", actionTypes);     //only find the available actiontypes for that user.
         model.addAttribute("action", newAction);
         model.addAttribute("actions", actionRepository.findByTransaction(transaction));
-        model.addAttribute("specialActionsAvailable", actionTypes.stream().filter(t -> t.isStandardAction()).toArray(ActionType[] :: new).length > 0); //get the info if there are specialActions.
+        model.addAttribute("specialActionsAvailable", actionTypes.stream().filter(t -> !t.isStandardAction()).toArray(ActionType[] :: new).length > 0); //get the info if there are specialActions.
         model.addAttribute("transactionID", id);
         return "transaction-view";
 
