@@ -11,9 +11,9 @@
 <body>
 	<th:block th:fragment="content">
 		<h1 th:text="#{transactionProgress}"></h1>
-		<div class="d-lg-flex justify-content-between align-items-end mb-3">
+		<div class="d-lg-flex justify-content-between mb-3">
 			<h3 class="mb-3"th:text="|${actions[0].transaction.buyer.name} #{buying} ${actions[0].transaction.product} #{from} ${actions[0].transaction.seller.name}|"></h3>
-			<a class="btn btn-outline-primary" th:href="@{'/pdfexport/transaction/' + ${transactionID}}"><i class="bi bi-file-earmark-pdf"></i>PDF</a>
+			<a class="btn btn-outline-primary align-self-start" th:href="@{'/pdfexport/transaction/' + ${transactionID}}"><i class="bi bi-file-earmark-pdf"></i>PDF</a>
 		</div>
 		<!-- Accordion for every action in chosen transaction to visualize transaction progress -->
 		<div th:unless="${actions.isEmpty()}">
