@@ -61,7 +61,7 @@ public class ActionTypeService {
 
         InitiatorType initiatorType = InitiatorType.SELLER;
 
-        if(currentUser.getCompany().equals(transaction.getBuyer())) {      //findout if current user is Buyer or seller.
+        if(currentUser.getCompany().getId().equals(transaction.getBuyer().getId())) {      //findout if current user is Buyer or seller.
             initiatorType = InitiatorType.BUYER;
         }
 
