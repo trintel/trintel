@@ -58,7 +58,7 @@ public class TransactionController {
     }
 
 
-    @PreAuthorize("isInCompany(#companyID)")
+    @PreAuthorize("hasCompany()")
     @GetMapping("/transaction/{companyID}/create")
     public String createTransaction(@PathVariable Long companyID, @AuthenticationPrincipal User user, Model model) {
 
@@ -78,7 +78,7 @@ public class TransactionController {
 
     }
 
-    @PreAuthorize("isInCompany(#companyID)")
+    @PreAuthorize("hasCompany()")
     @PostMapping("/transaction/{companyID}/save")
     public String createTransaction(Action action, Transaction transaction, @PathVariable Long companyID, @AuthenticationPrincipal User user, Model model) {
 
@@ -118,7 +118,7 @@ public class TransactionController {
     }
 
     //TODO only othorize if user is seller/buyer in resprct to actiontype.initiatorType.
-    @PreAuthorize("hasPermission(#id, 'transaction') and hasRole('STUDENT')")
+    @PreAuthorize("hasPermission(#transactionID, 'transaction') and hasRole('STUDENT')")
     @GetMapping("/transaction/{transactionID}/addAction")
     public String showAction(Action action, @PathVariable Long transactionID, @AuthenticationPrincipal User user, Model model) {
         Action newAction = new Action();
@@ -139,7 +139,7 @@ public class TransactionController {
         return "transaction-addSpecialAction";
     }
 
-    @PreAuthorize("hasPermission(#id, 'transaction') and hasRole('STUDENT')")
+    @PreAuthorize("hasPermission(#transactionID, 'transaction') and hasRole('STUDENT')")
     @GetMapping("/transaction/{transactionID}/addOffer")
     public String showOffer(@PathVariable Long transactionID, Model model) {
         Action newAction = new Action();
@@ -149,7 +149,7 @@ public class TransactionController {
         return "transaction-addOffer";
     }
 
-    @PreAuthorize("hasPermission(#id, 'transaction') and hasRole('STUDENT')")
+    @PreAuthorize("hasPermission(#transactionID, 'transaction') and hasRole('STUDENT')")
     @PostMapping("/transaction/{transactionID}/addOffer")
     public String addOffer(Action offer, @PathVariable Long transactionID, @AuthenticationPrincipal User user, BindingResult bindingResult, Model model) {
         if(bindingResult.hasErrors()) {
@@ -164,7 +164,7 @@ public class TransactionController {
         return "redirect:/transaction/" + transactionID;
     }
 
-    @PreAuthorize("hasPermission(#id, 'transaction') and hasRole('STUDENT')")
+    @PreAuthorize("hasPermission(#transactionID, 'transaction') and hasRole('STUDENT')")
     @PostMapping("/transaction/{transactionID}/addAction")
     public String createAction(Action action, @PathVariable Long transactionID, @AuthenticationPrincipal User user, Model model) {
         // ActionType actionType = actionTypeRepository.findByName(actionTypeName);
@@ -185,7 +185,7 @@ public class TransactionController {
         return "redirect:/transaction/" + transactionID;
     }
 
-    @PreAuthorize("hasPermission(#id, 'transaction') and hasRole('STUDENT')")
+    @PreAuthorize("hasPermission(#transactionID, 'transaction') and hasRole('STUDENT')")
     @PostMapping("/transaction/{transactionID}/accept")
     public String createAcceptAction(String message, @PathVariable Long transactionID, @AuthenticationPrincipal User user) {
         Transaction transaction = transactionRepository.findById(transactionID).get();
@@ -197,7 +197,7 @@ public class TransactionController {
         return "redirect:/transaction/" + transactionID;
     }
 
-    @PreAuthorize("hasPermission(#id, 'transaction') and hasRole('STUDENT')")
+    @PreAuthorize("hasPermission(#transactionID, 'transaction') and hasRole('STUDENT')")
     @PostMapping("/transaction/{transactionID}/cancel")
     public String createCancelAction(String message, @PathVariable Long transactionID, @AuthenticationPrincipal User user) {
         Transaction transaction = transactionRepository.findById(transactionID).get();
@@ -209,7 +209,7 @@ public class TransactionController {
         return "redirect:/transaction/" + transactionID;
     }
 
-    @PreAuthorize("hasPermission(#id, 'transaction') and hasRole('STUDENT')")
+    @PreAuthorize("hasPermission(#transactionID, 'transaction') and hasRole('STUDENT')")
     @PostMapping("/transaction/{transactionID}/delivery")
     public String createDeliveryAction(String message, @PathVariable Long transactionID, @AuthenticationPrincipal User user) {
         Transaction transaction = transactionRepository.findById(transactionID).get();
@@ -221,7 +221,7 @@ public class TransactionController {
         return "redirect:/transaction/" + transactionID;
     }
 
-    @PreAuthorize("hasPermission(#id, 'transaction') and hasRole('STUDENT')")
+    @PreAuthorize("hasPermission(#transactionID, 'transaction') and hasRole('STUDENT')")
     @PostMapping("/transaction/{transactionID}/invoicing")
     public String createInvoiceAction(String message, @PathVariable Long transactionID, @AuthenticationPrincipal User user) {
         Transaction transaction = transactionRepository.findById(transactionID).get();
@@ -231,7 +231,7 @@ public class TransactionController {
         return "redirect:/transaction/" + transactionID;
     }
 
-    @PreAuthorize("hasPermission(#id, 'transaction') and hasRole('STUDENT')")
+    @PreAuthorize("hasPermission(#transactionID, 'transaction') and hasRole('STUDENT')")
     @PostMapping("/transaction/{transactionID}/paid")
     public String createPaidAction(String message, @PathVariable Long transactionID, @AuthenticationPrincipal User user) {
         Transaction transaction = transactionRepository.findById(transactionID).get();

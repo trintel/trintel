@@ -121,7 +121,7 @@ public class CompanyController {
         return "company-edit";
     }
 
-    @PreAuthorize("isInCompany(#companyID)")
+    @PreAuthorize("hasRole('ADMIN') or isInCompany(#companyID)")
     @PostMapping(consumes = "multipart/form-data", value = "/company/{companyID}/edit")
     public String saveOwnCompany(@RequestParam("formFile") MultipartFile companyLogo, @Valid Company company,
             BindingResult bindingResult, @PathVariable Long companyID, @AuthenticationPrincipal User user, Model model)
