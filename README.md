@@ -1,5 +1,36 @@
+# Trintel
 
 Laufende Instanz: [http://134.245.1.240:1200](http://134.245.1.240:1200)
+
+  - [Trintel](#trintel)
+      - [Login Daten](#login-daten)
+      - [Deployment](#deployment)
+  - [Implementierte Funktionen](#implementierte-funktionen)
+    - [Allgemein](#allgemein)
+      - [Erweiterbarer Sprachsupport](#erweiterbarer-sprachsupport)
+    - [Administrator](#administrator)
+      - [Transaktionen](#transaktionen)
+      - [PDF-Export](#pdf-export)
+      - [Admin Panel](#admin-panel)
+      - [Unternehmensverwaltung](#unternehmensverwaltung)
+      - [Schülerverwaltung](#schülerverwaltung)
+      - [Admin Statistik](#admin-statistik)
+    - [Schüler](#schüler)
+      - [Transaktionen](#transaktionen)
+      - [PDF-Export](#pdf-export)
+      - [Eigenes Unternehmen einsehen](#eigenes-unternehmen-einsehen)
+      - [Schüler Statistik ](#schüler-statistik-)
+  - [Anwendungsfälle im Pflichtenheft](#anwendungsfälle-im-pflichtenheft)
+  - [Automatische Tests](#automatische-tests)
+      - [CompanyTests](#companytests)
+      - [TransactionTests](#transactiontests)
+      - [BackUpTests](#backuptests)
+      - [DatabaseTests](#databasetests)
+      - [HomeTest](#hometest)
+      - [StatistikTests](#statistiktests)
+      - [UserTests](#usertests)
+
+
 ### Login Daten
 
 Bei uns meldent man sich mit mail und pw an.
