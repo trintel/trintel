@@ -1,6 +1,55 @@
+
+Laufende Instanz: [http://134.245.1.240:1200](http://134.245.1.240:1200)
+### Login Daten
+
+Bei uns meldent man sich mit mail und pw an.
+```
+email: admin@admin
+password: password
+```
+
+Als Admin kann man dann im Admin Panel die signup url einsehen mit der sich neue Schüler anmelden können. (Achtung, der ist nicht persistent, gilt nur für die aktuelle Laufzeit).
+Zudem wir in den logs ein Admin signup link geprintet für weitere Admins.
+
+### Deployment
+
+In der deploy Pipeline wird ein Docker Image erstellt, das wir verwenden können.
+Wir laden das Docker Image und führen es aus. Das wird hier im folgenden erklärt.
+
+Aufgrund der max Artifact size bei GitLab wird das hier gleich ein bisschen sketchy.
+
+1. In GitLab in den CI Tab gehen die letzte deploy Pipeline raussuchen. [Link zur Pipeline übersicht auf deploy Branch](https://git.informatik.uni-kiel.de/sopro/lms8_eg_017/softwareprojekt/-/pipelines?page=1&scope=all&ref=deploy)
+2. Bei den Stages der letzten Pipeline die Stage `build-docker` anklicken und ihre logs anzeigen lassen.
+3. In den logs einen Link suchen, der in etwa so aussieht: `https://transfer.sh/XXXXXX/trintel-image.tar`. (IdR. Zeile 66)
+
+Nun die folgenden  Commands ausführen.
+
+```sh
+wget https://transfer.sh/XXXXXX/trintel-image.tar` # der Link aus den Logs.
+docker load -i trintel-image.tar
+docker run -d -p 8080:8080 --name trintel-container trintel
+```
+
+Jetzt läuft die App in Container und ist über Port 8080 erreichbar.
+
+Will man das Docker Image lokal bauen muss man beachten, dass die folgenden Directories gemoved werden:
+
+```
+mv build/libs/trintel-0.0.1-SNAPSHOT.jar target/app.jar
+mv build/resources target/
+```
+
+Sodass sie vom Dockerfile gefunden werden können.
+
+
+**Lokal testen ohne Docker**
+
+Hier ist es am einfachsten das Repo zu clonen und die App mit `./gradlew bootRun` zu starten. Hier als Hinweis, wir nutzen die Java openjdk 11.
+
 # Implementierte Funktionen
 
 ## Allgemein
+
 ### Erweiterbarer Sprachsupport
 
 - zur Zeit: Deutsch und Englisch
