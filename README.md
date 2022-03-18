@@ -1,6 +1,7 @@
 # Trintel
 
 Laufende Instanz: [http://134.245.1.240:1200](http://134.245.1.240:1200)
+Git Commit: 8e288b6d333f159490eb1f357c584b2c2d698f38
 
   - [Login Daten](#login-daten)
   - [Deployment](#deployment)
