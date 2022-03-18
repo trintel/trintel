@@ -46,12 +46,12 @@ Schüler:
 
 
 
-# Automatische Tests
+## Automatische Tests
 
 *Einzelne Beschreibungen der Tests entnehmen Sie bitte aus den Javadoc Kommentaren.*
 Zum Ausführen der Tests: ./gradlew test
 
-# CompanyTests
+### CompanyTests
 
 ---
 
@@ -84,29 +84,7 @@ Zum Ausführen der Tests: ./gradlew test
 - adminAddCompany()
 - adminDeleteCompany()
 
-# TransactionTests
-
-**Beschreibung: Testet die Funktionen des Transaction und Action Type Controller aus Studenten und Admin Sicht. Dabei wird geprüft, ob die Mapping entsprechend der Rechtevergabe erreichbar sind und Aktionen ausgeführt werden können. Dafür sind auch Intergrationstest, die die Datenbank mit einbeziehen, beinhaltet.**
-
-- listTransactionsTestAdmin()
-- listTransactionsTestStudent()
-- createTransactionsTestAdmin()
-- createTransactionsTestStudent1()
-- createTransactionsTestStudent2()
-- saveTransactionsTestStudent()
-- saveTransactionsTestAdmin()
-- transactionDetailTestStudent()
-- transactionDetailTestAdmin()
-- createActionTestStudent()
-- createActionTestAdmin()
-- addActionTypeTestStudent()
-- addActionTypeTestAdmin()
-- saveActionTypeTestStudent()
-- editExistingActionTypeTestStudent()
-- editExistingActionTypeTestAdmin()
-- editNewActionTypeTestStudent()
-- editNewActionTypeTestAdmin()
-- saveEditActionTypeTestStudent()
+### TransactionTests
 
 ---
 
@@ -132,7 +110,7 @@ Zum Ausführen der Tests: ./gradlew test
 - editNewActionTypeTestAdmin()
 - saveEditActionTypeTestStudent()
 
-# BackUpTests
+### BackUpTests
 
 ---
 
@@ -140,7 +118,7 @@ Zum Ausführen der Tests: ./gradlew test
 
 - importExportTestAdmin()
 
-# DatabaseTests
+### DatabaseTests
 
 ---
 
@@ -157,7 +135,7 @@ Zum Ausführen der Tests: ./gradlew test
 - isActionTypeSavedInDatabase()HomeTest
 - isActionSavedInDatabase()
 
-# Home Test
+### HomeTest
 
 ---
 
@@ -165,7 +143,7 @@ Zum Ausführen der Tests: ./gradlew test
 
 - contextLoads()
 
-# StatistikTests
+### StatistikTests
 
 ---
 
@@ -177,7 +155,7 @@ Zum Ausführen der Tests: ./gradlew test
 - listAdminStatistikTestAdmin()
 - listAdminStatistikTestStudent()
 
-# UserTests
+### UserTests
 
 ---
 
