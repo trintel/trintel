@@ -7,6 +7,7 @@ Laufende Instanz: [http://134.245.1.240:1200](http://134.245.1.240:1200)
   - [Implementierte Funktionen](#implementierte-funktionen)
     - [Allgemein](#allgemein)
       - [Erweiterbarer Sprachsupport](#erweiterbarer-sprachsupport)
+      - [Login und Registrierung](#login-und-registrierung)
     - [Administrator](#administrator)
       - [Transaktionen](#transaktionen)
       - [PDF-Export](#pdf-export)
@@ -18,7 +19,7 @@ Laufende Instanz: [http://134.245.1.240:1200](http://134.245.1.240:1200)
       - [Transaktionen](#transaktionen)
       - [PDF-Export](#pdf-export)
       - [Eigenes Unternehmen einsehen](#eigenes-unternehmen-einsehen)
-      - [Schüler Statistik ](#schüler-statistik-)
+      - [Schüler Statistik ](#schüler-statistik)
   - [Anwendungsfälle im Pflichtenheft](#anwendungsfälle-im-pflichtenheft)
   - [Automatische Tests](#automatische-tests)
       - [CompanyTests](#companytests)
@@ -85,6 +86,10 @@ Hier ist es am einfachsten das Repo zu clonen und die App mit `./gradlew bootRun
 - zur Zeit: Deutsch und Englisch
 
 - festgelegt durch Sprache im Browser und Aufenthaltsort
+
+### Login und Registrierung
+
+Schüler können sich über eine Signup URL registrieren. Sie bekommen dann eine Bestätigungsemail mit eine Aktivierungslink für den Account.
 
 ## Administrator
 
