@@ -80,12 +80,15 @@ Menüreiter “Admin Panel”
 
     
 - **Spiel exportieren**
-    
-    - WORKAROUND @LUCA
+   
+    Als Admin die folgende URL aufrufen: `localhost:8080/backup/export`. Die Export Datei ist dann im Docker Container im top Directory zu finden.
     
 - **Spiel importieren**
     
-    - WORKAROUND @LUCA 
+    Hier muss die zu importierende Datei im top Directory des Docker Containers sein. Dann ein POST request mit path Feld wie im Folgenden als Beispiel gezeigt:
+    ```
+    curl -X POST -F 'path=export.json' http://localhost:8080/backup/import
+    ```  
     
 - **Aktionen einsehen**
     
