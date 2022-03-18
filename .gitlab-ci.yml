@@ -77,6 +77,8 @@ test:
 deployment:
   stage: build-docker
   image: docker:latest
+  before_script:
+    - apk add --update curl && rm -rf /var/cache/apk/*
   
   only: 
     - deploy
@@ -85,7 +87,8 @@ deployment:
     - ls target
     - ls target/resources
     - docker build -t trintel .
+    - docker save -o trintel-image.tar trintel
+    - curl --upload-file ./trintel-image.tar https://transfer.sh/trintel-image.tar
     - docker stop trintel-container || true
     - docker rm trintel-container || true
     - docker run -d -p 8080:8080 --name trintel-container trintel
-
