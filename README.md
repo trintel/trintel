@@ -1,20 +1,25 @@
-# Trintel
+# Implementierte Funktionen
 
-##Implementierte Funktionen
+## Allgemein
+### Erweiterbarer Sprachsupport
 
-Allgemein:
-- erweiterbarer Sprachsupport
-    - zur Zeit: Deutsch und Englisch
-    - festgelegt durch Sprache im Browser und Aufenthaltsort
+- zur Zeit: Deutsch und Englisch
 
-Administrator:
-- Übersicht aller Transaktionen in der Datenbank
-    - Status, Käufer, Verkäufer, Produkt und letztes Update
-- Einsicht in den Verlauf jeder einzelnen Transaktion in der Datenbank
-    - für jede zugehörige Aktion: Aktionstyp, auslösendes Unternehmen, auslösender Schüler, Datum, Zeit, Menge, Preis und Nachricht
-- PDF-Export
-    - für den ganzen Transaktionsverlauf
-    - für einzelne Aktionen
+- festgelegt durch Sprache im Browser und Aufenthaltsort
+
+## Administrator
+
+### Transaktionen
+Menüreiter "Transaktionen"
+- **Übersicht aller Transaktionen in der Datenbank**
+    - Angaben: Status, Käufer, Verkäufer, Produkt und letztes Update
+- **Einsicht in den Verlauf jeder einzelnen Transaktion in der Datenbank**
+    - Angaben für jede zugehörige Aktion: Aktionstyp, auslösendes Unternehmen, auslösender Schüler, Datum, Zeit, Menge, Preis und Nachricht
+### PDF-Export
+
+- für den ganzen Transaktionsverlauf
+
+- für einzelne Aktionen
 
 ### Admin Panel
 
@@ -22,34 +27,33 @@ Menüreiter “Admin Panel”
 
 - **Einladungslink für Schüler*innen einsehen**
     
-     Abschnitt “Einladungslink”
+    - Abschnitt “Einladungslink”
+
     
 - **Spiel exportieren**
     
-    WORKAROUND @LUCA
+    - WORKAROUND @LUCA
     
 - **Spiel importieren**
     
-    WORKAROUND @LUCA 
+    - WORKAROUND @LUCA 
     
 - **Aktionen einsehen**
     
-    Abschnitt “Aktionen”
+    - Abschnitt “Aktionen”
     
 - **Aktion bearbeiten**
     
-    auf “Bearbeiten” bei der jeweiligen Aktion klicken (nicht möglich bei Standardaktionen) ⇒ neue Seite öffnet sich
-    
-    1. Name bearbeiten
-    2. Beschreibung bearbeiten
-    3. Initiator bearbeiten
+    - auf “Bearbeiten” bei der jeweiligen Aktion klicken (nicht möglich bei Standardaktionen) ⇒ neue Seite öffnet sich
+    - Name bearbeiten
+    - Beschreibung bearbeiten
+    - Initiator bearbeiten
 - **Neue Aktion hinzufügen**
     
-    auf “Neue Aktion hinzufügen” klicken ⇒ neue Seite öffnet sich
-    
-    1. Name eingeben
-    2. Beschreibung eingeben
-    3. Initiator auswählen
+    - auf “Neue Aktion hinzufügen” klicken ⇒ neue Seite öffnet sich
+    - Name eingeben
+    - Beschreibung eingeben
+    - Initiator auswählen
 
 ### Unternehmensverwaltung
 
@@ -58,24 +62,23 @@ Menüreiter “Unternehmen”
 - **Liste der Unternehmen einsehen**
 - **Neues Unternehmen hinzufügen**
     
-    auf “Unternehmen registrieren” klicken ⇒ neue Seite öffnet sich
+    - auf “Unternehmen registrieren” klicken ⇒ neue Seite öffnet sich
     
-    1. Unternehmensnamen eingeben
+    - Unternehmensnamen eingeben
 - **Unternehmen löschen**
     
-    auf “Löschen” beim jeweiligen Unternehmen klicken ⇒ Löschen bestätigen
+    - auf “Löschen” beim jeweiligen Unternehmen klicken ⇒ Löschen bestätigen
     
 - **Unternehmensdetails einsehen**
     
-    auf den Unternehmensnamen oder den nach rechts zeigenden Pfeil klicken
+    - auf den Unternehmensnamen oder den nach rechts zeigenden Pfeil klicken
     
 - **Unternehmen bearbeiten**
     
-    Unternehmensdetails einsehen und auf “Bearbeiten” klicken
-    
-    1. Logo hochladen
-    2. Name bearbeiten
-    3. Signatur bearbeiten
+    - Unternehmensdetails einsehen und auf “Bearbeiten” klicken
+    - Logo hochladen
+    - Name bearbeiten
+    - Signatur bearbeiten
 
 ### Schülerverwaltung
 
@@ -83,32 +86,70 @@ Menüreiter “Schüler*innen”
 
 - Liste der Schüler einsehen
 - Schüler suchen
-    1. Namen in Suchfeld eingeben
-    2. auf die Lupe klicken
+    - Namen in Suchfeld eingeben
+    - auf die Lupe klicken
 - Schüler neu zuordnen
     
-    auf “Neu zuordnen” bei der jeweiligen Person klicken ⇒ neue Seite öffnet sich
-    
-    1. Unternehmen auswählen
+    - auf “Neu zuordnen” bei der jeweiligen Person klicken ⇒ neue Seite öffnet sich
+    - Unternehmen auswählen
 - Schülerunternehmen einsehen
-    1. auf Unternehmen unterhalb des Personennamens klicken
+    - auf Unternehmen unterhalb des Personennamens klicken
 
-Schüler:
-- Erstellung neuer Transaktionen als Käufer
-    - mit Auswahl eines Unternehmens als Handelspartner (Verkäufer)
-- Durchführen von Transaktionen mit anderen Unternehmen auf der Handlsplattform
-    - grundlegender Ablauf: Anfrage (durch Käufer) -> Angebot -> (Verkäufer) -> Annahme (Käufer) -> Lieferung/Rechnungsstellung (Verkäufer) -> Markieren als bezahlt (Verkäufer)
-    - Verhandlungen möglich durch gegenseitiges Versenden von Angeboten bis das aktuellste davon angenommen wird
-    - Berichtigungen von fehlerhaften Angeboten durch Versenden eines neuen Angebots durch das selbe Unternehmen möglich
-- jederzeitige Nutzung der vom Administrator erstellten Freitext-Spezialaktionen
+### Admin Statistik
+
+Menüreiter "Statistik"
+- Gesamtübersicht
+- sortierbar durch Klick auf Kategorie
+- mehr Details durch Klick auf Unternehmen
+## Schüler
+
+### Transaktionen
+
+Menüreiter "Transaktionen"
+
+- **Erstellung neuer Transaktionen als Käufer**
+
+    -  mit Auswahl eines Unternehmens als Handelspartner (Verkäufer)
+
+- **grundlegender Ablauf einer erfolgreich abgeschlossenen Transaktion**
+
+    - Anfrage (durch Käufer)
+    - Angebot (durch Verkäufer)
+    - Annahme (durch Käufer)
+    - Lieferung/Rechnungsstellung (durch Verkäufer)
+    - Als bezahlt markieren (durch Verkäufer)
+
+- **Verhandlungen**
+
+    - gegenseitiges Versenden von Angeboten von beiden Seiten
+    - Annahme des aktuellsten Angebots durch Handelspartner
+
+- **Berichtigungen von fehlerhaften Angeboten (bei z.B. Tippfehlern bei Menge oder Preis)**
+
+    - Versenden eines neuen Angebots durch das selbe Unternehmen möglich
+
+- **Nutzung der vom Administrator erstellten Freitext-Spezialaktionen**
     - Auswahl verfügbar durch Button "Spezialaktionen"
-- Übersicht aller Transaktionen, an denen das eigene Unternehmen beteiligt ist
-    - Status, Käufer, Verkäufer, Produkt und letztes Update
-- Einsicht in den Verlauf jeder einzelnen Transaktion in der Datenbank
-    - für jede zugehörige Aktion: Aktionstyp, auslösendes Unternehmen, Datum, Zeit, Menge, Preis und Nachricht
-- PDF-Export
-    - für den ganzen Transaktionsverlauf
-    - für einzelne Aktionen
+    - jederzeit im Transaktionablauf möglich
+
+- **Abbruch einer Transaktion**
+
+    - durch Käufer: nach Stellen einer Anfrage (bei z.B. falsch ausgewähltem Unternehmen) oder endgültiges Ablehnen von Angeboten
+    - durch Verkäufer: nach Eingang einer Anfrage (falls Produkt nicht angeboten wird oder nicht mehr vorrätig) oder edngültiges Ablehnen von Angeboten
+
+- **Übersicht aller Transaktionen, an denen das eigene Unternehmen beteiligt ist**
+
+    - Angaben: Status, Käufer, Verkäufer, Produkt und letztes Update
+
+- **Einsicht in den Verlauf jeder einzelnen Transaktion in der Datenbank**
+
+    - Angaben für jede zugehörige Aktion: Aktionstyp, auslösendes Unternehmen, Datum, Zeit, Menge, Preis und Nachricht
+
+### PDF-Export
+
+- **für den ganzen Transaktionsverlauf**
+
+- **für einzelne Aktionen**
 
 ### Eigenes Unternehmen einsehen
 
@@ -116,13 +157,18 @@ Menüreiter “Mein Unternehmen”
 
 - **Unternehmen bearbeiten**
     
-    Unternehmensdetails einsehen und auf “Bearbeiten” klicken
-    
-    1. Logo hochladen
-    2. Name bearbeiten
-    3. Signatur bearbeiten
+    - auf “Bearbeiten” klicken
+    - Logo hochladen
+    - Name bearbeiten
+    - Signatur bearbeiten
 
-**Anwendungsfälle im Pflichtenheft**
+### Schüler Statistik 
+
+Menüreiter "Statistik"
+- Unternehmensstatistiken
+- Tabelle sortierbar durch Klick auf Kategorie
+---
+# Anwendungsfälle im Pflichtenheft
 
 - Gesamtstatistik einsehen (Administrator): Implementiert
 - Unternehmen erstellen (Administrator): Implementiert
@@ -132,14 +178,14 @@ Menüreiter “Mein Unternehmen”
 - Transaktion durchführen (Schüler): Implementiert
 - PDF zu Transaktionen generieren (Administrator/Schüler): Implementiert
 
-## Automatische Tests
+---
+
+# Automatische Tests
 
 *Einzelne Beschreibungen der Tests entnehmen Sie bitte aus den Javadoc Kommentaren.*
 Zum Ausführen der Tests: ./gradlew test
 
 ### CompanyTests
-
----
 
 **Beschreibung: Testet die Funktionen des Company Controller aus Studenten und Admin Sicht. Dabei wird geprüft, ob die Mapping entsprechend der Rechtevergabe erreichbar sind und Aktionen ausgeführt werden können. Dafür sind auch Intergrationstest, die die Datenbank mit einbeziehen, beinhaltet.**
 
@@ -172,8 +218,6 @@ Zum Ausführen der Tests: ./gradlew test
 
 ### TransactionTests
 
----
-
 **Beschreibung: Testet die Funktionen des Transaction und Action Type Controller aus Studenten und Admin Sicht. Dabei wird geprüft, ob die Mapping entsprechend der Rechtevergabe erreichbar sind und Aktionen ausgeführt werden können. Dafür sind auch Intergrationstest, die die Datenbank mit einbeziehen, beinhaltet.**
 
 - listTransactionsTestAdmin()
@@ -198,15 +242,11 @@ Zum Ausführen der Tests: ./gradlew test
 
 ### BackUpTests
 
----
-
 **Beschreibung: Testet die Funktionen des Backup Controller. Es wird überprüft ob ein Export und Import durchgeführt werden kann.**
 
 - importExportTestAdmin()
 
 ### DatabaseTests
-
----
 
 **Beschreibung: Testet, ob Objekte, die erstellt und in der Datenbank gespeichert werden, auch tatsächlich gesichert werden und abrufbar sind.**
 
@@ -223,15 +263,11 @@ Zum Ausführen der Tests: ./gradlew test
 
 ### HomeTest
 
----
-
 **Beschreibung: Testet, ob der HomeController existiert.**
 
 - contextLoads()
 
 ### StatistikTests
-
----
 
 **Beschreibung: Es wird getestet, ob die Statistik für Admin und User abrufbar sind.**
 
@@ -243,8 +279,6 @@ Zum Ausführen der Tests: ./gradlew test
 
 ### UserTests
 
----
-
 **Beschreibung: Es wird getestet, ob sich Admins und User registrieren können, sowie nicht registrierte Nutzer ohne InviteLink keinen Zugriff haben. Außerdem, ob die Login/ Logout Feature funktioniert.**
 
 - signUpRedirectTestStudent()
@@ -255,29 +289,3 @@ Zum Ausführen der Tests: ./gradlew test
 - studentLogout()
 - testInvalidLoginDenied()
 - testRedirectToLogin()
-
-# Feature Statistic
-**Ablauf:**
-
-[Admin]:
-Seitenleiste [Statistik] -> Gesamtübersicht -> sortierbar durch Klick auf Kategorie -> mehr Details durch Klick auf Unternehmen
-
-[Schüler]:
-Seitenleiste [Statistik] -> Unternehmensstatistiken -> sortierbar durch Klick auf Kategorie
-
-**Beschreibung:**
-
-Das geforderte Muss-Feature Statistik wurde sowohl für den Admin als auch den Schüler in der Seitenleiste unseres Programms unter dem 
-Punkt Statistik integriert. Jeder Nutzer hat hierbei eine eigene Ansicht der Statistiken, sodass der Admin die Statistiken aller
-existeirenden Unternehmen einsehen kann. Der Schüler hingegen hat nur die Einsicht in die Statistiken des eigenen Unternehmens,
-um die Datensicherheit zu gerwährleisten.
-
-Sobald der Admin die Statistikkategorie aus der Seitenleiste auswählt sieht er eine Tabelle, in welcher alle erstellten Unternehmen 
-sichtbar sind. Hier werden nun die allgemeinen Daten angezeigt, um dem Admin eine Übersicht zu schaffen. Zusätzlich kann jede Spalte durch einen 
-Klick auf die Kategorie auf- und absteigen sortiert werden, um die Unternehmen vergleichen zu können. Möchte der Admin nun detailiertere Daten zu 
-jedem Unternehmen einsehen, kann er in der linken Spalte der Unternehmen ein Unternehmen anklicken und wird auf die entsprechenden 
-Statisktikseiten weitergeleited.
-
-Der Schüler hat auf seiner Staistikseite eine Übersicht über die Finanzen sowie Transaktionsstatistiken um das eigene Agieren auf dem Markt zu 
-analysieren. Zusätzlich lässt sich auch hier die Tabelle der Transaktionbeziehungen auf- und absteigend sortieren. Allgemein ist auch hier von der
-Security abgesichert, dass eine Schüler nicht durch Url-Raten Statistiken anderer Unternhemen einsehen kann, denn dann wird ein FORBIDDEN-ERROR erzeugt.
