@@ -258,7 +258,7 @@ Zum Ausführen der Tests: ./gradlew test
 - testInvalidLoginDenied()
 - testRedirectToLogin()
 
-# Feature Statistic
+## Feature Statistic
 **Ablauf:**
 
 [Admin]:
