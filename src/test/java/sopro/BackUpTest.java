@@ -89,7 +89,7 @@ public class BackUpTest {
      */
     @Test
     @WithUserDetails(value = "admin@admin", userDetailsServiceBeanName = "userDetailsService")
-    public void saveTransactionsTestAdmin() throws Exception {
+    public void importExportTestAdmin() throws Exception {
         int UserBefore = 0;
         for (User user : userRepository.findAll()) {
             UserBefore += 1;
