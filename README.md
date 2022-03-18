@@ -2,9 +2,8 @@
 
 Laufende Instanz: [http://134.245.1.240:1200](http://134.245.1.240:1200)
 
-  - [Trintel](#trintel)
-      - [Login Daten](#login-daten)
-      - [Deployment](#deployment)
+  - [Login Daten](#login-daten)
+  - [Deployment](#deployment)
   - [Implementierte Funktionen](#implementierte-funktionen)
     - [Allgemein](#allgemein)
       - [Erweiterbarer Sprachsupport](#erweiterbarer-sprachsupport)
