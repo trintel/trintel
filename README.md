@@ -34,27 +34,27 @@ Git Commit: 8e288b6d333f159490eb1f357c584b2c2d698f38
 
 ### Login Daten
 
-Bei uns meldent man sich mit mail und pw an.
+Bei unserer Anwendung meldet man sich mit einer E-Mail-Adresse und einem Passwort an.
 ```
 email: admin@admin
 password: password
 ```
 
-Als Admin kann man dann im Admin Panel die signup url einsehen mit der sich neue Schüler anmelden können. (Achtung, der ist nicht persistent, gilt nur für die aktuelle Laufzeit).
-Zudem wir in den logs ein Admin signup link geprintet für weitere Admins.
+Als Administrator kann man dann im Admin Panel die Registrierungs-URL einsehen, mit der sich neue Schüler anmelden können (Achtung! Diese URL ist nicht persistent, gilt also nur für die aktuelle Laufzeit).
+Zudem wird in der Konsole ein Link für den Registrierung für Admins geprintet, um dem Spiel weitere Admins hinzu zu fügen.
 
 ### Deployment
 
-In der deploy Pipeline wird ein Docker Image erstellt, das wir verwenden können.
-Wir laden das Docker Image und führen es aus. Das wird hier im folgenden erklärt.
+In der Deploy-Pipeline wird ein Docker Image erstellt, das wir verwenden können.
+Wir laden das Docker Image und führen es aus. Dieses Vorgehen wird hier im Folgenden erklärt.
 
-Aufgrund der max Artifact size bei GitLab wird das hier gleich ein bisschen sketchy.
+Aufgrund der "max Artifact size" bei GitLab wird das hier gleich ein bisschen sketchy.
 
-1. In GitLab in den CI Tab gehen die letzte deploy Pipeline raussuchen. [Link zur Pipeline übersicht auf deploy Branch](https://git.informatik.uni-kiel.de/sopro/lms8_eg_017/softwareprojekt/-/pipelines?page=1&scope=all&ref=deploy)
-2. Bei den Stages der letzten Pipeline die Stage `build-docker` anklicken und ihre logs anzeigen lassen.
-3. In den logs einen Link suchen, der in etwa so aussieht: `https://transfer.sh/XXXXXX/trintel-image.tar`. (IdR. Zeile 66)
+1. In GitLab in den CI Tab gehen und die letzte Deploy-Pipeline raussuchen. [Link zur Pipeline übersicht auf deploy Branch](https://git.informatik.uni-kiel.de/sopro/lms8_eg_017/softwareprojekt/-/pipelines?page=1&scope=all&ref=deploy)
+2. Bei den Stages der letzten Pipeline die Stage `build-docker` anklicken und ihre Logs anzeigen lassen.
+3. In den Logs einen Link suchen, der in etwa so aussieht: `https://transfer.sh/XXXXXX/trintel-image.tar` (i.d.R. Zeile 66).
 
-Nun die folgenden  Commands ausführen.
+Nun müssen die folgenden Commands ausgeführt werden:
 
 ```sh
 wget https://transfer.sh/XXXXXX/trintel-image.tar` # der Link aus den Logs.
@@ -62,21 +62,21 @@ docker load -i trintel-image.tar
 docker run -d -p 8080:8080 --name trintel-container trintel
 ```
 
-Jetzt läuft die App in Container und ist über Port 8080 erreichbar.
+Jetzt läuft die App im Container und ist über den Port 8080 erreichbar.
 
-Will man das Docker Image lokal bauen muss man beachten, dass die folgenden Directories gemoved werden:
+Will man das Docker Image lokal bauen, muss man beachten, dass die folgenden Directories gemoved werden:
 
 ```
 mv build/libs/trintel-0.0.1-SNAPSHOT.jar target/app.jar
 mv build/resources target/
 ```
 
-Sodass sie vom Dockerfile gefunden werden können.
+So können sie dann vom Docker File gefunden werden.
 
 
 **Lokal testen ohne Docker**
 
-Hier ist es am einfachsten das Repo zu clonen und die App mit `./gradlew bootRun` zu starten. Hier als Hinweis, wir nutzen die Java openjdk 11.
+Hier ist es am einfachsten, das Repository zu clonen und die App mit `./gradlew bootRun` zu starten. Hier als Hinweis: Wir nutzen die Java openjdk 11.
 
 # Implementierte Funktionen
 
@@ -90,21 +90,31 @@ Hier ist es am einfachsten das Repo zu clonen und die App mit `./gradlew bootRun
 
 ### Login und Registrierung
 
-Schüler können sich über eine Signup URL registrieren. Sie bekommen dann eine Bestätigungsemail mit eine Aktivierungslink für den Account.
+- **Registrierung über einen Registrierungslink**
+
+    - eigene Links jeweils für Schüler und Administratoren
+    - Registrierungsbestätigung über einen Link, der per E-Mail an den Nutzer geschickt wird
+
 
 ## Administrator
 
 ### Transaktionen
+
 Menüreiter "Transaktionen"
+
 - **Übersicht aller Transaktionen in der Datenbank**
+
     - Angaben: Status, Käufer, Verkäufer, Produkt und letztes Update
+
 - **Einsicht in den Verlauf jeder einzelnen Transaktion in der Datenbank**
+
     - Angaben für jede zugehörige Aktion: Aktionstyp, auslösendes Unternehmen, auslösender Schüler, Datum, Zeit, Menge, Preis und Nachricht
+
 ### PDF-Export
 
-- für den ganzen Transaktionsverlauf
+- **für den ganzen Transaktionsverlauf**
 
-- für einzelne Aktionen
+- **für einzelne Aktionen**
 
 ### Admin Panel
 
