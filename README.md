@@ -1,6 +1,6 @@
 # Trintel
 
-**Implementierte Funktionen**
+##Implementierte Funktionen
 
 Allgemein:
 - erweiterbarer Sprachsupport
@@ -15,6 +15,83 @@ Administrator:
 - PDF-Export
     - für den ganzen Transaktionsverlauf
     - für einzelne Aktionen
+
+### Admin Panel
+
+Menüreiter “Admin Panel”
+
+- **Einladungslink für Schüler*innen einsehen**
+    
+     Abschnitt “Einladungslink”
+    
+- **Spiel exportieren**
+    
+    WORKAROUND @LUCA
+    
+- **Spiel importieren**
+    
+    WORKAROUND @LUCA 
+    
+- **Aktionen einsehen**
+    
+    Abschnitt “Aktionen”
+    
+- **Aktion bearbeiten**
+    
+    auf “Bearbeiten” bei der jeweiligen Aktion klicken (nicht möglich bei Standardaktionen) ⇒ neue Seite öffnet sich
+    
+    1. Name bearbeiten
+    2. Beschreibung bearbeiten
+    3. Initiator bearbeiten
+- **Neue Aktion hinzufügen**
+    
+    auf “Neue Aktion hinzufügen” klicken ⇒ neue Seite öffnet sich
+    
+    1. Name eingeben
+    2. Beschreibung eingeben
+    3. Initiator auswählen
+
+### Unternehmensverwaltung
+
+Menüreiter “Unternehmen”
+
+- **Liste der Unternehmen einsehen**
+- **Neues Unternehmen hinzufügen**
+    
+    auf “Unternehmen registrieren” klicken ⇒ neue Seite öffnet sich
+    
+    1. Unternehmensnamen eingeben
+- **Unternehmen löschen**
+    
+    auf “Löschen” beim jeweiligen Unternehmen klicken ⇒ Löschen bestätigen
+    
+- **Unternehmensdetails einsehen**
+    
+    auf den Unternehmensnamen oder den nach rechts zeigenden Pfeil klicken
+    
+- **Unternehmen bearbeiten**
+    
+    Unternehmensdetails einsehen und auf “Bearbeiten” klicken
+    
+    1. Logo hochladen
+    2. Name bearbeiten
+    3. Signatur bearbeiten
+
+### Schülerverwaltung
+
+Menüreiter “Schüler*innen”
+
+- Liste der Schüler einsehen
+- Schüler suchen
+    1. Namen in Suchfeld eingeben
+    2. auf die Lupe klicken
+- Schüler neu zuordnen
+    
+    auf “Neu zuordnen” bei der jeweiligen Person klicken ⇒ neue Seite öffnet sich
+    
+    1. Unternehmen auswählen
+- Schülerunternehmen einsehen
+    1. auf Unternehmen unterhalb des Personennamens klicken
 
 Schüler:
 - Erstellung neuer Transaktionen als Käufer
@@ -33,6 +110,18 @@ Schüler:
     - für den ganzen Transaktionsverlauf
     - für einzelne Aktionen
 
+### Eigenes Unternehmen einsehen
+
+Menüreiter “Mein Unternehmen”
+
+- **Unternehmen bearbeiten**
+    
+    Unternehmensdetails einsehen und auf “Bearbeiten” klicken
+    
+    1. Logo hochladen
+    2. Name bearbeiten
+    3. Signatur bearbeiten
+
 **Anwendungsfälle im Pflichtenheft**
 
 - Gesamtstatistik einsehen (Administrator): Implementiert
@@ -42,9 +131,6 @@ Schüler:
 - Spiel importieren (Administrator): Implementiert
 - Transaktion durchführen (Schüler): Implementiert
 - PDF zu Transaktionen generieren (Administrator/Schüler): Implementiert
-
-
-
 
 ## Automatische Tests
 
