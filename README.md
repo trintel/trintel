@@ -48,18 +48,11 @@ Zudem wird in der Konsole ein Link für den Registrierung für Admins geprintet,
 In der Deploy-Pipeline wird ein Docker Image erstellt, das wir verwenden können.
 Wir laden das Docker Image und führen es aus. Dieses Vorgehen wird hier im Folgenden erklärt.
 
-Aufgrund der "max Artifact size" bei GitLab wird das hier gleich ein bisschen sketchy.
-
-1. In GitLab in den CI Tab gehen und die letzte Deploy-Pipeline raussuchen. [Link zur Pipeline übersicht auf deploy Branch](https://git.informatik.uni-kiel.de/sopro/lms8_eg_017/softwareprojekt/-/pipelines?page=1&scope=all&ref=deploy)
-2. Bei den Stages der letzten Pipeline die Stage `build-docker` anklicken und ihre Logs anzeigen lassen.
-3. In den Logs einen Link suchen, der in etwa so aussieht: `https://transfer.sh/XXXXXX/trintel-image.tar` (i.d.R. Zeile 66).
-
 Nun müssen die folgenden Commands ausgeführt werden:
 
 ```sh
-wget https://transfer.sh/XXXXXX/trintel-image.tar` # der Link aus den Logs.
-docker load -i trintel-image.tar
-docker run -d -p 8080:8080 --name trintel-container trintel
+docker pull b3zz/trintel
+docker run -d -p 8080:8080 --name trintel-container b3zz/trintel
 ```
 
 Jetzt läuft die App im Container und ist über den Port 8080 erreichbar.
