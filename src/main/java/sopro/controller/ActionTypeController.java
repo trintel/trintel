@@ -26,7 +26,8 @@ public class ActionTypeController {
 
     @GetMapping("/admin-panel")
     public String showActions(Model model) {
-        model.addAttribute("signupUrl", SignupUrlService.STUDENT_SIGNUP_URL);
+        model.addAttribute("signupUrlStudent", SignupUrlService.STUDENT_SIGNUP_URL);
+        model.addAttribute("signupUrlAdmin", SignupUrlService.ADMIN_SIGNUP_URL);
         model.addAttribute("actionTypes", actionTypeRepository.findAll());
         return "admin-panel";
     }

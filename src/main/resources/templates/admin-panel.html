@@ -11,12 +11,23 @@
         <h1 th:text="#{adminPanel}"></h1>
         <div class="row align-items-center mt-4 mt-md-0">
             <div class="col-md-4">
-                <h4 th:text="#{inviteLink}"></h4>
-                <p class="mb-0" th:text="#{inviteLinkDescr}"></p>
+                <h4 th:text="#{inviteLinkStudents}"></h4>
+                <p class="mb-0" th:text="#{inviteLinkDescrStudents}"></p>
             </div>
             <div class="col-md">
                 <input onclick="this.select()" class="form-control copybtn" placeholder="Input group"
-                    aria-label="Input group" aria-describedby="btnGroupAddon2" th:value="'/signup/' + ${signupUrl}"
+                    aria-label="Input group" aria-describedby="btnGroupAddon2" th:value="'/signup/' + ${signupUrlStudent}"
+                    readonly></input>
+            </div>
+        </div>
+        <div class="row align-items-center mt-4 mt-md-0">
+            <div class="col-md-4">
+                <h4 th:text="#{inviteLinkAdmins}"></h4>
+                <p class="mb-0" th:text="#{inviteLinkDescrAdmins}"></p>
+            </div>
+            <div class="col-md">
+                <input onclick="this.select()" class="form-control copybtn" placeholder="Input group"
+                    aria-label="Input group" aria-describedby="btnGroupAddon2" th:value="'/signup/' + ${signupUrlAdmin}"
                     readonly></input>
             </div>
         </div>
