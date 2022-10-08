@@ -8,7 +8,7 @@ public class IdHandler {
     // it better.
     public static long generateId() {
         try {
-            Thread.sleep((long) (Math.random() * 10));
+            Thread.sleep(1); //still not ideal but at least functional
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
