@@ -38,12 +38,12 @@
                 <p class="mb-0" th:text="#{exImDescr}"></p>
             </div>
             <div class="col-md mt-3 mt-md-0">
-                <button class="btn btn-primary">
-                    <i class="bi bi-box-arrow-up"></i>
+                <a class="btn btn-primary" th:href="@{'/backup/export'}">
+                    <i class="bi bi-box-arrow-down"></i>
                     <span th:text="#{export}"></span>
-                </button>
+                </a>
                 <button class="btn btn-primary">
-                    <i class="bi bi-box-arrow-in-down"></i>
+                    <i class="bi bi-box-arrow-in-up"></i>
                     <span th:text="#{import}"></span>
                 </button>
             </div>
