@@ -167,6 +167,7 @@ textarea {
   border-radius: .8rem !important;
   right: 0;
   left: auto;
+  padding: 0.5rem;
 }
 
 .dropdown-menu[data-bs-popper]{
@@ -175,6 +176,11 @@ textarea {
 
 .dropdown-item {
   border-radius: .8rem !important;
+}
+
+.dropdown-item.active, .dropdown-item:active {
+  background-color: #e9ecef;
+  color: #212529;
 }
 
 .form-check-input:checked {
@@ -201,6 +207,11 @@ main {
 }
 
 .btn-primary:hover {
+  background-color: #4c5672;
+  border-color: #4c5672;
+}
+
+.btn-check:checked+.btn, .btn.active, .btn.show, .btn:first-child:active, :not(.btn-check)+.btn:active {
   background-color: #4c5672;
   border-color: #4c5672;
 }
