@@ -50,9 +50,10 @@ public class UserController {
      * @return page Home
      */
     @GetMapping("/home")
-    public String showHome2(@AuthenticationPrincipal User user) {
+    public String showHome2(@AuthenticationPrincipal User user, Model model) {
         if (user.getCompany() != null || user.getRole().equals("ADMIN")) { // just go to the home page if a company is
                                                                            // already selected or the user is admin
+            model.addAttribute("forename", user.getForename());
             return "home";
         }
 
