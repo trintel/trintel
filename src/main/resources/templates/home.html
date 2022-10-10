@@ -13,10 +13,16 @@
       <h1><span th:text="#{welcome}"></span>, <span th:text="${forename}"></span>!</h1>
       <p th:text="#{homeDescription}"></p>
       <div class="row row-cols-1 row-cols-xl-3 g-3">
+         <!-- Home tiles for admins -->
          <div class="col" sec:authorize="hasRole('ADMIN')">
             <div class="card">
                <div class="card-body">
-                  <h5 class="card-title" th:text="#{openAdminPanelTitle}"></h5>
+                  <div class="d-flex align-items-center mb-2">
+                     <div class="icon-container me-2">
+                        <i class="bi bi-grid"></i>
+                     </div>
+                     <h5 class="card-title mb-0" th:text="#{openAdminPanelTitle}"></h5>
+                  </div>
                   <p class="card-text" th:text="#{openAdminPanelDescription}"></p>
                   <a th:href="@{/admin-panel}" th:text="#{openAdminPanel}"></a>
                </div>
@@ -25,7 +31,12 @@
          <div class="col" sec:authorize="hasRole('ADMIN')">
             <div class="card">
                <div class="card-body">
-                  <h5 class="card-title" th:text="#{manageApplicationTitle}"></h5>
+                  <div class="d-flex align-items-center mb-2">
+                     <div class="icon-container me-2">
+                        <i class="bi bi-pencil"></i>
+                     </div>
+                     <h5 class="card-title mb-0" th:text="#{manageApplicationTitle}"></h5>
+                  </div>
                   <p class="card-text" th:text="#{manageApplicationDescription}"></p>
                   <div class="d-flex gap-2 flex-column flex-md-row">
                      <a th:href="@{/companies}" th:text="#{manageCompanies}"></a>
@@ -38,7 +49,12 @@
          <div class="col" sec:authorize="hasRole('ADMIN')">
             <div class="card">
                <div class="card-body">
-                  <h5 class="card-title" th:text="#{viewDataTitle}"></h5>
+                  <div class="d-flex align-items-center mb-2">
+                     <div class="icon-container me-2">
+                        <i class="bi bi-binoculars"></i>
+                     </div>
+                     <h5 class="card-title mb-0" th:text="#{viewDataTitle}"></h5>
+                  </div>
                   <p class="card-text" th:text="#{viewDataDescription}"></p>
                   <div class="d-flex gap-2 flex-column flex-md-row">
                      <a th:href="@{/transactions}" th:text="#{viewAllTransactions}"></a>
@@ -48,10 +64,17 @@
                </div>
             </div>
          </div>
+
+         <!-- Home tiles for students -->
          <div class="col" sec:authorize="hasRole('STUDENT')">
             <div class="card">
                <div class="card-body">
-                  <h5 class="card-title" th:text="#{viewCompanyProfileTitle}"></h5>
+                  <div class="d-flex align-items-center mb-2">
+                     <div class="icon-container me-2">
+                        <i class="bi bi-briefcase"></i>
+                     </div>
+                     <h5 class="card-title mb-0" th:text="#{viewCompanyProfileTitle}"></h5>
+                  </div>
                   <p class="card-text" th:text="#{viewCompanyProfileDescription}"></p>
                   <a th:href="@{/company}" th:text="#{viewCompany}"></a>
                </div>
@@ -60,7 +83,12 @@
          <div class="col" sec:authorize="hasRole('STUDENT')">
             <div class="card">
                <div class="card-body">
-                  <h5 class="card-title" th:text="#{viewTransactionsTitle}"></h5>
+                  <div class="d-flex align-items-center mb-2">
+                     <div class="icon-container me-2">
+                        <i class="bi bi-cart"></i>
+                     </div>
+                     <h5 class="card-title mb-0" th:text="#{viewTransactionsTitle}"></h5>
+                  </div>
                   <p class="card-text" th:text="#{viewTransactionsDescription}"></p>
                   <a th:href="@{/transactions}" th:text="#{viewTransactions}"></a>
                </div>
@@ -69,7 +97,12 @@
          <div class="col" sec:authorize="hasRole('STUDENT')">
             <div class="card">
                <div class="card-body">
-                  <h5 class="card-title" th:text="#{viewStatisticsTitle}"></h5>
+                  <div class="d-flex align-items-center mb-2">
+                     <div class="icon-container me-2">
+                        <i class="bi bi-bar-chart-line"></i>
+                     </div>
+                     <h5 class="card-title mb-0" th:text="#{viewStatisticsTitle}"></h5>
+                  </div>
                   <p class="card-text" th:text="#{viewStatisticsDescription}"></p>
                   <a th:href="@{/statistics}" th:text="#{viewStatistics}"></a>
                </div>
