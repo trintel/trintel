@@ -1,6 +1,7 @@
 package sopro.controller;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -53,7 +54,10 @@ public class UserController {
     public String showHome2(@AuthenticationPrincipal User user, Model model) {
         if (user.getCompany() != null || user.getRole().equals("ADMIN")) { // just go to the home page if a company is
                                                                            // already selected or the user is admin
-            model.addAttribute("forename", user.getForename());
+            Optional<User> profile = userRepository.findById(user.getId());
+            if(profile.isPresent()) {
+                model.addAttribute("forename", profile.get().getForename());
+            }                                                               
             return "home";
         }
 
