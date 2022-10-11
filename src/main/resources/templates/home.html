@@ -13,9 +13,10 @@
       <h1><span th:text="#{welcome}"></span>, <span th:text="${forename}"></span>!</h1>
       <p th:text="#{homeDescription}"></p>
       <div class="row row-cols-1 row-cols-xl-3 g-3">
+
          <!-- Home tiles for admins -->
          <div class="col" sec:authorize="hasRole('ADMIN')">
-            <div class="card">
+            <div class="card h-100">
                <div class="card-body">
                   <div class="d-flex align-items-center mb-2">
                      <div class="icon-container me-2">
@@ -24,12 +25,17 @@
                      <h5 class="card-title mb-0" th:text="#{openAdminPanelTitle}"></h5>
                   </div>
                   <p class="card-text" th:text="#{openAdminPanelDescription}"></p>
-                  <a th:href="@{/admin-panel}" th:text="#{openAdminPanel}"></a>
+               </div>
+               <div class="card-footer">
+                  <a class="d-inline-block" th:href="@{/admin-panel}">
+                     <i class="bi bi-box-arrow-up-right"></i>
+                     <span th:text="#{openAdminPanel}"></span>
+                  </a>
                </div>
             </div>
          </div>
          <div class="col" sec:authorize="hasRole('ADMIN')">
-            <div class="card">
+            <div class="card h-100">
                <div class="card-body">
                   <div class="d-flex align-items-center mb-2">
                      <div class="icon-container me-2">
@@ -38,16 +44,21 @@
                      <h5 class="card-title mb-0" th:text="#{manageApplicationTitle}"></h5>
                   </div>
                   <p class="card-text" th:text="#{manageApplicationDescription}"></p>
-                  <div class="d-flex gap-2 flex-column flex-md-row">
-                     <a th:href="@{/companies}" th:text="#{manageCompanies}"></a>
-                     <span class="d-none d-md-block">|</span>
-                     <a th:href="@{/students}" th:text="#{manageStudents}"></a>
-                  </div>
+               </div>
+               <div class="card-footer">
+                  <a class="d-inline-block" th:href="@{/companies}">
+                     <i class="bi bi-box-arrow-up-right"></i>
+                     <span th:text="#{manageCompanies}"></span>
+                  </a>
+                  <a class="d-inline-block" th:href="@{/students}">
+                     <i class="bi bi-box-arrow-up-right"></i>
+                     <span th:text="#{manageStudents}"></span>
+                  </a>
                </div>
             </div>
          </div>
          <div class="col" sec:authorize="hasRole('ADMIN')">
-            <div class="card">
+            <div class="card h-100">
                <div class="card-body">
                   <div class="d-flex align-items-center mb-2">
                      <div class="icon-container me-2">
@@ -56,18 +67,23 @@
                      <h5 class="card-title mb-0" th:text="#{viewDataTitle}"></h5>
                   </div>
                   <p class="card-text" th:text="#{viewDataDescription}"></p>
-                  <div class="d-flex gap-2 flex-column flex-md-row">
-                     <a th:href="@{/transactions}" th:text="#{viewAllTransactions}"></a>
-                     <span class="d-none d-md-block">|</span>
-                     <a th:href="@{/statistics-Admin}" th:text="#{viewAllStatistics}"></a>
-                  </div>
+               </div>
+               <div class="card-footer">
+                  <a class="d-inline-block" th:href="@{/transactions}">
+                     <i class="bi bi-box-arrow-up-right"></i>
+                     <span th:text="#{viewAllTransactions}"></span>
+                  </a>
+                  <a class="d-inline-block" th:href="@{/statistics-Admin}">
+                     <i class="bi bi-box-arrow-up-right"></i>
+                     <span th:text="#{viewAllStatistics}"></span>
+                  </a>
                </div>
             </div>
          </div>
 
          <!-- Home tiles for students -->
          <div class="col" sec:authorize="hasRole('STUDENT')">
-            <div class="card">
+            <div class="card h-100">
                <div class="card-body">
                   <div class="d-flex align-items-center mb-2">
                      <div class="icon-container me-2">
@@ -76,12 +92,17 @@
                      <h5 class="card-title mb-0" th:text="#{viewCompanyProfileTitle}"></h5>
                   </div>
                   <p class="card-text" th:text="#{viewCompanyProfileDescription}"></p>
-                  <a th:href="@{/company}" th:text="#{viewCompany}"></a>
+               </div>
+               <div class="card-footer">
+                  <a class="d-inline-block" th:href="@{/company}">
+                     <i class="bi bi-box-arrow-up-right"></i>
+                     <span th:text="#{viewCompany}"></span>
+                  </a>
                </div>
             </div>
          </div>
          <div class="col" sec:authorize="hasRole('STUDENT')">
-            <div class="card">
+            <div class="card h-100">
                <div class="card-body">
                   <div class="d-flex align-items-center mb-2">
                      <div class="icon-container me-2">
@@ -90,12 +111,17 @@
                      <h5 class="card-title mb-0" th:text="#{viewTransactionsTitle}"></h5>
                   </div>
                   <p class="card-text" th:text="#{viewTransactionsDescription}"></p>
-                  <a th:href="@{/transactions}" th:text="#{viewTransactions}"></a>
+               </div>
+               <div class="card-footer">
+                  <a class="d-inline-block" th:href="@{/transactions}">
+                     <i class="bi bi-box-arrow-up-right"></i>
+                     <span th:text="#{viewTransactions}"></span>
+                  </a>
                </div>
             </div>
          </div>
          <div class="col" sec:authorize="hasRole('STUDENT')">
-            <div class="card">
+            <div class="card h-100">
                <div class="card-body">
                   <div class="d-flex align-items-center mb-2">
                      <div class="icon-container me-2">
@@ -104,7 +130,12 @@
                      <h5 class="card-title mb-0" th:text="#{viewStatisticsTitle}"></h5>
                   </div>
                   <p class="card-text" th:text="#{viewStatisticsDescription}"></p>
-                  <a th:href="@{/statistics}" th:text="#{viewStatistics}"></a>
+               </div>
+               <div class="card-footer">
+                  <a class="d-inline-block" th:href="@{/statistics}">
+                     <i class="bi bi-box-arrow-up-right"></i>
+                     <span th:text="#{viewStatistics}"></span>
+                  </a>
                </div>
             </div>
          </div>

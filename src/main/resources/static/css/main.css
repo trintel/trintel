@@ -201,6 +201,14 @@ main {
   border-radius: 0.8rem;
 }
 
+.card-footer a {
+  margin-right: .5rem;
+}
+
+.card-footer a:last-child {
+  margin-right: 0;
+}
+
 .btn-primary {
   background-color: #556080;
   border-color: #556080;
