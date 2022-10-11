@@ -9,26 +9,31 @@
 <body>
     <th:block th:fragment="content">
         <h1 th:text="#{adminPanel}"></h1>
-        <div class="row align-items-center mt-4 mt-md-0">
-            <div class="col-md-4">
-                <h4 th:text="#{inviteLinkStudents}"></h4>
-                <p class="mb-0" th:text="#{inviteLinkDescrStudents}"></p>
+        <div
+            th:with="port=${#httpServletRequest.getServerPort() == 80 ? '' : ':' + #httpServletRequest.getServerPort()}">
+            <div class="row align-items-center mt-4 mt-md-0">
+                <div class="col-md-4">
+                    <h4 th:text="#{inviteLinkStudents}"></h4>
+                    <p class="mb-0" th:text="#{inviteLinkDescrStudents}"></p>
+                </div>
+                <div class="col-md">
+                    <input onclick="this.select()" class="form-control copybtn" placeholder="Input group"
+                        aria-label="Input group" aria-describedby="btnGroupAddon2"
+                        th:value="${#httpServletRequest.getServerName()} + ${port} + '/signup/' + ${signupUrlStudent}"
+                        readonly></input>
+                </div>
             </div>
-            <div class="col-md">
-                <input onclick="this.select()" class="form-control copybtn" placeholder="Input group"
-                    aria-label="Input group" aria-describedby="btnGroupAddon2"
-                    th:value="'/signup/' + ${signupUrlStudent}" readonly></input>
-            </div>
-        </div>
-        <div class="row align-items-center mt-4 mt-md-0">
-            <div class="col-md-4">
-                <h4 th:text="#{inviteLinkAdmins}"></h4>
-                <p class="mb-0" th:text="#{inviteLinkDescrAdmins}"></p>
-            </div>
-            <div class="col-md">
-                <input onclick="this.select()" class="form-control copybtn" placeholder="Input group"
-                    aria-label="Input group" aria-describedby="btnGroupAddon2" th:value="'/signup/' + ${signupUrlAdmin}"
-                    readonly></input>
+            <hr class="dropdown-divider my-4">
+            <div class="row align-items-center mt-4 mt-md-0">
+                <div class="col-md-4">
+                    <h4 th:text="#{inviteLinkAdmins}"></h4>
+                    <p class="mb-0" th:text="#{inviteLinkDescrAdmins}"></p>
+                </div>
+                <div class="col-md">
+                    <input onclick="this.select()" class="form-control copybtn" placeholder="Input group"
+                        aria-label="Input group" aria-describedby="btnGroupAddon2"
+                        th:value="${#httpServletRequest.getServerName()} + ${port} + '/signup/' + ${signupUrlAdmin}" readonly></input>
+                </div>
             </div>
         </div>
         <hr class="dropdown-divider my-4">
@@ -125,9 +130,10 @@
                                     th:unless="${actionType.isStandardAction()}" style="white-space: nowrap">
                                     <i class="bi bi-pencil-square"></i> <span th:text="#{edit}" />
                                 </a>
-                                <div class="mt-3 mt-lg-0" data-bs-toggle="tooltip" data-bs-placement="top" th:title="#{cantBeEdited}">
-                                    <a class="btn btn-light disabled"
-                                        th:if="${actionType.isStandardAction()}" style="white-space: nowrap" disabled>
+                                <div class="mt-3 mt-lg-0" data-bs-toggle="tooltip" data-bs-placement="top"
+                                    th:title="#{cantBeEdited}">
+                                    <a class="btn btn-light disabled" th:if="${actionType.isStandardAction()}"
+                                        style="white-space: nowrap" disabled>
                                         <i class="bi bi-pencil-square"></i> <span th:text="#{edit}" />
                                     </a>
                                 </div>
