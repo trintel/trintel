@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import sopro.TrintelApplication;
 import sopro.events.OnRegistrationCompleteEvent;
@@ -166,4 +167,25 @@ public class UserController {
         return "redirect:/user/settings?name";
     }
 
+    @GetMapping("/reset-password")
+    public String getResetPasswordForm() {
+        return "reset-password";
+    }
+
+    @PostMapping("/reset-password")
+    public ModelAndView resetPassword(String email, RedirectAttributes ra) {
+        ModelAndView mav = new ModelAndView("redirect:/reset-password?success");
+        ra.addFlashAttribute("email", email);
+        return mav;
+    }
+
+    @GetMapping("/reset-password/new")
+    public String getSetNewPasswordForm() {
+        return "set-new-password";
+    }
+
+    @PostMapping("/reset-password/new")
+    public String setNewPassword() {
+        return "redirect:/login?resetPassword";
+    }
 }
