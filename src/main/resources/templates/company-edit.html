@@ -31,6 +31,11 @@
                     <label for="floatingName" th:text="#{companyName}"></label>
                 </div>
                 <div class="form-floating mb-3">
+                    <input type="text" maxlength="30" pattern="^[a-zA-Z0-9 ]+$" class="form-control" id="floatingName"
+                        placeholder="Homepage" th:field="*{homepage}">
+                    <label for="floatingName" th:text="#{companyHomepage}"></label>
+                </div>
+                <div class="form-floating mb-3">
                     <textarea class="form-control" id="floatingDescr" placeholder="Company signature"
                         th:field="*{description}" style="height: 130px"></textarea>
                     <label for="floatingDescr" th:text="#{signature}"></label>

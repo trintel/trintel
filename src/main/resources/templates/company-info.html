@@ -20,6 +20,12 @@
                     <p class="mb-3" th:text="${company.description}"></p>
                 </div>
 
+                <!-- TODO: Das hier hat Felix gemacht. Also nochmal prüfen. Felix ist kacke in sowas -->
+                <div th:unless="${company.getHomepage() == null || company.getHomepage().isEmpty()}">
+                    <h5 th:text="#{signature}"></h5>
+                    <p class="mb-3" th:text="${company.getHomepage()}"></p>
+                </div>
+
                 <h5 th:text="#{members}" th:unless="${company.getStudents().isEmpty()}"></h5>
                 <ul class="list-group mb-3" th:unless="${company.getStudents().isEmpty()}">
                     <li class="list-group-item" th:text="${student.forename} + ' ' + ${student.surname}"
