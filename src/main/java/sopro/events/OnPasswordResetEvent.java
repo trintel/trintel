@@ -8,12 +8,12 @@ import lombok.Getter;
 import sopro.model.User;
 
 @Getter
-public class OnRegistrationCompleteEvent extends ApplicationEvent {
+public class OnPasswordResetEvent extends ApplicationEvent {
     private String appUrl;
     private Locale locale;
     private User user;
 
-    public OnRegistrationCompleteEvent(User user, Locale locale, String appUrl) {
+    public OnPasswordResetEvent(User user, Locale locale, String appUrl) {
         super(user);
 
         this.user = user;
