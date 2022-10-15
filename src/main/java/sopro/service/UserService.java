@@ -8,7 +8,6 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -156,7 +155,7 @@ public class UserService implements UserInterface {
         }
 
         //TODO: Das hier würde ich gerne auslagern
-        user.setPassword(password); //TODO encode
+        user.setPassword(passwordEncoder.encode(password));
         resetTokenRepository.delete(resetToken); // Should not be needed anymore.
         userRepository.save(user);
         return TokenStatus.VALID;
