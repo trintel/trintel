@@ -10,15 +10,12 @@
     <th:block th:fragment="content">
         <div class="d-md-flex justify-content-md-between align-items-md-start">
             <div class="col-auto">
-                <div class="companylogo companylogo-lg float-md-end mb-3 mb-md-0 me-md-3 mx-auto mx-md-0">
+                <div class="companylogo companylogo-lg mb-3 mb-md-0 me-md-3 mx-auto mx-md-0">
                     <img th:src="@{'/company/logo/' + ${company.id}}" />
                 </div>
-                <a class="btn btn-primary mt-md-3" th:text="#{edit}" th:href="@{/company/{id}/edit(id=${company.id})}"
-            th:if="${#request.userPrincipal.principal.role} == 'ADMIN' or ${#request.userPrincipal.principal.company.id} == ${company.id}">
-        </a>
             </div>
             <div class="col">
-                <h1 th:text="${company.name}"></h1>
+                <h1 th:text="${company.name}" class="text-center text-md-start"></h1>
                 <div th:unless="${company.getDescription() == null || company.getDescription().isEmpty()}">
                     <h5 th:text="#{signature}"></h5>
                     <p class="mb-3" th:text="${company.description}"></p>
@@ -29,10 +26,12 @@
                     <li class="list-group-item" th:text="${student.forename} + ' ' + ${student.surname}"
                         th:each="student : ${company.getStudents()}"></li>
                 </ul>
-
                 <p th:if="${company.getStudents().isEmpty()}" th:text="#{noMembers}"></p>
             </div>
         </div>
+        <a class="btn btn-primary float-end" th:text="#{edit}" th:href="@{/company/{id}/edit(id=${company.id})}"
+            th:if="${#request.userPrincipal.principal.role} == 'ADMIN' or ${#request.userPrincipal.principal.company.id} == ${company.id}">
+        </a>
     </th:block>
 </body>
 
