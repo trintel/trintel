@@ -8,35 +8,35 @@
 
 <body>
     <th:block th:fragment="content">
-        <div class="d-md-flex justify-content-md-between flex-md-row-reverse align-items-md-start">
-            <div class="companylogo companylogo-lg float-md-end mb-3 mb-md-0 ms-md-3 mx-auto mx-md-0">
-                <img th:src="@{'/company/logo/' + ${company.id}}" />
+        <div class="d-md-flex justify-content-md-between align-items-md-start">
+            <div class="col-auto">
+                <div class="companylogo companylogo-lg mb-3 mb-md-0 me-md-3 mx-auto mx-md-0">
+                    <img th:src="@{'/company/logo/' + ${company.id}}" />
+                </div>
             </div>
-            <div class="col-md-9">
+            <div class="col">
+                <div class="d-flex flex-column align-items-center align-items-md-start">
                 <h1 th:text="${company.name}"></h1>
                 <th:block th:unless="${company.getHomepage() == null || company.getHomepage().isEmpty()}">
                     <a class="mb-3" th:href="${company.homepage}" target="_blank">
                         <i class="bi bi-link-45deg"></i><span th:text="${company.homepage}"></span>
                     </a>
                 </th:block>
-
+                </div>
                 <th:block th:unless="${company.getDescription() == null || company.getDescription().isEmpty()}">
                     <h5 th:text="#{signature}"></h5>
                     <p class="mb-3" th:text="${company.description}"></p>
                 </th:block>
-
                 <h5 th:text="#{members}"></h5>
                 <ul class="list-group mb-3" th:unless="${company.getStudents().isEmpty()}">
                     <li class="list-group-item" th:text="${student.forename} + ' ' + ${student.surname}"
                         th:each="student : ${company.getStudents()}"></li>
                 </ul>
-
                 <p th:if="${company.getStudents().isEmpty()}" th:text="#{noMembers}"></p>
             </div>
         </div>
-        <a class="float-end" th:href="@{/company/{id}/edit(id=${company.id})}"
+        <a class="btn btn-primary float-end" th:text="#{edit}" th:href="@{/company/{id}/edit(id=${company.id})}"
             th:if="${#request.userPrincipal.principal.role} == 'ADMIN' or ${#request.userPrincipal.principal.company.id} == ${company.id}">
-            <button class="btn btn-primary mt-md-3" type="submit" th:text="#{edit}"></button>
         </a>
     </th:block>
 </body>
