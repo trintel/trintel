@@ -31,11 +31,10 @@
                     <label for="floatingName" th:text="#{companyName}"></label>
                 </div>
 
-                <!-- TODO: Das hier hat Felix gemacht. Also nochmal prüfen. Felix ist kacke in sowas -->
                 <div class="form-floating mb-3">
-                    <input type="text" maxlength="30" pattern="^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$" class="form-control" id="floatingName"
+                    <input type="url" maxlength="30" class="form-control" id="floatingHomepage"
                         placeholder="Homepage" th:field="*{homepage}">
-                    <label for="floatingName" th:text="#{companyHomepage}"></label>
+                    <label for="floatingHomepage" th:text="#{companyHomepage}"></label>
                 </div>
 
                 <div class="form-floating mb-3">
