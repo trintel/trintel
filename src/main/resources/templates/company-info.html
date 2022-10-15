@@ -15,6 +15,11 @@
             </div>
             <div class="col-md-9">
                 <h1 th:text="${company.name}"></h1>
+                 <!-- TODO: Das hier hat Felix gemacht. Also nochmal prüfen. Felix ist kacke in sowas -->
+                 <div th:unless="${company.getHomepage() == null || company.getHomepage().isEmpty()}">
+                    <a class="mb-3" th:text="${company.homepage}" th:href="${company.homepage}"></a>
+                </div>
+
                 <div th:unless="${company.getDescription() == null || company.getDescription().isEmpty()}">
                     <h5 th:text="#{signature}"></h5>
                     <p class="mb-3" th:text="${company.description}"></p>

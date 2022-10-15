@@ -30,6 +30,14 @@
                         placeholder="Company name" th:field="*{name}">
                     <label for="floatingName" th:text="#{companyName}"></label>
                 </div>
+
+                <!-- TODO: Das hier hat Felix gemacht. Also nochmal prüfen. Felix ist kacke in sowas -->
+                <div class="form-floating mb-3">
+                    <input type="text" maxlength="30" pattern="^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$" class="form-control" id="floatingName"
+                        placeholder="Homepage" th:field="*{homepage}">
+                    <label for="floatingName" th:text="#{companyHomepage}"></label>
+                </div>
+
                 <div class="form-floating mb-3">
                     <textarea class="form-control" id="floatingDescr" placeholder="Company signature"
                         th:field="*{description}" style="height: 130px"></textarea>
