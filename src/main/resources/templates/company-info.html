@@ -8,12 +8,16 @@
 
 <body>
     <th:block th:fragment="content">
-        <div
-            class="d-md-flex justify-content-md-between flex-md-row-reverse align-items-md-start">
-            <div class="companylogo companylogo-lg float-md-end mb-3 mb-md-0 ms-md-3 mx-auto mx-md-0">
-                <img th:src="@{'/company/logo/' + ${company.id}}" />
+        <div class="d-md-flex justify-content-md-between align-items-md-start">
+            <div class="col-auto">
+                <div class="companylogo companylogo-lg float-md-end mb-3 mb-md-0 me-md-3 mx-auto mx-md-0">
+                    <img th:src="@{'/company/logo/' + ${company.id}}" />
+                </div>
+                <a class="btn btn-primary mt-md-3" th:text="#{edit}" th:href="@{/company/{id}/edit(id=${company.id})}"
+            th:if="${#request.userPrincipal.principal.role} == 'ADMIN' or ${#request.userPrincipal.principal.company.id} == ${company.id}">
+        </a>
             </div>
-            <div class="col-md-9">
+            <div class="col">
                 <h1 th:text="${company.name}"></h1>
                 <div th:unless="${company.getDescription() == null || company.getDescription().isEmpty()}">
                     <h5 th:text="#{signature}"></h5>
@@ -29,9 +33,6 @@
                 <p th:if="${company.getStudents().isEmpty()}" th:text="#{noMembers}"></p>
             </div>
         </div>
-        <a class="float-end" th:href="@{/company/{id}/edit(id=${company.id})}" th:if="${#request.userPrincipal.principal.role} == 'ADMIN' or ${#request.userPrincipal.principal.company.id} == ${company.id}">
-            <button class="btn btn-primary mt-md-3" type="submit" th:text="#{edit}"></button>
-        </a>
     </th:block>
 </body>
 
