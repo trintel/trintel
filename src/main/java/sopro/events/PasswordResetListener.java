@@ -15,14 +15,14 @@ public class PasswordResetListener implements
         ApplicationListener<OnPasswordResetEvent> {
 
     @Autowired
-    private UserInterface service;
+    private UserInterface userService;
 
     @Autowired
     private MailService mailService;
 
     @Override
     public void onApplicationEvent(OnPasswordResetEvent event) {
-        confirmRegistration(event);
+        createResetToken(event);
     }
 
 
@@ -31,10 +31,10 @@ public class PasswordResetListener implements
      *
      * @param event
      */
-    private void confirmRegistration(OnPasswordResetEvent event) {
+    private void createResetToken(OnPasswordResetEvent event) {
         User user = event.getUser();
         String token = UUID.randomUUID().toString();
-        service.createVerificationTokenForUser(user, token);
+        userService.createResetTokenForUser(user, token);
 
         mailService.sendResetEmailMessage(event, user, token);
     }

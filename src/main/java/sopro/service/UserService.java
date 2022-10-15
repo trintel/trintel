@@ -39,11 +39,6 @@ public class UserService implements UserInterface {
     @Autowired
     private UserRepository userRepository;
 
-    //TODO enum?!
-    public static final String TOKEN_INVALID = "invalidToken";
-    public static final String TOKEN_EXPIRED = "expired";
-    public static final String TOKEN_VALID = "valid";
-
     // TODO move registerNewUser here!
 
     /**
@@ -66,6 +61,7 @@ public class UserService implements UserInterface {
      */
     @Override
     public void createResetTokenForUser(final User user, final String token) {
+        resetTokenRepository.deleteByUser(user); //delete old tokens, if any exist.
         final ResetToken myToken = new ResetToken(token, user);
         resetTokenRepository.save(myToken);
     }
@@ -154,10 +150,8 @@ public class UserService implements UserInterface {
             return TokenStatus.EXPIRED;
         }
 
-        //TODO: Das hier würde ich gerne auslagern
-        user.setPassword(passwordEncoder.encode(password));
+        changePassword(user, password);
         resetTokenRepository.delete(resetToken); // Should not be needed anymore.
-        userRepository.save(user);
         return TokenStatus.VALID;
     }
 
