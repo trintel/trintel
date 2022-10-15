@@ -181,8 +181,8 @@ public class UserController {
         return mav;
     }
 
-    @GetMapping("/reset-password/new/{token}")
-    public String getSetNewPasswordForm(@PathVariable String token) {
+    @GetMapping("/reset-password/new")
+    public String getSetNewPasswordForm() {
         return "set-new-password";
     }
 

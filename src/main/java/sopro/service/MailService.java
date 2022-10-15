@@ -54,7 +54,7 @@ public class MailService implements MailInterface {
     public void sendResetEmailMessage(final OnPasswordResetEvent event, final User user, final String token) {
         final String recipientAddress = user.getEmail();
         final String subject = messages.getMessage("emailSubjectPWReset", null, "Password Reset", event.getLocale());
-        final String confirmationUrl = "<a href=\"http://" + event.getAppUrl() + "/reset-password/new/" + token + "\">" + messages.getMessage("reserPW", null, "reset password", event.getLocale()) + "</a>";
+        final String confirmationUrl = "<a href=\"http://" + event.getAppUrl() + "/reset-password/new?token=" + token + "\">" + messages.getMessage("resetPW", null, "reset password", event.getLocale()) + "</a>";
         final String message = messages.getMessage("emailPWReset", null, "A password reset for your account has been requested. To change your password please click the link below.", event.getLocale());
         final String hello = messages.getMessage("emailHello", null, "Hello", event.getLocale());
         final String greetings = messages.getMessage("emailGreetings", null, "Kind regards", event.getLocale());

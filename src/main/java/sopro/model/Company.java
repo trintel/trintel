@@ -29,6 +29,7 @@ public class Company {
     @Getter @Setter @Id private Long id;
     @Getter @Setter @NotEmpty @Column(unique = true) private String name;
     @Getter @Setter private String description;
+    @Getter @Setter private String homepage;
     @Getter @Setter	@JsonIgnore	@OneToMany(mappedBy = "company") private List<User> students;
     @Getter @Setter	@JsonIgnore	@OneToMany(mappedBy = "buyer", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE) private List<Transaction> buyingTransactions;
     @Getter @Setter	@JsonIgnore	@OneToMany(mappedBy = "seller", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE) private List<Transaction> sellingTransactions;
@@ -44,6 +45,7 @@ public class Company {
         this.name = name;
         this.students = new ArrayList<User>();
         this.description = "";
+        this.homepage = "";
     }
 
     @PreRemove
