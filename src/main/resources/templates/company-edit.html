@@ -30,6 +30,13 @@
                         placeholder="Company name" th:field="*{name}">
                     <label for="floatingName" th:text="#{companyName}"></label>
                 </div>
+
+                <div class="form-floating mb-3">
+                    <input type="url" maxlength="30" class="form-control" id="floatingHomepage"
+                        placeholder="Homepage" th:field="*{homepage}">
+                    <label for="floatingHomepage" th:text="#{companyHomepage}"></label>
+                </div>
+
                 <div class="form-floating mb-3">
                     <textarea class="form-control" id="floatingDescr" placeholder="Company signature"
                         th:field="*{description}" style="height: 130px"></textarea>

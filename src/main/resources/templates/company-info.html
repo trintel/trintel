@@ -15,13 +15,19 @@
                 </div>
             </div>
             <div class="col">
-                <h1 th:text="${company.name}" class="text-center text-md-start"></h1>
-                <div th:unless="${company.getDescription() == null || company.getDescription().isEmpty()}">
+                <div class="d-flex flex-column align-items-center align-items-md-start">
+                <h1 th:text="${company.name}"></h1>
+                <th:block th:unless="${company.getHomepage() == null || company.getHomepage().isEmpty()}">
+                    <a class="mb-3" th:href="${company.homepage}" target="_blank">
+                        <i class="bi bi-link-45deg"></i><span th:text="${company.homepage}"></span>
+                    </a>
+                </th:block>
+                </div>
+                <th:block th:unless="${company.getDescription() == null || company.getDescription().isEmpty()}">
                     <h5 th:text="#{signature}"></h5>
                     <p class="mb-3" th:text="${company.description}"></p>
-                </div>
-
-                <h5 th:text="#{members}" th:unless="${company.getStudents().isEmpty()}"></h5>
+                </th:block>
+                <h5 th:text="#{members}"></h5>
                 <ul class="list-group mb-3" th:unless="${company.getStudents().isEmpty()}">
                     <li class="list-group-item" th:text="${student.forename} + ' ' + ${student.surname}"
                         th:each="student : ${company.getStudents()}"></li>
