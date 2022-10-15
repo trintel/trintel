@@ -187,13 +187,10 @@ public class UserController {
     }
 
     @PostMapping("/reset-password/new/{token}")
-    public ModelAndView setNewPassword(@PathVariable String token, final ModelMap model, @RequestParam("password") String password) {
+    public ModelAndView setNewPassword(@PathVariable String token, @RequestParam("password") String password) {
         final TokenStatus tokenStatus = userService.validateResetToken(token, password);
         if (tokenStatus == TokenStatus.VALID)
-            return new ModelAndView("redirect:/login?resetPassword", model); // Success you can now login.
-
-        //@cwerl: Das sollte so ok sein mit der error page, oder?
-        model.addAttribute("invalidLogin", "Registration token expired.");
-        return new ModelAndView("redirect:/login?error", model); // Bad user, agelaufen.
+            return new ModelAndView("redirect:/login?resetPassword"); // Success you can now login.
+        return new ModelAndView("redirect:/reset-password?invalidToken"); // Bad user, agelaufen.
     }
 }
