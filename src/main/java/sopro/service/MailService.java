@@ -12,7 +12,7 @@ import sopro.model.User;
 
 @Service
 public class MailService implements MailInterface {
-    
+
     @Autowired
     private MessageSource messages;
 
@@ -39,7 +39,7 @@ public class MailService implements MailInterface {
         email.setSubject(subject);
         email.setText(hello + " " + user.getForename() + ",\r\n\r\n" + message + "\r\n\r\n" + confirmationUrl + "\r\n\r\n" + greetings + " - The Trintel Team");
         email.setFrom("trintel@cau.zeppel.eu");
-        
+
         mailSender.send(email);
     }
 
@@ -63,7 +63,7 @@ public class MailService implements MailInterface {
         email.setSubject(subject);
         email.setText(hello + " " + user.getForename() + ",\r\n\r\n" + message + "\r\n\r\n" + confirmationUrl + "\r\n\r\n" + greetings + " - The Trintel Team");
         email.setFrom("trintel@cau.zeppel.eu");
-        
+
         mailSender.send(email);
     }
 }

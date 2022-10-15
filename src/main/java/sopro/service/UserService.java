@@ -30,7 +30,7 @@ public class UserService implements UserInterface {
     @Autowired
     private VerificationTokenRepository verificationTokenRepository;
 
-    @Autowired 
+    @Autowired
     private ResetTokenRepository resetTokenRepository;
 
     @Autowired

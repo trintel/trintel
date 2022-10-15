@@ -5,8 +5,8 @@ import java.util.stream.Stream;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import sopro.model.User;
 import sopro.model.ResetToken;
+import sopro.model.User;
 
 public interface ResetTokenRepository extends JpaRepository<ResetToken, Long> {
 

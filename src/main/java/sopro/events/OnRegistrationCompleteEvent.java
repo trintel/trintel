@@ -4,8 +4,9 @@ import java.util.Locale;
 
 import org.springframework.context.ApplicationEvent;
 
-import lombok.Getter;
 import sopro.model.User;
+
+import lombok.Getter;
 
 @Getter
 public class OnRegistrationCompleteEvent extends ApplicationEvent {
