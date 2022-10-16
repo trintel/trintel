@@ -13,19 +13,21 @@
             <img class="w-75 mx-auto mb-3" th:src="@{/img/trintel-full.png}"/>
             <p class="alert alert-danger" th:if="${param.error}" th:text="#{invalidLogin}"></p>
             <p class="alert alert-success" th:if="${param.logout}" th:text="#{successLogout}"></p>
+            <p class="alert alert-success" th:if="${param.resetPassword}" th:text="#{resetPasswordSuccess}"></p>
             <form th:action="@{/login}" method="post">
                 <div class="form-floating mb-3">
                     <input type="email" maxlength="255" class="form-control" id="floatingInputUsername" placeholder="Email"
-                        name="username" required autofocus>
+                        name="username" th:classappend="${param.error}  ? is-invalid" required autofocus>
                     <label for="floatingInputUsername" th:text="#{email}"></label>
                 </div>
                 <div class="form-floating mb-3">
                     <input type="password" maxlength="255" class="form-control" id="floatingPassword" placeholder="Password"
-                        name="password">
+                        name="password" th:classappend="${param.error}  ? is-invalid" required>
                     <label for="floatingPassword" th:text="#{password}"></label>
                 </div>
                 <div class="form-group">
-                    <button type="submit" class="w-100 btn btn-lg btn-primary" th:text=" #{login}"></button>
+                    <a th:href="@{/reset-password}" th:text="#{resetPassword}"></a>
+                    <button type="submit" class="w-100 btn btn-lg btn-primary mt-3" th:text=" #{login}"></button>
                 </div>
             </form>
         </main>

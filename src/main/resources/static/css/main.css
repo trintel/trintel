@@ -224,6 +224,11 @@ main {
   border-color: #4c5672;
 }
 
+.btn.disabled, .btn:disabled, fieldset:disabled .btn {
+  background-color: #8895bd;
+  border-color: #8895bd;
+}
+
 .btn-outline-primary {
   color: #556080;
   border-color: #556080;
