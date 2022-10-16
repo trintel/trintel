@@ -8,6 +8,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
 import sopro.service.PdfInterface;
 import sopro.service.SignupUrlInterface;
@@ -15,7 +16,7 @@ import sopro.storage.StorageProperties;
 
 @SpringBootApplication
 @EnableConfigurationProperties(StorageProperties.class)
-public class TrintelApplication implements CommandLineRunner {
+public class TrintelApplication extends SpringBootServletInitializer implements CommandLineRunner {
 
     @Autowired
     InitDatabaseService initDatabaseService;
