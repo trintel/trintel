@@ -23,6 +23,7 @@ public class Action {
     @Getter @Setter @ManyToOne @NotNull private ActionType actiontype;
     @Getter @Setter @ManyToOne @NotNull private Transaction transaction;
     @Getter @Setter @ManyToOne @OneToOne private User initiator;
+    @Getter @Setter @OneToOne(optional=true) private PdfFile pdfFile;
     @Getter @Setter private String message;
     @Getter @Setter private Integer amount;
     @Getter @Setter private Double pricePerPiece;
@@ -35,13 +36,14 @@ public class Action {
         this.time = LocalTime.now();
     }
 
-    public Action(String message, ActionType actiontype, Transaction transaction) {
+    public Action(String message, ActionType actiontype, Transaction transaction, PdfFile pdfFile) {
         this.id = IdHandler.generateId();
         this.message = message;
         this.actiontype = actiontype;
         this.transaction = transaction;
         this.date = LocalDate.now();
         this.time = LocalTime.now();
+        this.pdfFile = pdfFile;
     }
 
     /**

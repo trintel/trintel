@@ -23,9 +23,12 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import sopro.model.Action;
 import sopro.model.ActionType;
+import sopro.model.PdfFile;
 import sopro.model.Transaction;
 import sopro.model.User;
 import sopro.model.util.InitiatorType;
@@ -194,10 +197,13 @@ public class TransactionController {
 
     @PreAuthorize("hasPermission(#transactionID, 'transaction') and hasRole('STUDENT')")
     @PostMapping("/transaction/{transactionID}/addAction")
-    public String createAction(Action action, @PathVariable Long transactionID, @AuthenticationPrincipal User user,
+    public String createAction(Action action, @RequestParam("formFile") MultipartFile attachment, @PathVariable Long transactionID, @AuthenticationPrincipal User user,
             Model model) {
         // ActionType actionType = actionTypeRepository.findByName(actionTypeName);
         // action.setActiontype(actionType);
+
+        PdfFile pdfFile = pdfService.storeFile(attachment);
+
         Transaction transaction = transactionRepository.findById(transactionID).get();
 
         if (action.getActiontype().getName().equals("ACCEPT")) {
@@ -208,6 +214,7 @@ public class TransactionController {
 
         action.setTransaction(transaction);
         action.setInitiator(user);
+        action.setPdfFile(pdfFile);
         actionRepository.save(action);
 
         return "redirect:/transaction/" + transactionID;
@@ -215,10 +222,11 @@ public class TransactionController {
 
     @PreAuthorize("hasPermission(#transactionID, 'transaction') and hasRole('STUDENT')")
     @PostMapping("/transaction/{transactionID}/accept")
-    public String createAcceptAction(String message, @PathVariable Long transactionID,
+    public String createAcceptAction(String message, @RequestParam("formFile") MultipartFile attachment, @PathVariable Long transactionID,
             @AuthenticationPrincipal User user) {
+        PdfFile pdfFile = pdfService.storeFile(attachment);
         Transaction transaction = transactionRepository.findById(transactionID).get();
-        Action accept = new Action(message, actionTypeService.getAcceptActionType(), transaction);
+        Action accept = new Action(message, actionTypeService.getAcceptActionType(), transaction, pdfFile);
         transaction.setConfirmed(true);
         accept.setInitiator(user);
         actionRepository.save(accept);
@@ -231,7 +239,7 @@ public class TransactionController {
     public String createCancelAction(String message, @PathVariable Long transactionID,
             @AuthenticationPrincipal User user) {
         Transaction transaction = transactionRepository.findById(transactionID).get();
-        Action cancel = new Action(message, actionTypeService.getAbortActionType(), transaction);
+        Action cancel = new Action(message, actionTypeService.getAbortActionType(), transaction, null); //TODO !!
         transaction.setActive(false);
         cancel.setInitiator(user);
         actionRepository.save(cancel);
@@ -244,7 +252,7 @@ public class TransactionController {
     public String createDeliveryAction(String message, @PathVariable Long transactionID,
             @AuthenticationPrincipal User user) {
         Transaction transaction = transactionRepository.findById(transactionID).get();
-        Action delivered = new Action(message, actionTypeService.getDeliveryActionType(), transaction);
+        Action delivered = new Action(message, actionTypeService.getDeliveryActionType(), transaction, null);   //TODO!!
         transaction.setShipped(true);
         delivered.setInitiator(user);
         actionRepository.save(delivered);
@@ -257,7 +265,7 @@ public class TransactionController {
     public String createInvoiceAction(String message, @PathVariable Long transactionID,
             @AuthenticationPrincipal User user) {
         Transaction transaction = transactionRepository.findById(transactionID).get();
-        Action invoice = new Action(message, actionTypeService.getInvoiceActionType(), transaction);
+        Action invoice = new Action(message, actionTypeService.getInvoiceActionType(), transaction, null);  //TODO!!
         invoice.setInitiator(user);
         actionRepository.save(invoice);
         return "redirect:/transaction/" + transactionID;
@@ -268,7 +276,7 @@ public class TransactionController {
     public String createPaidAction(String message, @PathVariable Long transactionID,
             @AuthenticationPrincipal User user) {
         Transaction transaction = transactionRepository.findById(transactionID).get();
-        Action paid = new Action(message, actionTypeService.getPaidActionType(), transaction);
+        Action paid = new Action(message, actionTypeService.getPaidActionType(), transaction, null);    //TODO!!!
         transaction.setPaid(true);
         transaction.setActive(false);
         paid.setInitiator(user);
@@ -279,9 +287,19 @@ public class TransactionController {
 
     @GetMapping("/pdfexport/action/{actionId}")
     public ResponseEntity<byte[]> exportAction(@PathVariable long actionId, HttpServletResponse response, Model model) {
+        Action action = actionRepository.findById(actionId).get(); //TODO exception handling
+        byte[] contents = action.getPdfFile().getData();
+        if(contents != null) {  //unsure..
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            String filename = action.getPdfFile().getFileName(); // Last part is the filename
+            headers.setContentDispositionFormData(filename, filename);
+            headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+            ResponseEntity<byte[]> res = new ResponseEntity<>(contents, headers, HttpStatus.OK);
+            return res;
+        }
         String pdfPath = pdfService.generatePdfFromAction(actionId);
 
-        byte[] contents;
         try {
             contents = Files.readAllBytes(new File(pdfPath).toPath());
 

@@ -9,11 +9,15 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import sopro.TrintelApplication;
 import sopro.model.Action;
+import sopro.model.PdfFile;
 import sopro.repository.ActionRepository;
 import sopro.repository.CompanyLogoRepository;
+import sopro.repository.PdfFileRepository;
 import sopro.repository.TransactionRepository;
 
 import com.itextpdf.text.Chunk;
@@ -36,6 +40,9 @@ import com.itextpdf.text.pdf.draw.LineSeparator;
 public class PdfService implements PdfInterface {
 
     @Autowired
+    PdfFileRepository pdfFileRepository;
+
+    @Autowired
     ActionRepository actionRepository;
 
     @Autowired
@@ -43,6 +50,28 @@ public class PdfService implements PdfInterface {
 
     @Autowired
     TransactionRepository transactionRepository;
+
+    public PdfFile storeFile(MultipartFile file) { //TODO handle exceptions properly.
+        // Normalize file name
+        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+
+        try {
+            // Check if the file's name contains invalid characters
+            if(fileName.contains("..")) {
+                throw new IllegalArgumentException("Sorry! Filename contains invalid path sequence " + fileName);
+            }
+
+            PdfFile dbFile = new PdfFile(fileName, file.getContentType(), file.getBytes());
+
+            return pdfFileRepository.save(dbFile);
+        } catch (IOException ex) {
+            throw new IllegalArgumentException("Could not store file " + fileName + ". Please try again!", ex);
+        }
+    }
+
+    public PdfFile getFile(long fileId) {
+        return pdfFileRepository.findById(fileId).orElse(null); //TODO Handle exception properly.
+    }
 
     public String generatePdfFromAction(long actionId) {
         String path = "pdf-export-" + actionId + ".pdf";
