@@ -57,7 +57,7 @@ public class UserController {
             Optional<User> profile = userRepository.findById(user.getId());
             if(profile.isPresent()) {
                 model.addAttribute("forename", profile.get().getForename());
-            }                                                               
+            }
             return "home";
         }
 

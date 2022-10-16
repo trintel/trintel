@@ -6,5 +6,5 @@ import sopro.model.PdfFile;
 
 
 public interface PdfFileRepository extends CrudRepository<PdfFile, Long>{
-    
+
 }

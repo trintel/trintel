@@ -233,7 +233,7 @@ public class TransactionController {
     @PostMapping("/transaction/{transactionID}/accept")
     public String createAcceptAction(String message, @RequestParam("attachment") MultipartFile attachment, @PathVariable Long transactionID,
             @AuthenticationPrincipal User user) {
-        
+
         Transaction transaction = transactionRepository.findById(transactionID).get();
         PdfFile pdfFile;
         if(!attachment.isEmpty()) {

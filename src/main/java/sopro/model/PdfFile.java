@@ -5,15 +5,16 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.OneToOne;
 
+import sopro.model.util.IdHandler;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import sopro.model.util.IdHandler;
 
 @Entity
 @NoArgsConstructor
 public class PdfFile {
-    
+
     @Getter @Setter @Id private long id = IdHandler.generateId();
     @Getter @Setter private String fileName;
     @Getter @Setter private String fileType; //TODO restrict to pdf??
@@ -26,5 +27,5 @@ public class PdfFile {
         this.fileType = fileType;
         this.data = data;
     }
-    
+
 }
