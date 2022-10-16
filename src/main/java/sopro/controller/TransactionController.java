@@ -181,15 +181,18 @@ public class TransactionController {
 
     @PreAuthorize("hasPermission(#transactionID, 'transaction') and hasRole('STUDENT')")
     @PostMapping("/transaction/{transactionID}/addOffer")
-    public String addOffer(Action offer, @PathVariable Long transactionID, @AuthenticationPrincipal User user,
+    public String addOffer(Action offer, @RequestParam("attachment") MultipartFile attachment, @PathVariable Long transactionID, @AuthenticationPrincipal User user,
             BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("action", offer);
             model.addAttribute("transactionID", transactionID);
             return "transaction-addOffer";
         }
+
+        PdfFile pdfFile = pdfService.storeFile(attachment);
         offer.setActiontype(actionTypeService.getOfferAction()); // to be sure.
         offer.setTransaction(transactionRepository.findById(transactionID).get());
+        offer.setPdfFile(pdfFile);
         offer.setInitiator(user);
         actionRepository.save(offer); // save the new offer.
         return "redirect:/transaction/" + transactionID;
