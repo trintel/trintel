@@ -189,10 +189,13 @@ public class TransactionController {
             return "transaction-addOffer";
         }
 
-        PdfFile pdfFile = pdfService.storeFile(attachment);
+        if(!attachment.isEmpty()) {
+            PdfFile pdfFile = pdfService.storeFile(attachment);
+            offer.setPdfFile(pdfFile);
+        }
+
         offer.setActiontype(actionTypeService.getOfferAction()); // to be sure.
         offer.setTransaction(transactionRepository.findById(transactionID).get());
-        offer.setPdfFile(pdfFile);
         offer.setInitiator(user);
         actionRepository.save(offer); // save the new offer.
         return "redirect:/transaction/" + transactionID;
@@ -202,10 +205,11 @@ public class TransactionController {
     @PostMapping("/transaction/{transactionID}/addAction")
     public String createAction(Action action, @RequestParam("formFile") MultipartFile attachment, @PathVariable Long transactionID, @AuthenticationPrincipal User user,
             Model model) {
-        // ActionType actionType = actionTypeRepository.findByName(actionTypeName);
-        // action.setActiontype(actionType);
 
-        PdfFile pdfFile = pdfService.storeFile(attachment);
+        if(!attachment.isEmpty()) {
+            PdfFile pdfFile = pdfService.storeFile(attachment);
+            action.setPdfFile(pdfFile);
+        }
 
         Transaction transaction = transactionRepository.findById(transactionID).get();
 
@@ -217,7 +221,6 @@ public class TransactionController {
 
         action.setTransaction(transaction);
         action.setInitiator(user);
-        action.setPdfFile(pdfFile);
         actionRepository.save(action);
 
         return "redirect:/transaction/" + transactionID;
@@ -225,10 +228,16 @@ public class TransactionController {
 
     @PreAuthorize("hasPermission(#transactionID, 'transaction') and hasRole('STUDENT')")
     @PostMapping("/transaction/{transactionID}/accept")
-    public String createAcceptAction(String message, @RequestParam("formFile") MultipartFile attachment, @PathVariable Long transactionID,
+    public String createAcceptAction(String message, @RequestParam("attachment") MultipartFile attachment, @PathVariable Long transactionID,
             @AuthenticationPrincipal User user) {
-        PdfFile pdfFile = pdfService.storeFile(attachment);
+        
         Transaction transaction = transactionRepository.findById(transactionID).get();
+        PdfFile pdfFile;
+        if(!attachment.isEmpty()) {
+            pdfFile = pdfService.storeFile(attachment);
+        } else {
+            pdfFile = null;     //TODO temporary
+        }
         Action accept = new Action(message, actionTypeService.getAcceptActionType(), transaction, pdfFile);
         transaction.setConfirmed(true);
         accept.setInitiator(user);
@@ -291,8 +300,9 @@ public class TransactionController {
     @GetMapping("/pdfexport/action/{actionId}")
     public ResponseEntity<byte[]> exportAction(@PathVariable long actionId, HttpServletResponse response, Model model) {
         Action action = actionRepository.findById(actionId).get(); //TODO exception handling
-        byte[] contents = action.getPdfFile().getData();
-        if(contents != null) {  //unsure..
+
+        if(action.getPdfFile() != null) {  //TODO temporary
+            byte[] contents = action.getPdfFile().getData();
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_PDF);
             String filename = action.getPdfFile().getFileName(); // Last part is the filename
@@ -301,10 +311,10 @@ public class TransactionController {
             ResponseEntity<byte[]> res = new ResponseEntity<>(contents, headers, HttpStatus.OK);
             return res;
         }
-        String pdfPath = pdfService.generatePdfFromAction(actionId);
 
+        String pdfPath = pdfService.generatePdfFromAction(actionId);
         try {
-            contents = Files.readAllBytes(new File(pdfPath).toPath());
+            byte[] contents = Files.readAllBytes(new File(pdfPath).toPath());
 
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_PDF);
