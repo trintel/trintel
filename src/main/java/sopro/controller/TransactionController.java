@@ -146,8 +146,9 @@ public class TransactionController {
             Model model) {
         Action newAction = new Action();
         InitiatorType initiatorType = InitiatorType.SELLER; //TODO kann weg
+        Transaction transaction = transactionRepository.findById(transactionID).get();
 
-        if (user.getCompany().equals(transactionRepository.findById(transactionID).get().getBuyer())) { // findout if
+        if (user.getCompany().equals(transaction.getBuyer())) { // findout if
                                                                                                         // current user
                                                                                                         // is Buyer or
                                                                                                         // seller.
@@ -159,9 +160,10 @@ public class TransactionController {
         // actionTypes = actionTypeRepository.findByInitiatorType(initiatorType);
 
         // add the list of special actions
-        model.addAttribute("actiontypes", actionTypeService.getAvailableActions(transactionRepository.findById(transactionID).get(), user));
+        model.addAttribute("actiontypes", actionTypeService.getAvailableActions(transaction, user));
         model.addAttribute("action", newAction);
         model.addAttribute("transactionID", transactionID);
+        model.addAttribute("lastAction", transaction.getLatestAction());
         return "transaction-addSpecialAction";
     }
 
@@ -176,6 +178,7 @@ public class TransactionController {
         model.addAttribute("action", newAction);
         model.addAttribute("transactionID", transactionID);
         model.addAttribute("transaction", transaction);
+        model.addAttribute("lastAction", transaction.getLatestAction());
         return "transaction-addOffer";
     }
 
