@@ -63,7 +63,7 @@ public class InitDatabaseService {
             admin.setRole("ADMIN");
             userRepository.save(admin);
 
-            //Create demo Companys
+            //Create demo Companies
             Company company1 = new Company("[187]Strassenbande");
             Company company2 = new Company("Streber GmbH");
             Company company3 = new Company("7Bags");
