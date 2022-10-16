@@ -16,7 +16,7 @@ import sopro.storage.StorageProperties;
 
 @SpringBootApplication
 @EnableConfigurationProperties(StorageProperties.class)
-public class TrintelApplication extends SpringBootServletInitializer implements CommandLineRunner {
+public class TrintelApplication implements CommandLineRunner {
 
     @Autowired
     InitDatabaseService initDatabaseService;
