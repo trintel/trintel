@@ -31,7 +31,6 @@ import sopro.model.ActionType;
 import sopro.model.PdfFile;
 import sopro.model.Transaction;
 import sopro.model.User;
-import sopro.model.util.InitiatorType;
 import sopro.repository.ActionRepository;
 import sopro.repository.ActionTypeRepository;
 import sopro.repository.CompanyRepository;
@@ -145,25 +144,13 @@ public class TransactionController {
     public String showAction(Action action, @PathVariable Long transactionID, @AuthenticationPrincipal User user,
             Model model) {
         Action newAction = new Action();
-        InitiatorType initiatorType = InitiatorType.SELLER; //TODO kann weg
         Transaction transaction = transactionRepository.findById(transactionID).get();
-
-        if (user.getCompany().equals(transaction.getBuyer())) { // findout if
-                                                                                                        // current user
-                                                                                                        // is Buyer or
-                                                                                                        // seller.
-            initiatorType = InitiatorType.BUYER;
-        }
-
-        // a ArrayList for all available actions for the current Initiator
-        // List<ActionType> actionTypes = new ArrayList<>();
-        // actionTypes = actionTypeRepository.findByInitiatorType(initiatorType);
 
         // add the list of special actions
         model.addAttribute("actiontypes", actionTypeService.getAvailableActions(transaction, user));
         model.addAttribute("action", newAction);
         model.addAttribute("transactionID", transactionID);
-        model.addAttribute("lastAction", transaction.getLatestAction());
+        model.addAttribute("lastAction", transaction.getLastAction());
         return "transaction-addSpecialAction";
     }
 
@@ -178,7 +165,7 @@ public class TransactionController {
         model.addAttribute("action", newAction);
         model.addAttribute("transactionID", transactionID);
         model.addAttribute("transaction", transaction);
-        model.addAttribute("lastAction", transaction.getLatestAction());
+        model.addAttribute("lastAction", transaction.getLastAction());
         return "transaction-addOffer";
     }
 
