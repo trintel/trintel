@@ -146,7 +146,7 @@ public class TransactionTest {
         Transaction testTransaction = new Transaction(companyRepository.findById(userRepository.findByEmail("j@j").getCompany().getId()).get(), companyRepository.findById(userRepository.findByEmail("f@f").getCompany().getId()).get());
         testTransaction.setProduct("Product 1");
 
-        Action testAction = new Action("Test message testAction", testActionType, testTransaction);
+        Action testAction = new Action("Test message testAction", testActionType, testTransaction, null);
         testAction.setInitiator(userRepository.findByEmail("j@j"));
 
         actionTypeRepository.save(testActionType);
@@ -173,7 +173,7 @@ public class TransactionTest {
         Transaction testTransaction = new Transaction(companyRepository.findById(userRepository.findByEmail("j@j").getCompany().getId()).get(), companyRepository.findById(userRepository.findByEmail("f@f").getCompany().getId()).get());
         testTransaction.setProduct("Product 1");
 
-        Action testAction = new Action("Test message testAction", testActionType, testTransaction);
+        Action testAction = new Action("Test message testAction", testActionType, testTransaction, null);
         testAction.setInitiator(userRepository.findByEmail("j@j"));
 
         actionTypeRepository.save(testActionType);
@@ -225,7 +225,7 @@ public class TransactionTest {
         Transaction transaction = transactionRepository.findByBuyer(userRepository.findByEmail("j@j").getCompany()).get(0);
 
         ActionType request = new ActionType("offer", "testText", InitiatorType.BUYER);
-        Action actionTest = new Action("Test message", request, transaction);
+        Action actionTest = new Action("Test message", request, transaction, null);
 
         actionTypeRepository.save(request);
         //actionRepository.save(actionTest);
@@ -246,7 +246,7 @@ public class TransactionTest {
         Transaction transaction = transactionRepository.findByBuyer(userRepository.findByEmail("j@j").getCompany()).get(0);
 
         ActionType request = new ActionType("offer", "testText", InitiatorType.BUYER);
-        Action actionTest = new Action("Test message", request, transaction);
+        Action actionTest = new Action("Test message", request, transaction, null);
 
         actionTypeRepository.save(request);
         //actionRepository.save(actionTest);
