@@ -13,7 +13,7 @@ import lombok.Setter;
 
 @Entity
 @NoArgsConstructor
-public class PdfFile {
+public class AttachedFile {
 
     @Getter @Setter @Id private long id = IdHandler.generateId();
     @Getter @Setter private String fileName;
@@ -22,7 +22,7 @@ public class PdfFile {
     @Getter @Setter @OneToOne private Action action;
 
 
-    public PdfFile(String fileName, String fileType, byte[] data) {
+    public AttachedFile(String fileName, String fileType, byte[] data) {
         this.fileName = fileName;
         this.fileType = fileType;
         this.data = data;

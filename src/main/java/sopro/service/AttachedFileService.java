@@ -14,10 +14,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import sopro.TrintelApplication;
 import sopro.model.Action;
-import sopro.model.PdfFile;
+import sopro.model.AttachedFile;
 import sopro.repository.ActionRepository;
+import sopro.repository.AttachedFileRepository;
 import sopro.repository.CompanyLogoRepository;
-import sopro.repository.PdfFileRepository;
 import sopro.repository.TransactionRepository;
 
 import com.itextpdf.text.Chunk;
@@ -37,10 +37,10 @@ import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.draw.LineSeparator;
 
 @Service
-public class PdfService implements PdfInterface {
+public class AttachedFileService implements AttachedFileInterface {
 
     @Autowired
-    PdfFileRepository pdfFileRepository;
+    AttachedFileRepository attachedFileRepository;
 
     @Autowired
     ActionRepository actionRepository;
@@ -51,7 +51,7 @@ public class PdfService implements PdfInterface {
     @Autowired
     TransactionRepository transactionRepository;
 
-    public PdfFile storeFile(MultipartFile file) { //TODO handle exceptions properly.
+    public AttachedFile storeFile(MultipartFile file) { //TODO handle exceptions properly.
         // Normalize file name
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 
@@ -61,16 +61,16 @@ public class PdfService implements PdfInterface {
                 throw new IllegalArgumentException("Sorry! Filename contains invalid path sequence " + fileName);
             }
 
-            PdfFile dbFile = new PdfFile(fileName, file.getContentType(), file.getBytes());
+            AttachedFile dbFile = new AttachedFile(fileName, file.getContentType(), file.getBytes());
 
-            return pdfFileRepository.save(dbFile);
+            return attachedFileRepository.save(dbFile);
         } catch (IOException ex) {
             throw new IllegalArgumentException("Could not store file " + fileName + ". Please try again!", ex);
         }
     }
 
-    public PdfFile getFile(long fileId) {
-        return pdfFileRepository.findById(fileId).orElse(null); //TODO Handle exception properly.
+    public AttachedFile getFile(long fileId) {
+        return attachedFileRepository.findById(fileId).orElse(null); //TODO Handle exception properly.
     }
 
     public String generatePdfFromAction(long actionId) {

@@ -28,7 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import sopro.model.Action;
 import sopro.model.ActionType;
-import sopro.model.PdfFile;
+import sopro.model.AttachedFile;
 import sopro.model.Transaction;
 import sopro.model.User;
 import sopro.repository.ActionRepository;
@@ -36,7 +36,7 @@ import sopro.repository.ActionTypeRepository;
 import sopro.repository.CompanyRepository;
 import sopro.repository.TransactionRepository;
 import sopro.service.ActionTypeService;
-import sopro.service.PdfInterface;
+import sopro.service.AttachedFileInterface;
 
 @Controller
 public class TransactionController {
@@ -57,7 +57,7 @@ public class TransactionController {
     ActionTypeService actionTypeService;
 
     @Autowired
-    PdfInterface pdfService;
+    AttachedFileInterface attachedFileService;
 
     @GetMapping("/transactions")
     public String listTransactions(Model model, @AuthenticationPrincipal User user) {
@@ -180,8 +180,8 @@ public class TransactionController {
         }
 
         if(!attachment.isEmpty()) {
-            PdfFile pdfFile = pdfService.storeFile(attachment);
-            offer.setPdfFile(pdfFile);
+            AttachedFile attachedFile = attachedFileService.storeFile(attachment);
+            offer.setAttachedFile(attachedFile);
         }
 
         offer.setActiontype(actionTypeService.getOfferAction()); // to be sure.
@@ -197,8 +197,8 @@ public class TransactionController {
             Model model) {
 
         if(!attachment.isEmpty()) {
-            PdfFile pdfFile = pdfService.storeFile(attachment);
-            action.setPdfFile(pdfFile);
+            AttachedFile attachedFile = attachedFileService.storeFile(attachment);
+            action.setAttachedFile(attachedFile);
         }
 
         Transaction transaction = transactionRepository.findById(transactionID).get();
@@ -222,13 +222,13 @@ public class TransactionController {
             @AuthenticationPrincipal User user) {
 
         Transaction transaction = transactionRepository.findById(transactionID).get();
-        PdfFile pdfFile;
+        AttachedFile attachedFile;
         if(!attachment.isEmpty()) {
-            pdfFile = pdfService.storeFile(attachment);
+            attachedFile = attachedFileService.storeFile(attachment);
         } else {
-            pdfFile = null;     //TODO temporary
+            attachedFile = null;     //TODO temporary
         }
-        Action accept = new Action(message, actionTypeService.getAcceptActionType(), transaction, pdfFile);
+        Action accept = new Action(message, actionTypeService.getAcceptActionType(), transaction, attachedFile);
         transaction.setConfirmed(true);
         accept.setInitiator(user);
         actionRepository.save(accept);
@@ -291,18 +291,18 @@ public class TransactionController {
     public ResponseEntity<byte[]> exportAction(@PathVariable long actionId, HttpServletResponse response, Model model) {
         Action action = actionRepository.findById(actionId).get(); //TODO exception handling
 
-        if(action.getPdfFile() != null) {  //TODO temporary
-            byte[] contents = action.getPdfFile().getData();
+        if(action.getAttachedFile() != null) {  //TODO temporary
+            byte[] contents = action.getAttachedFile().getData();
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_PDF);
-            String filename = action.getPdfFile().getFileName(); // Last part is the filename
+            String filename = action.getAttachedFile().getFileName(); // Last part is the filename
             headers.setContentDispositionFormData(filename, filename);
             headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
             ResponseEntity<byte[]> res = new ResponseEntity<>(contents, headers, HttpStatus.OK);
             return res;
         }
 
-        String pdfPath = pdfService.generatePdfFromAction(actionId);
+        String pdfPath = attachedFileService.generatePdfFromAction(actionId);
         try {
             byte[] contents = Files.readAllBytes(new File(pdfPath).toPath());
 
@@ -323,7 +323,7 @@ public class TransactionController {
 
     @GetMapping("/pdfexport/transaction/{transactionId}")
     public ResponseEntity<byte[]> exportTransaction(@PathVariable long transactionId, HttpServletResponse response, Model model) {
-        String pdfPath = pdfService.generatePdfFromTransaction(transactionId);
+        String pdfPath = attachedFileService.generatePdfFromTransaction(transactionId);
 
         byte[] contents;
         try {
