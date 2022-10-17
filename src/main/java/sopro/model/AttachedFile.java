@@ -17,7 +17,7 @@ public class AttachedFile {
 
     @Getter @Setter @Id private long id = IdHandler.generateId();
     @Getter @Setter private String fileName;
-    @Getter @Setter private String fileType; //TODO restrict to pdf??
+    @Getter @Setter private String fileType;
     @Getter @Setter @Lob byte[] data;
     @Getter @Setter @OneToOne private Action action;
 
