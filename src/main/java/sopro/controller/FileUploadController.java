@@ -27,7 +27,7 @@ public class FileUploadController {
     }
 
     @PreAuthorize("hasRole('ADMIN') or isInCompany(#companyID)")
-    @PostMapping("/companies/{companyID}/edit/upload-logo")     //TODO: Maybe check if User is Authorised to do that (But Post, so....)
+    @PostMapping("/companies/{companyID}/edit/upload-logo")
     public String handleFileUpload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes, @PathVariable Long companyID) {
 
         storageService.store(file);
