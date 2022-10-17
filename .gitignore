@@ -1,6 +1,9 @@
 # Created by https://www.gitignore.io/api/java,gradle,eclipse
 # Edit at https://www.gitignore.io/?templates=java,gradle,eclipse
 
+### Custom ###
+*.pdf
+
 ### h2 Database ###
 *.mv.db
 *.trace.db
