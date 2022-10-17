@@ -143,16 +143,16 @@
 								</div>
 							</div>
 							<div class="accordion-body">
-								<th:block th:if="${action.pdfFile == null}">
+								<th:block th:if="${action.attachedFile == null}">
 									<a class="btn btn-secondary" th:href="@{'/pdfexport/action/' + ${action.id}}">
 										<i class="bi bi-file-earmark-arrow-down"></i>
 										<span th:text="'pdf-export-' + ${action.id} + '.pdf'"></span>
 									</a>
 								</th:block>
-								<th:block th:if="${action.pdfFile != null}">
+								<th:block th:if="${action.attachedFile != null}">
 									<a class="btn btn-secondary" th:href="@{'/pdfexport/action/' + ${action.id}}">
 										<i class="bi bi-file-earmark-arrow-down"></i>
-										<span th:text="${action.pdfFile.fileName}"></span>
+										<span th:text="${action.attachedFile.fileName}"></span>
 									</a>
 								</th:block>
 							</div>
