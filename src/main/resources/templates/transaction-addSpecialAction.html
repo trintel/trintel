@@ -28,9 +28,6 @@
                         </th:block>
                     </select>
                 </div>
-                <!-- TODO: Das hier hat wieder Felix hingerotzt -->
-                <input name="formFile" placeholder="Company logo" class="form-control" type="file" id="formFile">
-
                 <!-- Block: Message -->
                 <div class="form-floating mb-3 w-100">
                     <input th:field="*{message}" type="text" class="form-control" id="actionText" placeholder="message"
@@ -44,6 +41,9 @@
                         </button>
                     </a>
                 </div>
+
+                <!-- File attachment -->
+                <input name="formFile" placeholder="Company logo" class="form-control mb-3" type="file" id="formFile">
             </form>
             <!-- Block: Back Button -->
             <button class="w-100 btn btn-lg btn-light mt-3" onclick="history.back()">
