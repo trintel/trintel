@@ -10,13 +10,17 @@
 
 <body>
 	<th:block th:fragment="content">
-		<h1 th:text="#{transactionProgress}"></h1>
-		<div class="d-lg-flex justify-content-between mb-3">
-			<h3 class="mb-3"
-				th:text="|${actions[0].transaction.buyer.name} #{buying} ${actions[0].transaction.product} #{from} ${actions[0].transaction.seller.name}|">
-			</h3>
-			<a class="btn btn-outline-primary align-self-start"
-				th:href="@{'/pdfexport/transaction/' + ${transactionID}}"><i class="bi bi-file-earmark-pdf"></i>PDF</a>
+		<div class="d-lg-flex justify-content-between align-items-start mb-3">
+			<div>
+				<h1 th:text="#{transactionProgress}"></h1>
+				<h3 class="mb-3"
+					th:text="|${actions[0].transaction.buyer.name} #{buying} ${actions[0].transaction.product} #{from} ${actions[0].transaction.seller.name}|">
+				</h3>
+			</div>
+			<a class="btn btn-secondary" th:href="@{'/pdfexport/transaction/' + ${transactionID}}">
+				<i class="bi bi-file-arrow-down"></i>
+				<span th:text="#{exportTransaction}">
+			</a>
 		</div>
 		<!-- Accordion for every action in chosen transaction to visualize transaction progress -->
 		<div th:unless="${actions.isEmpty()}">
@@ -81,80 +85,77 @@
 						<div th:id="'panelsStayOpen-collapseOne'+${action.id}" class="accordion-collapse collapse"
 							th:classappend="${{action.id == actions[#lists.size(actions)-1].id} ? 'show':''}"
 							th:aria-labelledby="'panelsStayOpen-headingOne'+${action.id}">
-							<th:block th:if="${action.pdfFile != null}">
-								<div class="accordion-body">
-									<a th:href="@{'/download/file-action/' + ${action.pdfFile.id}}">
-										<i class="bi bi-file-earmark-text"></i>
+							<div class="accordion-body d-flex">
+								<div class="me-5" sec:authorize="hasRole('ADMIN')">
+									<span class="text-muted fs-6" th:text="#{initiatingStudent}"></span>
+									<span class="text-black">
+										<h5 th:text="${action.initiator.forename} + ' ' + ${action.initiator.surname}">
+										</h5>
+									</span>
+								</div>
+								<div class="me-5">
+									<span class="text-muted fs-6" th:text="#{date}"></span>
+									<span class="text-black">
+										<h5 th:text="${#temporals.format(action.date, 'dd-MM-yyyy')}"></h5>
+									</span>
+								</div>
+								<div>
+									<span class="text-muted fs-6" th:text="#{time}"></span>
+									<span class="text-black">
+										<h5 th:text="${#temporals.format(action.time, 'HH:mm')}"></h5>
+									</span>
+								</div>
+							</div>
+							<div class="accordion-body d-flex">
+								<div class="me-5">
+									<span class="text-muted fs-6" th:text="#{amount}"></span>
+									<div
+										th:if="${action.actiontype.name == 'Request' or action.actiontype.name == 'Offer'}">
+										<span class="text-black">
+											<h5 th:text="${action.amount}"></h5>
+										</span>
+									</div>
+									<div
+										th:unless="${action.actiontype.name == 'Request' or action.actiontype.name == 'Offer'}">
+										<span class="text-black">
+											<h5 th:text="${action.transaction.amount}"></h5>
+										</span>
+									</div>
+								</div>
+								<div th:unless="${action.actiontype.name} == 'Request'" class="me-5">
+									<span class="text-muted fs-6" th:text="#{pricePerPiece}"></span>
+									<div th:if="${action.actiontype.name == 'Offer'}">
+										<span class="text-black">
+											<h5 th:text="${action.pricePerPiece} + ' €'"></h5>
+										</span>
+									</div>
+									<div th:unless="${action.actiontype.name == 'Offer'}">
+										<span class="text-black">
+											<h5 th:text="${action.transaction.pricePerPiece} + ' €'"></h5>
+										</span>
+									</div>
+								</div>
+								<div>
+									<span class="text-muted fs-6" th:text="#{message}"></span>
+									<span class="text-black">
+										<h5 th:text="${action.message}" class="text-break"></h5>
+									</span>
+								</div>
+							</div>
+							<div class="accordion-body">
+								<th:block th:if="${action.pdfFile == null}">
+									<a class="btn btn-secondary" th:href="@{'/pdfexport/action/' + ${action.id}}">
+										<i class="bi bi-file-earmark-arrow-down"></i>
+										<span th:text="'pdf-export-' + ${action.id} + '.pdf'"></span>
+									</a>
+								</th:block>
+								<th:block th:if="${action.pdfFile != null}">
+									<a class="btn btn-secondary" th:href="@{'/pdfexport/action/' + ${action.id}}">
+										<i class="bi bi-file-earmark-arrow-down"></i>
 										<span th:text="${action.pdfFile.fileName}"></span>
 									</a>
-								</div>
-							</th:block>
-							<th:block th:if="${action.pdfFile == null}">
-								<div class="accordion-body d-flex">
-									<div class="me-5" sec:authorize="hasRole('ADMIN')">
-										<span class="text-muted fs-6" th:text="#{initiatingStudent}"></span>
-										<span class="text-black">
-											<h5
-												th:text="${action.initiator.forename} + ' ' + ${action.initiator.surname}">
-											</h5>
-										</span>
-									</div>
-									<div class="me-5">
-										<span class="text-muted fs-6" th:text="#{date}"></span>
-										<span class="text-black">
-											<h5 th:text="${#temporals.format(action.date, 'dd-MM-yyyy')}"></h5>
-										</span>
-									</div>
-									<div>
-										<span class="text-muted fs-6" th:text="#{time}"></span>
-										<span class="text-black">
-											<h5 th:text="${#temporals.format(action.time, 'HH:mm')}"></h5>
-										</span>
-									</div>
-								</div>
-								<div class="accordion-body d-flex">
-									<div class="me-5">
-										<span class="text-muted fs-6" th:text="#{amount}"></span>
-										<div
-											th:if="${action.actiontype.name == 'Request' or action.actiontype.name == 'Offer'}">
-											<span class="text-black">
-												<h5 th:text="${action.amount}"></h5>
-											</span>
-										</div>
-										<div
-											th:unless="${action.actiontype.name == 'Request' or action.actiontype.name == 'Offer'}">
-											<span class="text-black">
-												<h5 th:text="${action.transaction.amount}"></h5>
-											</span>
-										</div>
-									</div>
-									<div th:unless="${action.actiontype.name} == 'Request'" class="me-5">
-										<span class="text-muted fs-6" th:text="#{pricePerPiece}"></span>
-										<div th:if="${action.actiontype.name == 'Offer'}">
-											<span class="text-black">
-												<h5 th:text="${action.pricePerPiece} + ' €'"></h5>
-											</span>
-										</div>
-										<div th:unless="${action.actiontype.name == 'Offer'}">
-											<span class="text-black">
-												<h5 th:text="${action.transaction.pricePerPiece} + ' €'"></h5>
-											</span>
-										</div>
-									</div>
-									<div>
-										<span class="text-muted fs-6" th:text="#{message}"></span>
-										<span class="text-black">
-											<h5 th:text="${action.message}" class="text-break"></h5>
-										</span>
-									</div>
-									<div class="d-flex ms-auto align-items-end">
-										<a th:href="@{'/pdfexport/action/' + ${action.id}}">
-											<button type="button" class="btn btn-outline-primary"><i
-													class="bi bi-file-earmark-pdf"></i>PDF</button>
-										</a>
-									</div>
-								</div>
-							</th:block>
+								</th:block>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -193,9 +194,8 @@
 											<div class="modal-body">
 												<textarea class="form-control" th:field="*{message}"
 													th:placeholder="#{optMessage}"></textarea>
-												<!-- TODO: Das hier hat wieder Felix hingerotzt -->
-												<input name="attachment" placeholder="Company logo" class="form-control"
-													type="file" id="attachment">
+												<input name="attachment" placeholder="Company logo"
+													class="form-control mt-3" type="file" id="attachment">
 											</div>
 											<div class="modal-footer">
 												<button type="submit" class="w-100 btn btn-lg btn-primary"

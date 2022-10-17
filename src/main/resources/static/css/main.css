@@ -219,6 +219,18 @@ main {
   border-color: #4c5672;
 }
 
+.btn-secondary {
+  color: #54617f;
+  border-color: #e5e8ec;
+  background-color: #e5e8ec;
+}
+
+.btn-secondary:hover {
+  color: #54617f;
+  border-color: #cfd3d7;
+  background-color: #cfd3d7;
+}
+
 .btn-check:checked+.btn, .btn.active, .btn.show, .btn:first-child:active, :not(.btn-check)+.btn:active {
   background-color: #4c5672;
   border-color: #4c5672;

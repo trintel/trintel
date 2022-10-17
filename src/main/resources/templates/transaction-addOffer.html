@@ -28,9 +28,6 @@ AVIALABLE as long as no offer is accepted-->
                 <div class="form-floating mb-3">
                     <h1 th:text="#{offer}"></h1>
                 </div>
-
-                <!-- TODO: Das hier hat wieder Felix hingerotzt -->
-                <input name="attachment" placeholder="Company logo" class="form-control" type="file" id="attachment">
                 
                 <!-- Block: Price & Amount -->
                 <div class="d-flex">
@@ -51,6 +48,10 @@ AVIALABLE as long as no offer is accepted-->
                         name="Request_Message">
                     <label for="floatingReqMessage" th:text="#{message}"></label>
                 </div>
+
+                <!-- File attachment -->
+                <input name="attachment" placeholder="Company logo" class="form-control mb-3" type="file" id="attachment">
+
                 <!-- Block: Submit Button -->
                 <div class="form-group">
                     <a th:href="@{'/transaction/' + ${transactionID} + '/addAction'}">
