@@ -24,9 +24,11 @@ public class ExceptionHandlingController {
   @ExceptionHandler({MaxUploadSizeExceededException.class, NestedServletException.class, SizeLimitExceededException.class})
   public String databaseError(Model model) {
     TrintelApplication.logger.error("File upload too large");
+    model.addAttribute("error", "File exceeds maximum upload size");
+    model.addAttribute("status", "500");
     model.addAttribute("timestamp", new Timestamp(System.currentTimeMillis()));
 
-    return "error-file-size";
+    return "error";
   }
 
   @ExceptionHandler(Exception.class)
