@@ -1,6 +1,5 @@
 package sopro;
 
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -103,7 +102,8 @@ public class StatistikTest {
     public void listStatistikTestStudent2() throws Exception {
 
         mockMvc.perform(get("/statistics/" + userRepository.findByEmail("f@f").getCompany().getId()))
-               .andExpect(status().isForbidden());
+               .andExpect(status().isOk())
+               .andExpect(view().name("error"));
     }
 
     /**
@@ -130,7 +130,8 @@ public class StatistikTest {
     public void listAdminStatistikTestStudent() throws Exception {
 
         mockMvc.perform(get("/statistics-Admin"))
-               .andExpect(status().isForbidden());
+               .andExpect(status().isOk())
+               .andExpect(view().name("error"));
     }
 
 

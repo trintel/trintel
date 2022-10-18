@@ -138,7 +138,8 @@ public class CompanyTest {
     @WithMockUser(username = "student@student", roles = { "STUDENT" })
     public void addCompanieTestStudent() throws Exception {
         mockMvc.perform(get("/companies/add"))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isOk())
+                .andExpect(view().name("error"));
     }
 
     /**
@@ -167,7 +168,8 @@ public class CompanyTest {
     @WithMockUser(username = "student@student", roles = { "STUDENT" })
     public void saveCompanieTestStudent() throws Exception {
         mockMvc.perform(get("/companies/add"))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isOk())
+                .andExpect(view().name("error"));
     }
 
     /**
@@ -196,7 +198,8 @@ public class CompanyTest {
     @WithMockUser(username = "student@student", roles = { "STUDENT" })
     public void listAllStudentsTestStudent() throws Exception {
         mockMvc.perform(get("/students"))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isOk())
+                .andExpect(view().name("error"));
     }
 
     /**
@@ -235,7 +238,8 @@ public class CompanyTest {
         companyRepository.save(testCompany);
 
         mockMvc.perform(get("/student/" + id + "/reassign"))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isOk())
+                .andExpect(view().name("error"));
     }
 
     /**
@@ -275,7 +279,8 @@ public class CompanyTest {
         companyRepository.save(testCompany);
 
         mockMvc.perform(post("/student/" + id + "/reassign").param("name", companyName).with(csrf()))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isOk())
+                .andExpect(view().name("error"));
     }
 
     // #######################################################################################
@@ -292,7 +297,8 @@ public class CompanyTest {
     @WithUserDetails(value = "admin@admin", userDetailsServiceBeanName = "userDetailsService")
     public void companySelectTestAdmin() throws Exception {
         mockMvc.perform(get("/company/select"))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isOk())
+                .andExpect(view().name("error"));
     }
 
         /**
@@ -305,7 +311,8 @@ public class CompanyTest {
     @WithUserDetails(value = "j@j", userDetailsServiceBeanName = "userDetailsService")
     public void companySelectTestAssignedStudent() throws Exception {
         mockMvc.perform(get("/company/select"))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isOk())
+                .andExpect(view().name("error"));
     }
 
     /**
@@ -335,7 +342,8 @@ public class CompanyTest {
         long id = testCompany.getId();
 
         mockMvc.perform(get("/company/select/" + id))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isOk())
+                .andExpect(view().name("error"));
 
         companyRepository.delete(testCompany);
     }
@@ -367,7 +375,8 @@ public class CompanyTest {
     @WithUserDetails(value = "admin@admin", userDetailsServiceBeanName = "userDetailsService")
     public void joinCompany2TestAdmin() throws Exception {
         mockMvc.perform(post("/company/join").param("name", companyName).with(csrf()))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isOk())
+                .andExpect(view().name("error"));
     }
 
     /**

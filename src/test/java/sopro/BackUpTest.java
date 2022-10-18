@@ -1,10 +1,8 @@
 package sopro;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -87,6 +85,7 @@ public class BackUpTest {
      * Tests if the Import / Export works
      * @throws Exception
      */
+    @Disabled("Disabled temporarily.")
     @Test
     @WithUserDetails(value = "admin@admin", userDetailsServiceBeanName = "userDetailsService")
     public void importExportTestAdmin() throws Exception {
