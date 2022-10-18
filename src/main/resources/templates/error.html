@@ -10,14 +10,25 @@
     <th:block th:fragment="content">
         <style th:replace="fragments/small-content :: content"></style>
         <main class="form-small">
-            <!-- Block: Header -->
-            <h1 class="mb-3 text-danger" th:text="#{error}"></h1>
+            <div class="d-flex align-items-center mb-3">
+                <!-- Block: Header -->
+                <img class="border-end me-3" width="110" th:src="@{/img/onlyicon-error.png}" />
+                <h1 class="mb-0 fs-3" th:text="#{error}"></h1>
+        </div>
             <!-- Block: Info List -->
             <ul class="list-group mb-3">
-                <li class="list-group-item"><h5 th:text="#{errorType} + ': ' + ${error}"></h5></li>
-                <li class="list-group-item"><h5 th:text="#{status} + ': ' + ${status}"></h5></li>
-                <!-- <li class="list-group-item"><h5 th:text="#{exception} + ': ' + ${exception}"></h5></li> -->
-                <li class="list-group-item"><h5 th:text="#{time} + ': ' + ${timestamp}"></h5></li>
+                <li class="list-group-item">
+                    <span class="fw-bold" th:text="#{errorType} + ': '"></span>
+                    <span th:text="${error}"></span>
+                </li>
+                <li class="list-group-item">
+                    <span class="fw-bold" th:text="#{status} + ': '"></span>
+                    <span th:text="${status}"></span>
+                </li>
+                <li class="list-group-item">
+                    <span class="fw-bold" th:text="#{time} + ': '"></span>
+                    <span th:text="${timestamp}"></span>
+                </li>
                 
             </ul>
             <!-- Block: Back Button -->
@@ -26,38 +37,6 @@
                 <a th:text=" #{back}"></a>
             </button>
         </main>
-        <!-- <table>
-            <tr>
-                <td>Date</td>
-                <td th:text="${timestamp}" />
-            </tr>
-            <tr>
-                <td>Path</td>
-                <td th:text="${path}" />
-            </tr> 
-            <tr>
-                <td>Error</td>
-                <td th:text="${error}" />
-            </tr>
-            <tr>
-                <td>Status</td>
-                <td th:text="${status}" />
-            </tr>
-            <tr>
-                <td>Message</td>
-                <td th:text="${message}" />
-            </tr>
-            <tr>
-                <td>Exception</td>
-                <td th:text="${exception}" />
-            </tr>
-            <tr>
-                <td>Trace</td>
-                <td>
-                    <pre th:text="${trace}" />
-                </td>
-            </tr>
-        </table> -->
     </th:block>
 </body>
 

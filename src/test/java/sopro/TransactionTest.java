@@ -105,7 +105,8 @@ public class TransactionTest {
     @WithUserDetails(value = "admin@admin", userDetailsServiceBeanName = "userDetailsService")
     public void createTransactionsTestAdmin() throws Exception {
         mockMvc.perform(get("/transaction/" + userRepository.findByEmail("j@j").getCompany().getId() + "/create"))
-               .andExpect(status().isForbidden());
+               .andExpect(status().isOk())
+               .andExpect(view().name("error"));
     }
 
     /**
@@ -182,7 +183,8 @@ public class TransactionTest {
         Long companyIdSeller = userRepository.findByEmail("f@f").getCompany().getId();
 
         mockMvc.perform(post("/transaction/" + companyIdSeller + "/save").flashAttr("action", testAction).with(csrf()))
-               .andExpect(status().isForbidden());
+               .andExpect(status().isOk())
+               .andExpect(view().name("error"));
     }
 
 
@@ -252,7 +254,8 @@ public class TransactionTest {
         //actionRepository.save(actionTest);
 
         mockMvc.perform(post("/transaction/" + transaction.getId() + "/addAction").flashAttr("action", actionTest).with(csrf()))
-               .andExpect(status().isForbidden());
+               .andExpect(status().isOk())
+               .andExpect(view().name("error"));
     }
 
 
@@ -287,7 +290,8 @@ public class TransactionTest {
     @WithUserDetails(value = "j@j", userDetailsServiceBeanName = "userDetailsService")
     public void addActionTypeTestStudent() throws Exception {
         mockMvc.perform(get("/action/add"))
-               .andExpect(status().isForbidden());
+               .andExpect(status().isOk())
+               .andExpect(view().name("error"));
     }
 
     /**
@@ -314,7 +318,8 @@ public class TransactionTest {
         ActionType actionType = new ActionType("neuerTyp", "testTextNeu", InitiatorType.BUYER);
 
         mockMvc.perform(post("/action/save").flashAttr("actionType", actionType).with(csrf()))
-               .andExpect(status().isForbidden());
+               .andExpect(status().isOk())
+               .andExpect(view().name("error"));
     }
 
     /**
@@ -345,7 +350,8 @@ public class TransactionTest {
         long actionTypeId = actionTypes.iterator().next().getId();
 
         mockMvc.perform(get("/action/edit/" + actionTypeId))
-               .andExpect(status().isForbidden());
+               .andExpect(status().isOk())
+               .andExpect(view().name("error"));
     }
 
     /**
@@ -376,7 +382,8 @@ public class TransactionTest {
         actionTypeRepository.save(actionType);
 
         mockMvc.perform(get("/action/edit/" + actionType.getId()))
-               .andExpect(status().isForbidden());
+               .andExpect(status().isOk())
+               .andExpect(view().name("error"));
     }
 
     /**

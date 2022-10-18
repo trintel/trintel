@@ -7,14 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
-import sopro.service.PdfInterface;
 import sopro.service.SignupUrlInterface;
-import sopro.storage.StorageProperties;
 
 @SpringBootApplication
-@EnableConfigurationProperties(StorageProperties.class)
 public class TrintelApplication implements CommandLineRunner {
 
     @Autowired
@@ -23,12 +19,10 @@ public class TrintelApplication implements CommandLineRunner {
     @Autowired
     SignupUrlInterface signupUrlService;
 
-    @Autowired
-    PdfInterface pdfService;
 
     public static final Logger logger = LoggerFactory.getLogger(TrintelApplication.class);
 
-    public static final String WORKDIR = System.getProperty("user.dir");
+    public static final String WORKDIR = System.getProperty("user.dir"); //TODO: this links to the last use of the filesystem. (PdfService)
 
     public static void main(String[] args) {
         // System.setProperty("spring.devtools.restart.enabled", "true");
