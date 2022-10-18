@@ -19,10 +19,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import sopro.TrintelApplication;
 import sopro.events.OnRegistrationCompleteEvent;
 import sopro.model.User;
+import sopro.model.util.TokenStatus;
 import sopro.repository.UserRepository;
 import sopro.service.SignupUrlInterface;
 import sopro.service.UserInterface;
@@ -31,10 +33,10 @@ import sopro.service.UserInterface;
 public class UserController {
 
     @Autowired
-    UserRepository userRepository;
+    ApplicationEventPublisher eventPublisher;
 
     @Autowired
-    ApplicationEventPublisher eventPublisher;
+    UserRepository userRepository;
 
     @Autowired
     UserInterface userService;
@@ -140,8 +142,8 @@ public class UserController {
     @GetMapping("/registrationConfirm")
     public ModelAndView confirmRegistration(final HttpServletRequest request, final ModelMap model,
             @RequestParam("token") final String token) throws UnsupportedEncodingException {
-        final String result = userService.validateVerificationToken(token);
-        if (result.equals("valid"))
+        final TokenStatus tokenStatus = userService.validateVerificationToken(token);
+        if (tokenStatus == TokenStatus.VALID)
             return new ModelAndView("redirect:/login", model); // Success you can now login.
 
         model.addAttribute("invalidLogin", "Registration token expired.");
@@ -166,4 +168,29 @@ public class UserController {
         return "redirect:/user/settings?name";
     }
 
+    @GetMapping("/reset-password")
+    public String getResetPasswordForm() {
+        return "reset-password";
+    }
+
+    @PostMapping("/reset-password")
+    public ModelAndView resetPassword(String email, RedirectAttributes ra,  HttpServletRequest request) {
+        userService.requestPasswordReset(email, request);
+        ModelAndView mav = new ModelAndView("redirect:/reset-password?success");
+        ra.addFlashAttribute("email", email);
+        return mav;
+    }
+
+    @GetMapping("/reset-password/new")
+    public String getSetNewPasswordForm() {
+        return "set-new-password";
+    }
+
+    @PostMapping("/reset-password/new/{token}")
+    public ModelAndView setNewPassword(@PathVariable String token, @RequestParam("password") String password) {
+        final TokenStatus tokenStatus = userService.validateResetToken(token, password);
+        if (tokenStatus == TokenStatus.VALID)
+            return new ModelAndView("redirect:/login?resetPassword"); // Success you can now login.
+        return new ModelAndView("redirect:/reset-password?invalidToken"); // Bad user, agelaufen.
+    }
 }
