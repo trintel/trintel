@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import sopro.TrintelApplication;
 import sopro.model.Action;
 import sopro.model.AttachedFile;
 import sopro.repository.ActionRepository;
@@ -144,7 +143,8 @@ public class AttachedFileService implements AttachedFileInterface {
             };
             // header
 
-            Image img = Image.getInstance(TrintelApplication.WORKDIR + "/build/resources/main/static/img/placeholder.jpg");
+            //TODO: get from repository!!
+            Image img = Image.getInstance(System.getProperty("user.dir") + "/build/resources/main/static/img/placeholder.jpg");
 
             try {
                 img = Image.getInstance(a.getInitiator().getCompany().getCompanyLogo().getLogo());

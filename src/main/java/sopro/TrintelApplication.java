@@ -24,8 +24,6 @@ public class TrintelApplication implements CommandLineRunner {
 
     public static final Logger logger = LoggerFactory.getLogger(TrintelApplication.class);
 
-    public static final String WORKDIR = System.getProperty("user.dir");
-
     public static void main(String[] args) {
         // System.setProperty("spring.devtools.restart.enabled", "true");
         SpringApplication.run(TrintelApplication.class, args);
