@@ -1,8 +1,6 @@
 package sopro.controller;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -302,45 +300,31 @@ public class TransactionController {
             return res;
         }
 
-        String pdfPath = attachedFileService.generatePdfFromAction(actionId);
-        try {
-            byte[] contents = Files.readAllBytes(new File(pdfPath).toPath());
+        ByteArrayOutputStream out = attachedFileService.generatePdfFromAction(actionId);
+        byte[] contents = out.toByteArray();
 
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_PDF);
-            String [] soup = pdfPath.split("/"); // Last part is the filename
-            String filename =  soup[soup.length-1];
-            headers.setContentDispositionFormData(filename, filename);
-            headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
-            ResponseEntity<byte[]> res = new ResponseEntity<>(contents, headers, HttpStatus.OK);
-            return res;
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return null;
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        String filename =  "pdf-export-" + actionId + ".pdf";
+        headers.setContentDispositionFormData(filename, filename);
+        headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+        ResponseEntity<byte[]> res = new ResponseEntity<>(contents, headers, HttpStatus.OK);
+        return res;
     }
 
     @GetMapping("/pdfexport/transaction/{transactionId}")
     public ResponseEntity<byte[]> exportTransaction(@PathVariable long transactionId, HttpServletResponse response, Model model) {
-        String pdfPath = attachedFileService.generatePdfFromTransaction(transactionId);
+        ByteArrayOutputStream out = attachedFileService.generatePdfFromTransaction(transactionId);
 
         byte[] contents;
-        try {
-            contents = Files.readAllBytes(new File(pdfPath).toPath());
+        contents = out.toByteArray();
 
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_PDF);
-            String [] soup = pdfPath.split("/"); // Last part is the filename
-            String filename =  soup[soup.length-1];
-            headers.setContentDispositionFormData(filename, filename);
-            headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
-            ResponseEntity<byte[]> res = new ResponseEntity<>(contents, headers, HttpStatus.OK);
-            return res;
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return null;
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        String filename =  "pdf-export-" + transactionId + ".pdf";
+        headers.setContentDispositionFormData(filename, filename);
+        headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+        ResponseEntity<byte[]> res = new ResponseEntity<>(contents, headers, HttpStatus.OK);
+        return res;
     }
 }

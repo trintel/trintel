@@ -1,7 +1,7 @@
 package sopro.service;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -20,16 +20,17 @@ import sopro.repository.AttachedFileRepository;
 import sopro.repository.CompanyLogoRepository;
 import sopro.repository.TransactionRepository;
 
+import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
+import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.Rectangle;
-import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
@@ -73,12 +74,11 @@ public class AttachedFileService implements AttachedFileInterface {
         return attachedFileRepository.findById(fileId).orElse(null); //TODO Handle exception properly.
     }
 
-    public String generatePdfFromAction(long actionId) {
-        String path = "pdf-export-" + actionId + ".pdf";
+    public ByteArrayOutputStream generatePdfFromAction(long actionId) {
         long[] arr = { actionId };
 
         try {
-            buildPdf(arr, path);
+            return buildPdf(arr);
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -88,12 +88,11 @@ public class AttachedFileService implements AttachedFileInterface {
             e.printStackTrace();
         }
 
-        return path;
+        return null;
 
     }
 
-    public String generatePdfFromTransaction(long transactionId) {
-        String path = "pdf-export-" + transactionId + ".pdf";
+    public ByteArrayOutputStream generatePdfFromTransaction(long transactionId) {
         List<Action> ax = transactionRepository.findById(transactionId).get().getActions();
         long[] arr = new long[ax.size()];
         for (int i = 0; i < ax.size(); ++i)
@@ -101,7 +100,7 @@ public class AttachedFileService implements AttachedFileInterface {
 
         try {
 
-            buildPdf(arr, path);
+            return buildPdf(arr);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (DocumentException e) {
@@ -110,20 +109,19 @@ public class AttachedFileService implements AttachedFileInterface {
             e.printStackTrace();
         }
 
-        return path;
+        return null;
 
     }
 
-    private void buildPdf(long[] actionIdList, String path) throws DocumentException, IOException {
+    private ByteArrayOutputStream buildPdf(long[] actionIdList) throws DocumentException, IOException {
 
-        String FONT = TrintelApplication.WORKDIR + "/build/resources/main/font/Segoe_UI.ttf";
-        BaseFont bf = BaseFont.createFont(FONT, BaseFont.WINANSI, BaseFont.EMBEDDED);
-        Font font8 = new Font(bf, 8);
-        Font font10 = new Font(bf, 10);
-        Font font14 = new Font(bf, 14);
+        Font font8 = FontFactory.getFont(FontFactory.COURIER, 8, BaseColor.BLACK);
+        Font font10 = FontFactory.getFont(FontFactory.COURIER, 10, BaseColor.BLACK);
+        Font font14 = FontFactory.getFont(FontFactory.COURIER, 14, BaseColor.BLACK);
 
         Document document = new Document();
-        PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(path));
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        PdfWriter writer = PdfWriter.getInstance(document, out);
         document.open();
 
         long lastActionId = actionIdList[actionIdList.length - 1];
@@ -202,5 +200,6 @@ public class AttachedFileService implements AttachedFileInterface {
 
         }
         document.close();
+        return out;
     }
 }
