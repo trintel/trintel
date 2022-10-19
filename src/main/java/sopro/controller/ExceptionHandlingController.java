@@ -32,14 +32,12 @@ public class ExceptionHandlingController {
   }
 
   @ExceptionHandler(Exception.class)
-  public ModelAndView handleError(HttpServletRequest req, Exception ex) {
+  public String handleError(HttpServletRequest req, Exception ex, Model model) {
     TrintelApplication.logger.error("Request: " + req.getRequestURL() + " raised " + ex);
-
-    ModelAndView mav = new ModelAndView();
-    mav.addObject("exception", ex);
-    mav.addObject("url", req.getRequestURL());
-    mav.setViewName("error");
-    return mav;
+    model.addAttribute("error", ex.getMessage());
+    model.addAttribute("status", "500");
+    model.addAttribute("timestamp", new Timestamp(System.currentTimeMillis()));
+    return "error";
   }
 
 }
