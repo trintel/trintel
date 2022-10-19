@@ -1,15 +1,22 @@
 package sopro.service;
 
 import java.util.Calendar;
+import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import sopro.events.OnPasswordResetEvent;
+import sopro.model.ResetToken;
 import sopro.model.User;
 import sopro.model.VerificationToken;
+import sopro.model.util.TokenStatus;
+import sopro.repository.ResetTokenRepository;
 import sopro.repository.UserRepository;
 import sopro.repository.VerificationTokenRepository;
 
@@ -21,14 +28,16 @@ public class UserService implements UserInterface {
     PasswordEncoder passwordEncoder;
 
     @Autowired
-    private VerificationTokenRepository tokenRepository;
+    private VerificationTokenRepository verificationTokenRepository;
+
+    @Autowired
+    private ResetTokenRepository resetTokenRepository;
+
+    @Autowired
+    ApplicationEventPublisher eventPublisher;
 
     @Autowired
     private UserRepository userRepository;
-
-    public static final String TOKEN_INVALID = "invalidToken";
-    public static final String TOKEN_EXPIRED = "expired";
-    public static final String TOKEN_VALID = "valid";
 
     // TODO move registerNewUser here!
 
@@ -41,7 +50,20 @@ public class UserService implements UserInterface {
     @Override
     public void createVerificationTokenForUser(final User user, final String token) {
         final VerificationToken myToken = new VerificationToken(token, user);
-        tokenRepository.save(myToken);
+        verificationTokenRepository.save(myToken);
+    }
+
+    /**
+     * Create a token for a user.
+     *
+     * @param user
+     * @param token
+     */
+    @Override
+    public void createResetTokenForUser(final User user, final String token) {
+        resetTokenRepository.deleteByUser(user); //delete old tokens, if any exist.
+        final ResetToken myToken = new ResetToken(token, user);
+        resetTokenRepository.save(myToken);
     }
 
     /**
@@ -52,7 +74,7 @@ public class UserService implements UserInterface {
      */
     @Override
     public User getUser(String verificationToken) {
-        final VerificationToken token = tokenRepository.findByToken(verificationToken);
+        final VerificationToken token = verificationTokenRepository.findByToken(verificationToken);
         if (token != null) {
             return token.getUser();
         }
@@ -77,7 +99,7 @@ public class UserService implements UserInterface {
      */
     @Override
     public VerificationToken getVerificationToken(String VerificationToken) {
-        return tokenRepository.findByToken(VerificationToken);
+        return verificationTokenRepository.findByToken(VerificationToken);
     }
 
     /**
@@ -88,23 +110,49 @@ public class UserService implements UserInterface {
      * @return String
      */
     @Override
-    public String validateVerificationToken(String token) {
-        final VerificationToken verificationToken = tokenRepository.findByToken(token);
+    public TokenStatus validateVerificationToken(String token) {
+        final VerificationToken verificationToken = verificationTokenRepository.findByToken(token);
         if (verificationToken == null) {
-            return TOKEN_INVALID;
+            return TokenStatus.INVALID;
         }
 
         final User user = verificationToken.getUser();
         final Calendar cal = Calendar.getInstance();
         if ((verificationToken.getExpiryDate().getTime() - cal.getTime().getTime()) <= 0) {
-            tokenRepository.delete(verificationToken);
-            return TOKEN_EXPIRED;
+            verificationTokenRepository.delete(verificationToken);
+            return TokenStatus.EXPIRED;
         }
 
         user.setEnabled(true);
-        tokenRepository.delete(verificationToken); // Should not be needed anymore.
+        verificationTokenRepository.delete(verificationToken); // Should not be needed anymore.
         userRepository.save(user);
-        return TOKEN_VALID;
+        return TokenStatus.VALID;
+    }
+
+    /**
+     * Check if a token is valid. Delete if not.
+     * Also delete old tokens.
+     *
+     * @param token
+     * @return String
+     */
+    @Override
+    public TokenStatus validateResetToken(String token, String password) {
+        final ResetToken resetToken = resetTokenRepository.findByToken(token);
+        if (resetToken == null) {
+            return TokenStatus.INVALID;
+        }
+
+        final User user = resetToken.getUser();
+        final Calendar cal = Calendar.getInstance();
+        if ((resetToken.getExpiryDate().getTime() - cal.getTime().getTime()) <= 0) {
+            resetTokenRepository.delete(resetToken);
+            return TokenStatus.EXPIRED;
+        }
+
+        changePassword(user, password);
+        resetTokenRepository.delete(resetToken); // Should not be needed anymore.
+        return TokenStatus.VALID;
     }
 
     @Override
@@ -132,5 +180,19 @@ public class UserService implements UserInterface {
         databaseUser.setForename(forename);
         databaseUser.setSurname(surname);
         userRepository.save(databaseUser);
+    }
+
+    @Override
+    public void requestPasswordReset(String email, HttpServletRequest request) {
+        if(!userRepository.existsByEmail(email)) {
+            return; //user could not be found
+        }
+        User user = userRepository.findByEmail(email);
+        String token = UUID.randomUUID().toString();
+        createResetTokenForUser(user, token);
+
+        // Publish event for reset Mail.
+        eventPublisher.publishEvent(new OnPasswordResetEvent(user, request.getLocale(),
+                request.getServerName() + ":" + request.getServerPort()));
     }
 }

@@ -11,18 +11,18 @@ import sopro.service.MailService;
 import sopro.service.UserInterface;
 
 @Component
-public class RegistrationListener implements
-        ApplicationListener<OnRegistrationCompleteEvent> {
+public class PasswordResetListener implements
+        ApplicationListener<OnPasswordResetEvent> {
 
     @Autowired
-    private UserInterface service;
+    private UserInterface userService;
 
     @Autowired
     private MailService mailService;
 
     @Override
-    public void onApplicationEvent(OnRegistrationCompleteEvent event) {
-        this.confirmRegistration(event);
+    public void onApplicationEvent(OnPasswordResetEvent event) {
+        createResetToken(event);
     }
 
 
@@ -31,12 +31,12 @@ public class RegistrationListener implements
      *
      * @param event
      */
-    private void confirmRegistration(OnRegistrationCompleteEvent event) {
+    private void createResetToken(OnPasswordResetEvent event) {
         User user = event.getUser();
         String token = UUID.randomUUID().toString();
-        service.createVerificationTokenForUser(user, token);
+        userService.createResetTokenForUser(user, token);
 
-        mailService.sendVerificationEmailMessage(event, user, token);
+        mailService.sendResetEmailMessage(event, user, token);
     }
 
 }

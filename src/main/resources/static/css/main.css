@@ -236,6 +236,11 @@ main {
   border-color: #4c5672;
 }
 
+.btn.disabled, .btn:disabled, fieldset:disabled .btn {
+  background-color: #8895bd;
+  border-color: #8895bd;
+}
+
 .btn-outline-primary {
   color: #556080;
   border-color: #556080;
@@ -261,7 +266,7 @@ main {
 .companylogo {
   position: relative;
   border-radius: .8rem;
-  border: 1px solid rgba(0,0,0,.125);
+  box-shadow: 0 0 0 1px rgba(0,0,0,.125);
 }
 
 .companylogo:after {
@@ -296,13 +301,7 @@ main {
 }
 
 .companylogo-lg {
-  width: 10rem;
-}
-
-@media (min-width: 768px) {
-  .companylogo-lg {
-    width: 100%;
-  }
+  width: 8rem;
 }
 
 .accordion-item {

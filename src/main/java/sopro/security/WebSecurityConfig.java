@@ -54,6 +54,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     "/js/*",
                     "/login/**",
                     "/verify-your-email",
+                    "/reset-password/**",
                     "/registrationConfirm/**",
                     "/backup/**/**").permitAll() // permit all to access those Mathes
                 .antMatchers("/companies/").hasAnyRole("ADMIN", "STUDENT")
