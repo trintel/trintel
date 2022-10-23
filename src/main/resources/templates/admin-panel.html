@@ -49,8 +49,21 @@
                 </a>
                 <button class="btn btn-primary">
                     <i class="bi bi-box-arrow-in-up"></i>
+                    <!-- TODO den button hier auf das da unten binden... -->
                     <span th:text="#{import}"></span>
                 </button>
+
+                <!-- TODO das hier waere gut wenn chris das so machen koennte, das das gut aussieht. -->
+
+                <form method="post" th:action="@{/backup/import}" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <input type="file" name="file" class="form-control-file">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Import file</button>
+                </form>
+
+                <!-- end -->
+
             </div>
         </div>
         <hr class="dropdown-divider my-4">
