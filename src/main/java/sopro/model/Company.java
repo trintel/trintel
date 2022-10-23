@@ -34,6 +34,7 @@ public class Company {
     @Getter @Setter	@JsonIgnore	@OneToMany(mappedBy = "buyer", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE) private List<Transaction> buyingTransactions;
     @Getter @Setter	@JsonIgnore	@OneToMany(mappedBy = "seller", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE) private List<Transaction> sellingTransactions;
     @Getter @Setter	@JsonIgnore	@OneToOne(mappedBy = "company") private CompanyLogo companyLogo;
+    @Getter @Setter	@JsonIgnore	@OneToMany private List<Rating> ratings;
 
     public Company() {
         this.id = IdHandler.generateId();

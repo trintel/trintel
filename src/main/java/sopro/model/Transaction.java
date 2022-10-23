@@ -26,6 +26,7 @@ public class Transaction {
     @Getter @Setter @OneToMany(mappedBy = "transaction", cascade = CascadeType.REMOVE) List<Action> actions;
     @Getter @Setter @NotNull @ManyToOne private Company buyer;
     @Getter @Setter @NotNull @ManyToOne private Company seller;
+    @OneToMany List<Rating> ratings;
     @Getter @Setter private String product;
     @Getter @Setter private Boolean paid = false;
     @Getter @Setter private Boolean shipped = false;
@@ -118,6 +119,14 @@ public class Transaction {
      */
     public String getLatestActionName() {
         return this.getLatestAction().getActiontype().getName();
+    }
+
+    /**
+     * get the average rating of this transaction.
+     * @return
+     */
+    public double getAverageRating() {
+        return this.ratings.stream().mapToDouble(Rating :: getStars).sum() / this.ratings.size();
     }
 
     /**
