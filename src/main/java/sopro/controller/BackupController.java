@@ -33,6 +33,8 @@ public class BackupController {
     ExportInterface exportService;
 
     /**
+     * Manages the import of backup files and imports those. 
+     *
      * @param path
      * @param model
      * @return String
@@ -47,6 +49,8 @@ public class BackupController {
     }
 
     /**
+     * Exports all current data as json and lets the user download it.
+     *
      * @param model
      * @return String
      */
