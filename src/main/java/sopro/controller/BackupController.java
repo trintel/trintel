@@ -33,7 +33,7 @@ public class BackupController {
     ExportInterface exportService;
 
     /**
-     * Manages the import of backup files and imports those. 
+     * Manages the import of backup files and imports those.
      *
      * @param path
      * @param model
