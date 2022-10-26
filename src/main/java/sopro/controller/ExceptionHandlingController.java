@@ -9,7 +9,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.NestedServletException;
 
 import sopro.TrintelApplication;
@@ -32,14 +31,12 @@ public class ExceptionHandlingController {
   }
 
   @ExceptionHandler(Exception.class)
-  public ModelAndView handleError(HttpServletRequest req, Exception ex) {
+  public String handleError(HttpServletRequest req, Exception ex, Model model) {
     TrintelApplication.logger.error("Request: " + req.getRequestURL() + " raised " + ex);
-
-    ModelAndView mav = new ModelAndView();
-    mav.addObject("exception", ex);
-    mav.addObject("url", req.getRequestURL());
-    mav.setViewName("error");
-    return mav;
+    model.addAttribute("error", ex.getMessage());
+    model.addAttribute("status", "500");
+    model.addAttribute("timestamp", new Timestamp(System.currentTimeMillis()));
+    return "error";
   }
 
 }
