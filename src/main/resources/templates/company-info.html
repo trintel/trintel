@@ -16,12 +16,37 @@
             </div>
             <div class="col">
                 <div class="d-flex flex-column align-items-center align-items-md-start">
-                <h1 th:text="${company.name}"></h1>
-                <th:block th:unless="${company.getHomepage() == null || company.getHomepage().isEmpty()}">
-                    <a class="mb-3" th:href="${company.homepage}" target="_blank">
-                        <i class="bi bi-link-45deg"></i><span th:text="${company.homepage}"></span>
-                    </a>
-                </th:block>
+                    <h1 th:text="${company.name}"></h1>
+                    <th:block th:unless="${company.getHomepage() == null || company.getHomepage().isEmpty()}">
+                        <a class="mb-3" th:href="${company.homepage}" target="_blank">
+                            <i class="bi bi-link-45deg"></i><span th:text="${company.homepage}"></span>
+                        </a>
+                    </th:block>
+                    <div class="d-flex align-items-center">
+                        <th:block th:switch="${starType}">
+                            <th:block th:case="1">
+                                <input class="star star-1" type="radio" checked="checked" />
+                                <label class="star star-1" for="star-1"></label>
+                            </th:block>
+                            <th:block th:case="2">
+                                <input class="star star-2" type="radio" checked="checked" />
+                                <label class="star star-2" for="star-2"></label>
+                            </th:block>
+                            <th:block th:case="3">
+                                <input class="star star-3" type="radio" checked="checked" />
+                                <label class="star star-3" for="star-3"></label>
+                            </th:block>
+                            <th:block th:case="4">
+                                <input class="star star-4" type="radio" checked="checked" />
+                                <label class="star star-4" for="star-4"></label>
+                            </th:block>
+                            <th:block th:case="5">
+                                <input class="star star-5" type="radio" checked="checked" />
+                                <label class="star star-5" for="star-5"></label>
+                            </th:block>
+                        </th:block>
+                        <span class="fs-5 fw-bold" th:text="${avgRating}"></span>
+                    </div>
                 </div>
                 <th:block th:unless="${company.getDescription() == null || company.getDescription().isEmpty()}">
                     <h5 th:text="#{signature}"></h5>

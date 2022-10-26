@@ -23,15 +23,18 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import sopro.model.Action;
 import sopro.model.ActionType;
+import sopro.model.Rating;
 import sopro.model.Transaction;
 import sopro.model.User;
 import sopro.model.util.InitiatorType;
 import sopro.repository.ActionRepository;
 import sopro.repository.ActionTypeRepository;
 import sopro.repository.CompanyRepository;
+import sopro.repository.RatingRepository;
 import sopro.repository.TransactionRepository;
 import sopro.service.ActionTypeService;
 import sopro.service.PdfInterface;
@@ -50,6 +53,9 @@ public class TransactionController {
     // TODO maybe own Controller
     @Autowired
     CompanyRepository companyRepository;
+
+    @Autowired
+    RatingRepository ratingRepository;
 
     @Autowired
     ActionTypeService actionTypeService;
@@ -275,6 +281,21 @@ public class TransactionController {
         actionRepository.save(paid);
         transactionRepository.save(transaction);
         return "redirect:/transaction/" + transactionID;
+    }
+
+    // @PreAuthorize("hasPermission(#transactionID, 'transaction') and hasRole('STUDENT')")
+    @PostMapping("/transaction/{transactionID}/rate")
+    public String rateTransaction(@PathVariable Long transactionID, @AuthenticationPrincipal User user, @RequestParam int rating) {
+        Transaction t = transactionRepository.findById(transactionID).get();
+        Rating r;
+        if(user.getCompany().getId().equals(t.getBuyer().getId())) {
+            r = new Rating(t, t.getSeller(), user.getCompany(), rating);
+        } else {
+            r = new Rating(t, t.getBuyer(), user.getCompany(), rating);
+        
+        }
+        ratingRepository.save(r);
+        return "redirect:/transaction/" + transactionID + "?rated";
     }
 
     @GetMapping("/pdfexport/action/{actionId}")

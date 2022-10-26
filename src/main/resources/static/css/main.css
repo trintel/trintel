@@ -418,33 +418,7 @@ main {
   margin: 0;
 }
 
-
-
-
-
-
-.cont{
-  width: 93%;
-  max-width: 350px;
-  text-align: center;
-  margin: 4% auto;
-  padding: 30px 0;
-  background: #111;
-  color: #EEE;
-  border-radius: 5px;
-  border: thin solid #444;
-  overflow: hidden;
-}
-
-hr{
-  margin: 20px;
-  border: none;
-  border-bottom: thin solid rgba(255,255,255,.1);
-}
-
-div.stars{
-  display: inline-block;
-}
+/* Rating system */
 
 input.star{
   display: none;
@@ -458,13 +432,12 @@ label.star {
   transition: all .2s;
 }
 
-input.star:checked ~ label.star:before {
+.star:checked ~ label.star:before {
   content:'\F586';
   font-family: bootstrap-icons !important;
   color: #FD4;
   transition: all .25s;
 }
-
 
 input.star-5:checked ~ label.star:before {
   color:#FE7;
@@ -490,34 +463,4 @@ label.star:hover{
 label.star:before{
   content:'\F588';
   font-family: bootstrap-icons !important;
-}
-
-.rev-box{
-  overflow: hidden;
-  height: 0;
-  width: 100%;
-  transition: all .25s;
-}
-
-textarea.review{
-  background: #222;
-  border: none;
-  width: 100%;
-  max-width: 100%;
-  height: 100px;
-  padding: 10px;
-  box-sizing: border-box;
-  color: #EEE;
-}
-
-label.review{
-  display: block;
-  transition:opacity .25s;
-}
-
-
-
-input.star:checked ~ .rev-box{
-  height: 125px;
-  overflow: visible;
 }

@@ -1,7 +1,9 @@
 package sopro.controller;
 
+import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -22,6 +24,7 @@ import sopro.model.CompanyLogo;
 import sopro.model.User;
 import sopro.repository.CompanyLogoRepository;
 import sopro.repository.CompanyRepository;
+import sopro.repository.RatingRepository;
 import sopro.repository.UserRepository;
 
 @Controller
@@ -35,6 +38,9 @@ public class CompanyController {
 
     @Autowired
     CompanyLogoRepository companyLogoRepository;
+
+    @Autowired
+    RatingRepository ratingRepository;
 
     // #######################################################################################
     // ----------------------------------- ADMIN FUNCTIONS
@@ -66,14 +72,20 @@ public class CompanyController {
         if(companyLogoRepository.findByCompanyId(companyID) != null) {
             companyLogoRepository.delete(companyLogoRepository.findByCompanyId(companyID));     //company gets deleted because of cascade.remove.
         }
-
         companyRepository.deleteById(companyID);                                            //if there is no custom logo just delete the company
         return "redirect:/companies";
     }
 
     @GetMapping("/companies/{companyID}")
     public String viewCompany(@PathVariable Long companyID, Model model) {
-        model.addAttribute("company", companyRepository.findById(companyID).get());
+        Company c = companyRepository.findById(companyID).get();
+        model.addAttribute("company", c);
+        Optional<Double> avg = ratingRepository.getAverageById(companyID);
+        if(avg.isPresent()) {
+            DecimalFormat df = new DecimalFormat("#.#");
+            model.addAttribute("avgRating", df.format(avg.get()));
+            model.addAttribute("starType", Math.round(avg.get()));
+        }
         return "company-info";
     }
 
