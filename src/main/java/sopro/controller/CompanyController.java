@@ -1,5 +1,8 @@
 package sopro.controller;
 
+import java.util.Arrays;
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -131,8 +134,8 @@ public class CompanyController {
         }
         company.setId(companyID); // set the id of new Company-Object to the old id
         companyRepository.save(company); // old company get overwritten, since id is primary key
-
-        if (!companyLogo.isEmpty()) {
+        List<String> allowedFileTypes = Arrays.asList("image/png", "image/jpeg", "image/jpg");
+        if (!companyLogo.isEmpty() && allowedFileTypes.contains(companyLogo.getContentType())) {
             CompanyLogo dbLogo = companyLogoRepository.findByCompany(company);
             if (dbLogo == null) {
                 dbLogo = new CompanyLogo();
