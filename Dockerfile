@@ -1,10 +1,8 @@
 FROM openjdk:11-jre-slim
-WORKDIR ./home/trintel
 
-COPY /target/app.jar app.jar
-COPY /target/resources/ build/resources/
+COPY build/ /build/
 
 EXPOSE 8080
 
-ENTRYPOINT ["java","-jar","/home/trintel/app.jar"]
+ENTRYPOINT ["java","-jar","/build/libs/trintel-0.0.1-SNAPSHOT.jar"]
 

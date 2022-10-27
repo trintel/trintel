@@ -30,6 +30,7 @@ public class ExportImportService implements ExportImportInterface {
         }
 
         this.jdbc.execute("script to '" + dump.getPath() + "'");
+        // this.jdbc.execute("mysqldump > '" + dump.getPath() + "'");
         return dump.getPath();
     }
 

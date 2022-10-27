@@ -2,8 +2,6 @@ package sopro;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.io.File;
-
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -105,7 +103,7 @@ public class BackUpTest {
 
         String path = exportImportService.export();
         databaseService.clearDatabase();
-        exportImportService.importSQL(new File(path));
+        exportImportService.importSQL(path);
 
         int UserAfter = 0;
         for (User user : userRepository.findAll()) {
