@@ -3,9 +3,11 @@ package sopro;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 
 import sopro.service.SignupUrlInterface;
 
@@ -23,10 +25,12 @@ public class TrintelApplication implements CommandLineRunner {
     public static final String WORKDIR = System.getProperty("user.dir"); // TODO: this links to the last use of the
                                                                          // filesystem. (PdfService)
     public static final String EXPORT_PATH = "."; // Where e.g. SQL dumps are stored during runtime.
+    
+    public static ConfigurableApplicationContext context;
 
     public static void main(String[] args) {
         // System.setProperty("spring.devtools.restart.enabled", "true");
-        SpringApplication.run(TrintelApplication.class, args);
+        context = SpringApplication.run(TrintelApplication.class, args);
     }
 
     @Override

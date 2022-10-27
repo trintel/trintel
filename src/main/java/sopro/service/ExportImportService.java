@@ -40,8 +40,9 @@ public class ExportImportService implements ExportImportInterface {
      * @param sql file
      * @return isSuccess
      */
-    public boolean importSQL(File sql) {
-        this.jdbc.execute("runscript from '" + sql.getPath() + "'");
+    public boolean importSQL(String pathToScript) {
+        this.jdbc.execute("DROP ALL OBJECTS");
+        this.jdbc.execute("runscript from '" + pathToScript + "'");
         return true;
     }
 }

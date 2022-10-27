@@ -7,6 +7,8 @@ import java.nio.file.Files;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.ExitCodeGenerator;
+import org.springframework.boot.SpringApplication;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,6 +19,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import sopro.TrintelApplication;
 import sopro.service.ExportImportInterface;
@@ -36,11 +39,25 @@ public class BackupController {
      * @return String
      */
     @PostMapping("/backup/import")
-    public String importBackup(@RequestParam String path, Model model) {
-        TrintelApplication.logger.info("Importing file: " + path);
-        File sql = new File(path);
-        exportImportService.importSQL(sql);
+    public String importBackup(@RequestParam("file") MultipartFile importFile, Model model) {
+        TrintelApplication.logger.info("Imported file Type: " + importFile.getContentType());
+        TrintelApplication.logger.info("Importing file: " + importFile.getOriginalFilename());
+        File file = new File(TrintelApplication.WORKDIR + "/trintelImport.sql");
+        try {
+            importFile.transferTo(file);
+        } catch (IllegalStateException | IOException e) {
+            TrintelApplication.logger.info("Error " + e.getMessage());
+            e.printStackTrace();
+        }
+        exportImportService.importSQL(TrintelApplication.WORKDIR + "/trintelImport.sql");
 
+        SpringApplication.exit(TrintelApplication.context, new ExitCodeGenerator() {
+            @Override
+            public int getExitCode() {
+                // no errors
+                return 0;
+            }
+        });
         return "redirect:/home"; // Admin muss irgendwie datei hochladen können, dann post request mit Pfad zur
                                  // datei and das hier.
     }
