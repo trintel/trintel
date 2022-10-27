@@ -11,6 +11,9 @@
 <body>
 	<th:block th:fragment="content">
 		<h1 th:text="#{transactionProgress}"></h1>
+		<th:block th:if="${param.rated}">
+			<p class="alert alert-success" th:text="#{ratingSuccess}"></p>
+		</th:block>
 		<div class="d-lg-flex justify-content-between mb-3">
 			<h3 class="mb-3"
 				th:text="|${actions[0].transaction.buyer.name} #{buying} ${actions[0].transaction.product} #{from} ${actions[0].transaction.seller.name}|">
@@ -325,10 +328,13 @@
 				</div>
 			</div>
 		</div>
-		<th:block th:if="${actions[actions.size() - 1].actiontype.name.equals('Paid') && !isAlreadyReviewed}">
-				<form class="d-flex flex-column align-items-center" th:action="@{'/transaction/' + ${transactionID} + '/rate'}" method="post">
-					<h5 class="mb-0">Rate transaction</h5>
-					<div>
+		<th:block
+			th:if="${actions[actions.size() - 1].actiontype.name.equals('Paid') && !isAlreadyReviewed && !(#request.userPrincipal.principal.role == 'ADMIN')}">
+			<div class="d-flex align-items-center justify-content-center flex-column gap-3" style="height:100vh">
+				<form class="d-flex flex-column align-items-center"
+					th:action="@{'/transaction/' + ${transactionID} + '/rate'}" method="post">
+					<h3 class="mb-0" th:text="#{rateTransaction}"></h3>
+					<div class="fs-3">
 						<input class="star star-5" id="star-5" type="radio" name="rating" value="5" />
 						<label class="star star-5" for="star-5"></label>
 						<input class="star star-4" id="star-4" type="radio" name="rating" value="4" />
@@ -340,14 +346,11 @@
 						<input class="star star-1" id="star-1" type="radio" name="rating" value="1" />
 						<label class="star star-1" for="star-1"></label>
 					</div>
-					<button class="btn btn-primary center" type="submit">Submit</button>
+					<button class="btn btn-primary center" type="submit" th:text="#{save}"></button>
 				</form>
-			</th:block>
-			<th:block th:if="${param.rated}">
-				<p class="alert alert-success">
-					Transaction has been rated, thank you!
-				</p>
-			</th:block>
+				<span class="alert alert-warning" style="max-width:25rem" th:text="#{rateConfirm}"></span>
+			</div>
+		</th:block>
 		<a name="n"></a>
 	</th:block>
 </body>

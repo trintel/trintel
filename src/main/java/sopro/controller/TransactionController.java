@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import sopro.model.Action;
 import sopro.model.ActionType;
+import sopro.model.Company;
 import sopro.model.Rating;
 import sopro.model.Transaction;
 import sopro.model.User;
@@ -72,14 +73,15 @@ public class TransactionController {
             List<Transaction> transactions = new ArrayList<>();
             transactions.addAll(transactionRepository.findByBuyer(user.getCompany()));
             transactions.addAll(transactionRepository.findBySeller(user.getCompany()));
-            //Sort transactions.
-            transactions = transactions.stream().sorted(Comparator.comparing(Transaction :: getLatestActionDate).reversed().thenComparing(Transaction :: getLatestActionTime).reversed()).collect(Collectors.toList());
+            // Sort transactions.
+            transactions = transactions.stream().sorted(Comparator.comparing(Transaction::getLatestActionDate)
+                    .reversed().thenComparing(Transaction::getLatestActionTime).reversed())
+                    .collect(Collectors.toList());
             model.addAttribute("transactions", transactions);
         }
         return "transactions-list";
 
     }
-
 
     @PreAuthorize("hasCompany()")
     @GetMapping("/transaction/{companyID}/create")
@@ -122,7 +124,6 @@ public class TransactionController {
 
     }
 
-
     @PreAuthorize("hasPermission(#id, 'transaction')")
     @GetMapping("/transaction/{id}")
     public String transactionDetail(Model model, @PathVariable Long id, @AuthenticationPrincipal User user) {
@@ -130,26 +131,35 @@ public class TransactionController {
         Transaction transaction = transactionRepository.findById(id).get();
 
         List<ActionType> actionTypes = new ArrayList<>();
-        if(user.getRole().equals("STUDENT")) {
+        if (user.getRole().equals("STUDENT")) {
             actionTypes = actionTypeService.getAvailableActions(transaction, user);
         }
-        model.addAttribute("actiontypes", actionTypes);     //only find the available actiontypes for that user.
+        model.addAttribute("actiontypes", actionTypes); // only find the available actiontypes for that user.
         model.addAttribute("action", newAction);
         model.addAttribute("actions", actionRepository.findByTransaction(transaction));
-        model.addAttribute("specialActionsAvailable", actionTypes.stream().filter(t -> !t.isStandardAction()).toArray(ActionType[] :: new).length > 0); //get the info if there are specialActions.
+        model.addAttribute("specialActionsAvailable",
+                actionTypes.stream().filter(t -> !t.isStandardAction()).toArray(ActionType[]::new).length > 0); // get
+                                                                                                                // the
+                                                                                                                // info
+                                                                                                                // if
+                                                                                                                // there
+                                                                                                                // are
+                                                                                                                // specialActions.
         model.addAttribute("transactionID", id);
-        model.addAttribute("isAlreadyReviewed", ratingRepository.existsByTransactionAndRatingCompany(transaction, user.getCompany()));
+        model.addAttribute("isAlreadyReviewed",
+                ratingRepository.existsByTransactionAndRatingCompany(transaction, user.getCompany()));
         return "transaction-view";
 
     }
 
-    //TODO only othorize if user is seller/buyer in resprct to actiontype.initiatorType.
+    // TODO only othorize if user is seller/buyer in resprct to
+    // actiontype.initiatorType.
     @PreAuthorize("hasPermission(#transactionID, 'transaction') and hasRole('STUDENT')")
     @GetMapping("/transaction/{transactionID}/addAction")
     public String showAction(Action action, @PathVariable Long transactionID, @AuthenticationPrincipal User user,
             Model model) {
         Action newAction = new Action();
-        InitiatorType initiatorType = InitiatorType.SELLER; //TODO kann weg
+        InitiatorType initiatorType = InitiatorType.SELLER; // TODO kann weg
 
         if (user.getCompany().equals(transactionRepository.findById(transactionID).get().getBuyer())) { // findout if
                                                                                                         // current user
@@ -163,7 +173,8 @@ public class TransactionController {
         // actionTypes = actionTypeRepository.findByInitiatorType(initiatorType);
 
         // add the list of special actions
-        model.addAttribute("actiontypes", actionTypeService.getAvailableActions(transactionRepository.findById(transactionID).get(), user));
+        model.addAttribute("actiontypes",
+                actionTypeService.getAvailableActions(transactionRepository.findById(transactionID).get(), user));
         model.addAttribute("action", newAction);
         model.addAttribute("transactionID", transactionID);
         return "transaction-addSpecialAction";
@@ -284,17 +295,21 @@ public class TransactionController {
         return "redirect:/transaction/" + transactionID;
     }
 
-    // @PreAuthorize("hasPermission(#transactionID, 'transaction') and hasRole('STUDENT')")
+    @PreAuthorize("hasPermission(#transactionID, 'transaction') and hasRole('STUDENT')")
     @PostMapping("/transaction/{transactionID}/rate")
-    public String rateTransaction(@PathVariable Long transactionID, @AuthenticationPrincipal User user, @RequestParam int rating) {
+    public String rateTransaction(@PathVariable Long transactionID, @AuthenticationPrincipal User user,
+            @RequestParam int rating) {
         Transaction t = transactionRepository.findById(transactionID).get();
-        Rating r;
-        if(user.getCompany().getId().equals(t.getBuyer().getId())) {
-            r = new Rating(t, t.getSeller(), user.getCompany(), rating);
-        } else {
-            r = new Rating(t, t.getBuyer(), user.getCompany(), rating);
+        Company ratingCompany = user.getCompany();
+        if (!ratingRepository.existsByTransactionAndRatingCompany(t, ratingCompany)) {
+            Rating r;
+            if (ratingCompany.getId().equals(t.getBuyer().getId())) {
+                r = new Rating(t, t.getSeller(), ratingCompany, rating);
+            } else {
+                r = new Rating(t, t.getBuyer(), ratingCompany, rating);
+            }
+            ratingRepository.save(r);
         }
-        ratingRepository.save(r);
         return "redirect:/transaction/" + transactionID + "?rated";
     }
 
@@ -308,8 +323,8 @@ public class TransactionController {
 
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_PDF);
-            String [] soup = pdfPath.split("/"); // Last part is the filename
-            String filename =  soup[soup.length-1];
+            String[] soup = pdfPath.split("/"); // Last part is the filename
+            String filename = soup[soup.length - 1];
             headers.setContentDispositionFormData(filename, filename);
             headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
             ResponseEntity<byte[]> res = new ResponseEntity<>(contents, headers, HttpStatus.OK);
@@ -322,7 +337,8 @@ public class TransactionController {
     }
 
     @GetMapping("/pdfexport/transaction/{transactionId}")
-    public ResponseEntity<byte[]> exportTransaction(@PathVariable long transactionId, HttpServletResponse response, Model model) {
+    public ResponseEntity<byte[]> exportTransaction(@PathVariable long transactionId, HttpServletResponse response,
+            Model model) {
         String pdfPath = pdfService.generatePdfFromTransaction(transactionId);
 
         byte[] contents;
@@ -331,8 +347,8 @@ public class TransactionController {
 
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_PDF);
-            String [] soup = pdfPath.split("/"); // Last part is the filename
-            String filename =  soup[soup.length-1];
+            String[] soup = pdfPath.split("/"); // Last part is the filename
+            String filename = soup[soup.length - 1];
             headers.setContentDispositionFormData(filename, filename);
             headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
             ResponseEntity<byte[]> res = new ResponseEntity<>(contents, headers, HttpStatus.OK);

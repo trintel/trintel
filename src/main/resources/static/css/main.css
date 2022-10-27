@@ -436,7 +436,7 @@ label.star, span.star {
   transition: all .2s;
 }
 
-.star:checked ~ label.star:before, span.star.star-checked:before, .star-checked ~ span.star:before {
+input.star:checked ~ label.star:before, span.star.star-checked:before, span.star-checked ~ span.star:before {
   content:'\F586';
   font-family: bootstrap-icons !important;
   transition: all .25s;
@@ -466,4 +466,8 @@ input.star-1:checked ~ label.star:before, span.star-1-checked, span.star-1-check
 label.star:before, span.star:before {
   content:'\F588';
   font-family: bootstrap-icons !important;
+}
+
+label.star:hover {
+  transform: scale(1.3);
 }
