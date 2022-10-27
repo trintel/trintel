@@ -19,18 +19,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import sopro.TrintelApplication;
-import sopro.service.backup.ExportInterface;
-import sopro.service.backup.ImportInterface;
+import sopro.service.ExportImportInterface;
 
 @Controller
 @PreAuthorize("hasRole('ADMIN')")
 public class BackupController {
 
     @Autowired
-    ImportInterface importService;
-
-    @Autowired
-    ExportInterface exportService;
+    ExportImportInterface exportImportService;
 
     /**
      * Manages the import of backup files and imports those.
@@ -42,14 +38,15 @@ public class BackupController {
     @PostMapping("/backup/import")
     public String importBackup(@RequestParam String path, Model model) {
         TrintelApplication.logger.info("Importing file: " + path);
-        importService.importJSON(path);
+        // importService.importJSON(path);
+        // TODO
 
         return "redirect:/home"; // Admin muss irgendwie datei hochladen können, dann post request mit Pfad zur
                                  // datei and das hier.
     }
 
     /**
-     * Exports all current data as json and lets the user download it.
+     * Exports all current data as SQL dump and lets the user download it.
      *
      * @param model
      * @return String
@@ -57,7 +54,7 @@ public class BackupController {
     @GetMapping("/backup/export")
     public ResponseEntity<byte[]> exportAction(HttpServletResponse response, Model model) {
 
-        String filePath = exportService.export();
+        String filePath = exportImportService.export();
 
         try {
             byte[] contents = Files.readAllBytes(new File(filePath).toPath());
@@ -69,7 +66,7 @@ public class BackupController {
             headers.setContentDispositionFormData("attachment", filename);
             headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
             ResponseEntity<byte[]> res = new ResponseEntity<>(contents, headers, HttpStatus.OK);
-            TrintelApplication.logger.info("Exporting to " + exportService.export());
+            TrintelApplication.logger.info("Exporting to " + exportImportService.export());
             return res;
         } catch (IOException e) {
             e.printStackTrace();

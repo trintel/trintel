@@ -3,6 +3,8 @@
 
 ### Custom ###
 *.pdf
+*.sql
+
 
 ### h2 Database ###
 *.mv.db

@@ -1,6 +1,5 @@
 package sopro;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +18,11 @@ public class TrintelApplication implements CommandLineRunner {
     @Autowired
     SignupUrlInterface signupUrlService;
 
-
     public static final Logger logger = LoggerFactory.getLogger(TrintelApplication.class);
 
-    public static final String WORKDIR = System.getProperty("user.dir"); //TODO: this links to the last use of the filesystem. (PdfService)
+    public static final String WORKDIR = System.getProperty("user.dir"); // TODO: this links to the last use of the
+                                                                         // filesystem. (PdfService)
+    public static final String EXPORT_PATH = "."; // Where e.g. SQL dumps are stored during runtime.
 
     public static void main(String[] args) {
         // System.setProperty("spring.devtools.restart.enabled", "true");
@@ -33,9 +33,9 @@ public class TrintelApplication implements CommandLineRunner {
     public void run(String... arg0) throws Exception {
         signupUrlService.generateAdminSignupURL();
         signupUrlService.generateStudentSignupURL();
-        //For tests
-        //initDatabaseService.init();
-        //For final deploy
+        // For tests
+        // initDatabaseService.init();
+        // For final deploy
         initDatabaseService.deployinit();
     }
 }
