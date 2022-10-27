@@ -2,6 +2,8 @@ package sopro;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.io.File;
+
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +13,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.transaction.AfterTransaction;
 import org.springframework.test.context.transaction.BeforeTransaction;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import sopro.model.Action;
@@ -24,8 +25,7 @@ import sopro.repository.ActionTypeRepository;
 import sopro.repository.CompanyRepository;
 import sopro.repository.TransactionRepository;
 import sopro.repository.UserRepository;
-import sopro.service.backup.ExportInterface;
-import sopro.service.backup.ImportInterface;
+import sopro.service.ExportImportService;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -55,16 +55,10 @@ public class BackUpTest {
     ObjectMapper objectMapper;
 
     @Autowired
-    private MockMvc mockMvc;
+    ExportImportService exportImportService;
 
     @Autowired
     PasswordEncoder passwordEncoder;
-
-    @Autowired
-    ImportInterface importService;
-
-    @Autowired
-    ExportInterface exportService;
 
     String companyName = "NewComp";
 
@@ -79,10 +73,9 @@ public class BackUpTest {
         databaseService.clearDatabase();
     }
 
-
-
     /**
      * Tests if the Import / Export works
+     *
      * @throws Exception
      */
     @Disabled("Disabled temporarily.")
@@ -110,9 +103,9 @@ public class BackUpTest {
             TransactionBefore += 1;
         }
 
-        String path = exportService.export();
+        String path = exportImportService.export();
         databaseService.clearDatabase();
-        importService.importJSON(path);
+        exportImportService.importSQL(new File(path));
 
         int UserAfter = 0;
         for (User user : userRepository.findAll()) {
