@@ -17,4 +17,6 @@ public interface RatingRepository extends JpaRepository<Rating, Long> {
 
     @Query("SELECT AVG(stars) FROM Rating WHERE ratedCompany.id = ?1")
     Optional<Double> getAverageById(Long companyId);
+
+    boolean existsByTransactionAndRatingCompany(Transaction transaction, Company ratingCompany);
 }

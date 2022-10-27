@@ -122,14 +122,6 @@ public class Transaction {
     }
 
     /**
-     * get the average rating of this transaction.
-     * @return
-     */
-    public double getAverageRating() {
-        return this.ratings.stream().mapToDouble(Rating :: getStars).sum() / this.ratings.size();
-    }
-
-    /**
      * Returns a map of all fields.
      *
      * @return m map

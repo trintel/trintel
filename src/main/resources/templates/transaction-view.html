@@ -325,7 +325,7 @@
 				</div>
 			</div>
 		</div>
-		<th:block th:unless="${actions[0].transaction.active}">
+		<th:block th:if="${actions[actions.size() - 1].actiontype.name.equals('Paid') && !isAlreadyReviewed}">
 				<form class="d-flex flex-column align-items-center" th:action="@{'/transaction/' + ${transactionID} + '/rate'}" method="post">
 					<h5 class="mb-0">Rate transaction</h5>
 					<div>

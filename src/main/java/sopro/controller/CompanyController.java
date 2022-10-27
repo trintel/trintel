@@ -86,6 +86,7 @@ public class CompanyController {
             model.addAttribute("avgRating", df.format(avg.get()));
             model.addAttribute("starType", Math.round(avg.get()));
         }
+        model.addAttribute("ratings", ratingRepository.findByRatedCompany(c));
         return "company-info";
     }
 

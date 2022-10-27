@@ -138,6 +138,7 @@ public class TransactionController {
         model.addAttribute("actions", actionRepository.findByTransaction(transaction));
         model.addAttribute("specialActionsAvailable", actionTypes.stream().filter(t -> !t.isStandardAction()).toArray(ActionType[] :: new).length > 0); //get the info if there are specialActions.
         model.addAttribute("transactionID", id);
+        model.addAttribute("isAlreadyReviewed", ratingRepository.existsByTransactionAndRatingCompany(transaction, user.getCompany()));
         return "transaction-view";
 
     }
@@ -292,7 +293,6 @@ public class TransactionController {
             r = new Rating(t, t.getSeller(), user.getCompany(), rating);
         } else {
             r = new Rating(t, t.getBuyer(), user.getCompany(), rating);
-
         }
         ratingRepository.save(r);
         return "redirect:/transaction/" + transactionID + "?rated";
