@@ -38,8 +38,8 @@ public class BackupController {
     @PostMapping("/backup/import")
     public String importBackup(@RequestParam String path, Model model) {
         TrintelApplication.logger.info("Importing file: " + path);
-        // importService.importJSON(path);
-        // TODO
+        File sql = new File(path);
+        exportImportService.importSQL(sql);
 
         return "redirect:/home"; // Admin muss irgendwie datei hochladen können, dann post request mit Pfad zur
                                  // datei and das hier.

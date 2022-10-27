@@ -11,11 +11,11 @@ import sopro.TrintelApplication;
 @Service
 public class ExportImportService implements ExportImportInterface {
 
-    private final JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbc;
 
     @Autowired
     public ExportImportService(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+        this.jdbc = jdbcTemplate;
     }
 
     /**
@@ -29,12 +29,19 @@ public class ExportImportService implements ExportImportInterface {
             dump.delete();
         }
 
-        this.jdbcTemplate.execute("script to '" + dump.getPath() + "'");
+        this.jdbc.execute("script to '" + dump.getPath() + "'");
         return dump.getPath();
     }
 
+    /**
+     * Imports sql file into database.
+     * Note: DB should idealy be empty before running this.
+     *
+     * @param sql file
+     * @return isSuccess
+     */
     public boolean importSQL(File sql) {
-        return false;
+        this.jdbc.execute("runscript from '" + sql.getPath() + "'");
+        return true;
     }
-
 }
