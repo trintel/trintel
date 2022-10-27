@@ -292,7 +292,7 @@ public class TransactionController {
             r = new Rating(t, t.getSeller(), user.getCompany(), rating);
         } else {
             r = new Rating(t, t.getBuyer(), user.getCompany(), rating);
-        
+
         }
         ratingRepository.save(r);
         return "redirect:/transaction/" + transactionID + "?rated";

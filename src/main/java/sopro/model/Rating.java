@@ -4,9 +4,10 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import sopro.model.util.IdHandler;
+
 import lombok.Getter;
 import lombok.Setter;
-import sopro.model.util.IdHandler;
 
 @Entity
 public class Rating {
