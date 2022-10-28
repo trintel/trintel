@@ -76,7 +76,7 @@ public class Transaction {
      *
      * @return
      */
-    public Action getLatestAction() {
+    public Action getLastAction() {
         return actions.get(actions.size() - 1);
     }
 
@@ -99,7 +99,7 @@ public class Transaction {
      * @return
      */
     public LocalDate getLatestActionDate() {
-        return this.getLatestAction().getDate();
+        return this.getLastAction().getDate();
     }
 
     /**
@@ -108,7 +108,7 @@ public class Transaction {
      * @return
      */
     public LocalTime getLatestActionTime() {
-        return this.getLatestAction().getTime();
+        return this.getLastAction().getTime();
     }
 
     /**
@@ -117,7 +117,7 @@ public class Transaction {
      * @return
      */
     public String getLatestActionName() {
-        return this.getLatestAction().getActiontype().getName();
+        return this.getLastAction().getActiontype().getName();
     }
 
     /**

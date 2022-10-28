@@ -10,10 +10,17 @@
 
 <body>
 	<th:block th:fragment="content">
-		<h1 th:text="#{transactionProgress}"></h1>
-		<div class="d-lg-flex justify-content-between mb-3">
-			<h3 class="mb-3"th:text="|${actions[0].transaction.buyer.name} #{buying} ${actions[0].transaction.product} #{from} ${actions[0].transaction.seller.name}|"></h3>
-			<a class="btn btn-outline-primary align-self-start" th:href="@{'/pdfexport/transaction/' + ${transactionID}}"><i class="bi bi-file-earmark-pdf"></i>PDF</a>
+		<div class="d-lg-flex justify-content-between align-items-start mb-3">
+			<div>
+				<h1 th:text="#{transactionProgress}"></h1>
+				<h3 class="mb-3"
+					th:text="|${actions[0].transaction.buyer.name} #{buying} ${actions[0].transaction.product} #{from} ${actions[0].transaction.seller.name}|">
+				</h3>
+			</div>
+			<a class="btn btn-secondary" th:href="@{'/pdfexport/transaction/' + ${transactionID}}">
+				<i class="bi bi-file-earmark-arrow-down"></i>
+				<span th:text="#{exportTransaction}">
+			</a>
 		</div>
 		<!-- Accordion for every action in chosen transaction to visualize transaction progress -->
 		<div th:unless="${actions.isEmpty()}">
@@ -22,16 +29,37 @@
 					<div class="accordion-item mb-3">
 						<!-- Accordion header/button -->
 						<div class="accordion-header" th:id="'panelsStayOpen-headingOne'+${action.id}">
-							<button class="accordion-button" th:classappend="${{action.id == actions[#lists.size(actions)-1].id} ? '':'collapsed'}" type="button" data-bs-toggle="collapse" th:data-bs-target="'#panelsStayOpen-collapseOne'+${action.id}" th:aria-labelledby="'panelsStayOpen-headingOne'+${action.id}"  aria-expanded="true" th:aria-controls="'panelsStayOpen-collapseOne'+${action.id}">
+							<button class="accordion-button"
+								th:classappend="${{action.id == actions[#lists.size(actions)-1].id} ? '':'collapsed'}"
+								type="button" data-bs-toggle="collapse"
+								th:data-bs-target="'#panelsStayOpen-collapseOne'+${action.id}"
+								th:aria-labelledby="'panelsStayOpen-headingOne'+${action.id}" aria-expanded="true"
+								th:aria-controls="'panelsStayOpen-collapseOne'+${action.id}">
 								<div th:switch="${action.actiontype.name}">
-									<h4 th:case="Request" class="mb-0"><div class="badge bg-danger me-3" th:text="#{requestTLV}"></div></h4>
-									<h4 th:case="Offer" class="mb-0"><div class="badge bg-warning me-3" th:text="#{offerTLV}"></div></h4>
-									<h4 th:case="Accept" class="mb-0"><div class="badge bg-success me-3" th:text="#{acceptTV}"></div></h4>
-									<h4 th:case="Cancel" class="mb-0"><div class="badge bg-light text-dark me-3" th:text="#{cancelTV}"></div></h4>
-									<h4 th:case="Delivery" class="mb-0"><div class="badge bg-primary me-3" th:text="#{deliveryTLV}"></div></h4>
-									<h4 th:case="Invoicing" class="mb-0"><div class="badge bg-dark me-3" th:text="#{invoicingTLV}"></div></h4>
-									<h4 th:case="Paid" class="mb-0"><div class="badge bg-primary me-3" th:text="#{paidTV}"></div></h4>
-									<h4 th:case="*" class="mb-0"><div class="badge bg-secondary me-3" th:text="${action.actiontype.name}"></div></h4>
+									<h4 th:case="Request" class="mb-0">
+										<div class="badge bg-danger me-3" th:text="#{requestTLV}"></div>
+									</h4>
+									<h4 th:case="Offer" class="mb-0">
+										<div class="badge bg-warning me-3" th:text="#{offerTLV}"></div>
+									</h4>
+									<h4 th:case="Accept" class="mb-0">
+										<div class="badge bg-success me-3" th:text="#{acceptTV}"></div>
+									</h4>
+									<h4 th:case="Cancel" class="mb-0">
+										<div class="badge bg-light text-dark me-3" th:text="#{cancelTV}"></div>
+									</h4>
+									<h4 th:case="Delivery" class="mb-0">
+										<div class="badge bg-primary me-3" th:text="#{deliveryTLV}"></div>
+									</h4>
+									<h4 th:case="Invoicing" class="mb-0">
+										<div class="badge bg-dark me-3" th:text="#{invoicingTLV}"></div>
+									</h4>
+									<h4 th:case="Paid" class="mb-0">
+										<div class="badge bg-primary me-3" th:text="#{paidTV}"></div>
+									</h4>
+									<h4 th:case="*" class="mb-0">
+										<div class="badge bg-secondary me-3" th:text="${action.actiontype.name}"></div>
+									</h4>
 								</div>
 								<div class="me-5">
 									<span class="text-muted fs-6" th:text="#{initiatingCompany}"></span>
@@ -54,49 +82,79 @@
 							</button>
 						</div>
 						<!-- Accordion body -->
-						<div th:id="'panelsStayOpen-collapseOne'+${action.id}" class="accordion-collapse collapse" th:classappend="${{action.id == actions[#lists.size(actions)-1].id} ? 'show':''}" th:aria-labelledby="'panelsStayOpen-headingOne'+${action.id}">
+						<div th:id="'panelsStayOpen-collapseOne'+${action.id}" class="accordion-collapse collapse"
+							th:classappend="${{action.id == actions[#lists.size(actions)-1].id} ? 'show':''}"
+							th:aria-labelledby="'panelsStayOpen-headingOne'+${action.id}">
 							<div class="accordion-body d-flex">
 								<div class="me-5" sec:authorize="hasRole('ADMIN')">
 									<span class="text-muted fs-6" th:text="#{initiatingStudent}"></span>
-									<span class="text-black"><h5 th:text="${action.initiator.forename} + ' ' + ${action.initiator.surname}"></h5></span>
+									<span class="text-black">
+										<h5 th:text="${action.initiator.forename} + ' ' + ${action.initiator.surname}">
+										</h5>
+									</span>
 								</div>
 								<div class="me-5">
 									<span class="text-muted fs-6" th:text="#{date}"></span>
-									<span class="text-black"><h5 th:text="${#temporals.format(action.date, 'dd-MM-yyyy')}"></h5></span>
+									<span class="text-black">
+										<h5 th:text="${#temporals.format(action.date, 'dd-MM-yyyy')}"></h5>
+									</span>
 								</div>
 								<div>
 									<span class="text-muted fs-6" th:text="#{time}"></span>
-									<span class="text-black"><h5 th:text="${#temporals.format(action.time, 'HH:mm')}"></h5></span>
+									<span class="text-black">
+										<h5 th:text="${#temporals.format(action.time, 'HH:mm')}"></h5>
+									</span>
 								</div>
 							</div>
 							<div class="accordion-body d-flex">
 								<div class="me-5">
 									<span class="text-muted fs-6" th:text="#{amount}"></span>
-									<div th:if="${action.actiontype.name == 'Request' or action.actiontype.name == 'Offer'}">
-										<span class="text-black"><h5 th:text="${action.amount}"></h5></span>
+									<div
+										th:if="${action.actiontype.name == 'Request' or action.actiontype.name == 'Offer'}">
+										<span class="text-black">
+											<h5 th:text="${action.amount}"></h5>
+										</span>
 									</div>
-									<div th:unless="${action.actiontype.name == 'Request' or action.actiontype.name == 'Offer'}">
-										<span class="text-black"><h5 th:text="${action.transaction.amount}"></h5></span>
+									<div
+										th:unless="${action.actiontype.name == 'Request' or action.actiontype.name == 'Offer'}">
+										<span class="text-black">
+											<h5 th:text="${action.transaction.amount}"></h5>
+										</span>
 									</div>
 								</div>
 								<div th:unless="${action.actiontype.name} == 'Request'" class="me-5">
 									<span class="text-muted fs-6" th:text="#{pricePerPiece}"></span>
 									<div th:if="${action.actiontype.name == 'Offer'}">
-										<span class="text-black"><h5 th:text="${action.pricePerPiece} + ' €'"></h5></span>
+										<span class="text-black">
+											<h5 th:text="${action.pricePerPiece} + ' €'"></h5>
+										</span>
 									</div>
 									<div th:unless="${action.actiontype.name == 'Offer'}">
-										<span class="text-black"><h5 th:text="${action.transaction.pricePerPiece} + ' €'"></h5></span>
+										<span class="text-black">
+											<h5 th:text="${action.transaction.pricePerPiece} + ' €'"></h5>
+										</span>
 									</div>
 								</div>
 								<div>
 									<span class="text-muted fs-6" th:text="#{message}"></span>
-									<span class="text-black"><h5 th:text="${action.message}" class="text-break"></h5></span>
+									<span class="text-black">
+										<h5 th:text="${action.message}" class="text-break"></h5>
+									</span>
 								</div>
-								<div class="d-flex ms-auto align-items-end">
-									<a th:href="@{'/pdfexport/action/' + ${action.id}}">
-										<button type="button" class="btn btn-outline-primary"><i class="bi bi-file-earmark-pdf"></i>PDF</button>
+							</div>
+							<div class="accordion-body">
+								<th:block th:if="${action.attachedFile == null}">
+									<a class="btn btn-secondary" th:href="@{'/pdfexport/action/' + ${action.id}}">
+										<i class="bi bi-file-earmark-arrow-down"></i>
+										<span th:text="'pdf-export-' + ${action.id} + '.pdf'"></span>
 									</a>
-								</div>
+								</th:block>
+								<th:block th:if="${action.attachedFile != null}">
+									<a class="btn btn-secondary" th:href="@{'/pdfexport/action/' + ${action.id}}">
+										<i class="bi bi-file-earmark-arrow-down"></i>
+										<span th:text="${action.attachedFile.fileName}"></span>
+									</a>
+								</th:block>
 							</div>
 						</div>
 					</div>
@@ -111,27 +169,37 @@
 						<!-- "Offer" button -->
 						<a th:case="Offer" th:href="@{'/transaction/' + ${transactionID} + '/addOffer'}">
 							<button type="button" class="btn btn-primary me-3 mb-3 mb-md-0">
-								<i class="bi bi-cart-plus"></i> <span th:text="#{offerNA}" ></span>
+								<i class="bi bi-cart-plus"></i> <span th:text="#{offerNA}"></span>
 							</button>
 						</a>
 						<!-- Modal for "Accept" button -->
 						<div th:case="Accept">
-							<form th:object="${action}" th:action="@{'/transaction/' + ${transactionID} + '/accept'}" method="post">
-								<button type="button" class="btn btn-success me-3 mb-3 mb-md-0" data-bs-toggle="modal" data-bs-target="#acceptModal">
+							<form action="#" th:object="${action}"
+								th:action="@{'/transaction/' + ${transactionID} + '/accept'}" method="post"
+								enctype="multipart/form-data">
+								<button type="button" class="btn btn-success me-3 mb-3 mb-md-0" data-bs-toggle="modal"
+									data-bs-target="#acceptModal">
 									<i class="bi bi-check2-circle"></i> <span th:text="#{acceptNA}"></span>
 								</button>
-								<div class="modal fade" id="acceptModal" tabindex="-1" aria-labelledby="acceptModalLabel" aria-hidden="true">
+								<div class="modal fade" id="acceptModal" tabindex="-1"
+									aria-labelledby="acceptModalLabel" aria-hidden="true">
 									<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
 										<div class="modal-content">
 											<div class="modal-header">
-												<h5 class="modal-title" id="acceptModalLabel" th:text="#{acceptNA}"></h5>
-												<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+												<h5 class="modal-title" id="acceptModalLabel" th:text="#{acceptNA}">
+												</h5>
+												<button type="button" class="btn-close" data-bs-dismiss="modal"
+													aria-label="Close"></button>
 											</div>
 											<div class="modal-body">
-												<textarea class="form-control" th:field="*{message}" th:placeholder="#{optMessage}"></textarea>
+												<textarea class="form-control" th:field="*{message}"
+													th:placeholder="#{optMessage}"></textarea>
+												<input name="attachment" placeholder="Company logo"
+													class="form-control mt-3" type="file" id="attachment">
 											</div>
 											<div class="modal-footer">
-												<button type="submit" class="w-100 btn btn-lg btn-primary" th:text="#{confirm}"></button>
+												<button type="submit" class="w-100 btn btn-lg btn-primary"
+													th:text="#{confirm}"></button>
 											</div>
 										</div>
 									</div>
@@ -140,22 +208,29 @@
 						</div>
 						<!-- Modal for "Cancel" button -->
 						<div th:case="Cancel">
-							<form th:object="${action}" th:action="@{'/transaction/' + ${transactionID} + '/cancel'}" method="post">
-								<button type="button" class="btn btn-danger me-3 mb-3 mb-md-0" data-bs-toggle="modal" data-bs-target="#cancelModal">
+							<form th:object="${action}" th:action="@{'/transaction/' + ${transactionID} + '/cancel'}"
+								method="post">
+								<button type="button" class="btn btn-danger me-3 mb-3 mb-md-0" data-bs-toggle="modal"
+									data-bs-target="#cancelModal">
 									<i class="bi bi-x-circle"></i> <span th:text="#{cancelNA}"></span>
 								</button>
-								<div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
+								<div class="modal fade" id="cancelModal" tabindex="-1"
+									aria-labelledby="cancelModalLabel" aria-hidden="true">
 									<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
 										<div class="modal-content">
 											<div class="modal-header">
-												<h5 class="modal-title" id="cancelModalLabel" th:text="#{cancelNA}"></h5>
-												<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+												<h5 class="modal-title" id="cancelModalLabel" th:text="#{cancelNA}">
+												</h5>
+												<button type="button" class="btn-close" data-bs-dismiss="modal"
+													aria-label="Close"></button>
 											</div>
 											<div class="modal-body">
-												<textarea class="form-control" th:field="*{message}" th:placeholder="#{optMessage}"></textarea>
+												<textarea class="form-control" th:field="*{message}"
+													th:placeholder="#{optMessage}"></textarea>
 											</div>
 											<div class="modal-footer">
-												<button type="submit" class="w-100 btn btn-lg btn-primary" th:text="#{confirm}"></button>
+												<button type="submit" class="w-100 btn btn-lg btn-primary"
+													th:text="#{confirm}"></button>
 											</div>
 										</div>
 									</div>
@@ -164,22 +239,29 @@
 						</div>
 						<!-- Modal for "Delivery" button -->
 						<div th:case="Delivery">
-							<form th:object="${action}" th:action="@{'/transaction/' + ${transactionID} + '/delivery'}" method="post">
-								<button type="button" class="btn btn-primary me-3 mb-3 mb-md-0" data-bs-toggle="modal" data-bs-target="#deliveryModal">
+							<form th:object="${action}" th:action="@{'/transaction/' + ${transactionID} + '/delivery'}"
+								method="post">
+								<button type="button" class="btn btn-primary me-3 mb-3 mb-md-0" data-bs-toggle="modal"
+									data-bs-target="#deliveryModal">
 									<i class="bi bi-truck"></i> <span th:text=" #{deliveryNA}"></span>
 								</button>
-								<div class="modal fade" id="deliveryModal" tabindex="-1" aria-labelledby="deliveryModalLabel" aria-hidden="true">
+								<div class="modal fade" id="deliveryModal" tabindex="-1"
+									aria-labelledby="deliveryModalLabel" aria-hidden="true">
 									<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
 										<div class="modal-content">
 											<div class="modal-header">
-												<h5 class="modal-title" id="deliveryModalLabel" th:text="#{deliveryNA}"></h5>
-												<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+												<h5 class="modal-title" id="deliveryModalLabel" th:text="#{deliveryNA}">
+												</h5>
+												<button type="button" class="btn-close" data-bs-dismiss="modal"
+													aria-label="Close"></button>
 											</div>
 											<div class="modal-body">
-												<textarea class="form-control" th:field="*{message}" th:placeholder="#{optMessage}"></textarea>
+												<textarea class="form-control" th:field="*{message}"
+													th:placeholder="#{optMessage}"></textarea>
 											</div>
 											<div class="modal-footer">
-												<button type="submit" class="w-100 btn btn-lg btn-primary" th:text="#{confirm}"></button>
+												<button type="submit" class="w-100 btn btn-lg btn-primary"
+													th:text="#{confirm}"></button>
 											</div>
 										</div>
 									</div>
@@ -188,22 +270,29 @@
 						</div>
 						<!-- Modal for "Invoicing" button -->
 						<div th:case="Invoicing">
-							<form th:object="${action}" th:action="@{'/transaction/' + ${transactionID} + '/invoicing'}" method="post">
-								<button type="button" class="btn btn-primary me-3 mb-3 mb-md-0" data-bs-toggle="modal" data-bs-target="#invoicingModal">
+							<form th:object="${action}" th:action="@{'/transaction/' + ${transactionID} + '/invoicing'}"
+								method="post">
+								<button type="button" class="btn btn-primary me-3 mb-3 mb-md-0" data-bs-toggle="modal"
+									data-bs-target="#invoicingModal">
 									<i class="bi bi-receipt-cutoff"></i> <span th:text=" #{invoicingNA}"></span>
 								</button>
-								<div class="modal fade" id="invoicingModal" tabindex="-1" aria-labelledby="invoicingModalLabel" aria-hidden="true">
+								<div class="modal fade" id="invoicingModal" tabindex="-1"
+									aria-labelledby="invoicingModalLabel" aria-hidden="true">
 									<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
 										<div class="modal-content">
 											<div class="modal-header">
-												<h5 class="modal-title" id="invoicingModalLabel" th:text="#{invoicingNA}"></h5>
-												<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+												<h5 class="modal-title" id="invoicingModalLabel"
+													th:text="#{invoicingNA}"></h5>
+												<button type="button" class="btn-close" data-bs-dismiss="modal"
+													aria-label="Close"></button>
 											</div>
 											<div class="modal-body">
-												<textarea class="form-control" th:field="*{message}" th:placeholder="#{optMessage}"></textarea>
+												<textarea class="form-control" th:field="*{message}"
+													th:placeholder="#{optMessage}"></textarea>
 											</div>
 											<div class="modal-footer">
-												<button type="submit"class="w-100 btn btn-lg btn-primary" th:text="#{confirm}"></button>
+												<button type="submit" class="w-100 btn btn-lg btn-primary"
+													th:text="#{confirm}"></button>
 											</div>
 										</div>
 									</div>
@@ -212,22 +301,28 @@
 						</div>
 						<!-- Modal for "Paid" button -->
 						<div th:case="Paid">
-							<form th:object="${action}" th:action="@{'/transaction/' + ${transactionID} + '/paid'}" method="post">
-								<button type="button" class="btn btn-primary me-3 mb-3 mb-md-0" data-bs-toggle="modal" data-bs-target="#paidModal">
+							<form th:object="${action}" th:action="@{'/transaction/' + ${transactionID} + '/paid'}"
+								method="post">
+								<button type="button" class="btn btn-primary me-3 mb-3 mb-md-0" data-bs-toggle="modal"
+									data-bs-target="#paidModal">
 									<i class="bi bi-cash-coin"></i> <span th:text=" #{paidNA}"></span>
 								</button>
-								<div class="modal fade" id="paidModal" tabindex="-1" aria-labelledby="paidModalLabel" aria-hidden="true">
+								<div class="modal fade" id="paidModal" tabindex="-1" aria-labelledby="paidModalLabel"
+									aria-hidden="true">
 									<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
 										<div class="modal-content">
 											<div class="modal-header">
 												<h5 class="modal-title" id="paidModalLabel" th:text="#{paidNA}"></h5>
-												<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+												<button type="button" class="btn-close" data-bs-dismiss="modal"
+													aria-label="Close"></button>
 											</div>
 											<div class="modal-body">
-												<textarea class="form-control" th:field="*{message}" th:placeholder="#{optMessage}"></textarea>
+												<textarea class="form-control" th:field="*{message}"
+													th:placeholder="#{optMessage}"></textarea>
 											</div>
 											<div class="modal-footer">
-												<button type="submit" class="w-100 btn btn-lg btn-primary" th:text="#{confirm}"></button>
+												<button type="submit" class="w-100 btn btn-lg btn-primary"
+													th:text="#{confirm}"></button>
 											</div>
 										</div>
 									</div>
@@ -239,7 +334,7 @@
 				<div th:if="${specialActionsAvailable}">
 					<a th:href="@{'/transaction/' + ${transactionID} + '/addAction'}">
 						<button class="btn btn-primary me-3 mb-md-0">
-							<i class="bi bi-three-dots"></i> <span th:text="#{specialActions}" ></span>
+							<i class="bi bi-three-dots"></i> <span th:text="#{specialActions}"></span>
 						</button>
 					</a>
 				</div>
@@ -248,4 +343,5 @@
 		<a name="n"></a>
 	</th:block>
 </body>
+
 </html>

@@ -11,7 +11,7 @@
     <th:block th:fragment="content">
         <style th:replace="fragments/small-content :: content"></style>
         <main class="form-small">
-            <form th:action="@{'/transaction/' + ${transactionID} + '/addAction'}" th:object="${action}" method="post">
+            <form action="#" th:action="@{'/transaction/' + ${transactionID} + '/addAction'}" th:object="${action}" method="post" enctype="multipart/form-data">
                 <!-- Block: Header -->
                 <div class="form-floating mb-3">
                     <h1 class="mb-3" th:text="#{specialActions}"></h1>
@@ -41,6 +41,9 @@
                         </button>
                     </a>
                 </div>
+
+                <!-- File attachment -->
+                <input name="formFile" placeholder="Company logo" class="form-control mb-3" type="file" id="formFile">
             </form>
             <!-- Block: Back Button -->
             <button class="w-100 btn btn-lg btn-light mt-3" onclick="history.back()">

@@ -74,7 +74,7 @@ public class ActionTypeService {
             //Add the Offer-Option if: the last action is a Request from the other company
             //                     OR: the last action is an Offer
             if(actionType.getName().equals("Offer")) {
-                if(transaction.getLatestAction().getInitiator().getCompany().getId().equals(currentUser.getCompany().getId()) && transaction.getLatestActionName().equals("Request") || transaction.getConfirmed() ||  transaction.getBuyer().getId().equals(currentUser.getCompany().getId())) {
+                if(transaction.getLastAction().getInitiator().getCompany().getId().equals(currentUser.getCompany().getId()) && transaction.getLatestActionName().equals("Request") || transaction.getConfirmed() ||  transaction.getBuyer().getId().equals(currentUser.getCompany().getId())) {
                     if(!transaction.getLatestStandardAction().getActiontype().getName().equals("Offer")) {
                         actionTypes.remove(actionType);
                     }

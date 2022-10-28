@@ -63,7 +63,7 @@ public class InitDatabaseService {
             admin.setRole("ADMIN");
             userRepository.save(admin);
 
-            //Create demo Companys
+            //Create demo Companies
             Company company1 = new Company("[187]Strassenbande");
             Company company2 = new Company("Streber GmbH");
             Company company3 = new Company("7Bags");
@@ -107,15 +107,15 @@ public class InitDatabaseService {
             Transaction transaction1 = new Transaction(company1, company2);
             transaction1.setProduct("Product 1");
 
-            Action trans1Request = new Action("Test message", request, transaction1);
+            Action trans1Request = new Action("Test message", request, transaction1, null);
             trans1Request.setInitiator(student2);
 
-            Action trans1Offer = new Action("Test message", offer, transaction1);
+            Action trans1Offer = new Action("Test message", offer, transaction1, null);
             trans1Offer.setAmount(20);
             trans1Offer.setPricePerPiece(0.4);
             trans1Offer.setInitiator(student1);
 
-            Action trans1Accept = new Action("Test message", accept, transaction1);
+            Action trans1Accept = new Action("Test message", accept, transaction1, null);
             transaction1.setConfirmed(true);
             trans1Accept.setInitiator(student2);
 
@@ -135,7 +135,7 @@ public class InitDatabaseService {
             Transaction transaction2 = new Transaction(company3, company1);
             transaction2.setProduct("Product 2");
 
-            Action trans2Request = new Action("Test message", request, transaction2);
+            Action trans2Request = new Action("Test message", request, transaction2, null);
             trans2Request.setInitiator(student4);
 
             transactionRepository.save(transaction2);
@@ -148,8 +148,8 @@ public class InitDatabaseService {
 
             try {
                 // byte[] defaultImg = Files.readAllBytes(Paths.get("src/main/ressources/static/img/onlyicon.png").normalize().toAbsolutePath());
-                System.out.println(TrintelApplication.WORKDIR + "/build/resources/main/static/img/placeholder.jpg");
-                File f = new File (TrintelApplication.WORKDIR + "/build/resources/main/static/img/placeholder.jpg");
+                System.out.println(System.getProperty("user.dir") + "/build/resources/main/static/img/placeholder.jpg");
+                File f = new File (System.getProperty("user.dir") + "/build/resources/main/static/img/placeholder.jpg");
                 BufferedImage image = ImageIO.read(f);
                 CompanyLogo companyLogo = new CompanyLogo();
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -202,7 +202,7 @@ public class InitDatabaseService {
 
             try {
                 // byte[] defaultImg = Files.readAllBytes(Paths.get("src/main/ressources/static/img/onlyicon.png").normalize().toAbsolutePath());
-                File f = new File (TrintelApplication.WORKDIR + "/build/resources/main/static/img/placeholder.jpg");
+                File f = new File (System.getProperty("user.dir") + "/build/resources/main/static/img/placeholder.jpg");
                 BufferedImage image = ImageIO.read(f);
                 CompanyLogo companyLogo = new CompanyLogo();
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();

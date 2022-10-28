@@ -1,8 +1,6 @@
 package sopro.controller;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -23,18 +21,20 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import sopro.model.Action;
 import sopro.model.ActionType;
+import sopro.model.AttachedFile;
 import sopro.model.Transaction;
 import sopro.model.User;
-import sopro.model.util.InitiatorType;
 import sopro.repository.ActionRepository;
 import sopro.repository.ActionTypeRepository;
 import sopro.repository.CompanyRepository;
 import sopro.repository.TransactionRepository;
 import sopro.service.ActionTypeService;
-import sopro.service.PdfInterface;
+import sopro.service.AttachedFileInterface;
 
 @Controller
 public class TransactionController {
@@ -55,7 +55,7 @@ public class TransactionController {
     ActionTypeService actionTypeService;
 
     @Autowired
-    PdfInterface pdfService;
+    AttachedFileInterface attachedFileService;
 
     @GetMapping("/transactions")
     public String listTransactions(Model model, @AuthenticationPrincipal User user) {
@@ -142,23 +142,13 @@ public class TransactionController {
     public String showAction(Action action, @PathVariable Long transactionID, @AuthenticationPrincipal User user,
             Model model) {
         Action newAction = new Action();
-        InitiatorType initiatorType = InitiatorType.SELLER; //TODO kann weg
-
-        if (user.getCompany().equals(transactionRepository.findById(transactionID).get().getBuyer())) { // findout if
-                                                                                                        // current user
-                                                                                                        // is Buyer or
-                                                                                                        // seller.
-            initiatorType = InitiatorType.BUYER;
-        }
-
-        // a ArrayList for all available actions for the current Initiator
-        // List<ActionType> actionTypes = new ArrayList<>();
-        // actionTypes = actionTypeRepository.findByInitiatorType(initiatorType);
+        Transaction transaction = transactionRepository.findById(transactionID).get();
 
         // add the list of special actions
-        model.addAttribute("actiontypes", actionTypeService.getAvailableActions(transactionRepository.findById(transactionID).get(), user));
+        model.addAttribute("actiontypes", actionTypeService.getAvailableActions(transaction, user));
         model.addAttribute("action", newAction);
         model.addAttribute("transactionID", transactionID);
+        model.addAttribute("lastAction", transaction.getLastAction());
         return "transaction-addSpecialAction";
     }
 
@@ -173,18 +163,25 @@ public class TransactionController {
         model.addAttribute("action", newAction);
         model.addAttribute("transactionID", transactionID);
         model.addAttribute("transaction", transaction);
+        model.addAttribute("lastAction", transaction.getLastAction());
         return "transaction-addOffer";
     }
 
     @PreAuthorize("hasPermission(#transactionID, 'transaction') and hasRole('STUDENT')")
     @PostMapping("/transaction/{transactionID}/addOffer")
-    public String addOffer(Action offer, @PathVariable Long transactionID, @AuthenticationPrincipal User user,
+    public String addOffer(Action offer, @RequestParam("attachment") MultipartFile attachment, @PathVariable Long transactionID, @AuthenticationPrincipal User user,
             BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("action", offer);
             model.addAttribute("transactionID", transactionID);
             return "transaction-addOffer";
         }
+
+        if(!attachment.isEmpty()) {
+            AttachedFile attachedFile = attachedFileService.storeFile(attachment);
+            offer.setAttachedFile(attachedFile);
+        }
+
         offer.setActiontype(actionTypeService.getOfferAction()); // to be sure.
         offer.setTransaction(transactionRepository.findById(transactionID).get());
         offer.setInitiator(user);
@@ -194,10 +191,14 @@ public class TransactionController {
 
     @PreAuthorize("hasPermission(#transactionID, 'transaction') and hasRole('STUDENT')")
     @PostMapping("/transaction/{transactionID}/addAction")
-    public String createAction(Action action, @PathVariable Long transactionID, @AuthenticationPrincipal User user,
+    public String createAction(Action action, @RequestParam("formFile") MultipartFile attachment, @PathVariable Long transactionID, @AuthenticationPrincipal User user,
             Model model) {
-        // ActionType actionType = actionTypeRepository.findByName(actionTypeName);
-        // action.setActiontype(actionType);
+
+        if(!attachment.isEmpty()) {
+            AttachedFile attachedFile = attachedFileService.storeFile(attachment);
+            action.setAttachedFile(attachedFile);
+        }
+
         Transaction transaction = transactionRepository.findById(transactionID).get();
 
         if (action.getActiontype().getName().equals("ACCEPT")) {
@@ -215,10 +216,17 @@ public class TransactionController {
 
     @PreAuthorize("hasPermission(#transactionID, 'transaction') and hasRole('STUDENT')")
     @PostMapping("/transaction/{transactionID}/accept")
-    public String createAcceptAction(String message, @PathVariable Long transactionID,
+    public String createAcceptAction(String message, @RequestParam("attachment") MultipartFile attachment, @PathVariable Long transactionID,
             @AuthenticationPrincipal User user) {
+
         Transaction transaction = transactionRepository.findById(transactionID).get();
-        Action accept = new Action(message, actionTypeService.getAcceptActionType(), transaction);
+        AttachedFile attachedFile;
+        if(!attachment.isEmpty()) {
+            attachedFile = attachedFileService.storeFile(attachment);
+        } else {
+            attachedFile = null;     //TODO temporary
+        }
+        Action accept = new Action(message, actionTypeService.getAcceptActionType(), transaction, attachedFile);
         transaction.setConfirmed(true);
         accept.setInitiator(user);
         actionRepository.save(accept);
@@ -231,7 +239,7 @@ public class TransactionController {
     public String createCancelAction(String message, @PathVariable Long transactionID,
             @AuthenticationPrincipal User user) {
         Transaction transaction = transactionRepository.findById(transactionID).get();
-        Action cancel = new Action(message, actionTypeService.getAbortActionType(), transaction);
+        Action cancel = new Action(message, actionTypeService.getAbortActionType(), transaction, null); //TODO !!
         transaction.setActive(false);
         cancel.setInitiator(user);
         actionRepository.save(cancel);
@@ -244,7 +252,7 @@ public class TransactionController {
     public String createDeliveryAction(String message, @PathVariable Long transactionID,
             @AuthenticationPrincipal User user) {
         Transaction transaction = transactionRepository.findById(transactionID).get();
-        Action delivered = new Action(message, actionTypeService.getDeliveryActionType(), transaction);
+        Action delivered = new Action(message, actionTypeService.getDeliveryActionType(), transaction, null);   //TODO!!
         transaction.setShipped(true);
         delivered.setInitiator(user);
         actionRepository.save(delivered);
@@ -257,7 +265,7 @@ public class TransactionController {
     public String createInvoiceAction(String message, @PathVariable Long transactionID,
             @AuthenticationPrincipal User user) {
         Transaction transaction = transactionRepository.findById(transactionID).get();
-        Action invoice = new Action(message, actionTypeService.getInvoiceActionType(), transaction);
+        Action invoice = new Action(message, actionTypeService.getInvoiceActionType(), transaction, null);  //TODO!!
         invoice.setInitiator(user);
         actionRepository.save(invoice);
         return "redirect:/transaction/" + transactionID;
@@ -268,7 +276,7 @@ public class TransactionController {
     public String createPaidAction(String message, @PathVariable Long transactionID,
             @AuthenticationPrincipal User user) {
         Transaction transaction = transactionRepository.findById(transactionID).get();
-        Action paid = new Action(message, actionTypeService.getPaidActionType(), transaction);
+        Action paid = new Action(message, actionTypeService.getPaidActionType(), transaction, null);    //TODO!!!
         transaction.setPaid(true);
         transaction.setActive(false);
         paid.setInitiator(user);
@@ -279,47 +287,44 @@ public class TransactionController {
 
     @GetMapping("/pdfexport/action/{actionId}")
     public ResponseEntity<byte[]> exportAction(@PathVariable long actionId, HttpServletResponse response, Model model) {
-        String pdfPath = pdfService.generatePdfFromAction(actionId);
+        Action action = actionRepository.findById(actionId).get(); //TODO exception handling
 
-        byte[] contents;
-        try {
-            contents = Files.readAllBytes(new File(pdfPath).toPath());
-
+        if(action.getAttachedFile() != null) {  //TODO temporary
+            byte[] contents = action.getAttachedFile().getData();
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_PDF);
-            String [] soup = pdfPath.split("/"); // Last part is the filename
-            String filename =  soup[soup.length-1];
+            String filename = action.getAttachedFile().getFileName(); // Last part is the filename
             headers.setContentDispositionFormData(filename, filename);
             headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
             ResponseEntity<byte[]> res = new ResponseEntity<>(contents, headers, HttpStatus.OK);
             return res;
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
         }
-        return null;
+
+        ByteArrayOutputStream out = attachedFileService.generatePdfFromAction(actionId);
+        byte[] contents = out.toByteArray();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        String filename =  "pdf-export-" + actionId + ".pdf";
+        headers.setContentDispositionFormData(filename, filename);
+        headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+        ResponseEntity<byte[]> res = new ResponseEntity<>(contents, headers, HttpStatus.OK);
+        return res;
     }
 
     @GetMapping("/pdfexport/transaction/{transactionId}")
     public ResponseEntity<byte[]> exportTransaction(@PathVariable long transactionId, HttpServletResponse response, Model model) {
-        String pdfPath = pdfService.generatePdfFromTransaction(transactionId);
+        ByteArrayOutputStream out = attachedFileService.generatePdfFromTransaction(transactionId);
 
         byte[] contents;
-        try {
-            contents = Files.readAllBytes(new File(pdfPath).toPath());
+        contents = out.toByteArray();
 
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_PDF);
-            String [] soup = pdfPath.split("/"); // Last part is the filename
-            String filename =  soup[soup.length-1];
-            headers.setContentDispositionFormData(filename, filename);
-            headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
-            ResponseEntity<byte[]> res = new ResponseEntity<>(contents, headers, HttpStatus.OK);
-            return res;
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return null;
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        String filename =  "pdf-export-" + transactionId + ".pdf";
+        headers.setContentDispositionFormData(filename, filename);
+        headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+        ResponseEntity<byte[]> res = new ResponseEntity<>(contents, headers, HttpStatus.OK);
+        return res;
     }
 }

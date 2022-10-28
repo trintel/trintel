@@ -214,7 +214,7 @@ public class DatabaseTest {
         ActionType testActionType = new ActionType("testActionType", "testDescription", InitiatorType.BUYER);
         actionTypeRepository.save(testActionType);
 
-        Action actionTest = new Action("testMessage", testActionType, testTransaction);
+        Action actionTest = new Action("testMessage", testActionType, testTransaction, null);
         actionRepository.save(actionTest);
 
         assertEquals(actionTest, actionRepository.findById(actionTest.getId()).get());

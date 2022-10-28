@@ -12,7 +12,7 @@ AVIALABLE as long as no offer is accepted-->
     <th:block th:fragment="content">
         <style th:replace="fragments/small-content :: content"></style>
         <main class="form-small">
-            <form th:action="@{'/transaction/' + ${transactionID} + '/addOffer'}" th:object="${action}" method="post">
+            <form action="#" th:action="@{'/transaction/' + ${transactionID} + '/addOffer'}" th:object="${action}" method="post" enctype="multipart/form-data">
                 <!-- Hidden input field to pass the actiontype offer without asking the user because he already clicked on create Offer. In 
                 this case its clear for the the user but the value has to be passed because behind the UI -->
                 <div class="form-floating mb-3">
@@ -28,6 +28,7 @@ AVIALABLE as long as no offer is accepted-->
                 <div class="form-floating mb-3">
                     <h1 th:text="#{offer}"></h1>
                 </div>
+                
                 <!-- Block: Price & Amount -->
                 <div class="d-flex">
                     <div class="form-floating mb-3" th:object="${action}">
@@ -47,6 +48,10 @@ AVIALABLE as long as no offer is accepted-->
                         name="Request_Message">
                     <label for="floatingReqMessage" th:text="#{message}"></label>
                 </div>
+
+                <!-- File attachment -->
+                <input name="attachment" placeholder="Company logo" class="form-control mb-3" type="file" id="attachment">
+
                 <!-- Block: Submit Button -->
                 <div class="form-group">
                     <a th:href="@{'/transaction/' + ${transactionID} + '/addAction'}">
