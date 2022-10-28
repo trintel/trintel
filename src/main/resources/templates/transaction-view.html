@@ -11,9 +11,6 @@
 <body>
 	<th:block th:fragment="content">
 		<h1 th:text="#{transactionProgress}"></h1>
-		<th:block th:if="${param.rated}">
-			<p class="alert alert-success" th:text="#{ratingSuccess}"></p>
-		</th:block>
 		<div class="d-lg-flex justify-content-between mb-3">
 			<h3 class="mb-3"
 				th:text="|${actions[0].transaction.buyer.name} #{buying} ${actions[0].transaction.product} #{from} ${actions[0].transaction.seller.name}|">
@@ -351,7 +348,10 @@
 				<span class="alert alert-warning" style="max-width:25rem" th:text="#{rateConfirm}"></span>
 			</div>
 		</th:block>
-		<a name="n"></a>
+		<th:block th:if="${param.rated}">
+			<p class="alert alert-success" th:text="#{ratingSuccess}"></p>
+		</th:block>
+		<script th:src="@{/js/autoScrollDown.js}"></script>
 	</th:block>
 </body>
 
