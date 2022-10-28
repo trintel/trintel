@@ -4,12 +4,10 @@ import java.sql.Timestamp;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.tomcat.util.http.fileupload.impl.SizeLimitExceededException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
-import org.springframework.web.util.NestedServletException;
 
 import sopro.TrintelApplication;
 
@@ -20,7 +18,7 @@ public class ExceptionHandlingController {
 
 
   // Specify name of a specific view that will be used to display the error:
-  @ExceptionHandler({MaxUploadSizeExceededException.class, NestedServletException.class, SizeLimitExceededException.class})
+  @ExceptionHandler(MaxUploadSizeExceededException.class)
   public String databaseError(Model model) {
     TrintelApplication.logger.error("File upload too large");
     model.addAttribute("error", "File exceeds maximum upload size");
