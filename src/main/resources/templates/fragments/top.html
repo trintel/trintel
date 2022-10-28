@@ -11,26 +11,7 @@
       <a class="navbar-brand">Trintel</a>
     </ul>
     <ul class="navbar-nav mx-1 mb-sm-0 logout-top" th:with="currentUser=${#httpServletRequest.userPrincipal?.name}">
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="dropdown03" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="false" th:text="${currentUser}" th:if="${currentUser != null}">User</a>
-        <ul class="dropdown-menu" aria-labelledby="dropdown03">
-          <li>
-            <a class="dropdown-item" href="/user/settings" th:text="#{uSettings}"></a>
-          </li>
-          <li>
-            <a class="dropdown-item" data-bs-toggle="collapse" href="#changeLanguage" role="button" aria-expanded="false" aria-controls="changeLanguage" th:text="#{lang.change}"></a>
-            <div class="collapse" id="changeLanguage">
-              <ul class="list-group my-1">
-                <li class="list-group-item"><a th:href="@{?lang=en}">English</a></li>
-                <li class="list-group-item"><a th:href="@{?lang=de}">Deutsch</a></li>
-              </ul>
-            </div>
-          </li>
-          <form th:action="@{/logout}" method="post">
-            <input type="submit" class="dropdown-item" th:value="#{logout}" />
-          </form>
-        </ul>
-      </li>
+      <th:block th:include="fragments/nav-dropdown :: dropdown"></th:block>
     </ul>
   </div>
 </header>
