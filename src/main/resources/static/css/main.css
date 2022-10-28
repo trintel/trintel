@@ -285,6 +285,11 @@ main {
 
 .companylogo-xs {
   min-width: 2rem;
+  border-radius: 100%;
+}
+
+.companylogo-xs img {
+  border-radius: 100%;
 }
 
 .companylogo-sm {
@@ -296,7 +301,7 @@ main {
 }
 
 .companylogo-lg {
-  width: 8rem;
+  width: 10rem;
 }
 
 .accordion-item {
@@ -428,4 +433,84 @@ main {
 .icon-container i {
   font-size: 1.5rem;
   margin: 0;
+}
+
+/* Rating system */
+
+input.star{
+  display: none;
+}
+
+label.star, span.star {
+  float: right;
+  padding: 0 5px;
+  color: #ebecf0;
+  transition: all .2s;
+}
+
+input.star:checked ~ label.star:before, span.star.star-checked:before, span.star-checked ~ span.star:before {
+  content:'\F586';
+  font-family: bootstrap-icons !important;
+  transition: all .25s;
+}
+
+input.star-5:checked ~ label.star:before, span.star-5-checked, span.star-5-checked ~ span.star:before {
+  color:#FE7;
+  text-shadow: 0 0 20px #ffdf33;
+}
+
+input.star-4:checked ~ label.star:before, span.star-4-checked, span.star-4-checked ~ span.star:before {
+  color: #FD4;
+}
+
+input.star-3:checked ~ label.star:before, span.star-3-checked, span.star-3-checked ~ span.star:before {
+  color: rgb(255, 196, 34);
+}
+
+input.star-2:checked ~ label.star:before, span.star-2-checked, span.star-2-checked ~ span.star:before {
+  color: rgb(255, 156, 34);
+}
+
+input.star-1:checked ~ label.star:before, span.star-1-checked, span.star-1-checked ~ span.star:before {
+  color: #F62;
+}
+
+label.star:before, span.star:before {
+  content:'\F588';
+  font-family: bootstrap-icons !important;
+}
+
+label.star:hover {
+  transform: scale(1.3);
+}
+
+/* Background colors for badges */
+.badge.bg-primary {
+  background-color: #c6ddff !important;
+  color: #0d6efd;
+}
+
+.badge.bg-secondary {
+  background-color: #e5e7ec !important;
+  color: #54617f;
+}
+
+.badge.bg-dark {
+  background-color: #a0b2c3 !important;
+  color: #212529;
+}
+
+.badge.bg-success {
+  background-color: #d1e7dd !important;
+  color: #198754;
+}
+
+.badge.bg-warning {
+  background-color: #fff3cd !important;
+  color: #d3a10b;
+}
+
+.badge.bg-danger {
+  background-color: #f8d7da !important;
+  color: #dc3545;
 }

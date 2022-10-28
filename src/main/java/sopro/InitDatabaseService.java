@@ -148,7 +148,6 @@ public class InitDatabaseService {
 
             try {
                 // byte[] defaultImg = Files.readAllBytes(Paths.get("src/main/ressources/static/img/onlyicon.png").normalize().toAbsolutePath());
-                System.out.println(System.getProperty("user.dir") + "/build/resources/main/static/img/placeholder.jpg");
                 File f = new File (System.getProperty("user.dir") + "/build/resources/main/static/img/placeholder.jpg");
                 BufferedImage image = ImageIO.read(f);
                 CompanyLogo companyLogo = new CompanyLogo();

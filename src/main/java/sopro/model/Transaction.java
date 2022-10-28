@@ -26,6 +26,7 @@ public class Transaction {
     @Getter @Setter @OneToMany(mappedBy = "transaction", cascade = CascadeType.REMOVE) List<Action> actions;
     @Getter @Setter @NotNull @ManyToOne private Company buyer;
     @Getter @Setter @NotNull @ManyToOne private Company seller;
+    @Getter @Setter @OneToMany(mappedBy = "transaction") List<Rating> ratings;
     @Getter @Setter private String product;
     @Getter @Setter private Boolean paid = false;
     @Getter @Setter private Boolean shipped = false;

@@ -26,7 +26,7 @@
 		<div th:unless="${transactions.isEmpty()}">
 			<!-- Card for every transaction -->
 			<div th:each="transaction: ${transactions}">
-				<a th:href="@{'/transaction/' + ${transaction.id} + '#n'}" class="text-decoration-none">
+				<a th:href="@{'/transaction/' + ${transaction.id}}" class="text-decoration-none">
 					<div class="card mb-3">
 						<!-- Alert marker if opposing company performed last action -->
 						<div sec:authorize="hasRole('STUDENT')">

@@ -12,7 +12,7 @@
 		<p th:text="#{sldescr}"></p>
 
 		<!-- Search -->
-		<form th:object="${student}" th:action="@{/students/search(q=${searchString})}" method="get">
+		<form th:object="${student}" th:action="@{/students/search}" method="get">
 			<div class="form-floating mb-3 inputandbutton">
 				<input type="search" name="q" class="form-control border-end-0" id="search" placeholder="Search"
 					th:value="${searchedStudent}">

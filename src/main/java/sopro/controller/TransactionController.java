@@ -27,11 +27,14 @@ import org.springframework.web.multipart.MultipartFile;
 import sopro.model.Action;
 import sopro.model.ActionType;
 import sopro.model.AttachedFile;
+import sopro.model.Company;
+import sopro.model.Rating;
 import sopro.model.Transaction;
 import sopro.model.User;
 import sopro.repository.ActionRepository;
 import sopro.repository.ActionTypeRepository;
 import sopro.repository.CompanyRepository;
+import sopro.repository.RatingRepository;
 import sopro.repository.TransactionRepository;
 import sopro.service.ActionTypeService;
 import sopro.service.AttachedFileInterface;
@@ -52,6 +55,9 @@ public class TransactionController {
     CompanyRepository companyRepository;
 
     @Autowired
+    RatingRepository ratingRepository;
+
+    @Autowired
     ActionTypeService actionTypeService;
 
     @Autowired
@@ -66,14 +72,15 @@ public class TransactionController {
             List<Transaction> transactions = new ArrayList<>();
             transactions.addAll(transactionRepository.findByBuyer(user.getCompany()));
             transactions.addAll(transactionRepository.findBySeller(user.getCompany()));
-            //Sort transactions.
-            transactions = transactions.stream().sorted(Comparator.comparing(Transaction :: getLatestActionDate).reversed().thenComparing(Transaction :: getLatestActionTime).reversed()).collect(Collectors.toList());
+            // Sort transactions.
+            transactions = transactions.stream().sorted(Comparator.comparing(Transaction::getLatestActionDate)
+                    .reversed().thenComparing(Transaction::getLatestActionTime).reversed())
+                    .collect(Collectors.toList());
             model.addAttribute("transactions", transactions);
         }
         return "transactions-list";
 
     }
-
 
     @PreAuthorize("hasCompany()")
     @GetMapping("/transaction/{companyID}/create")
@@ -116,7 +123,6 @@ public class TransactionController {
 
     }
 
-
     @PreAuthorize("hasPermission(#id, 'transaction')")
     @GetMapping("/transaction/{id}")
     public String transactionDetail(Model model, @PathVariable Long id, @AuthenticationPrincipal User user) {
@@ -124,19 +130,29 @@ public class TransactionController {
         Transaction transaction = transactionRepository.findById(id).get();
 
         List<ActionType> actionTypes = new ArrayList<>();
-        if(user.getRole().equals("STUDENT")) {
+        if (user.getRole().equals("STUDENT")) {
             actionTypes = actionTypeService.getAvailableActions(transaction, user);
         }
-        model.addAttribute("actiontypes", actionTypes);     //only find the available actiontypes for that user.
+        model.addAttribute("actiontypes", actionTypes); // only find the available actiontypes for that user.
         model.addAttribute("action", newAction);
         model.addAttribute("actions", actionRepository.findByTransaction(transaction));
-        model.addAttribute("specialActionsAvailable", actionTypes.stream().filter(t -> !t.isStandardAction()).toArray(ActionType[] :: new).length > 0); //get the info if there are specialActions.
+        model.addAttribute("specialActionsAvailable",
+                actionTypes.stream().filter(t -> !t.isStandardAction()).toArray(ActionType[]::new).length > 0); // get
+                                                                                                                // the
+                                                                                                                // info
+                                                                                                                // if
+                                                                                                                // there
+                                                                                                                // are
+                                                                                                                // specialActions.
         model.addAttribute("transactionID", id);
+        model.addAttribute("isAlreadyReviewed",
+                ratingRepository.existsByTransactionAndRatingCompany(transaction, user.getCompany()));
         return "transaction-view";
 
     }
 
-    //TODO only othorize if user is seller/buyer in resprct to actiontype.initiatorType.
+    // TODO only othorize if user is seller/buyer in resprct to
+    // actiontype.initiatorType.
     @PreAuthorize("hasPermission(#transactionID, 'transaction') and hasRole('STUDENT')")
     @GetMapping("/transaction/{transactionID}/addAction")
     public String showAction(Action action, @PathVariable Long transactionID, @AuthenticationPrincipal User user,
@@ -283,6 +299,25 @@ public class TransactionController {
         actionRepository.save(paid);
         transactionRepository.save(transaction);
         return "redirect:/transaction/" + transactionID;
+    }
+
+    @PreAuthorize("hasPermission(#transactionID, 'transaction') and hasRole('STUDENT')")
+    @PostMapping("/transaction/{transactionID}/rate")
+    public String rateTransaction(@PathVariable Long transactionID, @AuthenticationPrincipal User user,
+            @RequestParam int rating) {
+        
+        Transaction t = transactionRepository.findById(transactionID).get();
+        Company ratingCompany = user.getCompany();
+        if (!ratingRepository.existsByTransactionAndRatingCompany(t, ratingCompany)) {
+            Rating r;
+            if (ratingCompany.getId().equals(t.getBuyer().getId())) {
+                r = new Rating(t, t.getSeller(), ratingCompany, rating);
+            } else {
+                r = new Rating(t, t.getBuyer(), ratingCompany, rating);
+            }
+            ratingRepository.save(r);
+        }
+        return "redirect:/transaction/" + transactionID + "?rated";
     }
 
     @GetMapping("/pdfexport/action/{actionId}")
