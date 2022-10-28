@@ -1,0 +1,28 @@
+version: '3.3'
+services:
+  # db:
+  #   image: mysql:5.7
+  #   restart: always
+  #   environment:
+  #     MYSQL_DATABASE: 'coolDB'
+  #     # Password for root access
+  #     MYSQL_ROOT_PASSWORD: 'pw'
+  #   ports:
+  #     # <Port exposed> : < MySQL Port running inside container>
+  #     - '3306:3306'
+  #     # Where our data will be persisted
+  #   volumes:
+  #     - my-db:/var/lib/mysql
+
+  trintel:
+    image: trintel:1.0.0
+    # depends_on:
+    #   - db
+    ports:
+      - '8080:8080'
+    restart: always
+    volumes:
+      - trintel-database:/trintel-database
+# Names our volume
+volumes:
+  trintel-database:
