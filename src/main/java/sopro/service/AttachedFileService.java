@@ -126,8 +126,14 @@ public class AttachedFileService implements AttachedFileInterface {
         long lastActionId = actionIdList[actionIdList.length - 1];
 
         for (long actionId : actionIdList) {
+
             // ab hier content
             Action a = actionRepository.findById(actionId).get();
+
+            if(a.getAttachedFile() != null) {
+                out.writeBytes(a.getAttachedFile().getData());
+                continue;
+            }
 
             String[] body = {
                     "Initiator: " + a.getInitiator().getCompany().getName(),
