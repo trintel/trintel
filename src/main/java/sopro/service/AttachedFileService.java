@@ -261,7 +261,5 @@ public class AttachedFileService implements AttachedFileInterface {
         outputStream.flush();
         document.close();
         outputStream.close();
-
-        System.out.println("Pdf files merged successfully.");
        }
 }
