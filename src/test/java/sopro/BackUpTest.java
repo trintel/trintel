@@ -23,8 +23,7 @@ import sopro.repository.ActionTypeRepository;
 import sopro.repository.CompanyRepository;
 import sopro.repository.TransactionRepository;
 import sopro.repository.UserRepository;
-import sopro.service.backup.ExportInterface;
-import sopro.service.backup.ImportInterface;
+import sopro.service.ExportImportService;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -54,13 +53,10 @@ public class BackUpTest {
     ObjectMapper objectMapper;
 
     @Autowired
+    ExportImportService exportImportService;
+
+    @Autowired
     PasswordEncoder passwordEncoder;
-
-    @Autowired
-    ImportInterface importService;
-
-    @Autowired
-    ExportInterface exportService;
 
     String companyName = "NewComp";
 
@@ -75,10 +71,9 @@ public class BackUpTest {
         databaseService.clearDatabase();
     }
 
-
-
     /**
      * Tests if the Import / Export works
+     *
      * @throws Exception
      */
     @Disabled("Disabled temporarily.")
@@ -106,9 +101,9 @@ public class BackUpTest {
             TransactionBefore += 1;
         }
 
-        String path = exportService.export();
+        String path = exportImportService.export();
         databaseService.clearDatabase();
-        importService.importJSON(path);
+        exportImportService.importSQL(path);
 
         int UserAfter = 0;
         for (User user : userRepository.findAll()) {
