@@ -70,7 +70,7 @@
                             </div>
                             <form method="post" th:action="@{/backup/import}" enctype="multipart/form-data">
                                 <div class="modal-body">
-                                    <input class="form-control" type="file" id="formFile" name="file" accept=".sql">
+                                    <input class="form-control" type="file" id="formFile" name="file" accept=".sql" required>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" th:text="#{cancel}"></button>
