@@ -43,6 +43,12 @@ public class BackupController {
         TrintelApplication.logger.info("Imported file Type: " + importFile.getContentType());
         TrintelApplication.logger.info("Importing file: " + importFile.getOriginalFilename());
         File file = new File(TrintelApplication.WORKDIR + "/trintelImport.sql");
+
+        if (!importFile.getOriginalFilename().contains(".sql")) {
+            TrintelApplication.logger.error("Tried to import a non sql file: "+ importFile.getOriginalFilename());
+            return "redirect:/home";
+        }
+
         try {
             importFile.transferTo(file);
         } catch (IllegalStateException | IOException e) {
