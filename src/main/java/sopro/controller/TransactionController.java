@@ -299,6 +299,7 @@ public class TransactionController {
     @PostMapping("/transaction/{transactionID}/rate")
     public String rateTransaction(@PathVariable Long transactionID, @AuthenticationPrincipal User user,
             @RequestParam int rating) {
+        
         Transaction t = transactionRepository.findById(transactionID).get();
         Company ratingCompany = user.getCompany();
         if (!ratingRepository.existsByTransactionAndRatingCompany(t, ratingCompany)) {

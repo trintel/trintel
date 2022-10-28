@@ -325,6 +325,47 @@
 				</div>
 			</div>
 		</div>
+		<h3 th:text="#{ratingsForTransaction}"></h3>
+		<div class="row row-cols-1 row-cols-lg-2 row-cols-xl-3 g-3 mb-3"
+			th:unless="${actions[0].transaction.ratings.isEmpty()}">
+			<th:block th:each="r : ${actions[0].transaction.ratings}">
+				<div class="col">
+					<div class="card">
+						<div class="card-body d-flex flex-column align-items-start">
+							<!-- Card content -->
+							<div class="mb-1">
+								<span class="star"
+									th:classappend="${r.stars == 5 ? 'star-checked star-5-checked' : ''}"></span>
+								<span class="star"
+									th:classappend="${r.stars == 4 ? 'star-checked star-4-checked' : ''}"></span>
+								<span class="star"
+									th:classappend="${r.stars == 3 ? 'star-checked star-3-checked' : ''}"></span>
+								<span class="star"
+									th:classappend="${r.stars == 2 ? 'star-checked star-2-checked' : ''}"></span>
+								<span class="star"
+									th:classappend="${r.stars == 1 ? 'star-checked star-1-checked' : ''}"></span>
+							</div>
+							<!-- Company name, logo and description -->
+							<div class="col d-flex align-items-center">
+								<div class="companylogo companylogo-xs me-2">
+									<img th:src="@{'/company/logo/' + ${r.ratingCompany.id}}" />
+								</div>
+								<div>
+									<a th:href="@{'/companies/' + ${r.ratingCompany.id}}"
+										class="text-decoration-none text-black" th:text="${r.ratingCompany.name}">
+									</a>
+									<span class="badge bg-secondary" th:if="${r.transaction.seller.id.equals(r.ratingCompany.id)}"
+										th:text="#{seller}"></span>
+									<span class="badge bg-secondary" th:if="${r.transaction.buyer.id.equals(r.ratingCompany.id)}"
+										th:text="#{buyer}"></span>
+								</div>
+							</div>
+						</div>
+					</div>
+					</a>
+				</div>
+			</th:block>
+		</div>
 		<th:block
 			th:if="${actions[actions.size() - 1].actiontype.name.equals('Paid') && !isAlreadyReviewed && !(#request.userPrincipal.principal.role == 'ADMIN')}">
 			<div class="d-flex align-items-center justify-content-center flex-column gap-3" style="height:100vh">
@@ -332,7 +373,7 @@
 					th:action="@{'/transaction/' + ${transactionID} + '/rate'}" method="post">
 					<h3 class="mb-0" th:text="#{rateTransaction}"></h3>
 					<div class="fs-3">
-						<input class="star star-5" id="star-5" type="radio" name="rating" value="5" required/>
+						<input class="star star-5" id="star-5" type="radio" name="rating" value="5" required />
 						<label class="star star-5" for="star-5"></label>
 						<input class="star star-4" id="star-4" type="radio" name="rating" value="4" />
 						<label class="star star-4" for="star-4"></label>

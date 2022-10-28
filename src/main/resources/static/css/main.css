@@ -471,3 +471,34 @@ label.star:before, span.star:before {
 label.star:hover {
   transform: scale(1.3);
 }
+
+/* Background colors for badges */
+.badge.bg-primary {
+  background-color: #c6ddff !important;
+  color: #0d6efd;
+}
+
+.badge.bg-secondary {
+  background-color: #e5e7ec !important;
+  color: #54617f;
+}
+
+.badge.bg-dark {
+  background-color: #a0b2c3 !important;
+  color: #212529;
+}
+
+.badge.bg-success {
+  background-color: #d1e7dd !important;
+  color: #198754;
+}
+
+.badge.bg-warning {
+  background-color: #fff3cd !important;
+  color: #d3a10b;
+}
+
+.badge.bg-danger {
+  background-color: #f8d7da !important;
+  color: #dc3545;
+}
