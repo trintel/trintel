@@ -168,9 +168,9 @@ public class InitDatabaseService {
         if (userRepository.count() == 0 && companyRepository.count() == 0) {
 
             //Create demo Users
-            User admin = new User(true, true, true, true, "admin", "admin", "admin@admin", passwordEncoder.encode("password"), null);
-            admin.setRole("ADMIN");
-            userRepository.save(admin);
+            // User admin = new User(true, true, true, true, "admin", "admin", "admin@admin", passwordEncoder.encode("password"), null);
+            // admin.setRole("ADMIN");
+            // userRepository.save(admin);
 
             //Create demo Action_types
             ActionType request = new ActionType("Request", "Demo request text.", InitiatorType.BUYER);
