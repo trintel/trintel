@@ -155,7 +155,7 @@ public class TransactionController {
         model.addAttribute("skip", true);
         model.addAttribute("actionTypeID", actionTypeID);
         model.addAttribute("actionTypes", actionTypeService);
-        if(actionTypeService.getDeliveryActionType().getId().equals(actionTypeID) 
+        if(actionTypeService.getDeliveryActionType().getId().equals(actionTypeID)
             || actionTypeService.getInvoiceActionType().getId().equals(actionTypeID)
             || actionTypeService.getPaidActionType().getId().equals(actionTypeID)) {
             model.addAttribute("roleRestricted", true);
