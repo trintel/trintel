@@ -240,7 +240,7 @@
 						<!-- Modal for "Delivery" button -->
 						<div th:case="Delivery">
 							<form th:object="${action}" th:action="@{'/transaction/' + ${transactionID} + '/delivery'}"
-								method="post">
+								method="post" enctype="multipart/form-data">
 								<button type="button" class="btn btn-primary me-3 mb-3 mb-md-0" data-bs-toggle="modal"
 									data-bs-target="#deliveryModal">
 									<i class="bi bi-truck"></i> <span th:text=" #{deliveryNA}"></span>
@@ -258,6 +258,8 @@
 											<div class="modal-body">
 												<textarea class="form-control" th:field="*{message}"
 													th:placeholder="#{optMessage}"></textarea>
+												<input name="attachment" placeholder="Company logo"
+													class="form-control mt-3" type="file" id="attachment">
 											</div>
 											<div class="modal-footer">
 												<button type="submit" class="w-100 btn btn-lg btn-primary"

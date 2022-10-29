@@ -157,6 +157,8 @@ public class TransactionController {
             return "transaction-addOffer";
         } else if(actionTypeService.getAcceptActionType().getId() == actionType) {
             return "transaction-addAccept";
+        } else if(actionTypeService.getDeliveryActionType().getId() == actionType) {
+            return "transaction-addDelivery";
         } else {
             model.addAttribute("actiontypes", actionTypeRepository.getSpecialActionTypes());
             return "transaction-addSpecialAction";
@@ -212,6 +214,18 @@ public class TransactionController {
         transaction.setProduct(product);
         transactionRepository.save(transaction);
         return createAcceptAction(accept, attachment, transaction.getId(), user);
+    }
+
+    @PreAuthorize("hasCompany()")
+    @PostMapping("/transaction/{companyID}/create/skip/addDelivery")
+    public String createTransactionSkipAddDelivery(Action delivery, @RequestParam("attachment") MultipartFile attachment, @RequestParam String product, @PathVariable Long companyID, @AuthenticationPrincipal User user,
+            BindingResult bindingResult, Model model) {
+        Transaction transaction = new Transaction();
+        transaction.setBuyer(companyRepository.getById(companyID));
+        transaction.setSeller(user.getCompany());
+        transaction.setProduct(product);
+        transactionRepository.save(transaction);
+        return createDeliveryAction(delivery, transaction.getId(), attachment, user);
     }
 
     @PreAuthorize("hasPermission(#id, 'transaction')")
@@ -355,13 +369,18 @@ public class TransactionController {
 
     @PreAuthorize("hasPermission(#transactionID, 'transaction') and hasRole('STUDENT')")
     @PostMapping("/transaction/{transactionID}/delivery")
-    public String createDeliveryAction(String message, @PathVariable Long transactionID,
+    public String createDeliveryAction(Action delivery, @PathVariable Long transactionID, @RequestParam("attachment") MultipartFile attachment,
             @AuthenticationPrincipal User user) {
         Transaction transaction = transactionRepository.findById(transactionID).get();
-        Action delivered = new Action(message, actionTypeService.getDeliveryActionType(), transaction, null);   //TODO!!
+        if(!attachment.isEmpty()) {
+            AttachedFile attachedFile = attachedFileService.storeFile(attachment);
+            delivery.setAttachedFile(attachedFile);
+        }
         transaction.setShipped(true);
-        delivered.setInitiator(user);
-        actionRepository.save(delivered);
+        delivery.setInitiator(user);
+        delivery.setTransaction(transaction);
+        delivery.setActiontype(actionTypeService.getDeliveryActionType());
+        actionRepository.save(delivery);
         transactionRepository.save(transaction);
         return "redirect:/transaction/" + transactionID;
     }
