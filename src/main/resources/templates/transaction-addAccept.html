@@ -12,10 +12,9 @@ AVIALABLE as long as no offer is accepted-->
     <th:block th:fragment="content">
         <style th:replace="fragments/small-content :: content"></style>
         <main class="form-small">
-            <!-- Block: Header -->
-            <div class="form-floating mb-3">
+
                 <h1 th:text="#{acceptNA}"></h1>
-            </div>
+
             <form action="#" th:action="@{'/transaction/' + ${companyID} + '/create/skip/addAccept'}"
                 th:object="${action}" method="post" enctype="multipart/form-data">
                 <div class="row mb-3">

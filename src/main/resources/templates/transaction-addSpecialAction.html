@@ -13,9 +13,7 @@
         <main class="form-small">
             <form action="#" th:action="${skip} ? @{'/transaction/' + ${companyID} + '/create/skip/addAction'} : @{'/transaction/' + ${transactionID} + '/addAction'}" th:object="${action}" method="post" enctype="multipart/form-data">
                 <!-- Block: Header -->
-                <div class="form-floating mb-3">
-                    <h1 class="mb-3" th:text="#{specialActions}"></h1>
-                </div>
+                <h1 th:text="#{specialActions}"></h1>
                 <th:block th:if="${skip}">
                     <div class="row mb-3">
                         <div class="col pe-0">
