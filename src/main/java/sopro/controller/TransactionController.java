@@ -154,16 +154,13 @@ public class TransactionController {
         model.addAttribute("companyID", companyID);
         model.addAttribute("skip", true);
         model.addAttribute("actionTypeID", actionTypeID);
-        if(actionTypeService.getOfferAction().getId().equals(actionTypeID)) {
-            return "transaction-addOffer";
-        } else if(actionTypeService.getAcceptActionType().getId().equals(actionTypeID)) {
-            return "transaction-addAccept";
-        } else if(actionTypeService.getDeliveryActionType().getId().equals(actionTypeID)) {
-            return "transaction-addDelivery";
-        } else {
-            model.addAttribute("actiontypes", actionTypeRepository.getSpecialActionTypes());
-            return "transaction-addSpecialAction";
+        model.addAttribute("actionTypes", actionTypeService);
+        if(actionTypeService.getDeliveryActionType().getId().equals(actionTypeID) 
+            || actionTypeService.getInvoiceActionType().getId().equals(actionTypeID)
+            || actionTypeService.getPaidActionType().getId().equals(actionTypeID)) {
+            model.addAttribute("roleRestricted", true);
         }
+        return "transaction-addAction";
     }
 
     @PreAuthorize("hasCompany()")
@@ -190,8 +187,18 @@ public class TransactionController {
             transaction.setConfirmed(true);
             transactionRepository.save(transaction);
             return createDeliveryAction(action, transaction.getId(), attachment, user);
+        } else if(actionTypeService.getInvoiceActionType().getId().equals(actionTypeID)) {
+            transaction.setConfirmed(true);
+            transaction.setShipped(true);
+            transactionRepository.save(transaction);
+            return createInvoiceAction(action, transaction.getId(), attachment, user);
+        } else if(actionTypeService.getPaidActionType().getId().equals(actionTypeID)) {
+            transaction.setConfirmed(true);
+            transaction.setShipped(true);
+            transactionRepository.save(transaction);
+            return createPaidAction(action, transaction.getId(), attachment, user);
         }
-        return "";
+        return "/transaction/" + companyID + "/create/skip";
     }
 
     @PreAuthorize("hasPermission(#id, 'transaction')")
@@ -353,25 +360,36 @@ public class TransactionController {
 
     @PreAuthorize("hasPermission(#transactionID, 'transaction') and hasRole('STUDENT')")
     @PostMapping("/transaction/{transactionID}/invoicing")
-    public String createInvoiceAction(String message, @PathVariable Long transactionID,
+    public String createInvoiceAction(Action invoice, @PathVariable Long transactionID, @RequestParam("attachment") MultipartFile attachment,
             @AuthenticationPrincipal User user) {
         Transaction transaction = transactionRepository.findById(transactionID).get();
-        Action invoice = new Action(message, actionTypeService.getInvoiceActionType(), transaction, null);  //TODO!!
+        if(!attachment.isEmpty()) {
+            AttachedFile attachedFile = attachedFileService.storeFile(attachment);
+            invoice.setAttachedFile(attachedFile);
+        }
         invoice.setInitiator(user);
+        invoice.setTransaction(transaction);
+        invoice.setActiontype(actionTypeService.getInvoiceActionType());
         actionRepository.save(invoice);
+        transactionRepository.save(transaction);
         return "redirect:/transaction/" + transactionID;
     }
 
     @PreAuthorize("hasPermission(#transactionID, 'transaction') and hasRole('STUDENT')")
     @PostMapping("/transaction/{transactionID}/paid")
-    public String createPaidAction(String message, @PathVariable Long transactionID,
+    public String createPaidAction(Action payment, @PathVariable Long transactionID, @RequestParam("attachment") MultipartFile attachment,
             @AuthenticationPrincipal User user) {
         Transaction transaction = transactionRepository.findById(transactionID).get();
-        Action paid = new Action(message, actionTypeService.getPaidActionType(), transaction, null);    //TODO!!!
+        if(!attachment.isEmpty()) {
+            AttachedFile attachedFile = attachedFileService.storeFile(attachment);
+            payment.setAttachedFile(attachedFile);
+        }
         transaction.setPaid(true);
         transaction.setActive(false);
-        paid.setInitiator(user);
-        actionRepository.save(paid);
+        payment.setInitiator(user);
+        payment.setTransaction(transaction);
+        payment.setActiontype(actionTypeService.getPaidActionType());
+        actionRepository.save(payment);
         transactionRepository.save(transaction);
         return "redirect:/transaction/" + transactionID;
     }

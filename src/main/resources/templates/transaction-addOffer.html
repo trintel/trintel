@@ -13,7 +13,7 @@ AVIALABLE as long as no offer is accepted-->
         <style th:replace="fragments/small-content :: content"></style>
         <main class="form-small">
             <form action="#"
-                th:action="${skip} ? @{'/transaction/' + ${companyID} + '/create/skip/' + ${actionTypeID}} : @{'/transaction/' + ${transactionID} + '/addOffer'}"
+                th:action="@{'/transaction/' + ${transactionID} + '/addOffer'}"
                 th:object="${action}" method="post" enctype="multipart/form-data">
                 <!-- Hidden input field to pass the actiontype offer without asking the user because he already clicked on create Offer. In 
                 this case its clear for the the user but the value has to be passed because behind the UI -->
@@ -29,28 +29,6 @@ AVIALABLE as long as no offer is accepted-->
                 </div>
                 <!-- Block: Header -->
                 <h1 th:text="#{offer}"></h1>
-                <th:block th:if="${skip}">
-                    <div class="row mb-3">
-                        <div class="col pe-0">
-                            <!-- Block: Product -->
-                            <div class="form-floating">
-                                <input type="text" class="form-control" id="product" placeholder="product"
-                                    name="product" required>
-                                <label for="product" th:text="#{product}"></label>
-                            </div>
-                        </div>
-                        <!-- Block: Drop Down menu for user role -->
-                        <div class="col-4 ps-3">
-                            <div class="custom-select">
-                                <select name="isBuyer" required>
-                                    <option value="" th:text="#{role}"></option>
-                                    <option th:text="#{buyer}" th:value="true"> </option>
-                                    <option th:text="#{seller}" th:value="false"> </option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </th:block>
 
                 <!-- Block: Price & Amount -->
                 <div class="d-flex">

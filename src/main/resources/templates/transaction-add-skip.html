@@ -36,10 +36,22 @@
                                                         th:case="${actionTypes.invoiceActionType.id}"></i>
                                                     <i class="bi bi-cash-coin"
                                                         th:case="${actionTypes.paidActionType.id}"></i>
-                                                    <i class="bi bi-three-dots" th:case="*"></i>
                                                 </th:block>
                                             </div>
-                                            <h5 class="card-title mb-0 text-black" th:text="${actionType.name}"></h5>
+                                            <th:block th:switch="${actionType.id}">
+                                                <h5 class="card-title mb-0 text-black">
+                                                    <span th:text="#{offerTLV}"
+                                                        th:case="${actionTypes.offerAction.id}"></span>
+                                                    <span th:text="#{acceptTV}"
+                                                        th:case="${actionTypes.acceptActionType.id}"></span>
+                                                    <span th:text="#{deliveryTLV}"
+                                                        th:case="${actionTypes.deliveryActionType.id}"></span>
+                                                    <span th:text="#{invoicingTLV}"
+                                                        th:case="${actionTypes.invoiceActionType.id}"></span>
+                                                    <span th:text="#{paidTV}"
+                                                        th:case="${actionTypes.paidActionType.id}"></span>
+                                                </h5>
+                                            </th:block>
                                         </div>
                                         <span class="card-text text-secondary" th:text="${actionType.text}"></span>
                                     </div>

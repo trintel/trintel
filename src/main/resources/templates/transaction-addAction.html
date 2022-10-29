@@ -13,21 +13,52 @@ AVIALABLE as long as no offer is accepted-->
         <style th:replace="fragments/small-content :: content"></style>
         <main class="form-small">
 
-                <h1 th:text="#{acceptNA}"></h1>
+
+            <div class="d-flex align-items-center mb-3">
+                <div class="icon-container me-2">
+                    <th:block th:switch="${actionTypeID}">
+                        <i class="bi bi-cart-plus"
+                            th:case="${actionTypes.offerAction.id}"></i>
+                        <i class="bi bi-check2-circle"
+                            th:case="${actionTypes.acceptActionType.id}"></i>
+                        <i class="bi bi-truck"
+                            th:case="${actionTypes.deliveryActionType.id}"></i>
+                        <i class="bi bi-receipt-cutoff"
+                            th:case="${actionTypes.invoiceActionType.id}"></i>
+                        <i class="bi bi-cash-coin"
+                            th:case="${actionTypes.paidActionType.id}"></i>
+                    </th:block>
+                </div>
+                <th:block th:switch="${actionTypeID}">
+                    <h1 class="card-title mb-0 text-black">
+                        <span th:text="#{offerTLV}"
+                            th:case="${actionTypes.offerAction.id}"></span>
+                        <span th:text="#{acceptTV}"
+                            th:case="${actionTypes.acceptActionType.id}"></span>
+                        <span th:text="#{deliveryTLV}"
+                            th:case="${actionTypes.deliveryActionType.id}"></span>
+                        <span th:text="#{invoicingTLV}"
+                            th:case="${actionTypes.invoiceActionType.id}"></span>
+                        <span th:text="#{paidTV}"
+                            th:case="${actionTypes.paidActionType.id}"></span>
+                    </h1>
+                </th:block>
+            </div>
 
             <form action="#" th:action="@{'/transaction/' + ${companyID} + '/create/skip/' + ${actionTypeID}}"
                 th:object="${action}" method="post" enctype="multipart/form-data">
+                
                 <div class="row mb-3">
                     <div class="col pe-0">
                         <!-- Block: Product -->
                         <div class="form-floating">
-                            <input type="text" class="form-control" id="product" placeholder="product" name="product"
-                                required>
+                            <input type="text" class="form-control" id="product" placeholder="product"
+                                name="product" required>
                             <label for="product" th:text="#{product}"></label>
                         </div>
                     </div>
                     <!-- Block: Drop Down menu for user role -->
-                    <div class="col-4 ps-3">
+                    <div class="col-4 ps-3" th:unless="${roleRestricted}">
                         <div class="custom-select">
                             <select name="isBuyer" required>
                                 <option value="" th:text="#{role}"></option>
@@ -37,6 +68,8 @@ AVIALABLE as long as no offer is accepted-->
                         </div>
                     </div>
                 </div>
+                    
+                    
                 <!-- Block: Price & Amount -->
                 <div class="d-flex">
                     <div class="form-floating mb-3" th:object="${action}">
