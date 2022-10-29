@@ -13,7 +13,7 @@
             <h1 class="my-3" th:text="#{transactionWith(${transaction.seller.name})}"></h1>
             <p class="alert alert-warning">
                 Use this feature only if you have already started the transaction from outside of this application and
-                want to resume here. Just upload the documents from your external transaction history and carry on with a follow-up action!
+                want to resume here. Just choose the last action you have done, upload documents from your external transaction history and carry on!
             </p>
             <form method="post" th:action="@{'/transaction/' + ${companyID} + '/create/skip/save'}">
                 <div class="row row-cols-1 row-cols-lg-2 row-cols-xl-3 g-3">
