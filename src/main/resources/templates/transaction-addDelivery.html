@@ -15,7 +15,7 @@ AVIALABLE as long as no offer is accepted-->
 
             <h1 th:text="#{deliveryNA}"></h1>
 
-            <form action="#" th:action="@{'/transaction/' + ${companyID} + '/create/skip/addDelivery'}"
+            <form action="#" th:action="@{'/transaction/' + ${companyID} + '/create/skip/' + ${actionTypeID}}"
                 th:object="${action}" method="post" enctype="multipart/form-data">
 
                 <!-- Block: Product -->

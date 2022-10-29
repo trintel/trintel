@@ -15,7 +15,7 @@ AVIALABLE as long as no offer is accepted-->
 
                 <h1 th:text="#{acceptNA}"></h1>
 
-            <form action="#" th:action="@{'/transaction/' + ${companyID} + '/create/skip/addAccept'}"
+            <form action="#" th:action="@{'/transaction/' + ${companyID} + '/create/skip/' + ${actionTypeID}}"
                 th:object="${action}" method="post" enctype="multipart/form-data">
                 <div class="row mb-3">
                     <div class="col pe-0">
