@@ -510,3 +510,22 @@ label.star:hover {
   background-color: #f8d7da !important;
   color: #dc3545;
 }
+
+.radio-card-label {
+  display: block;
+}
+
+.radio-card-label > input{ /* HIDE RADIO */
+  visibility: hidden; /* Makes input not-clickable */
+  position: absolute; /* Remove input from document flow */
+}
+
+.radio-card-label > input + div{ /* DIV STYLES */
+  transition: all .2s;
+  cursor: pointer;
+}
+
+.radio-card-label > input:checked + div{ /* (RADIO CHECKED) DIV STYLES */
+  background-color: #e5e7ec;
+  border-color: #54617f;
+}

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:include="layout-fullscreen :: page">
+
+<head>
+    <title th:text="#{request}"> </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+<body>
+    <th:block th:fragment="content">
+        <div class="container">
+            <!-- Block: Header -->
+            <h1 class="my-3" th:text="#{transactionWith(${transaction.seller.name})}"></h1>
+            <p class="alert alert-warning">
+                Use this feature only if you have already started the transaction from outside of this application and
+                want to resume here. Just choose the last action you have done, upload documents from your external transaction history and carry on!
+            </p>
+            <form method="post" th:action="@{'/transaction/' + ${companyID} + '/create/skip/save'}">
+                <div class="row row-cols-1 row-cols-lg-2 row-cols-xl-3 g-3">
+                    <th:block th:each="actionType : ${altActionTypes}">
+                        <div class="col">
+                            <label class="radio-card-label">
+                                <input type="radio" name="actionType" th:value="${actionType.id}" />
+                                <div class="card">
+                                    <div class="card-body d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <div class="d-flex align-items-center mb-2">
+                                                <div class="icon-container me-2">
+                                                    <th:block th:switch="${actionType.id}">
+                                                        <i class="bi bi-cart-plus"
+                                                            th:case="${actionTypes.offerAction.id}"></i>
+                                                        <i class="bi bi-check2-circle"
+                                                            th:case="${actionTypes.acceptActionType.id}"></i>
+                                                        <i class="bi bi-truck"
+                                                            th:case="${actionTypes.deliveryActionType.id}"></i>
+                                                        <i class="bi bi-receipt-cutoff"
+                                                            th:case="${actionTypes.invoiceActionType.id}"></i>
+                                                        <i class="bi bi-cash-coin"
+                                                            th:case="${actionTypes.paidActionType.id}"></i>
+                                                        <i class="bi bi-three-dots" th:case="*"></i>
+                                                    </th:block>
+                                                </div>
+                                                <h5 class="card-title mb-0" th:text="${actionType.name}"></h5>
+                                            </div>
+                                            <span class="card-text" th:text="${actionType.text}"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </label>
+                        </div>
+                    </th:block>
+                    <div class="col">
+                        <label class="radio-card-label">
+                            <input type="radio" name="actionType" th:value="-1" />
+                            <div class="card">
+                                <div class="card-body d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <div class="d-flex align-items-center mb-2">
+                                            <div class="icon-container me-2">
+                                                <i class="bi bi-three-dots"></i>
+                                            </div>
+                                            <h5 class="card-title mb-0">Other</h5>
+                                        </div>
+                                        <span class="card-text">d</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-lg float-end mt-3" th:text="#{submit}"></button>
+            </form>
+            <!-- Block: Back Button -->
+            <button class="btn btn-lg btn-light mt-3" onclick="history.back()">
+                <i class="bi bi-arrow-left"></i>
+                <span th:text=" #{back}"></span>
+            </button>
+        </div>
+
+
+    </th:block>
+</body>
+
+</html>

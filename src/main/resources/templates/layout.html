@@ -1,15 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" th:fragment="page">
 
-<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="icon" type="image/x-icon" th:href="@{/img/icon.ico}"/>
-	<link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.2/css/bootstrap.min.css}"/>
-	<link rel="stylesheet" th:href="@{/webjars/bootstrap-icons/1.8.1/font/bootstrap-icons.css}"/>
-	<link rel="stylesheet" th:href="@{/css/main.css}"/>
-    <title>Trintel</title>
-</head>
+<head th:replace="fragments/head :: head"></head>
 
 <body class="bg-light">
 	<header th:replace="fragments/top :: bar"></header>

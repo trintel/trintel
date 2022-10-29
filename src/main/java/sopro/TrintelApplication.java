@@ -37,8 +37,8 @@ public class TrintelApplication implements CommandLineRunner {
         signupUrlService.generateAdminSignupURL();
         signupUrlService.generateStudentSignupURL();
         // For tests
-        // initDatabaseService.init();
+        initDatabaseService.init();
         // For final deploy
-        initDatabaseService.deployinit();
+        // initDatabaseService.deployinit();
     }
 }

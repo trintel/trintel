@@ -123,6 +123,78 @@ public class TransactionController {
 
     }
 
+    @PreAuthorize("hasCompany()")
+    @GetMapping("/transaction/{companyID}/create/skip")
+    public String createTransactionSkip(@PathVariable Long companyID, @AuthenticationPrincipal User user, Model model) {
+
+        Transaction newTransaction = new Transaction();
+        newTransaction.setSeller(companyRepository.findById(companyID).get());
+
+        Action newAction = new Action();
+        Iterable<ActionType> altActionTypesIter = actionTypeRepository.findAll();
+        List<ActionType> altActionTypes = new ArrayList<ActionType>();
+        for(ActionType actionType : altActionTypesIter) {
+            if(!actionType.equals(actionTypeService.getInitialActionType()) && !actionType.equals(actionTypeService.getAbortActionType()) && actionType.isStandardAction()) {
+                altActionTypes.add(actionType);
+            }
+        }
+        model.addAttribute("actionTypes", actionTypeService);
+        model.addAttribute("altActionTypes", altActionTypes);
+        model.addAttribute("companyID", companyID);
+        model.addAttribute("action", newAction);
+        model.addAttribute("transaction", newTransaction);
+        return "transaction-add-skip";
+
+    }
+
+    @PreAuthorize("hasCompany()")
+    @PostMapping("/transaction/{companyID}/create/skip/save")
+    public String createTransactionSkipSave(Action action, Transaction transaction, @PathVariable Long companyID,
+            @AuthenticationPrincipal User user, @RequestParam long actionType, Model model) {
+        model.addAttribute("companyID", companyID);
+        model.addAttribute("skip", true);
+        if(actionTypeService.getOfferAction().getId() == actionType) {
+            return "transaction-addOffer";
+        } else {
+            model.addAttribute("actiontypes", actionTypeRepository.getSpecialActionTypes());
+            return "transaction-addSpecialAction";
+        }
+    }
+
+    @PreAuthorize("hasCompany()")
+    @PostMapping("/transaction/{companyID}/create/skip/addOffer")
+    public String createTransactionSkipAddOffer(Action offer, @RequestParam("attachment") MultipartFile attachment, @RequestParam String product, @RequestParam boolean isBuyer, @PathVariable Long companyID, @AuthenticationPrincipal User user,
+            BindingResult bindingResult, Model model) {
+        Transaction transaction = new Transaction();
+        if(isBuyer) {
+            transaction.setBuyer(user.getCompany());
+            transaction.setSeller(companyRepository.getById(companyID));
+        } else {
+            transaction.setBuyer(companyRepository.getById(companyID));
+            transaction.setSeller(user.getCompany());
+        }
+        transaction.setProduct(product);
+        transactionRepository.save(transaction);
+        return addOffer(offer, attachment, transaction.getId(), user, bindingResult, model);
+    }
+
+    @PreAuthorize("hasCompany()")
+    @PostMapping("/transaction/{companyID}/create/skip/addAction")
+    public String createTransactionSkipAddAction(Action action, @RequestParam("attachment") MultipartFile attachment, @RequestParam String product, @RequestParam boolean isBuyer, @PathVariable Long companyID, @AuthenticationPrincipal User user,
+            BindingResult bindingResult, Model model) {
+        Transaction transaction = new Transaction();
+        if(isBuyer) {
+            transaction.setBuyer(user.getCompany());
+            transaction.setSeller(companyRepository.getById(companyID));
+        } else {
+            transaction.setBuyer(companyRepository.getById(companyID));
+            transaction.setSeller(user.getCompany());
+        }
+        transaction.setProduct(product);
+        transactionRepository.save(transaction);
+        return createAction(action, attachment, transaction.getId(), user, model);
+    }
+
     @PreAuthorize("hasPermission(#id, 'transaction')")
     @GetMapping("/transaction/{id}")
     public String transactionDetail(Model model, @PathVariable Long id, @AuthenticationPrincipal User user) {
