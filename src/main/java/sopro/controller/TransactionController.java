@@ -224,6 +224,7 @@ public class TransactionController {
         transaction.setBuyer(companyRepository.getById(companyID));
         transaction.setSeller(user.getCompany());
         transaction.setProduct(product);
+        transaction.setConfirmed(true);
         transactionRepository.save(transaction);
         return createDeliveryAction(delivery, transaction.getId(), attachment, user);
     }
