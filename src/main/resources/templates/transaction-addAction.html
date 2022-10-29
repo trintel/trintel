@@ -12,8 +12,6 @@ AVIALABLE as long as no offer is accepted-->
     <th:block th:fragment="content">
         <style th:replace="fragments/small-content :: content"></style>
         <main class="form-small">
-
-
             <div class="d-flex align-items-center mb-3">
                 <div class="icon-container me-2">
                     <th:block th:switch="${actionTypeID}">
@@ -48,8 +46,8 @@ AVIALABLE as long as no offer is accepted-->
             <form action="#" th:action="@{'/transaction/' + ${companyID} + '/create/skip/' + ${actionTypeID}}"
                 th:object="${action}" method="post" enctype="multipart/form-data">
                 
-                <div class="row mb-3">
-                    <div class="col pe-0">
+                <div class="row g-3 mb-3">
+                    <div class="col">
                         <!-- Block: Product -->
                         <div class="form-floating">
                             <input type="text" class="form-control" id="product" placeholder="product"
@@ -58,7 +56,7 @@ AVIALABLE as long as no offer is accepted-->
                         </div>
                     </div>
                     <!-- Block: Drop Down menu for user role -->
-                    <div class="col-4 ps-3" th:unless="${roleRestricted}">
+                    <div class="col-4" th:unless="${roleRestricted}">
                         <div class="custom-select">
                             <select name="isBuyer" required>
                                 <option value="" th:text="#{role}"></option>
@@ -68,7 +66,6 @@ AVIALABLE as long as no offer is accepted-->
                         </div>
                     </div>
                 </div>
-                    
                     
                 <!-- Block: Price & Amount -->
                 <div class="d-flex">
