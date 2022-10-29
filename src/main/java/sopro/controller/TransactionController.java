@@ -155,6 +155,8 @@ public class TransactionController {
         model.addAttribute("skip", true);
         if(actionTypeService.getOfferAction().getId() == actionType) {
             return "transaction-addOffer";
+        } else if(actionTypeService.getAcceptActionType().getId() == actionType) {
+            return "transaction-addAccept";
         } else {
             model.addAttribute("actiontypes", actionTypeRepository.getSpecialActionTypes());
             return "transaction-addSpecialAction";
@@ -193,6 +195,23 @@ public class TransactionController {
         transaction.setProduct(product);
         transactionRepository.save(transaction);
         return createAction(action, attachment, transaction.getId(), user, model);
+    }
+
+    @PreAuthorize("hasCompany()")
+    @PostMapping("/transaction/{companyID}/create/skip/addAccept")
+    public String createTransactionSkipAddAccept(Action accept, @RequestParam("attachment") MultipartFile attachment, @RequestParam String product, @RequestParam boolean isBuyer, @PathVariable Long companyID, @AuthenticationPrincipal User user,
+            BindingResult bindingResult, Model model) {
+        Transaction transaction = new Transaction();
+        if(isBuyer) {
+            transaction.setBuyer(user.getCompany());
+            transaction.setSeller(companyRepository.getById(companyID));
+        } else {
+            transaction.setBuyer(companyRepository.getById(companyID));
+            transaction.setSeller(user.getCompany());
+        }
+        transaction.setProduct(product);
+        transactionRepository.save(transaction);
+        return createAcceptAction(accept, attachment, transaction.getId(), user);
     }
 
     @PreAuthorize("hasPermission(#id, 'transaction')")
@@ -304,19 +323,18 @@ public class TransactionController {
 
     @PreAuthorize("hasPermission(#transactionID, 'transaction') and hasRole('STUDENT')")
     @PostMapping("/transaction/{transactionID}/accept")
-    public String createAcceptAction(String message, @RequestParam("attachment") MultipartFile attachment, @PathVariable Long transactionID,
+    public String createAcceptAction(Action accept, @RequestParam("attachment") MultipartFile attachment, @PathVariable Long transactionID,
             @AuthenticationPrincipal User user) {
 
         Transaction transaction = transactionRepository.findById(transactionID).get();
-        AttachedFile attachedFile;
         if(!attachment.isEmpty()) {
-            attachedFile = attachedFileService.storeFile(attachment);
-        } else {
-            attachedFile = null;     //TODO temporary
+            AttachedFile attachedFile = attachedFileService.storeFile(attachment);
+            accept.setAttachedFile(attachedFile);
         }
-        Action accept = new Action(message, actionTypeService.getAcceptActionType(), transaction, attachedFile);
         transaction.setConfirmed(true);
         accept.setInitiator(user);
+        accept.setActiontype(actionTypeService.getAcceptActionType());
+        accept.setTransaction(transaction);
         actionRepository.save(accept);
         transactionRepository.save(transaction);
         return "redirect:/transaction/" + transactionID;

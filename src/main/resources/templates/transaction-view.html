@@ -15,7 +15,7 @@
 				<h1 th:text="#{transactionProgress}"></h1>
 				<h5 class="mb-3 text-secondary"
 					th:text="|${actions[0].transaction.buyer.name} #{buying} ${actions[0].transaction.product} #{from} ${actions[0].transaction.seller.name}|">
-				</h3>
+					</h3>
 			</div>
 			<a class="btn btn-secondary" th:href="@{'/pdfexport/transaction/' + ${transactionID}}">
 				<i class="bi bi-file-earmark-arrow-down"></i>
@@ -174,23 +174,23 @@
 						</a>
 						<!-- Modal for "Accept" button -->
 						<div th:case="Accept">
-							<form action="#" th:object="${action}"
-								th:action="@{'/transaction/' + ${transactionID} + '/accept'}" method="post"
-								enctype="multipart/form-data">
-								<button type="button" class="btn btn-success me-3 mb-3 mb-md-0" data-bs-toggle="modal"
-									data-bs-target="#acceptModal">
-									<i class="bi bi-check2-circle"></i> <span th:text="#{acceptNA}"></span>
-								</button>
-								<div class="modal fade" id="acceptModal" tabindex="-1"
-									aria-labelledby="acceptModalLabel" aria-hidden="true">
-									<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-										<div class="modal-content">
-											<div class="modal-header">
-												<h5 class="modal-title" id="acceptModalLabel" th:text="#{acceptNA}">
-												</h5>
-												<button type="button" class="btn-close" data-bs-dismiss="modal"
-													aria-label="Close"></button>
-											</div>
+							<button type="button" class="btn btn-success me-3 mb-3 mb-md-0" data-bs-toggle="modal"
+								data-bs-target="#acceptModal">
+								<i class="bi bi-check2-circle"></i> <span th:text="#{acceptNA}"></span>
+							</button>
+							<div class="modal fade" id="acceptModal" tabindex="-1" aria-labelledby="acceptModalLabel"
+								aria-hidden="true">
+								<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title" id="acceptModalLabel" th:text="#{acceptNA}">
+											</h5>
+											<button type="button" class="btn-close" data-bs-dismiss="modal"
+												aria-label="Close"></button>
+										</div>
+										<form action="#" th:object="${action}"
+											th:action="@{'/transaction/' + ${transactionID} + '/accept'}" method="post"
+											enctype="multipart/form-data">
 											<div class="modal-body">
 												<textarea class="form-control" th:field="*{message}"
 													th:placeholder="#{optMessage}"></textarea>
@@ -201,10 +201,10 @@
 												<button type="submit" class="w-100 btn btn-lg btn-primary"
 													th:text="#{confirm}"></button>
 											</div>
-										</div>
+										</form>
 									</div>
 								</div>
-							</form>
+							</div>
 						</div>
 						<!-- Modal for "Cancel" button -->
 						<div th:case="Cancel">

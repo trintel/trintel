@@ -1,0 +1,74 @@
+<!-- This file represents the creation of an offer. 
+AVIALABLE as long as no offer is accepted-->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:include="layout-fullscreen :: page">
+
+<head>
+    <title th:text="#{request}"> </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+<body>
+    <th:block th:fragment="content">
+        <style th:replace="fragments/small-content :: content"></style>
+        <main class="form-small">
+            <!-- Block: Header -->
+            <div class="form-floating mb-3">
+                <h1 th:text="#{acceptNA}"></h1>
+            </div>
+            <form action="#" th:action="@{'/transaction/' + ${companyID} + '/create/skip/addAccept'}"
+                th:object="${action}" method="post" enctype="multipart/form-data">
+                <div class="row mb-3">
+                    <div class="col pe-0">
+                        <!-- Block: Product -->
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="product" placeholder="product" name="product"
+                                required>
+                            <label for="product" th:text="#{product}"></label>
+                        </div>
+                    </div>
+                    <!-- Block: Drop Down menu for user role -->
+                    <div class="col-4 ps-3">
+                        <div class="custom-select">
+                            <select name="isBuyer" required>
+                                <option value="" th:text="#{role}"></option>
+                                <option th:text="#{buyer}" th:value="true"> </option>
+                                <option th:text="#{seller}" th:value="false"> </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <!-- Block: Price & Amount -->
+                <div class="d-flex">
+                    <div class="form-floating mb-3" th:object="${action}">
+                        <input th:field="*{pricePerPiece}" min="0" type="number" step="0.01" class="form-control"
+                            id="offPrice" placeholder="price" name="Offer_Price" required>
+                        <label for="floatingOffPrice" th:text="#{offPrice}"></label>
+                    </div>
+                    <div class="form-floating mb-3 ms-3">
+                        <input th:field="*{amount}" min="0" type="number" class="form-control" id="offAmount"
+                            placeholder="amount" name="Offer_Amount" required>
+                        <label for="floatingOffAmount" th:text="#{amount}"></label>
+                    </div>
+                </div>
+                <textarea class="form-control" th:field="*{message}" th:placeholder="#{optMessage}" style="height:10rem"></textarea>
+                <input name="attachment" placeholder="Company logo" class="form-control mt-3" type="file"
+                    id="attachment">
+
+                <!-- Block: Submit Button -->
+                <div class="form-group">
+                    <a th:href="@{'/transaction/' + ${transactionID} + '/addAction'}">
+                        <button type="submit" class="w-100 btn btn-lg btn-primary mt-3"><a th:text="#{confirm}"></a></button>
+                    </a>
+                </div>
+            </form>
+            <!-- Block: Back Button -->
+            <button class="w-100 btn btn-lg btn-light mt-3" onclick="history.back()">
+                <i class="bi bi-arrow-left"></i>
+                <a th:text=" #{back}"></a>
+            </button>
+        </main>
+    </th:block>
+</body>
+
+</html>
