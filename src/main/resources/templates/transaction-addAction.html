@@ -15,58 +15,50 @@ AVIALABLE as long as no offer is accepted-->
             <div class="d-flex align-items-center mb-3">
                 <div class="icon-container me-2">
                     <th:block th:switch="${actionTypeID}">
-                        <i class="bi bi-cart-plus"
-                            th:case="${actionTypes.offerAction.id}"></i>
-                        <i class="bi bi-check2-circle"
-                            th:case="${actionTypes.acceptActionType.id}"></i>
-                        <i class="bi bi-truck"
-                            th:case="${actionTypes.deliveryActionType.id}"></i>
-                        <i class="bi bi-receipt-cutoff"
-                            th:case="${actionTypes.invoiceActionType.id}"></i>
-                        <i class="bi bi-cash-coin"
-                            th:case="${actionTypes.paidActionType.id}"></i>
+                        <i class="bi bi-cart-plus" th:case="${actionTypes.offerAction.id}"></i>
+                        <i class="bi bi-check2-circle" th:case="${actionTypes.acceptActionType.id}"></i>
+                        <i class="bi bi-truck" th:case="${actionTypes.deliveryActionType.id}"></i>
+                        <i class="bi bi-receipt-cutoff" th:case="${actionTypes.invoiceActionType.id}"></i>
+                        <i class="bi bi-cash-coin" th:case="${actionTypes.paidActionType.id}"></i>
                     </th:block>
                 </div>
                 <th:block th:switch="${actionTypeID}">
                     <h1 class="card-title mb-0 text-black">
-                        <span th:text="#{offerTLV}"
-                            th:case="${actionTypes.offerAction.id}"></span>
-                        <span th:text="#{acceptTV}"
-                            th:case="${actionTypes.acceptActionType.id}"></span>
-                        <span th:text="#{deliveryTLV}"
-                            th:case="${actionTypes.deliveryActionType.id}"></span>
-                        <span th:text="#{invoicingTLV}"
-                            th:case="${actionTypes.invoiceActionType.id}"></span>
-                        <span th:text="#{paidTV}"
-                            th:case="${actionTypes.paidActionType.id}"></span>
+                        <span th:text="#{offerTLV}" th:case="${actionTypes.offerAction.id}"></span>
+                        <span th:text="#{acceptTV}" th:case="${actionTypes.acceptActionType.id}"></span>
+                        <span th:text="#{deliveryTLV}" th:case="${actionTypes.deliveryActionType.id}"></span>
+                        <span th:text="#{invoicingTLV}" th:case="${actionTypes.invoiceActionType.id}"></span>
+                        <span th:text="#{paidTV}" th:case="${actionTypes.paidActionType.id}"></span>
                     </h1>
                 </th:block>
             </div>
 
             <form action="#" th:action="@{'/transaction/' + ${companyID} + '/create/skip/' + ${actionTypeID}}"
                 th:object="${action}" method="post" enctype="multipart/form-data">
-                
+
                 <div class="row g-3 mb-3">
                     <div class="col">
                         <!-- Block: Product -->
                         <div class="form-floating">
-                            <input type="text" class="form-control" id="product" placeholder="product"
-                                name="product" required>
+                            <input type="text" class="form-control" id="product" placeholder="product" name="product"
+                                required>
                             <label for="product" th:text="#{product}"></label>
                         </div>
                     </div>
                     <!-- Block: Drop Down menu for user role -->
-                    <div class="col-4" th:unless="${roleRestricted}">
-                        <div class="custom-select">
-                            <select name="isBuyer" required>
-                                <option value="" th:text="#{role}"></option>
-                                <option th:text="#{buyer}" th:value="true"> </option>
-                                <option th:text="#{seller}" th:value="false"> </option>
-                            </select>
-                        </div>
+                    <div class="col-5">
+                        <select name="isBuyer" th:unless="${roleRestricted}" required>
+                            <option value="" th:text="#{role}"></option>
+                            <option th:text="#{buyer}" th:value="true"> </option>
+                            <option th:text="#{seller}" th:value="false"> </option>
+                        </select>
+
+                        <select name="isBuyer" th:if="${roleRestricted}" required disabled>
+                            <option th:text="#{seller}" th:value="false"> </option>
+                        </select>
                     </div>
                 </div>
-                    
+
                 <!-- Block: Price & Amount -->
                 <div class="d-flex">
                     <div class="form-floating mb-3" th:object="${action}">
@@ -80,14 +72,16 @@ AVIALABLE as long as no offer is accepted-->
                         <label for="floatingOffAmount" th:text="#{amount}"></label>
                     </div>
                 </div>
-                <textarea class="form-control" th:field="*{message}" th:placeholder="#{optMessage}" style="height:10rem"></textarea>
+                <textarea class="form-control" th:field="*{message}" th:placeholder="#{optMessage}"
+                    style="height:10rem"></textarea>
                 <input name="attachment" placeholder="Company logo" class="form-control mt-3" type="file"
                     id="attachment">
 
                 <!-- Block: Submit Button -->
                 <div class="form-group">
                     <a th:href="@{'/transaction/' + ${transactionID} + '/addAction'}">
-                        <button type="submit" class="w-100 btn btn-lg btn-primary mt-3"><a th:text="#{confirm}"></a></button>
+                        <button type="submit" class="w-100 btn btn-lg btn-primary mt-3"><a
+                                th:text="#{confirm}"></a></button>
                     </a>
                 </div>
             </form>

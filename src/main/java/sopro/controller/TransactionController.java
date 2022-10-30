@@ -165,7 +165,7 @@ public class TransactionController {
 
     @PreAuthorize("hasCompany()")
     @PostMapping("/transaction/{companyID}/create/skip/{actionTypeID}")
-    public String createTransactionSkipAddOffer(Action action, @RequestParam("attachment") MultipartFile attachment, @RequestParam String product, @RequestParam(defaultValue = "false") boolean isBuyer, @PathVariable Long companyID, @PathVariable Long actionTypeID, @AuthenticationPrincipal User user,
+    public String createTransactionSkipAddOffer(Action action, @RequestParam("attachment") MultipartFile attachment, @RequestParam String product, boolean isBuyer, @PathVariable Long companyID, @PathVariable Long actionTypeID, @AuthenticationPrincipal User user,
             BindingResult bindingResult, Model model) {
         Transaction transaction = new Transaction();
         transaction.setProduct(product);
