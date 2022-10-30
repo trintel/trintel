@@ -285,7 +285,7 @@ public class TransactionController {
 
     @PreAuthorize("hasPermission(#transactionID, 'transaction') and hasRole('STUDENT')")
     @PostMapping("/transaction/{transactionID}/addAction")
-    public String createAction(Action action, @RequestParam("formFile") MultipartFile attachment, @PathVariable Long transactionID, @AuthenticationPrincipal User user,
+    public String createAction(Action action, MultipartFile attachment, @PathVariable Long transactionID, @AuthenticationPrincipal User user,
             Model model) {
 
         if(!attachment.isEmpty()) {
