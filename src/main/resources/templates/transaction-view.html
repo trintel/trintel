@@ -15,7 +15,7 @@
 				<h1 th:text="#{transactionProgress}"></h1>
 				<h5 class="mb-3 text-secondary"
 					th:text="|${actions[0].transaction.buyer.name} #{buying} ${actions[0].transaction.product} #{from} ${actions[0].transaction.seller.name}|">
-					</h3>
+				</h5>
 			</div>
 			<a class="btn btn-secondary" th:href="@{'/pdfexport/transaction/' + ${transactionID}}">
 				<i class="bi bi-file-earmark-arrow-down"></i>
@@ -366,7 +366,7 @@
 									<span class="star"
 										th:classappend="${r.stars == 1 ? 'star-checked star-1-checked' : ''}"></span>
 								</div>
-								<!-- Company name, logo and description -->
+								<!-- Company name, logo -->
 								<div class="col d-flex align-items-center">
 									<div class="companylogo companylogo-xs me-2">
 										<img th:src="@{'/company/logo/' + ${r.ratingCompany.id}}" />
