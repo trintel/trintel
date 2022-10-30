@@ -231,6 +231,11 @@ main {
   background-color: #cfd3d7;
 }
 
+.btn-light {
+  background-color: rgba(84, 97, 127, 0.117);
+  color: #54617f;
+}
+
 .btn-check:checked+.btn, .btn.active, .btn.show, .btn:first-child:active, :not(.btn-check)+.btn:active {
   background-color: #4c5672;
   border-color: #4c5672;
@@ -354,7 +359,6 @@ main {
   justify-content: center;
   height: 2rem;
   width: 2rem;
-  background: gainsboro;
   border-radius: .8rem;
   padding: 1.5rem;
   background-color: rgba(84, 97, 127, 0.117);
