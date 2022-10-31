@@ -12,11 +12,14 @@ AVIALABLE as long as no offer is accepted-->
     <th:block th:fragment="content">
         <style th:replace="fragments/small-content :: content"></style>
         <main class="form-small">
-            <form action="#" th:action="@{'/transaction/' + ${transactionID} + '/addOffer'}" th:object="${action}" method="post" enctype="multipart/form-data">
+            <form action="#"
+                th:action="@{'/transaction/' + ${transactionID} + '/addOffer'}"
+                th:object="${action}" method="post" enctype="multipart/form-data">
                 <!-- Hidden input field to pass the actiontype offer without asking the user because he already clicked on create Offer. In 
                 this case its clear for the the user but the value has to be passed because behind the UI -->
-                <div class="form-floating mb-3">
-                    <select class="disabled w-100" hidden style="appearance: none; border: none;" th:field="*{actiontype}">
+                <div class="form-floating mb-3 d-none">
+                    <select class="disabled w-100" hidden
+                        th:field="*{actiontype}">
                         <div th:each="actiontype : ${actiontypes}">
                             <div th:if="${actiontype.name = 'Offer'}">
                                 <option th:value="${actiontype.id}"> </option>
@@ -25,15 +28,13 @@ AVIALABLE as long as no offer is accepted-->
                     </select>
                 </div>
                 <!-- Block: Header -->
-                <div class="form-floating mb-3">
-                    <h1 th:text="#{offer}"></h1>
-                </div>
-                
+                <h1 th:text="#{offer}"></h1>
+
                 <!-- Block: Price & Amount -->
                 <div class="d-flex">
                     <div class="form-floating mb-3" th:object="${action}">
-                        <input th:field="*{pricePerPiece}" min="0" type="number" step="0.01" class="form-control" id="offPrice"
-                            placeholder="price" name="Offer_Price" required>
+                        <input th:field="*{pricePerPiece}" min="0" type="number" step="0.01" class="form-control"
+                            id="offPrice" placeholder="price" name="Offer_Price" required>
                         <label for="floatingOffPrice" th:text="#{offPrice}"></label>
                     </div>
                     <div class="form-floating mb-3 ms-3">
@@ -44,19 +45,19 @@ AVIALABLE as long as no offer is accepted-->
                 </div>
                 <!-- Block: Message -->
                 <div class="form-floating mb-3">
-                    <input th:field="*{message}" type="text" class="form-control" id="reqMessage" placeholder="message"
-                        name="Request_Message">
+                    <textarea th:field="*{message}" type="text" class="form-control" id="reqMessage" placeholder="message"
+                        name="Request_Message" style="height:10rem"></textarea>
                     <label for="floatingReqMessage" th:text="#{message}"></label>
                 </div>
 
                 <!-- File attachment -->
-                <input name="attachment" placeholder="Company logo" class="form-control mb-3" type="file" id="attachment">
+                <input name="attachment" placeholder="Company logo" class="form-control mb-3" type="file"
+                    id="attachment">
 
                 <!-- Block: Submit Button -->
                 <div class="form-group">
                     <a th:href="@{'/transaction/' + ${transactionID} + '/addAction'}">
-                        <button type="submit" class="w-100 btn btn-lg btn-primary"><a
-                                th:text=" #{send}"></a></button>
+                        <button type="submit" class="w-100 btn btn-lg btn-primary"><a th:text=" #{send}"></a></button>
                     </a>
                 </div>
             </form>
@@ -68,4 +69,5 @@ AVIALABLE as long as no offer is accepted-->
         </main>
     </th:block>
 </body>
+
 </html>

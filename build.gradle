@@ -32,6 +32,7 @@ dependencies {
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
 	implementation 'org.webjars:bootstrap:5.2.2'
 	implementation 'org.webjars.npm:bootstrap-icons:1.8.1'
+	implementation 'org.webjars:jquery:3.6.1'
 	implementation 'com.itextpdf:itextpdf:5.0.6'
 	implementation 'com.googlecode.json-simple:json-simple:1.1.1'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'

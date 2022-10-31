@@ -172,9 +172,9 @@ public class InitDatabaseService {
             // userRepository.save(admin);
 
             //Create demo Action_types
-            ActionType request = new ActionType("Request", "Demo request text.", InitiatorType.BUYER);
-            ActionType offer = new ActionType("Offer", "Demo offer text.", InitiatorType.BOTH);
-            ActionType accept = new ActionType("Accept", "Demo accept text.", InitiatorType.BOTH);
+            ActionType request = new ActionType("Request", "Request a product and its amount from a seller.", InitiatorType.BUYER);
+            ActionType offer = new ActionType("Offer", "Make an initial offer or a counter offer.", InitiatorType.BOTH);
+            ActionType accept = new ActionType("Accept", "Accept the most recent offer.", InitiatorType.BOTH);
             ActionType cancelBuyer = new ActionType("Cancel", "Option to cancel transaction for buyer.", InitiatorType.BOTH);
             ActionType delivery = new ActionType("Delivery", "Action to kick off delivery of goods to buyer.", InitiatorType.SELLER);
             ActionType invoicing = new ActionType("Invoicing", "Action to send receipt to buyer.", InitiatorType.SELLER);

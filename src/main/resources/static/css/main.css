@@ -12,7 +12,7 @@ a.icon-link:hover { text-decoration: none; }
   justify-content: center;
   height: 100%;
   width: 100%;
-  max-width: 380px;
+  max-width: 450px;
   padding: 15px;
   margin: auto;
 }
@@ -34,8 +34,12 @@ a:hover {
   color: #627393;
 }
 
-input {
+input, .selectize-input {
   border-radius: .8rem !important;
+}
+
+.selectize-input {
+  padding: 1rem .75rem;
 }
 
 .btn-outline-secondary {
@@ -227,6 +231,11 @@ main {
   background-color: #cfd3d7;
 }
 
+.btn-light {
+  background-color: rgba(84, 97, 127, 0.117);
+  color: #54617f;
+}
+
 .btn-check:checked+.btn, .btn.active, .btn.show, .btn:first-child:active, :not(.btn-check)+.btn:active {
   background-color: #4c5672;
   border-color: #4c5672;
@@ -339,75 +348,6 @@ main {
   padding-top: 0;
 }
 
-/* CUSTOM SELECT */
-
-/* The container must be positioned relative: */
-.custom-select {
-  position: relative;
-}
-
-.custom-select select {
-  display: none; /*hide original SELECT element: */
-}
-
-.select-selected {
-  background-color: #ffffff;
-  border: 1px solid #ced4da !important;
-  border-radius: .8rem;
-}
-
-.select-selected.select-button-active {
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-}
-
-/* Style the arrow inside the select element: */
-.select-selected:after {
-  position: absolute;
-  content: "";
-  top: 25px;
-  right: 10px;
-  width: 0;
-  height: 0;
-  border: 6px solid transparent;
-  border-color: #000 transparent transparent transparent;
-}
-
-/* Point the arrow upwards when the select box is open (active): */
-.select-selected.select-arrow-active:after {
-  border-color: transparent transparent #000 transparent;
-  top: 18px;
-}
-
-/* style the items (options), including the selected item: */
-.select-items div,.select-selected {
-  padding: 1rem .75rem;
-  border-top: 1px solid #ced4da;
-  cursor: pointer;
-}
-
-/* Style items (options): */
-.select-items {
-  background-color: rgb(255, 255, 255);
-  top: 100%;
-  left: 0;
-  right: 0;
-  z-index: 99;
-  border-bottom-left-radius: .8rem;
-  border-bottom-right-radius: .8rem;
-  border: 1px solid #ced4da;
-  color:#6f6f6f;
-}
-
-/* Hide the items when the select box is closed: */
-.select-hide {
-  display: none;
-}
-
-.select-items div:hover, .same-as-selected {
-  color: #000000 !important;
-}
-
 .container {
   padding: 0 !important;
 }
@@ -419,7 +359,6 @@ main {
   justify-content: center;
   height: 2rem;
   width: 2rem;
-  background: gainsboro;
   border-radius: .8rem;
   padding: 1.5rem;
   background-color: rgba(84, 97, 127, 0.117);
@@ -509,4 +448,39 @@ label.star:hover {
 .badge.bg-danger {
   background-color: #f8d7da !important;
   color: #dc3545;
+}
+
+.radio-card-label {
+  display: block;
+}
+
+.radio-card-label > input{ /* HIDE RADIO */
+  visibility: hidden; /* Makes input not-clickable */
+  position: absolute; /* Remove input from document flow */
+}
+
+.radio-card-label > input + div{ /* DIV STYLES */
+  transition: all .2s;
+  cursor: pointer;
+}
+
+.radio-card-label > input:checked + div{ /* (RADIO CHECKED) DIV STYLES */
+  background-color: #e5e7ec;
+  border-color: #54617f;
+}
+
+/* MISC SELECTIZE */
+.option, .create {
+  margin: .3rem;
+  padding: 3px .45rem;
+  border-radius: .5rem !important;
+}
+
+.selectize-dropdown-content {
+  padding: .2rem;
+}
+
+.selectize-dropdown {
+  margin: .2rem 0 0 0;
+  border-radius: .8rem !important;
 }
