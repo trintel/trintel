@@ -12,7 +12,7 @@
         <main class="form-small text-break">
             <!-- Block: Header -->
             <h1 class="mb-3" th:text="#{request} + ' ' + #{requTo} + ' ' + ${transaction.seller.name}"></h1>
-            <form th:action="@{'/transaction/' + ${companyID} + '/save'}" th:object="${action}" method="post">
+            <form th:action="@{'/transaction/' + ${companyID} + '/save'}" th:object="${action}" method="post" enctype="multipart/form-data">
                 <!-- Block: Product & Amount -->
                 <div class="d-flex">
                     <div class="form-floating mb-3" th:object="${transaction}">
@@ -28,12 +28,17 @@
                 </div>
                 <!-- Block: Message -->
                 <div class="form-floating mb-3">
-                    <input th:field="*{message}" type="text" class="form-control" id="reqMessage" placeholder="message"
-                        name="Request_Message">
+                    <textarea th:field="*{message}" type="text" class="form-control" id="reqMessage" placeholder="message"
+                        name="Request_Message" style="height:10rem"></textarea>
                     <label for="floatingReqMessage" th:text="#{message}"></label>
                 </div>
+
+                <!-- Block: Attachment -->
+                <input name="attachment" placeholder="Company logo" class="form-control mt-3" type="file"
+                    id="attachment">
+
                 <!-- Block: Submit Button -->
-                <button type="submit" class="w-100 btn btn-lg btn-primary">
+                <button type="submit" class="w-100 btn btn-lg btn-primary mt-3">
                     <span th:text="#{send}"></span>
                 </button>
             </form>

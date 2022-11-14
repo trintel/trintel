@@ -72,8 +72,14 @@ AVIALABLE as long as no offer is accepted-->
                         <label for="floatingOffAmount" th:text="#{amount}"></label>
                     </div>
                 </div>
-                <textarea class="form-control" th:field="*{message}" th:placeholder="#{optMessage}"
-                    style="height:10rem"></textarea>
+
+                <!-- Block: Message -->
+                <div class="form-floating mb-3">
+                    <textarea th:field="*{message}" type="text" class="form-control" id="reqMessage" placeholder="message" style="height:10rem"></textarea>
+                    <label for="floatingReqMessage" th:text="#{message}"></label>
+                </div>
+
+                <!-- Block: Attachment -->
                 <input name="attachment" placeholder="Company logo" class="form-control mt-3" type="file"
                     id="attachment">
 

@@ -106,7 +106,7 @@ public class TransactionController {
     @PreAuthorize("hasCompany()")
     @PostMapping("/transaction/{companyID}/save")
     public String createTransaction(Action action, Transaction transaction, @PathVariable Long companyID,
-            @AuthenticationPrincipal User user, Model model) {
+            @AuthenticationPrincipal User user, @RequestParam("attachment") MultipartFile attachment, Model model) {
 
         transaction.setBuyer(user.getCompany());
         transaction.setSeller(companyRepository.findById(companyID).get());
@@ -115,6 +115,11 @@ public class TransactionController {
         action.setTransaction(transaction);
         // action.setActiontype(actionTypeRepository.findByName("Request"));
         action.setActiontype(actionTypeService.getInitialActionType());
+
+        if(!attachment.isEmpty()) {
+            AttachedFile attachedFile = attachedFileService.storeFile(attachment);
+            action.setAttachedFile(attachedFile);
+        }
 
         transactionRepository.save(transaction);
         actionRepository.save(action);
