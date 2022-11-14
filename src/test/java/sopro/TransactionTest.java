@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import sopro.model.Action;
 import sopro.model.ActionType;
-import sopro.model.AttachedFile;
 import sopro.model.Transaction;
 import sopro.model.util.InitiatorType;
 import sopro.repository.ActionRepository;
