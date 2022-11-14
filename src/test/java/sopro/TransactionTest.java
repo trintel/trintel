@@ -149,7 +149,7 @@ public class TransactionTest {
         Transaction testTransaction = new Transaction(companyRepository.findById(userRepository.findByEmail("j@j").getCompany().getId()).get(), companyRepository.findById(userRepository.findByEmail("f@f").getCompany().getId()).get());
         testTransaction.setProduct("Product 1");
 
-        Action testAction = new Action("Test message testAction", testActionType, testTransaction, new AttachedFile());
+        Action testAction = new Action("Test message testAction", testActionType, testTransaction, null);
         testAction.setInitiator(userRepository.findByEmail("j@j"));
 
         actionTypeRepository.save(testActionType);
