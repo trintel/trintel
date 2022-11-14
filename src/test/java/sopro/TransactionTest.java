@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import sopro.model.Action;
 import sopro.model.ActionType;
+import sopro.model.AttachedFile;
 import sopro.model.Transaction;
 import sopro.model.util.InitiatorType;
 import sopro.repository.ActionRepository;
@@ -148,7 +149,7 @@ public class TransactionTest {
         Transaction testTransaction = new Transaction(companyRepository.findById(userRepository.findByEmail("j@j").getCompany().getId()).get(), companyRepository.findById(userRepository.findByEmail("f@f").getCompany().getId()).get());
         testTransaction.setProduct("Product 1");
 
-        Action testAction = new Action("Test message testAction", testActionType, testTransaction, null);
+        Action testAction = new Action("Test message testAction", testActionType, testTransaction, new AttachedFile());
         testAction.setInitiator(userRepository.findByEmail("j@j"));
 
         actionTypeRepository.save(testActionType);
