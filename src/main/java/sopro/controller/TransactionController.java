@@ -106,7 +106,7 @@ public class TransactionController {
     @PreAuthorize("hasCompany()")
     @PostMapping("/transaction/{companyID}/save")
     public String createTransaction(Action action, Transaction transaction, @PathVariable Long companyID,
-            @AuthenticationPrincipal User user, @RequestParam(name = "attachment", required = false) MultipartFile attachment, Model model) {
+            @AuthenticationPrincipal User user, @RequestParam("attachment") MultipartFile attachment, Model model) {
 
         transaction.setBuyer(user.getCompany());
         transaction.setSeller(companyRepository.findById(companyID).get());
