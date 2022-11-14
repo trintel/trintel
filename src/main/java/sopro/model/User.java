@@ -86,7 +86,7 @@ public class User implements UserDetails {
         if(this.accountNonLocked) {
             return this.email;
         } else {
-            return "[deleted]";
+            return "[deactivated]";
         }
     }
 
@@ -94,7 +94,7 @@ public class User implements UserDetails {
         if(this.accountNonLocked) {
             return this.forename;
         } else {
-            return "[deleted]";
+            return "[deactivated]";
         }
     }
 
