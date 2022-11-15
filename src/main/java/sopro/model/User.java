@@ -83,7 +83,27 @@ public class User implements UserDetails {
     // Spring wants a username. We use email as username.
     @Override
     public String getUsername() {
-        return this.email;
+        if(this.accountNonLocked) {
+            return this.email;
+        } else {
+            return "[deactivated]";
+        }
+    }
+
+    public String getForename() {
+        if(this.accountNonLocked) {
+            return this.forename;
+        } else {
+            return "[deactivated]";
+        }
+    }
+
+    public String getSurname() {
+        if(this.accountNonLocked) {
+            return this.surname;
+        } else {
+            return "";
+        }
     }
 
     /**

@@ -47,11 +47,21 @@ public class StudentController {
         return "student-reassign";
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/student/{id}/reassign")
     public String moveToCompany(String companyName, @PathVariable Long id, Model model) {
         User user = userRepository.findById(id).get(); // find the student to be editet
         Company company2 = companyRepository.findByName(companyName); // find the new company
         user.setCompany(company2);
+        userRepository.save(user);
+        return "redirect:/students";
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/student/{id}/deactivate")
+    public String deactivate(@PathVariable Long id, Model model) {
+        User user = userRepository.findById(id).get(); // find the student to be editet
+        user.setAccountNonLocked(false);
         userRepository.save(user);
         return "redirect:/students";
     }
