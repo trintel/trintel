@@ -34,6 +34,8 @@ public class Company {
     @Getter @Setter	@JsonIgnore	@OneToMany(mappedBy = "buyer", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE) private List<Transaction> buyingTransactions;
     @Getter @Setter	@JsonIgnore	@OneToMany(mappedBy = "seller", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE) private List<Transaction> sellingTransactions;
     @Getter @Setter	@JsonIgnore	@OneToOne(mappedBy = "company") private CompanyLogo companyLogo;
+    @Getter @Setter	@JsonIgnore	@OneToMany(mappedBy = "ratingCompany", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE) private List<Rating> outRatings;
+    @Getter @Setter	@JsonIgnore	@OneToMany(mappedBy = "ratedCompany", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE) private List<Rating> inRatings;
 
     public Company() {
         this.id = IdHandler.generateId();
