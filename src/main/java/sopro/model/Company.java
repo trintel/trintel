@@ -28,12 +28,14 @@ public class Company {
 
     @Getter @Setter @Id private Long id;
     @Getter @Setter @NotEmpty @Column(unique = true) private String name;
-    @Getter @Setter private String description;
+    @Getter @Setter @Column(columnDefinition = "TEXT") private String description;
     @Getter @Setter private String homepage;
     @Setter	@JsonIgnore	@OneToMany(mappedBy = "company") private List<User> students;
     @Getter @Setter	@JsonIgnore	@OneToMany(mappedBy = "buyer", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE) private List<Transaction> buyingTransactions;
     @Getter @Setter	@JsonIgnore	@OneToMany(mappedBy = "seller", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE) private List<Transaction> sellingTransactions;
     @Getter @Setter	@JsonIgnore	@OneToOne(mappedBy = "company") private CompanyLogo companyLogo;
+    @Getter @Setter	@JsonIgnore	@OneToMany(mappedBy = "ratingCompany", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE) private List<Rating> outRatings;
+    @Getter @Setter	@JsonIgnore	@OneToMany(mappedBy = "ratedCompany", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE) private List<Rating> inRatings;
 
     public Company() {
         this.id = IdHandler.generateId();
