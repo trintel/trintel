@@ -62,7 +62,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // .antMatchers("/company/select/**").hasRole("STUDENT")
                 // .antMatchers("/company/**", "/companies/{companyID}").hasRole("STUDENT")
                 // .antMatchers("/students/**").hasRole("ADMIN")
-                // .antMatchers("/console/**").hasRole("ADMIN") // restrict to only ADMIN role is able to access /console
+                .antMatchers("/console/**").hasRole("ADMIN") // restrict to only ADMIN role is able to access /console
                 .anyRequest().authenticated()
                 .and()
             .formLogin()
