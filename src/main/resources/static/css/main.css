@@ -30,6 +30,10 @@ a {
   text-decoration: none;
 }
 
+p {
+  word-break: break-all;
+}
+
 a:hover {
   color: #627393;
 }
