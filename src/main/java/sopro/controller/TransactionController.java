@@ -119,6 +119,8 @@ public class TransactionController {
         if(!attachment.isEmpty()) {
             AttachedFile attachedFile = attachedFileService.storeFile(attachment);
             action.setAttachedFile(attachedFile);
+        } else {
+            return "redirect:/transaction/" + companyID + "/create";
         }
 
         transactionRepository.save(transaction);
