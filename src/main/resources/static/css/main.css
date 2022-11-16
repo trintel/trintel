@@ -34,6 +34,24 @@ p {
   word-break: break-all;
 }
 
+.description-short {
+  overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: initial;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.description-short p {
+  display: contents;
+}
+
+.description-short p:after {
+  content: "\A";
+  white-space:pre;
+}
+
 a:hover {
   color: #627393;
 }
