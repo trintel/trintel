@@ -180,4 +180,14 @@ public class CompanyController {
         }
         return "company-list";
     }
+
+    @GetMapping("/companies/search")
+    public String searchStudents(@RequestParam String q, Model model) {
+        if(q == null || q.isBlank()) {
+            return "redirect:/companies";
+        }
+        model.addAttribute("companies", companyRepository.searchByString(q));
+        model.addAttribute("searchedCompany", q);
+        return "company-list";
+    }
 }

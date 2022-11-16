@@ -68,6 +68,9 @@ public class StudentController {
 
     @GetMapping("/students/search")
     public String searchStudents(@RequestParam String q, Model model) {
+        if(q == null || q.isBlank()) {
+            return "redirect:/students";
+        }
         model.addAttribute("students", userRepository.searchByString(q)); // add a list of all students based on the searchstring
         model.addAttribute("searchedStudent", q);
         return "students-list";
