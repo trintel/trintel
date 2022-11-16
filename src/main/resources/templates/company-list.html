@@ -24,6 +24,18 @@
 			</div>
 		</div>
 
+		<!-- Search -->
+		<form th:object="${company}" th:action="@{/companies}" method="get">
+			<div class="form-floating mb-3 inputandbutton">
+				<input type="search" name="q" class="form-control border-end-0" id="search" placeholder="Search"
+					th:value="${searchedCompany}">
+				<label for="search" th:text="#{search}"></label>
+				<button class="btn btn-outline-secondary border-start-0" type="submit">
+					<i class="bi bi-search"></i>
+				</button>
+			</div>
+		</form>
+
 		<div th:unless="${companies.isEmpty()}">
 			<div class="row row-cols-1 row-cols-lg-2 g-3">
 				<th:block th:each="company : ${companies}">
