@@ -28,7 +28,7 @@
                 </div>
                 <th:block th:unless="${company.getDescription() == null || company.getDescription().isEmpty()}">
                     <h5 th:text="#{signature}"></h5>
-                    <p class="mb-3" th:text="${company.description}"></p>
+                    <p class="mb-3" th:utext="${#strings.replace(#strings.escapeXml(company.description),'&#10;','&lt;br&gt;')}"></p>
                 </th:block>
                 <h5 th:text="#{members}"></h5>
                 <ul class="list-group mb-3" th:unless="${company.getStudents().isEmpty()}">
