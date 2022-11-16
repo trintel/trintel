@@ -138,7 +138,7 @@
 								<div>
 									<span class="text-muted fs-6" th:text="#{message}"></span>
 									<span class="text-black">
-										<h5 th:text="${action.message}" class="text-break"></h5>
+										<h5 th:utext="${#strings.replace(#strings.escapeXml(action.message),'&#10;','&lt;br&gt;')}" class="text-break"></h5>
 									</span>
 								</div>
 							</div>

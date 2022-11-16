@@ -13,7 +13,7 @@
             <h3 class="mb-3 text-break" th:text="${company.name}"></h3>
             <div th:unless="${company.getDescription() == null || company.getDescription().isEmpty()}">
                 <h5 th:text="#{signature}"></h5>
-                <p class="mb-3" th:text="${company.description}"></p>
+                <p class="mb-3" th:utext="${#strings.replace(#strings.escapeXml(company.description),'&#10;','&lt;br&gt;')}"></p>
             </div>
             <form action="#" th:action="@{/company/join}" method="post">
                 <input type="hidden" th:value="${company.name}" th:attr="name='companyName'" />
