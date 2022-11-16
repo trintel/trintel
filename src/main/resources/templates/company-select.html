@@ -14,6 +14,17 @@
 		<div class="container">
 			<h1 class="my-3" th:utext="#{companySelection}"></h1>
 			<p th:text="#{companySelectionText}"></p>
+			<!-- Search -->
+			<form th:object="${company}" th:action="@{/company/select}" method="get">
+				<div class="form-floating mb-3 inputandbutton">
+					<input type="search" name="q" class="form-control border-end-0" id="search" placeholder="Search"
+						th:value="${searchedCompany}">
+					<label for="search" th:text="#{search}"></label>
+					<button class="btn btn-outline-secondary border-start-0" type="submit">
+						<i class="bi bi-search"></i>
+					</button>
+				</div>
+			</form>
 			<div class="row row-cols-1 row-cols-lg-2 row-cols-xl-3 g-3" th:unless="${companies.isEmpty()}">
 				<div class="col" th:each="company : ${companies}">
 					<a th:href="@{'/company/select/' + ${company.id}}" class="text-decoration-none">

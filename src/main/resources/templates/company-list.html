@@ -25,7 +25,7 @@
 		</div>
 
 		<!-- Search -->
-		<form th:object="${company}" th:action="@{/companies/search}" method="get">
+		<form th:object="${company}" th:action="@{/companies}" method="get">
 			<div class="form-floating mb-3 inputandbutton">
 				<input type="search" name="q" class="form-control border-end-0" id="search" placeholder="Search"
 					th:value="${searchedCompany}">

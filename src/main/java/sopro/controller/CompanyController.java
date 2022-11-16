@@ -96,9 +96,14 @@ public class CompanyController {
 
     @PreAuthorize("!hasCompany() and hasRole('STUDENT')")      //only if the company is not assigned and the user is student
     @GetMapping("/company/select")
-    public String selectCompany(Model model) {
+    public String selectCompany(Model model, @RequestParam(required = false) String q) {
         // .findByOrderByNameAsc() statt .findAll()
-        model.addAttribute("companies", companyRepository.findByOrderByNameAsc());
+        if(q == null || q.isBlank()) {
+            model.addAttribute("companies", companyRepository.findByOrderByNameAsc());
+        } else {
+            model.addAttribute("companies", companyRepository.searchByString(q));
+            model.addAttribute("searchedCompany", q);
+        }
         return "company-select";
     }
 
@@ -171,23 +176,22 @@ public class CompanyController {
     // Students see only other companies. can click on one to start transaction.
     //TODO difference between student and admin refactoring
     @GetMapping("/companies")
-    public String listCompanies(Model model, @AuthenticationPrincipal User user) {
+    public String listCompanies(Model model, @RequestParam(required = false) String q, @AuthenticationPrincipal User user) {
         if (user.getRole().equals("ADMIN")) {
-            model.addAttribute("companies", companyRepository.findAll()); // add a list of all companies to the model
+            if(q == null || q.isBlank()) {
+                model.addAttribute("companies", companyRepository.findAll()); // add a list of all companies to the model
+            } else {
+                model.addAttribute("companies", companyRepository.searchByString(q));
+                model.addAttribute("searchedCompany", q);
+            }
         } else {
-            model.addAttribute("companies", companyRepository.findByIdNot(user.getCompany().getId()));
-            // add a list of all companies to the model, without the own company.
+            if(q == null || q.isBlank()) {
+                model.addAttribute("companies", companyRepository.findByIdNot(user.getCompany().getId()));
+            } else {
+                model.addAttribute("companies", companyRepository.searchByStringNotOwn(q, user.getCompany().getId()));
+                model.addAttribute("searchedCompany", q);
+            }
         }
-        return "company-list";
-    }
-
-    @GetMapping("/companies/search")
-    public String searchStudents(@RequestParam String q, Model model) {
-        if(q == null || q.isBlank()) {
-            return "redirect:/companies";
-        }
-        model.addAttribute("companies", companyRepository.searchByString(q));
-        model.addAttribute("searchedCompany", q);
         return "company-list";
     }
 }
