@@ -54,6 +54,7 @@ public class TransactionController {
     @Autowired
     CompanyRepository companyRepository;
 
+    // TODO set up own rating controller with its own service
     @Autowired
     RatingRepository ratingRepository;
 
@@ -183,6 +184,7 @@ public class TransactionController {
             transaction.setBuyer(companyRepository.getById(companyID));
             transaction.setSeller(user.getCompany());
         }
+        // TODO no final else case?
         if(actionTypeService.getOfferAction().getId().equals(actionTypeID)) {
             transactionRepository.save(transaction);
             return addOffer(action, attachment, transaction.getId(), user, bindingResult, model);
