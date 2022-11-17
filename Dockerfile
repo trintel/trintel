@@ -1,4 +1,5 @@
 FROM openjdk:11-jre-slim
+ENV TZ=Europe/Berlin
 
 COPY build/ /build/
 
