@@ -222,7 +222,7 @@ public class InitDatabaseService {
             }
         }
     }
-    
+
     /**
      * function to reset the database.
      * WARN: all data will be lost.

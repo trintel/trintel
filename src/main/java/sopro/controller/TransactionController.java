@@ -139,7 +139,7 @@ public class TransactionController {
 
         Action newAction = new Action();
         Iterable<ActionType> altActionTypesIter = actionTypeRepository.findAll();
-        
+
         List<ActionType> altActionTypes = new ArrayList<ActionType>();
         for(ActionType actionType : altActionTypesIter) {
             if(!actionType.equals(actionTypeService.getInitialActionType()) && !actionType.equals(actionTypeService.getAbortActionType()) && actionType.isStandardAction()) {
@@ -185,7 +185,7 @@ public class TransactionController {
             transaction.setSeller(user.getCompany());
         }
 
-        
+
         transactionRepository.save(transaction);
         if(actionTypeService.getOfferAction().getId().equals(actionTypeID)) {
             addOffer(action, attachment, transaction.getId(), user, bindingResult, model);
