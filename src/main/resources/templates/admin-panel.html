@@ -63,17 +63,19 @@
                             <div class="modal-header">
                                 <div class="d-flex align-items-center align-content-center">
                                     <div class="icon-container me-2">
-                                       <i class="bi bi-box-arrow-in-up pt-1"></i>
+                                        <i class="bi bi-box-arrow-in-up pt-1"></i>
                                     </div>
                                     <h1 class="modal-title fs-5" id="importModalLabel" th:text="#{import}"></h1>
-                                 </div>
+                                </div>
                             </div>
                             <form method="post" th:action="@{/backup/import}" enctype="multipart/form-data">
                                 <div class="modal-body">
-                                    <input class="form-control" type="file" id="formFile" name="file" accept=".sql" required>
+                                    <input class="form-control" type="file" id="formFile" name="file" accept=".sql"
+                                        required>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" th:text="#{cancel}"></button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                        th:text="#{cancel}"></button>
                                     <button type="submit" class="btn btn-primary" th:text="#{confirm}"></button>
                                 </div>
                             </form>
@@ -173,6 +175,12 @@
             </div>
         </div>
         <p th:if="${actionTypes.isEmpty()}" th:text="#{noActionTypes}"></p>
+        <script>
+            $(document).ready(function () {
+                const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+                const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+            });
+        </script>
     </th:block>
 </body>
 
