@@ -44,13 +44,13 @@
                 <p class="mb-0" th:text="#{exImDescr}"></p>
             </div>
             <div class="col-md mt-3 mt-md-0">
-                <a class="btn btn-primary" th:href="@{'/backup/export'}">
+                <a class="btn btn-secondary" th:href="@{'/backup/export'}">
                     <i class="bi bi-box-arrow-down"></i>
                     <span th:text="#{export}"></span>
                 </a>
 
                 <!-- Import data trigger modal -->
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#importModal">
+                <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#importModal">
                     <i class="bi bi-box-arrow-in-up"></i>
                     <span th:text="#{import}"></span>
                 </button>
@@ -82,7 +82,7 @@
                 </div>
 
                 <!-- Reset data trigger modal -->
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#resetModal">
+                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#resetModal">
                     <i class="bi bi-bootstrap-reboot"></i>
                     <span th:text="#{reset}"></span>
                 </button>
@@ -103,7 +103,7 @@
                             <form method="post" th:action="@{/reset}" enctype="multipart/form-data">
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" th:text="#{cancel}"></button>
-                                    <button type="submit" class="btn btn-primary" th:text="#{confirm}"></button>
+                                    <button type="submit" class="btn btn-danger" th:text="#{confirm}"></button>
                                 </div>
                             </form>
                         </div>
