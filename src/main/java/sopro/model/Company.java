@@ -29,6 +29,12 @@ public class Company {
     @Getter @Setter @Id private Long id;
     @Getter @Setter @NotEmpty @Column(unique = true) private String name;
     @Getter @Setter @Column(columnDefinition = "TEXT") private String description;
+    @Getter @Setter @Column(columnDefinition = "TEXT") private String country;
+
+    @Getter @Setter @Column(columnDefinition = "TEXT") private String telephone;
+    @Getter @Setter @Column(columnDefinition = "TEXT") private String email;
+    @Getter @Setter @Column(columnDefinition = "TEXT") private String iban;
+
     @Getter @Setter private String homepage;
     @Setter	@JsonIgnore	@OneToMany(mappedBy = "company") private List<User> students;
     @Getter @Setter	@JsonIgnore	@OneToMany(mappedBy = "buyer", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE) private List<Transaction> buyingTransactions;
