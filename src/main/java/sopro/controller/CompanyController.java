@@ -3,7 +3,10 @@ package sopro.controller;
 import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Optional;
+import java.util.TreeMap;
 
 import javax.validation.Valid;
 
@@ -136,8 +139,16 @@ public class CompanyController {
 
     @PreAuthorize("hasRole('ADMIN') or isInCompany(#companyID)")
     @GetMapping("/company/{companyID}/edit")
-    public String editOwnCompany(Model model, @PathVariable Long companyID) {
+    public String editOwnCompany(Model model, @PathVariable Long companyID, Locale loc) {
         model.addAttribute("company", companyRepository.findById(companyID).get());
+        Map<String, String> countries = new TreeMap<String, String>();
+        Locale locale;
+        String[] countryCodes = Locale.getISOCountries();
+        for(String countryCode : countryCodes) {
+            locale = new Locale("ENGLISH", countryCode);
+            countries.put(countryCode, locale.getDisplayCountry(loc));
+        }
+        model.addAttribute("countries", countries);
         return "company-edit";
     }
 
