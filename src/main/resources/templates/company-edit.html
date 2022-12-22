@@ -32,6 +32,30 @@
                 </div>
 
                 <div class="form-floating mb-3">
+                    <input type="text" maxlength="30" pattern="^[a-zA-Z ]+$" class="form-control" id="floatingName"
+                        placeholder="country" th:field="*{country}">
+                    <label for="floatingName" th:text="#{country}"></label>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input type="text" maxlength="30" class="form-control" id="floatingName"
+                        placeholder="mail@example.org" th:field="*{email}">
+                    <label for="floatingName" th:text="#{email}"></label>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input type="text" maxlength="30" pattern="^[0-9 ]+$" class="form-control" id="floatingName"
+                    placeholder="#{telephone}" th:field="*{telephone}">
+                    <label for="floatingName" th:text="#{telephone}"></label>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input type="text" maxlength="30" pattern="^[A-Z0-9 ]+$" class="form-control" id="floatingName"
+                    placeholder="#{iban}" th:field="*{iban}">
+                    <label for="floatingName" th:text="#{iban}"></label>
+                </div>
+
+                <div class="form-floating mb-3">
                     <input type="url" maxlength="30" class="form-control" id="floatingHomepage"
                         placeholder="Homepage" th:field="*{homepage}">
                     <label for="floatingHomepage" th:text="#{companyHomepage}"></label>
