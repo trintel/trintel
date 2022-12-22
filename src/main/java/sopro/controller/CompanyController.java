@@ -80,7 +80,7 @@ public class CompanyController {
     }
 
     @GetMapping("/companies/{companyID}")
-    public String viewCompany(@PathVariable Long companyID, Model model) {
+    public String viewCompany(@PathVariable Long companyID, Model model, Locale loc) {
         Company c = companyRepository.findById(companyID).get();
         model.addAttribute("company", c);
         Optional<Double> avg = ratingRepository.getAverageById(companyID);
@@ -89,6 +89,7 @@ public class CompanyController {
             model.addAttribute("avgRating", df.format(avg.get()));
             model.addAttribute("starType", Math.round(avg.get()));
         }
+        model.addAttribute("country", new Locale("ENGLISH", c.getCountry()).getDisplayCountry(loc));
         model.addAttribute("ratings", ratingRepository.findByRatedCompany(c));
         return "company-info";
     }

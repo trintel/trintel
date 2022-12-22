@@ -22,7 +22,7 @@
                     <h1 th:text="${company.name}"></h1>
 
                     <th:block th:unless="${company.getCountry() == null || company.getCountry().isEmpty()}">
-                        <p class="mb-3" th:utext="${#strings.replace(#strings.escapeXml(company.country),'&#10;','&lt;br&gt;')}"></p>
+                        <p class="mb-3" th:utext="${country}"></p>
                     </th:block>
 
                     <th:block th:unless="${company.getHomepage() == null || company.getHomepage().isEmpty()}">
@@ -34,22 +34,22 @@
 
                 <th:block th:unless="${company.getEmail() == null || company.getEmail().isEmpty()}">
                     <h5 th:text="#{email}"></h5>
-                    <p class="mb-3" th:utext="${#strings.replace(#strings.escapeXml(company.email),'&#10;','&lt;br&gt;')}"></p>
+                    <p class="mb-3" th:text="${company.email}"></p>
                 </th:block>
 
                 <th:block th:unless="${company.getTelephone() == null || company.getTelephone().isEmpty()}">
                     <h5 th:text="#{telephone}"></h5>
-                    <p class="mb-3" th:utext="${#strings.replace(#strings.escapeXml(company.telephone),'&#10;','&lt;br&gt;')}"></p>
+                    <p class="mb-3" th:utext="${company.telephone}"></p>
                 </th:block>
                 
                 <th:block th:unless="${company.getIban() == null || company.getIban().isEmpty()}">
                     <h5 th:text="#{iban}"></h5>
-                    <p class="mb-3" th:utext="${#strings.replace(#strings.escapeXml(company.iban),'&#10;','&lt;br&gt;')}"></p>
+                    <p class="mb-3" th:utext="${company.iban}"></p>
                 </th:block>
 
                 <th:block th:unless="${company.getDescription() == null || company.getDescription().isEmpty()}">
                     <h5 th:text="#{signature}"></h5>
-                    <p class="mb-3" th:utext="${#strings.replace(#strings.escapeXml(company.description),'&#10;','&lt;br&gt;')}"></p>
+                    <p class="mb-3" th:utext="${company.description}"></p>
                 </th:block>
 
                 <h5 th:text="#{members}"></h5>
