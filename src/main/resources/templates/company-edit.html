@@ -31,6 +31,31 @@
                     <label for="floatingName" th:text="#{companyName}"></label>
                 </div>
 
+                <select name="country" class="mb-3" required>
+                    <option value="" th:text="#{country}"></option>
+                    <th:block th:each="country : ${countries}">
+                        <option th:value="${country.key}" th:text="${country.value}"></option>
+                    </th:block>
+                </select>
+
+                <div class="form-floating mb-3">
+                    <input type="text" maxlength="30" class="form-control" id="email"
+                        placeholder="mail@example.org" th:field="*{email}">
+                    <label for="email" th:text="#{email}"></label>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input type="text" maxlength="30" pattern="^[0-9 ]+$" class="form-control" id="telephone"
+                    placeholder="#{telephone}" th:field="*{telephone}">
+                    <label for="telephone" th:text="#{telephone}"></label>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input type="text" maxlength="30" pattern="^[A-Z0-9 ]+$" class="form-control" id="iban"
+                    placeholder="#{iban}" th:field="*{iban}">
+                    <label for="iban" th:text="#{iban}"></label>
+                </div>
+
                 <div class="form-floating mb-3">
                     <input type="url" maxlength="30" class="form-control" id="floatingHomepage"
                         placeholder="Homepage" th:field="*{homepage}">
