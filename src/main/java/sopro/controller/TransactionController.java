@@ -139,6 +139,7 @@ public class TransactionController {
 
         Action newAction = new Action();
         Iterable<ActionType> altActionTypesIter = actionTypeRepository.findAll();
+
         List<ActionType> altActionTypes = new ArrayList<ActionType>();
         for(ActionType actionType : altActionTypesIter) {
             if(!actionType.equals(actionTypeService.getInitialActionType()) && !actionType.equals(actionTypeService.getAbortActionType()) && actionType.isStandardAction()) {
@@ -183,29 +184,27 @@ public class TransactionController {
             transaction.setBuyer(companyRepository.getById(companyID));
             transaction.setSeller(user.getCompany());
         }
+
+
+        transactionRepository.save(transaction);
         if(actionTypeService.getOfferAction().getId().equals(actionTypeID)) {
-            transactionRepository.save(transaction);
-            return addOffer(action, attachment, transaction.getId(), user, bindingResult, model);
+            addOffer(action, attachment, transaction.getId(), user, bindingResult, model);
         } else if(actionTypeService.getAcceptActionType().getId().equals(actionTypeID)) {
             transaction.setConfirmed(true);
-            transactionRepository.save(transaction);
-            return createAcceptAction(action, attachment, transaction.getId(), user);
+            createAcceptAction(action, attachment, transaction.getId(), user);
         } else if(actionTypeService.getDeliveryActionType().getId().equals(actionTypeID)) {
             transaction.setConfirmed(true);
-            transactionRepository.save(transaction);
-            return createDeliveryAction(action, transaction.getId(), attachment, user);
+            createDeliveryAction(action, transaction.getId(), attachment, user);
         } else if(actionTypeService.getInvoiceActionType().getId().equals(actionTypeID)) {
             transaction.setConfirmed(true);
             transaction.setShipped(true);
-            transactionRepository.save(transaction);
-            return createInvoiceAction(action, transaction.getId(), attachment, user);
+            createInvoiceAction(action, transaction.getId(), attachment, user);
         } else if(actionTypeService.getPaidActionType().getId().equals(actionTypeID)) {
             transaction.setConfirmed(true);
             transaction.setShipped(true);
-            transactionRepository.save(transaction);
-            return createPaidAction(action, transaction.getId(), attachment, user);
+            createPaidAction(action, transaction.getId(), attachment, user);
         }
-        return "/transaction/" + companyID + "/create/skip";
+        return "redirect:/transaction/" + transaction.getId();
     }
 
     @PreAuthorize("hasPermission(#id, 'transaction')")

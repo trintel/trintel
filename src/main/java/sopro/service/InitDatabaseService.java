@@ -1,4 +1,4 @@
-package sopro;
+package sopro.service;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
@@ -22,8 +22,10 @@ import sopro.repository.ActionRepository;
 import sopro.repository.ActionTypeRepository;
 import sopro.repository.CompanyLogoRepository;
 import sopro.repository.CompanyRepository;
+import sopro.repository.ResetTokenRepository;
 import sopro.repository.TransactionRepository;
 import sopro.repository.UserRepository;
+import sopro.repository.VerificationTokenRepository;
 
 @Service
 public class InitDatabaseService {
@@ -47,7 +49,14 @@ public class InitDatabaseService {
     CompanyLogoRepository companyLogoRepository;
 
     @Autowired
+    ResetTokenRepository resetTokenRepository;
+
+    @Autowired
+    VerificationTokenRepository verificationTokenRepository;
+
+    @Autowired
     PasswordEncoder passwordEncoder;
+
 
     public void init() {
         // If there is no data, add some initial values for testing the application.
@@ -212,5 +221,22 @@ public class InitDatabaseService {
                 e.printStackTrace();
             }
         }
+    }
+
+    /**
+     * function to reset the database.
+     * WARN: all data will be lost.
+     */
+    public void resetWithAdmin(User admin) {
+        //delete all records.
+        companyRepository.deleteAll();
+        actionTypeRepository.deleteAll();
+        userRepository.deleteAll();
+        resetTokenRepository.deleteAll();
+        verificationTokenRepository.deleteAll();
+        //execute deploy init.
+        this.deployinit();
+        //add the current admin
+        userRepository.save(admin);
     }
 }

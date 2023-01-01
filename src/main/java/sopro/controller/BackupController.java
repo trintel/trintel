@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +23,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import sopro.TrintelApplication;
+import sopro.model.User;
 import sopro.service.ExportImportInterface;
+import sopro.service.InitDatabaseService;
 
 @Controller
 @PreAuthorize("hasRole('ADMIN')")
@@ -31,6 +34,8 @@ public class BackupController {
     @Autowired
     ExportImportInterface exportImportService;
 
+    @Autowired
+    InitDatabaseService initDatabaseService;
     /**
      * Manages the import of backup files and imports those.
      *
@@ -40,7 +45,6 @@ public class BackupController {
      */
     @PostMapping("/backup/import")
     public String importBackup(@RequestParam("file") MultipartFile importFile, Model model) {
-        TrintelApplication.logger.info("Imported file Type: " + importFile.getContentType());
         TrintelApplication.logger.info("Importing file: " + importFile.getOriginalFilename());
         File file = new File(TrintelApplication.WORKDIR + "/trintelImport.sql");
 
@@ -56,6 +60,8 @@ public class BackupController {
             e.printStackTrace();
         }
         exportImportService.importSQL(TrintelApplication.WORKDIR + "/trintelImport.sql");
+
+        TrintelApplication.logger.info("Quitting Application...");
 
         SpringApplication.exit(TrintelApplication.context, new ExitCodeGenerator() {
             @Override
@@ -95,5 +101,24 @@ public class BackupController {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/reset")
+    public String resetDatabase(Model model, @AuthenticationPrincipal User user) {
+        TrintelApplication.logger.info("Resetting Database to Default. Keeping User: " + user.getEmail());
+
+        initDatabaseService.resetWithAdmin(user);
+
+        TrintelApplication.logger.info("Quitting Application...");
+
+        SpringApplication.exit(TrintelApplication.context, new ExitCodeGenerator() {
+            @Override
+            public int getExitCode() {
+                // no errors
+                return 0;
+            }
+        });
+        return "redirect:/login";
     }
 }
