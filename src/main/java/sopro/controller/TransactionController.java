@@ -64,20 +64,36 @@ public class TransactionController {
     AttachedFileInterface attachedFileService;
 
     @GetMapping("/transactions")
-    public String listTransactions(Model model, @AuthenticationPrincipal User user) {
+    public String listTransactions(Model model, @AuthenticationPrincipal User user, @RequestParam(defaultValue = "true") boolean sortByNewest, @RequestParam(defaultValue = "") String buyer, @RequestParam(defaultValue = "") String seller) {
+        List<Transaction> transactions = new ArrayList<>();
         if (user.getRole().equals("ADMIN")) { // Admins can see all transactions
-            model.addAttribute("transactions", transactionRepository.findAll());
+            transactions = transactionRepository.findByBuyerAndSeller(buyer, seller);
+            if(sortByNewest) {
+                transactions = transactions.stream().sorted(Comparator.comparing(Transaction::getLatestActionDate)
+                .thenComparing(Transaction::getLatestActionTime).reversed())
+                .collect(Collectors.toList());
+            } else {
+                transactions = transactions.stream().sorted(Comparator.comparing(Transaction::getLatestActionDate)
+                .thenComparing(Transaction::getLatestActionTime))
+                .collect(Collectors.toList());
+            }
+            model.addAttribute("transactions", transactions);
         }
         if (user.getRole().equals("STUDENT")) { // Students can only see transactions, where they are involved
-            List<Transaction> transactions = new ArrayList<>();
             transactions.addAll(transactionRepository.findByBuyer(user.getCompany()));
             transactions.addAll(transactionRepository.findBySeller(user.getCompany()));
             // Sort transactions.
-            transactions = transactions.stream().sorted(Comparator.comparing(Transaction::getLatestActionDate)
-                    .reversed().thenComparing(Transaction::getLatestActionTime).reversed())
-                    .collect(Collectors.toList());
-            model.addAttribute("transactions", transactions);
+            if(sortByNewest) {
+                transactions = transactions.stream().sorted(Comparator.comparing(Transaction::getLatestActionDate)
+                .thenComparing(Transaction::getLatestActionTime).reversed())
+                .collect(Collectors.toList());
+            } else {
+                transactions = transactions.stream().sorted(Comparator.comparing(Transaction::getLatestActionDate)
+                .thenComparing(Transaction::getLatestActionTime))
+                .collect(Collectors.toList());
+            }
         }
+        model.addAttribute("actiontypes", actionTypeRepository.findAll());
         return "transactions-list";
 
     }

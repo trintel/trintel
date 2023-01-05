@@ -17,4 +17,7 @@ public interface TransactionRepository extends CrudRepository<Transaction, Long>
     Long countDistinctSellers(Company companyBuyer);
     @Query("SELECT COUNT(*) FROM Transaction t WHERE (t.buyer=?1 OR t.seller =?1) AND t.confirmed = true")
     Long countConfirmedTransactions(Company company);
+
+    @Query("SELECT t FROM Transaction t WHERE LOWER(t.buyer.name) LIKE LOWER(CONCAT('%', ?1, '%')) AND LOWER(t.seller.name) LIKE LOWER(CONCAT('%', ?2, '%'))")
+    List<Transaction> findByBuyerAndSeller(String buyer, String seller);
 }
