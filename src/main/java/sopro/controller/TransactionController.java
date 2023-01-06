@@ -64,35 +64,28 @@ public class TransactionController {
     AttachedFileInterface attachedFileService;
 
     @GetMapping("/transactions")
-    public String listTransactions(Model model, @AuthenticationPrincipal User user, @RequestParam(defaultValue = "true") boolean sortByNewest, @RequestParam(defaultValue = "") String buyer, @RequestParam(defaultValue = "") String seller) {
+    public String listTransactions(Model model, @AuthenticationPrincipal User user, @RequestParam(defaultValue = "true") boolean sortByNewest, @RequestParam(required = false) Long status, @RequestParam(defaultValue = "") String buyer, @RequestParam(defaultValue = "") String seller) {
         List<Transaction> transactions = new ArrayList<>();
         if (user.getRole().equals("ADMIN")) { // Admins can see all transactions
-            transactions = transactionRepository.findByBuyerAndSeller(buyer, seller);
-            if(sortByNewest) {
-                transactions = transactions.stream().sorted(Comparator.comparing(Transaction::getLatestActionDate)
-                .thenComparing(Transaction::getLatestActionTime).reversed())
-                .collect(Collectors.toList());
-            } else {
-                transactions = transactions.stream().sorted(Comparator.comparing(Transaction::getLatestActionDate)
-                .thenComparing(Transaction::getLatestActionTime))
-                .collect(Collectors.toList());
-            }
-            model.addAttribute("transactions", transactions);
+            transactions = transactionRepository.findAllByBuyerAndSellerName(buyer, seller);
         }
         if (user.getRole().equals("STUDENT")) { // Students can only see transactions, where they are involved
-            transactions.addAll(transactionRepository.findByBuyer(user.getCompany()));
-            transactions.addAll(transactionRepository.findBySeller(user.getCompany()));
-            // Sort transactions.
-            if(sortByNewest) {
-                transactions = transactions.stream().sorted(Comparator.comparing(Transaction::getLatestActionDate)
-                .thenComparing(Transaction::getLatestActionTime).reversed())
-                .collect(Collectors.toList());
-            } else {
-                transactions = transactions.stream().sorted(Comparator.comparing(Transaction::getLatestActionDate)
-                .thenComparing(Transaction::getLatestActionTime))
-                .collect(Collectors.toList());
-            }
+            transactions = transactionRepository.findOwnByBuyerAndSellerName(buyer, seller, user.getCompany().getId());
         }
+        if(status != null) {
+            transactions = transactions.stream().filter(transaction -> transaction.getLastAction().getActiontype().getId().equals(status)).collect(Collectors.toList());
+        }
+        // Sort transactions.
+        if(sortByNewest) {
+            transactions = transactions.stream().sorted(Comparator.comparing(Transaction::getLatestActionDate)
+            .thenComparing(Transaction::getLatestActionTime).reversed())
+            .collect(Collectors.toList());
+        } else {
+            transactions = transactions.stream().sorted(Comparator.comparing(Transaction::getLatestActionDate)
+            .thenComparing(Transaction::getLatestActionTime))
+            .collect(Collectors.toList());
+        }
+        model.addAttribute("transactions", transactions);
         model.addAttribute("actiontypes", actionTypeRepository.findAll());
         return "transactions-list";
 

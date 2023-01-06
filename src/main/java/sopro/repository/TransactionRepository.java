@@ -19,5 +19,8 @@ public interface TransactionRepository extends CrudRepository<Transaction, Long>
     Long countConfirmedTransactions(Company company);
 
     @Query("SELECT t FROM Transaction t WHERE LOWER(t.buyer.name) LIKE LOWER(CONCAT('%', ?1, '%')) AND LOWER(t.seller.name) LIKE LOWER(CONCAT('%', ?2, '%'))")
-    List<Transaction> findByBuyerAndSeller(String buyer, String seller);
+    List<Transaction> findAllByBuyerAndSellerName(String buyer, String seller);
+
+    @Query("SELECT t FROM Transaction t WHERE t.seller.id = ?3 OR t.buyer.id = ?3 AND LOWER(t.buyer.name) LIKE LOWER(CONCAT('%', ?1, '%')) AND LOWER(t.seller.name) LIKE LOWER(CONCAT('%', ?2, '%'))")
+    List<Transaction> findOwnByBuyerAndSellerName(String buyer, String seller, Long studentCompany);
 }

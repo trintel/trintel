@@ -49,14 +49,45 @@
 				<li>
 					<h6 class="dropdown-header" th:text="#{filter}"></h6>
 				</li>
+				<select name="status" class="mb-3">
+					<option value="" th:text="#{status}"></option>
+					<th:block th:each="actiontype : ${actiontypes}">
+						<div th:switch="${actiontype.name}">
+							<th:block th:case="Request">
+								<option th:text="#{requestTLV}" th:value="${actiontype.id}"> </option>
+							</th:block>
+							<th:block th:case="Offer">
+								<option th:text="#{offerTLV}" th:value="${actiontype.id}"> </option>
+							</th:block>
+							<th:block th:case="Accept">
+								<option th:text="#{acceptTL}" th:value="${actiontype.id}"> </option>
+							</th:block>
+							<th:block th:case="Cancel">
+								<option th:text="#{cancelTL}" th:value="${actiontype.id}" th:selected="${actiontype.id.equals(param.status)}"> </option>
+							</th:block>
+							<th:block th:case="Delivery">
+								<option th:text="#{deliveryTLV}" th:value="${actiontype.id}"> </option>
+							</th:block>
+							<th:block th:case="Invoicing">
+								<option th:text="#{invoicingTLV}" th:value="${actiontype.id}"> </option>
+							</th:block>
+							<th:block th:case="Paid">
+								<option th:text="#{paidTL}" th:value="${actiontype.id}"> </option>
+							</th:block>
+							<th:block th:case="*">
+								<option th:text="${actiontype.name}" th:value="${actiontype.id}"> </option>
+							</th:block>
+						</div>
+					</th:block>
+				</select>
 				<div class="form-floating mb-3">
-					<input type="text" class="form-control"
-						id="buyer" placeholder="buyer" name="buyer" th:value="${param.buyer}">
+					<input type="text" class="form-control" id="buyer" placeholder="buyer" name="buyer"
+						th:value="${param.buyer}">
 					<label for="buyer" th:text="#{buyer}"></label>
 				</div>
 				<div class="form-floating">
-					<input type="text" class="form-control"
-						id="seller" placeholder="seller" name="seller" th:value="${param.seller}">
+					<input type="text" class="form-control" id="seller" placeholder="seller" name="seller"
+						th:value="${param.seller}">
 					<label for="seller" th:text="#{seller}"></label>
 				</div>
 				<button type="submit" class="btn btn-primary w-100 mt-3" th:text="#{submit}"></button>
