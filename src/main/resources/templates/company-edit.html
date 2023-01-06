@@ -31,7 +31,7 @@
                     <label for="floatingName" th:text="#{companyName}"></label>
                 </div>
 
-                <select name="country" class="mb-3" required>
+                <select name="country" class="mb-3">
                     <option value="" th:text="#{country}"></option>
                     <th:block th:each="country : ${countries}">
                         <option th:value="${country.key}" th:text="${country.value}"></option>
