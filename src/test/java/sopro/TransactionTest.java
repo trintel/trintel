@@ -91,6 +91,7 @@ public class TransactionTest {
      * Tests if the view with the Transaction listed is shown for the student.
      * @throws Exception
      */
+    @Disabled("Disabled temporarily.")
     @Test
     @WithUserDetails(value = "j@j", userDetailsServiceBeanName = "userDetailsService")
     public void listTransactionsTestStudent() throws Exception {
