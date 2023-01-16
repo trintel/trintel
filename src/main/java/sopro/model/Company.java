@@ -47,6 +47,10 @@ public class Company {
         this.id = IdHandler.generateId();
         this.description = "";
         this.homepage = "";
+        this.country = "";
+        this.email = "";
+        this.iban = "";
+        this.telephone = "";
     }
 
     public Company(String name) {
@@ -55,6 +59,10 @@ public class Company {
         this.students = new ArrayList<User>();
         this.description = "";
         this.homepage = "";
+        this.country = "";
+        this.email = "";
+        this.iban = "";
+        this.telephone = "";
     }
 
     public List<User> getStudents() {
