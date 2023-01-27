@@ -253,6 +253,12 @@ main {
   background-color: #cfd3d7;
 }
 
+.btn-secondary:focus {
+  color: #54617f;
+  border-color: #cfd3d7 !important;
+  background-color: #cfd3d7 !important;
+}
+
 .btn-light {
   background-color: rgba(84, 97, 127, 0.117);
   color: #54617f;
@@ -505,4 +511,8 @@ label.star:hover {
 .selectize-dropdown {
   margin: .2rem 0 0 0;
   border-radius: .8rem !important;
+}
+
+.form-floating>label {
+  color: darkgray;
 }

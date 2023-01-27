@@ -23,6 +23,76 @@
 				</a>
 			</div>
 		</div>
+		<div class="dropdown">
+			<button class="btn btn-secondary dropdown-toggle mb-3" type="button" data-bs-toggle="dropdown"
+				aria-expanded="false" data-bs-auto-close="false">
+				<i class="bi bi-filter"></i><span th:text="#{sortAndFilter}"></span>
+			</button>
+			<form class="dropdown-menu" th:action="@{/transactions}">
+				<li>
+					<h6 class="dropdown-header" th:text="#{sortBy}"></h6>
+				</li>
+				<li>
+					<div class="form-check">
+						<input class="form-check-input" type="radio" name="sortByNewest" id="sortByNewest" value="true"
+							th:checked="${param.sortByNewest == null || param.sortByNewest}">
+						<label class="form-check-label" for="sortByNewest" th:text="#{newestFirst}">
+						</label>
+					</div>
+					<div class="form-check">
+						<input class="form-check-input" type="radio" name="sortByNewest" id="sortByOldest" value="false"
+							th:checked="${param.sortByNewest != null && !param.sortByNewest}">
+						<label class="form-check-label" for="sortByOldest" th:text="#{oldestFirst}">
+						</label>
+					</div>
+				</li>
+				<li>
+					<h6 class="dropdown-header" th:text="#{filter}"></h6>
+				</li>
+				<select name="status" class="mb-3">
+					<option value="" th:text="#{status}"></option>
+					<th:block th:each="actiontype : ${actiontypes}">
+						<div th:switch="${actiontype.name}">
+							<th:block th:case="Request">
+								<option th:text="#{requestTLV}" th:value="${actiontype.id}"> </option>
+							</th:block>
+							<th:block th:case="Offer">
+								<option th:text="#{offerTLV}" th:value="${actiontype.id}"> </option>
+							</th:block>
+							<th:block th:case="Accept">
+								<option th:text="#{acceptTL}" th:value="${actiontype.id}"> </option>
+							</th:block>
+							<th:block th:case="Cancel">
+								<option th:text="#{cancelTL}" th:value="${actiontype.id}" th:selected="${actiontype.id.equals(param.status)}"> </option>
+							</th:block>
+							<th:block th:case="Delivery">
+								<option th:text="#{deliveryTLV}" th:value="${actiontype.id}"> </option>
+							</th:block>
+							<th:block th:case="Invoicing">
+								<option th:text="#{invoicingTLV}" th:value="${actiontype.id}"> </option>
+							</th:block>
+							<th:block th:case="Paid">
+								<option th:text="#{paidTL}" th:value="${actiontype.id}"> </option>
+							</th:block>
+							<th:block th:case="*">
+								<option th:text="${actiontype.name}" th:value="${actiontype.id}"> </option>
+							</th:block>
+						</div>
+					</th:block>
+				</select>
+				<div class="form-floating mb-3">
+					<input type="text" class="form-control" id="buyer" placeholder="buyer" name="buyer"
+						th:value="${param.buyer}">
+					<label for="buyer" th:text="#{buyer}"></label>
+				</div>
+				<div class="form-floating">
+					<input type="text" class="form-control" id="seller" placeholder="seller" name="seller"
+						th:value="${param.seller}">
+					<label for="seller" th:text="#{seller}"></label>
+				</div>
+				<button type="submit" class="btn btn-primary w-100 mt-3" th:text="#{submit}"></button>
+			</form>
+		</div>
 		<div th:unless="${transactions.isEmpty()}">
 			<!-- Card for every transaction -->
 			<div th:each="transaction: ${transactions}">
@@ -30,9 +100,12 @@
 					<div class="card mb-3">
 						<!-- Alert marker if opposing company performed last action -->
 						<div sec:authorize="hasRole('STUDENT')">
-							<div th:if="${#request.userPrincipal.principal.company.id != transaction.actions[#lists.size(transaction.actions) - 1].initiator.company.id}">
-								<div th:unless="${transaction.actions[#lists.size(transaction.actions) - 1].actiontype.name == 'Paid' or transaction.actions[#lists.size(transaction.actions) - 1].actiontype.name == 'Cancel'}">
-									<span class="position-absolute top-0 start-0 translate-middle p-2 bg-danger border border-light rounded-circle">
+							<div
+								th:if="${#request.userPrincipal.principal.company.id != transaction.actions[#lists.size(transaction.actions) - 1].initiator.company.id}">
+								<div
+									th:unless="${transaction.actions[#lists.size(transaction.actions) - 1].actiontype.name == 'Paid' or transaction.actions[#lists.size(transaction.actions) - 1].actiontype.name == 'Cancel'}">
+									<span
+										class="position-absolute top-0 start-0 translate-middle p-2 bg-danger border border-light rounded-circle">
 										<span class="visually-hidden">New alerts</span>
 									</span>
 								</div>
@@ -41,7 +114,8 @@
 						<div class="card-body d-flex align-items-center justify-content-between">
 							<div class="w-100">
 								<!-- Badges for transaction status -->
-								<div th:switch="${transaction.actions[#lists.size(transaction.actions) - 1].actiontype.name}">
+								<div
+									th:switch="${transaction.actions[#lists.size(transaction.actions) - 1].actiontype.name}">
 									<h4 th:case="Request">
 										<div class="badge bg-danger" th:text="#{requestTLV}"></div>
 									</h4>
@@ -51,13 +125,20 @@
 									<h4 th:case="Accept">
 										<div class="badge bg-success" th:text="#{acceptTL}"></div>
 									</h4>
-									<h4 th:case="Cancel"><div class="badge bg-light text-dark" th:text="#{cancelTL}"></div></h4>
-									<h4 th:case="Delivery"><div class="badge bg-primary" th:text="#{deliveryTLV}"></div></h4>
-									<h4 th:case="Invoicing"><div class="badge bg-dark" th:text="#{invoicingTLV}"></div></h4>
-									<h4 th:case="Paid"><div class="badge bg-primary" th:text="#{paidTL}"></div></h4>
+									<h4 th:case="Cancel">
+										<div class="badge bg-light text-dark" th:text="#{cancelTL}"></div>
+									</h4>
+									<h4 th:case="Delivery">
+										<div class="badge bg-primary" th:text="#{deliveryTLV}"></div>
+									</h4>
+									<h4 th:case="Invoicing">
+										<div class="badge bg-dark" th:text="#{invoicingTLV}"></div>
+									</h4>
+									<h4 th:case="Paid">
+										<div class="badge bg-primary" th:text="#{paidTL}"></div>
+									</h4>
 									<h4 th:case="*">
-										<div class="badge bg-secondary"
-											th:text="${transaction.getLatestActionName()}">
+										<div class="badge bg-secondary" th:text="${transaction.getLatestActionName()}">
 										</div>
 									</h4>
 								</div>
@@ -84,7 +165,8 @@
 									<div class="col">
 										<span class="card-text text-muted fs-6" th:text="#{lastUpdate}"></span>
 										<span class="card-text text-black">
-											<h5 th:text="${#temporals.format(transaction.actions[#lists.size(transaction.actions) - 1].date, 'dd-MM-yyyy')} + ' ' + ${#temporals.format(transaction.actions[#lists.size(transaction.actions) - 1].time, 'HH:mm')}">
+											<h5
+												th:text="${#temporals.format(transaction.actions[#lists.size(transaction.actions) - 1].date, 'dd-MM-yyyy')} + ' ' + ${#temporals.format(transaction.actions[#lists.size(transaction.actions) - 1].time, 'HH:mm')}">
 											</h5>
 										</span>
 									</div>
