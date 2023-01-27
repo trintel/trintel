@@ -107,21 +107,21 @@
 								</div>
 							</div>
 							<div class="accordion-body d-flex">
-								<div class="me-5" th:unless="${action.actiontype.name == 'Request'}">
-									<span class="text-muted fs-6" th:text="#{amount}"></span>
-									<div th:if="${action.actiontype.name == 'Offer'}">
-										<span class="text-black">
-											<h5 th:text="${action.amount}"></h5>
-										</span>
-									</div>
-									<div th:unless="${action.actiontype.name == 'Offer'}">
-										<span class="text-black">
-											<h5 th:text="${action.transaction.amount}"></h5>
-										</span>
-									</div>
-								</div>
+								<!-- <div class="me-5" th:unless="${action.actiontype.name == 'Request'}"> -->
+								<!-- 	<span class="text-muted fs-6" th:text="#{amount}"></span> -->
+								<!-- 	<div th:if="${action.actiontype.name == 'Offer'}"> -->
+								<!-- 		<span class="text-black"> -->
+								<!-- 			<h5 th:text="${action.amount}"></h5> -->
+								<!-- 		</span> -->
+								<!-- 	</div> -->
+								<!-- 	<div th:unless="${action.actiontype.name == 'Offer'}"> -->
+								<!-- 		<span class="text-black"> -->
+								<!-- 			<h5 th:text="${action.transaction.amount}"></h5> -->
+								<!-- 		</span> -->
+								<!-- 	</div> -->
+								<!-- </div> -->
 								<div th:unless="${action.actiontype.name} == 'Request'" class="me-5">
-									<span class="text-muted fs-6" th:text="#{pricePerPiece}"></span>
+									<span class="text-muted fs-6" th:text="#{total}"></span>
 									<div th:if="${action.actiontype.name == 'Offer'}">
 										<span class="text-black">
 											<h5 th:text="${action.pricePerPiece} + ' €'"></h5>

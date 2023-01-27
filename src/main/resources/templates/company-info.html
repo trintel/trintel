@@ -22,7 +22,7 @@
                     <h1 th:text="${company.name}"></h1>
 
                     <th:block th:unless="${company.getCountry() == null || company.getCountry().isEmpty()}">
-                        <p class="mb-3" th:utext="${country}"></p>
+                        <p class="mb-3" th:text="${country}"></p>
                     </th:block>
 
                     <th:block th:unless="${company.getHomepage() == null || company.getHomepage().isEmpty()}">
@@ -39,17 +39,17 @@
 
                 <th:block th:unless="${company.getTelephone() == null || company.getTelephone().isEmpty()}">
                     <h5 th:text="#{telephone}"></h5>
-                    <p class="mb-3" th:utext="${company.telephone}"></p>
+                    <p class="mb-3" th:text="${company.telephone}"></p>
                 </th:block>
                 
                 <th:block th:unless="${company.getIban() == null || company.getIban().isEmpty()}">
                     <h5 th:text="#{iban}"></h5>
-                    <p class="mb-3" th:utext="${company.iban}"></p>
+                    <p class="mb-3" th:text="${company.iban}"></p>
                 </th:block>
 
                 <th:block th:unless="${company.getDescription() == null || company.getDescription().isEmpty()}">
                     <h5 th:text="#{signature}"></h5>
-                    <p class="mb-3" th:utext="${company.description}"></p>
+                    <p class="mb-3" th:utext="${#strings.replace(#strings.escapeXml(company.description),'&#10;','&lt;br&gt;')}"></p>
                 </th:block>
 
                 <h5 th:text="#{members}"></h5>

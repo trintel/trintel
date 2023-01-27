@@ -29,7 +29,7 @@ public class Action {
     @Getter @Setter @OneToOne(optional=true, fetch = FetchType.LAZY, cascade = CascadeType.REMOVE) private AttachedFile attachedFile;
     @Getter @Setter @Column(columnDefinition = "TEXT") private String message;
     @Getter @Setter private Integer amount;
-    @Getter @Setter private Double pricePerPiece;
+    @Getter @Setter private Double pricePerPiece; // in app now called sum
     @Getter @Setter private LocalDate date;       //the time and date of the action
     @Getter @Setter private LocalTime time;
 
@@ -37,6 +37,7 @@ public class Action {
         this.id = IdHandler.generateId();
         this.date = LocalDate.now();
         this.time = LocalTime.now();
+        this.amount = 1; // We set here amount to 1 for now per default because we use total instead of pricePerPiece.
     }
 
     public Action(String message, ActionType actiontype, Transaction transaction, AttachedFile attachedFile) {
@@ -47,6 +48,7 @@ public class Action {
         this.date = LocalDate.now();
         this.time = LocalTime.now();
         this.attachedFile = attachedFile;
+        this.amount = 1; // We set here amount to 1 for now per default because we use total instead of pricePerPiece.
     }
 
     /**
