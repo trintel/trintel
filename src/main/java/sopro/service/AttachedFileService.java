@@ -58,7 +58,17 @@ public class AttachedFileService implements AttachedFileInterface {
     @Autowired
     TransactionRepository transactionRepository;
 
-    public AttachedFile storeFile(MultipartFile file) { //TODO handle exceptions properly.
+
+    public List<AttachedFile> storeFiles(List<MultipartFile> files) {
+        List<AttachedFile> res = new ArrayList<>();
+
+        for (MultipartFile file : files)
+          res.add(storeFile(file));
+
+        return res;
+    }
+
+    private AttachedFile storeFile(MultipartFile file) { //TODO handle exceptions properly.
         // Normalize file name
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 
@@ -102,8 +112,8 @@ public class AttachedFileService implements AttachedFileInterface {
         List<InputStream> iSs = new ArrayList<>();
         for (int i = 0; i < ax.size(); ++i) {
             ByteArrayInputStream iS;
-            if(ax.get(i).getAttachedFile() != null) {
-                iS = new ByteArrayInputStream(ax.get(i).getAttachedFile().getData());
+            if(!ax.get(i).getAttachedFiles().isEmpty()) {
+                iS = new ByteArrayInputStream(ax.get(i).getAttachedFiles().get(0).getData()); // TODO ganze Liste machen wir, wenn wir bezahlt werden.
                 iSs.add(iS);
                 continue;
             }

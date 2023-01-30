@@ -3,6 +3,7 @@ package sopro.model;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.persistence.CascadeType;
@@ -11,6 +12,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 
@@ -26,7 +28,7 @@ public class Action {
     @Getter @Setter @ManyToOne @NotNull private ActionType actiontype;
     @Getter @Setter @ManyToOne @NotNull private Transaction transaction;
     @Getter @Setter @ManyToOne @OneToOne private User initiator;
-    @Getter @Setter @OneToOne(optional=true, fetch = FetchType.LAZY, cascade = CascadeType.REMOVE) private AttachedFile attachedFile;
+    @Getter @Setter @OneToMany(mappedBy="action", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE) private List<AttachedFile> attachedFiles;
     @Getter @Setter @Column(columnDefinition = "TEXT") private String message;
     @Getter @Setter private Integer amount;
     @Getter @Setter private Double pricePerPiece; // in app now called sum
@@ -40,14 +42,14 @@ public class Action {
         this.amount = 1; // We set here amount to 1 for now per default because we use total instead of pricePerPiece.
     }
 
-    public Action(String message, ActionType actiontype, Transaction transaction, AttachedFile attachedFile) {
+    public Action(String message, ActionType actiontype, Transaction transaction, List<AttachedFile> attachedFiles) {
         this.id = IdHandler.generateId();
         this.message = message;
         this.actiontype = actiontype;
         this.transaction = transaction;
         this.date = LocalDate.now();
         this.time = LocalTime.now();
-        this.attachedFile = attachedFile;
+        this.attachedFiles = attachedFiles;
         this.amount = 1; // We set here amount to 1 for now per default because we use total instead of pricePerPiece.
     }
 

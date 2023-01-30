@@ -2,6 +2,7 @@ package sopro.controller;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -115,7 +116,7 @@ public class TransactionController {
     @PreAuthorize("hasCompany()")
     @PostMapping("/transaction/{companyID}/save")
     public String createTransaction(Action action, Transaction transaction, @PathVariable Long companyID,
-            @AuthenticationPrincipal User user, @RequestParam("attachment") MultipartFile attachment, Model model) {
+            @AuthenticationPrincipal User user, @RequestParam("attachment") MultipartFile [] attachments, Model model) {
 
         transaction.setBuyer(user.getCompany());
         transaction.setSeller(companyRepository.findById(companyID).get());
@@ -125,9 +126,9 @@ public class TransactionController {
         // action.setActiontype(actionTypeRepository.findByName("Request"));
         action.setActiontype(actionTypeService.getInitialActionType());
 
-        if(!attachment.isEmpty()) {
-            AttachedFile attachedFile = attachedFileService.storeFile(attachment);
-            action.setAttachedFile(attachedFile);
+        if(attachments.length > 0) {
+            List<AttachedFile> attachedFiles = attachedFileService.storeFiles(Arrays.asList(attachments));
+            action.setAttachedFiles(attachedFiles);
         } else {
             return "redirect:/transaction/" + companyID + "/create";
         }
@@ -182,7 +183,7 @@ public class TransactionController {
 
     @PreAuthorize("hasCompany()")
     @PostMapping("/transaction/{companyID}/create/skip/{actionTypeID}")
-    public String createTransactionSkipAddOffer(Action action, @RequestParam("attachment") MultipartFile attachment, @RequestParam String product, boolean isBuyer, @PathVariable Long companyID, @PathVariable Long actionTypeID, @AuthenticationPrincipal User user,
+    public String createTransactionSkipAddOffer(Action action, @RequestParam("attachment") MultipartFile [] attachments, @RequestParam String product, boolean isBuyer, @PathVariable Long companyID, @PathVariable Long actionTypeID, @AuthenticationPrincipal User user,
             BindingResult bindingResult, Model model) {
         Transaction transaction = new Transaction();
         transaction.setProduct(product);
@@ -197,21 +198,21 @@ public class TransactionController {
 
         transactionRepository.save(transaction);
         if(actionTypeService.getOfferAction().getId().equals(actionTypeID)) {
-            addOffer(action, attachment, transaction.getId(), user, bindingResult, model);
+            addOffer(action, attachments, transaction.getId(), user, bindingResult, model);
         } else if(actionTypeService.getAcceptActionType().getId().equals(actionTypeID)) {
             transaction.setConfirmed(true);
-            createAcceptAction(action, attachment, transaction.getId(), user);
+            createAcceptAction(action, attachments, transaction.getId(), user);
         } else if(actionTypeService.getDeliveryActionType().getId().equals(actionTypeID)) {
             transaction.setConfirmed(true);
-            createDeliveryAction(action, transaction.getId(), attachment, user);
+            createDeliveryAction(action, transaction.getId(), attachments, user);
         } else if(actionTypeService.getInvoiceActionType().getId().equals(actionTypeID)) {
             transaction.setConfirmed(true);
             transaction.setShipped(true);
-            createInvoiceAction(action, transaction.getId(), attachment, user);
+            createInvoiceAction(action, transaction.getId(), attachments, user);
         } else if(actionTypeService.getPaidActionType().getId().equals(actionTypeID)) {
             transaction.setConfirmed(true);
             transaction.setShipped(true);
-            createPaidAction(action, transaction.getId(), attachment, user);
+            createPaidAction(action, transaction.getId(), attachments, user);
         }
         return "redirect:/transaction/" + transaction.getId();
     }
@@ -278,7 +279,7 @@ public class TransactionController {
 
     @PreAuthorize("hasPermission(#transactionID, 'transaction') and hasRole('STUDENT')")
     @PostMapping("/transaction/{transactionID}/addOffer")
-    public String addOffer(Action offer, @RequestParam("attachment") MultipartFile attachment, @PathVariable Long transactionID, @AuthenticationPrincipal User user,
+    public String addOffer(Action offer, @RequestParam("attachment") MultipartFile [] attachments, @PathVariable Long transactionID, @AuthenticationPrincipal User user,
             BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("action", offer);
@@ -286,9 +287,9 @@ public class TransactionController {
             return "transaction-addOffer";
         }
 
-        if(!attachment.isEmpty()) {
-            AttachedFile attachedFile = attachedFileService.storeFile(attachment);
-            offer.setAttachedFile(attachedFile);
+        if(attachments.length > 0) {
+            List<AttachedFile> attachedFiles = attachedFileService.storeFiles(Arrays.asList(attachments));
+            offer.setAttachedFiles(attachedFiles);
         }
 
         offer.setActiontype(actionTypeService.getOfferAction()); // to be sure.
@@ -300,12 +301,12 @@ public class TransactionController {
 
     @PreAuthorize("hasPermission(#transactionID, 'transaction') and hasRole('STUDENT')")
     @PostMapping("/transaction/{transactionID}/addAction")
-    public String createAction(Action action, MultipartFile attachment, @PathVariable Long transactionID, @AuthenticationPrincipal User user,
+    public String createAction(Action action, MultipartFile [] attachments, @PathVariable Long transactionID, @AuthenticationPrincipal User user,
             Model model) {
 
-        if(!attachment.isEmpty()) {
-            AttachedFile attachedFile = attachedFileService.storeFile(attachment);
-            action.setAttachedFile(attachedFile);
+        if(attachments.length > 0) {
+            List<AttachedFile> attachedFiles = attachedFileService.storeFiles(Arrays.asList(attachments));
+            action.setAttachedFiles(attachedFiles);
         }
 
         Transaction transaction = transactionRepository.findById(transactionID).get();
@@ -325,13 +326,13 @@ public class TransactionController {
 
     @PreAuthorize("hasPermission(#transactionID, 'transaction') and hasRole('STUDENT')")
     @PostMapping("/transaction/{transactionID}/accept")
-    public String createAcceptAction(Action accept, @RequestParam("attachment") MultipartFile attachment, @PathVariable Long transactionID,
+    public String createAcceptAction(Action accept, @RequestParam("attachment") MultipartFile [] attachments, @PathVariable Long transactionID,
             @AuthenticationPrincipal User user) {
 
         Transaction transaction = transactionRepository.findById(transactionID).get();
-        if(!attachment.isEmpty()) {
-            AttachedFile attachedFile = attachedFileService.storeFile(attachment);
-            accept.setAttachedFile(attachedFile);
+        if(attachments.length > 0) {
+            List<AttachedFile> attachedFiles = attachedFileService.storeFiles(Arrays.asList(attachments));
+            accept.setAttachedFiles(attachedFiles);
         }
         transaction.setConfirmed(true);
         accept.setInitiator(user);
@@ -357,12 +358,12 @@ public class TransactionController {
 
     @PreAuthorize("hasPermission(#transactionID, 'transaction') and hasRole('STUDENT')")
     @PostMapping("/transaction/{transactionID}/delivery")
-    public String createDeliveryAction(Action delivery, @PathVariable Long transactionID, @RequestParam("attachment") MultipartFile attachment,
+    public String createDeliveryAction(Action delivery, @PathVariable Long transactionID, @RequestParam("attachment") MultipartFile [] attachments,
             @AuthenticationPrincipal User user) {
         Transaction transaction = transactionRepository.findById(transactionID).get();
-        if(!attachment.isEmpty()) {
-            AttachedFile attachedFile = attachedFileService.storeFile(attachment);
-            delivery.setAttachedFile(attachedFile);
+        if(attachments.length > 0) {
+            List<AttachedFile> attachedFiles = attachedFileService.storeFiles(Arrays.asList(attachments));
+            delivery.setAttachedFiles(attachedFiles);
         }
         transaction.setShipped(true);
         delivery.setInitiator(user);
@@ -375,12 +376,12 @@ public class TransactionController {
 
     @PreAuthorize("hasPermission(#transactionID, 'transaction') and hasRole('STUDENT')")
     @PostMapping("/transaction/{transactionID}/invoicing")
-    public String createInvoiceAction(Action invoice, @PathVariable Long transactionID, @RequestParam("attachment") MultipartFile attachment,
+    public String createInvoiceAction(Action invoice, @PathVariable Long transactionID, @RequestParam("attachment") MultipartFile [] attachments,
             @AuthenticationPrincipal User user) {
         Transaction transaction = transactionRepository.findById(transactionID).get();
-        if(!attachment.isEmpty()) {
-            AttachedFile attachedFile = attachedFileService.storeFile(attachment);
-            invoice.setAttachedFile(attachedFile);
+        if(attachments.length > 0) {
+            List<AttachedFile> attachedFiles = attachedFileService.storeFiles(Arrays.asList(attachments));
+            invoice.setAttachedFiles(attachedFiles);
         }
         invoice.setInitiator(user);
         invoice.setTransaction(transaction);
@@ -392,12 +393,12 @@ public class TransactionController {
 
     @PreAuthorize("hasPermission(#transactionID, 'transaction') and hasRole('STUDENT')")
     @PostMapping("/transaction/{transactionID}/paid")
-    public String createPaidAction(Action payment, @PathVariable Long transactionID, @RequestParam("attachment") MultipartFile attachment,
+    public String createPaidAction(Action payment, @PathVariable Long transactionID, @RequestParam("attachment") MultipartFile [] attachments,
             @AuthenticationPrincipal User user) {
         Transaction transaction = transactionRepository.findById(transactionID).get();
-        if(!attachment.isEmpty()) {
-            AttachedFile attachedFile = attachedFileService.storeFile(attachment);
-            payment.setAttachedFile(attachedFile);
+        if(attachments.length > 0) {
+            List<AttachedFile> attachedFiles = attachedFileService.storeFiles(Arrays.asList(attachments));
+            payment.setAttachedFiles(attachedFiles);
         }
         transaction.setPaid(true);
         transaction.setActive(false);
@@ -432,11 +433,11 @@ public class TransactionController {
     public ResponseEntity<byte[]> exportAction(@PathVariable long actionId, HttpServletResponse response, Model model) {
         Action action = actionRepository.findById(actionId).get(); //TODO exception handling
 
-        if(action.getAttachedFile() != null) {  //TODO temporary
-            byte[] contents = action.getAttachedFile().getData();
+        if(!action.getAttachedFiles().isEmpty()) {  // TODO machen wir, wenn wir bezahlt werden.
+            byte[] contents = action.getAttachedFiles().get(0).getData();
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_PDF);
-            String filename = action.getAttachedFile().getFileName(); // Last part is the filename
+            String filename = action.getAttachedFiles().get(0).getFileName(); // Last part is the filename
             headers.setContentDispositionFormData(filename, filename);
             headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
             ResponseEntity<byte[]> res = new ResponseEntity<>(contents, headers, HttpStatus.OK);
