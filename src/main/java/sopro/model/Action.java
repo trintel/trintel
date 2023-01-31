@@ -28,7 +28,7 @@ public class Action {
     @Getter @Setter @ManyToOne @NotNull private ActionType actiontype;
     @Getter @Setter @ManyToOne @NotNull private Transaction transaction;
     @Getter @Setter @ManyToOne @OneToOne private User initiator;
-    @Getter @Setter @OneToMany(mappedBy="action", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE) private List<AttachedFile> attachedFiles;
+    @Getter @Setter @OneToMany(mappedBy="action", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE) List<AttachedFile> attachedFiles;
     @Getter @Setter @Column(columnDefinition = "TEXT") private String message;
     @Getter @Setter private Integer amount;
     @Getter @Setter private Double pricePerPiece; // in app now called sum
