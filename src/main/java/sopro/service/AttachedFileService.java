@@ -58,17 +58,16 @@ public class AttachedFileService implements AttachedFileInterface {
     @Autowired
     TransactionRepository transactionRepository;
 
-
-    public List<AttachedFile> storeFiles(List<MultipartFile> files) {
+    public List<AttachedFile> storeFiles(List<MultipartFile> files, Action action) {
         List<AttachedFile> res = new ArrayList<>();
 
         for (MultipartFile file : files)
-          res.add(storeFile(file));
+          res.add(storeFile(file, action));
 
         return res;
     }
 
-    private AttachedFile storeFile(MultipartFile file) { //TODO handle exceptions properly.
+    private AttachedFile storeFile(MultipartFile file, Action action) { //TODO handle exceptions properly.
         // Normalize file name
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 
@@ -79,7 +78,7 @@ public class AttachedFileService implements AttachedFileInterface {
             }
 
             AttachedFile dbFile = new AttachedFile(fileName, file.getContentType(), file.getBytes());
-
+            dbFile.setAction(action);
             return attachedFileRepository.save(dbFile);
         } catch (IOException ex) {
             throw new IllegalArgumentException("Could not store file " + fileName + ". Please try again!", ex);

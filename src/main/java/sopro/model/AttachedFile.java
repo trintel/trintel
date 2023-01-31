@@ -19,7 +19,7 @@ public class AttachedFile {
     @Getter @Setter private String fileName;
     @Getter @Setter private String fileType;
     @Getter @Setter @Lob byte[] data;
-    @Getter @Setter @ManyToOne private Action action;
+    @Getter @Setter @ManyToOne Action action;
 
 
     public AttachedFile(String fileName, String fileType, byte[] data) {
