@@ -141,17 +141,13 @@
 								</div>
 							</div>
 							<div class="accordion-body">
-								<th:block th:if="${action.attachedFiles.isEmpty()}">
-									<a class="btn btn-secondary" th:href="@{'/pdfexport/action/' + ${action.id}}">
-										<i class="bi bi-file-earmark-arrow-down"></i>
-										<span th:text="'pdf-export-' + ${action.id} + '.pdf'"></span>
-									</a>
-								</th:block>
-								<th:block th:if="${action.attachedFiles.isEmpty()}">
-									<a class="btn btn-secondary" th:href="@{'/pdfexport/action/' + ${action.id}}">
-										<i class="bi bi-file-earmark-arrow-down"></i>
-										<span th:text="${action.attachedFiles.get(0).fileName}"></span> <!-- TODO CHRIS alle Elemente in der Liste hier laden, nicht nur idx 0 -->
-									</a>
+								<th:block th:unless="${action.attachedFiles.isEmpty()}">
+									<th:block th:each="file : ${action.attachedFiles}">
+										<a class="btn btn-secondary" th:href="@{'/download/attachment/' + ${file.id}}">
+											<i class="bi bi-file-earmark-arrow-down"></i>
+											<span th:text="${file.fileName}"></span> <!-- TODO CHRIS alle Elemente in der Liste hier laden, nicht nur idx 0 -->
+										</a>
+									</th:block>
 								</th:block>
 							</div>
 						</div>
