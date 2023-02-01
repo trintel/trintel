@@ -495,7 +495,7 @@ public class TransactionController {
         byte[] contents = attachement.getData();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
-        String filename = attachement.getFileName(); 
+        String filename = attachement.getFileName();
         headers.setContentDispositionFormData(filename, filename);
         headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
         ResponseEntity<byte[]> res = new ResponseEntity<>(contents, headers, HttpStatus.OK);
