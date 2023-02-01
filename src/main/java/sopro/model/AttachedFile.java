@@ -3,7 +3,7 @@ package sopro.model;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Lob;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 
 import sopro.model.util.IdHandler;
 
@@ -19,7 +19,7 @@ public class AttachedFile {
     @Getter @Setter private String fileName;
     @Getter @Setter private String fileType;
     @Getter @Setter @Lob byte[] data;
-    @Getter @Setter @OneToOne private Action action;
+    @Getter @Setter @ManyToOne Action action;
 
 
     public AttachedFile(String fileName, String fileType, byte[] data) {
