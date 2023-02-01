@@ -12,4 +12,5 @@ public interface AttachedFileInterface {
     ByteArrayOutputStream generatePdfFromAction(long actionId);
     ByteArrayOutputStream generatePdfFromTransaction(long transactionId);
     List<AttachedFile> storeFiles(List<MultipartFile> files, Action action);
+    AttachedFile getFile(long fileId);
 }

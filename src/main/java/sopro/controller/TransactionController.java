@@ -486,4 +486,19 @@ public class TransactionController {
         ResponseEntity<byte[]> res = new ResponseEntity<>(contents, headers, HttpStatus.OK);
         return res;
     }
+
+    @GetMapping("download/attachment/{fileId}")
+    public ResponseEntity<byte[]> downloadAttachement(@PathVariable long fileId, HttpServletResponse response, Model model) {
+
+        AttachedFile attachement = attachedFileService.getFile(fileId);
+
+        byte[] contents = attachement.getData();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        String filename = attachement.getFileName(); 
+        headers.setContentDispositionFormData(filename, filename);
+        headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+        ResponseEntity<byte[]> res = new ResponseEntity<>(contents, headers, HttpStatus.OK);
+        return res;
+    }
 }
