@@ -3,6 +3,7 @@ package sopro;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -19,6 +20,9 @@ public class TrintelApplication implements CommandLineRunner {
 
     @Autowired
     SignupUrlInterface signupUrlService;
+
+    @Value("${spring.profiles.active:Prod}")
+    private String activeProfile;
 
     public static final Logger logger = LoggerFactory.getLogger(TrintelApplication.class);
 
@@ -38,7 +42,9 @@ public class TrintelApplication implements CommandLineRunner {
         signupUrlService.generateAdminSignupURL();
         signupUrlService.generateStudentSignupURL();
         // For tests
-        // initDatabaseService.init();
+        if(activeProfile.equals("debug")) {
+            initDatabaseService.init();
+        }
         // For final deploy
         initDatabaseService.deployinit();
     }
