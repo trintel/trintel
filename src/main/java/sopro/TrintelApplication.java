@@ -21,14 +21,13 @@ public class TrintelApplication implements CommandLineRunner {
     @Autowired
     SignupUrlInterface signupUrlService;
 
-    @Value("${spring.profiles.active:Prod}")
+    @Value("${spring.profiles.active:prod}")
     private String activeProfile;
 
     public static final Logger logger = LoggerFactory.getLogger(TrintelApplication.class);
 
-    public static final String WORKDIR = System.getProperty("user.dir"); // TODO: this links to the last use of the
-                                                                         // filesystem. (PdfService)
-    public static final String EXPORT_PATH = "."; // Where e.g. SQL dumps are stored during runtime.
+    //TODO: We should get rid of all file-system uses.
+    public static final String EXPORT_PATH = "."; // Where e.g. SQL dumps are stored during runtime. (only for temporary storrage.)
 
     public static ConfigurableApplicationContext context;
 
@@ -39,10 +38,11 @@ public class TrintelApplication implements CommandLineRunner {
 
     @Override
     public void run(String... arg0) throws Exception {
+        //signup urls are generated on ervery restart. This is intentional
         signupUrlService.generateAdminSignupURL();
         signupUrlService.generateStudentSignupURL();
         // For tests
-        if(activeProfile.equals("debug")) {
+        if(activeProfile.equals("dev")) {
             initDatabaseService.init();
         }
         // For final deploy

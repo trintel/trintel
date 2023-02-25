@@ -56,7 +56,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     "/verify-your-email",
                     "/reset-password/**",
                     "/registrationConfirm/**",
-                    "/backup/**/**").permitAll() // permit all to access those Mathes
+                    "/backup/**/**").permitAll() // permit all to access those Matches
                 .antMatchers("/companies/").hasAnyRole("ADMIN", "STUDENT")
                 // Hint: is done inside the controllers with @Preauthorize.
                 // .antMatchers("/company/select/**").hasRole("STUDENT")

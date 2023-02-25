@@ -91,7 +91,7 @@ Hier ist es am einfachsten, das Repository zu clonen und die App mit `./gradlew 
 Zum einfacheren Testen haben wir eine spezielle Init Methode für die Datenbank geschrieben, welche die Datenbank initial mit ein paar Dummy Daten befüllt. Die passiert, wenn das Spring Profile "debug" gesetzt ist. 
 
 ```
-./gradlew bootRun --args='--spring.profiles.active=debug'
+./gradlew bootRun --args='--spring.profiles.active=dev'
 ```
 Eine bestehende Datenbank wird bei erneutem Start des Programms nicht überschrieben.
 
