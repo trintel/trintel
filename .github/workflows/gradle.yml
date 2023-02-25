@@ -16,6 +16,14 @@ on:
 permissions:
   contents: read
 
+env:
+  spring.mail.host: ${{ vars.MAIL_HOST }}
+  spring.mail.port: ${{ vars.MAIL_PORT }}
+  spring.mail.username: ${{ vars.MAIL_USERNAME }}
+  spring.mail.password: ${{ secrets.MAIL_PASSWORD }}
+  spring.mail.properties.mail.smtp.auth: ${{ vars.MAIL_SMTP }}
+  spring.mail.properties.mail.smtp.starttls.enable: ${{ vars.MAIL_SMTP_TLS }}
+
 jobs:
   build:
 

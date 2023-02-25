@@ -71,7 +71,7 @@ public class CompanyController {
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/companies/delete/{companyID}")
     public String deleteCompany(@PathVariable Long companyID, Model model) {
-        //TODO maybe delete all transactions. so that companies with transactions can also be deleted.
+
         if(companyLogoRepository.findByCompanyId(companyID) != null) {
             companyLogoRepository.delete(companyLogoRepository.findByCompanyId(companyID));     //company gets deleted because of cascade.remove.
         }

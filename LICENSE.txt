@@ -1,6 +1,6 @@
 Copyright 2022 Philo Klemenz, Christopher Werl, Jonas Beckmann,
 Maximilian Wiendl, Felix Ohnesorge, Nicklas Ingenlath-Geerken, 
-Jan-Philipp Iben, Luca Meyer
+Jan-Philipp Iben, Luca Mayer
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

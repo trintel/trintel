@@ -29,8 +29,8 @@ public class User implements UserDetails {
 
     @Getter @Setter @Id private Long id;
     @Getter @Setter	@NotEmpty @Column(unique = true) private String email;
-    @Getter @Setter @NotEmpty private String surname;
-    @Getter @Setter	@NotEmpty private String forename;
+    @Setter @NotEmpty private String surname;
+    @Setter	@NotEmpty private String forename;
     @Getter @Setter	@NotEmpty private String password;
     @Getter @Setter	@NotEmpty private String role;
     @Getter @Setter private boolean enabled = false;

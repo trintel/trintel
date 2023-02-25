@@ -64,6 +64,8 @@ public class TransactionController {
     @Autowired
     AttachedFileInterface attachedFileService;
 
+    //TODO: write a service for the transactions, because this controller should not handle that much logic.
+
     @GetMapping("/transactions")
     public String listTransactions(Model model, @AuthenticationPrincipal User user,
             @RequestParam(defaultValue = "true") boolean sortByNewest, @RequestParam(required = false) Long status,

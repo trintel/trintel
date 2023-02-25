@@ -63,8 +63,6 @@ public class InitDatabaseService {
         // ATTENTION: If you change any model (i.e., the data scheme), you most likely
         // need to delete the .h2 database file in your file system first!
 
-        //TODO not all should be created in final version!!
-
         if (userRepository.count() == 0 && companyRepository.count() == 0) {
 
             //Create demo Users

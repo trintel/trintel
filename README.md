@@ -1,43 +1,45 @@
 # Trintel
 
-Laufende Instanz: [http://134.245.1.240:1200](http://134.245.1.240:1200)
-Git Commit: 8e288b6d333f159490eb1f357c584b2c2d698f38
-
-  - [Login Daten](#login-daten)
-  - [Deployment](#deployment)
-  - [Implementierte Funktionen](#implementierte-funktionen)
-    - [Allgemein](#allgemein)
-      - [Erweiterbarer Sprachsupport](#erweiterbarer-sprachsupport)
-      - [Login und Registrierung](#login-und-registrierung)
-    - [Administrator](#administrator)
-      - [Transaktionen](#transaktionen)
-      - [PDF-Export](#pdf-export)
-      - [Admin Panel](#admin-panel)
-      - [Unternehmensverwaltung](#unternehmensverwaltung)
-      - [Schülerverwaltung](#schülerverwaltung)
-      - [Admin Statistik](#admin-statistik)
-    - [Schüler](#schüler)
-      - [Transaktionen](#transaktionen)
-      - [PDF-Export](#pdf-export)
-      - [Eigenes Unternehmen einsehen](#eigenes-unternehmen-einsehen)
-      - [Schüler Statistik ](#schüler-statistik)
-  - [Anwendungsfälle im Pflichtenheft](#anwendungsfälle-im-pflichtenheft)
-  - [Automatische Tests](#automatische-tests)
-      - [CompanyTests](#companytests)
-      - [TransactionTests](#transactiontests)
-      - [BackUpTests](#backuptests)
-      - [DatabaseTests](#databasetests)
-      - [HomeTest](#hometest)
-      - [StatistikTests](#statistiktests)
-      - [UserTests](#usertests)
+- [Trintel](#trintel)
+    - [Login Daten](#login-daten)
+    - [Deployment](#deployment)
+      - [Docker Image bauen](#docker-image-bauen)
+      - [Docker Image ausführen](#docker-image-ausführen)
+      - [Starten mit Docker-Compose](#starten-mit-docker-compose)
+      - [Konfiguration](#konfiguration)
+- [Implementierte Funktionen](#implementierte-funktionen)
+  - [Allgemein](#allgemein)
+    - [Erweiterbarer Sprachsupport](#erweiterbarer-sprachsupport)
+    - [Login und Registrierung](#login-und-registrierung)
+  - [Administrator](#administrator)
+    - [Transaktionen](#transaktionen)
+    - [PDF-Export](#pdf-export)
+    - [Admin Panel](#admin-panel)
+    - [Unternehmensverwaltung](#unternehmensverwaltung)
+    - [Schülerverwaltung](#schülerverwaltung)
+    - [Admin Statistik](#admin-statistik)
+  - [Schüler](#schüler)
+    - [Transaktionen](#transaktionen-1)
+    - [PDF-Export](#pdf-export-1)
+    - [Eigenes Unternehmen einsehen](#eigenes-unternehmen-einsehen)
+    - [Schüler Statistik](#schüler-statistik)
+- [Anwendungsfälle im Pflichtenheft](#anwendungsfälle-im-pflichtenheft)
+- [Automatische Tests](#automatische-tests)
+    - [CompanyTests](#companytests)
+    - [TransactionTests](#transactiontests)
+    - [BackUpTests](#backuptests)
+    - [DatabaseTests](#databasetests)
+    - [HomeTest](#hometest)
+    - [StatistikTests](#statistiktests)
+    - [UserTests](#usertests)
 
 
 ### Login Daten
 
-Bei unserer Anwendung meldet man sich mit einer E-Mail-Adresse und einem Passwort an.
+Beim start des Programms werden zwei URLs in den logs ausgegeben. Diese URLs können genutzt werden, um um sich zu registrieren.
 ```
-email: admin@admin
-password: password
+2023-02-07 10:58:57.989  INFO 1 --- [           main] sopro.TrintelApplication                 : The registration URL for ADMINS is: /signup/3e60eb52-f2c0-4f3d-9d50-ce63e578714b
+2023-02-07 10:58:57.991  INFO 1 --- [           main] sopro.TrintelApplication                 : The registration URL for STUDENTS is: /signup/3bb82933-55b8-4975-b631-3ef322e39dc9
 ```
 
 Als Administrator kann man dann im Admin Panel die Registrierungs-URL einsehen, mit der sich neue Schüler anmelden können (Achtung! Diese URL ist nicht persistent, gilt also nur für die aktuelle Laufzeit).
@@ -45,7 +47,17 @@ Zudem wird in der Konsole ein Link für den Registrierung für Admins geprintet,
 
 ### Deployment
 
-In der Deploy-Pipeline wird ein Docker Image erstellt, das wir verwenden können.
+#### Docker Image bauen
+
+In der Deploy-Pipeline wird ein Docker Image erstellt und nach Docker-Hub gepusht, das wir verwenden können.
+Man kann das Image auch lokal bauen mit dem Befehl:
+```
+docker build -t trintel:1.0.0
+```
+Wichtig ist, dass die jars vorhanden sind. Das Projekt muss vorher also einmal mit Gradle gebaut werden.
+Das Docker File ist so geschrieben, dass das gesamte `/build` Verzeichnis ins Image kopiert wird. Der Entrypoint ist aber Fest auf /`build/libs/trintel-0.0.1-SNAPSHOT.jar` gesetzt. Dies ist wichtig, falls die Version in der `build.gradle` angepasst wird. (Versionierung haben wir über Docker gemanaged und nicht über Gradle)
+
+#### Docker Image ausführen
 Wir laden das Docker Image und führen es aus. Dieses Vorgehen wird hier im Folgenden erklärt.
 
 Nun müssen die folgenden Commands ausgeführt werden:
@@ -57,19 +69,40 @@ docker run -d -p 8080:8080 --name trintel-container b3zz/trintel
 
 Jetzt läuft die App im Container und ist über den Port 8080 erreichbar.
 
-Will man das Docker Image lokal bauen, muss man beachten, dass die folgenden Directories gemoved werden:
+#### Starten mit Docker-Compose
 
+Für den produktiven Deploy nutzen wir `docker-compose`. Außerdem nutzen wir für die Loganalyse den `Elastic Stack`.
+Dieser besteht in unserer Konfiguration aus zwei Teilen.
+
+- `Filebeat` läuft parallel zu der Trintel Instanz/ den Instanzen und sammelt alle logs der Docker Container ein.
+Diese werden dann an einen anderen Server geschickt. Dies ist Konfiguriert in der `elastic-stack/filebeat.yml`.
+ - `Logstash` läuft dann auf einem anderen Server, welcher die Logs empfängt, parsed und in einer ES-DB speichert.
+Dieser Teil kann mit der `elastic-stack/docker-compose.yml` gestartet werden.
+
+**Achtung!**: Viele Pfade sind relativ angegeben. Daher sollte docker-compose immer aus dem Ordner, in welchem die docker-compose.yml liegt aufgerufen werden.
+
+```sh
+docker-compose up -d
 ```
-mv build/libs/trintel-0.0.1-SNAPSHOT.jar target/app.jar
-mv build/resources target/
-```
-
-So können sie dann vom Docker File gefunden werden.
-
 
 **Lokal testen ohne Docker**
 
 Hier ist es am einfachsten, das Repository zu clonen und die App mit `./gradlew bootRun` zu starten. Hier als Hinweis: Wir nutzen die Java openjdk 11.
+
+Zum einfacheren Testen haben wir eine spezielle Init Methode für die Datenbank geschrieben, welche die Datenbank initial mit ein paar Dummy Daten befüllt. Dies passiert, wenn das Spring Profile "dev" gesetzt ist. 
+
+```
+./gradlew bootRun --args='--spring.profiles.active=dev'
+```
+Eine bestehende Datenbank wird bei erneutem Start des Programms nicht überschrieben.
+
+#### Konfiguration
+
+Alle Werte in den `.properties` Dateien sind im Prinzip nur Defaults und können durch das setzen von Umgebungsvariablen überschrieben werden.
+Dies nutzen wir mit `Docker` bzw. `docker-compose` aus.
+
+Insbesondere die Konfiguration des Mail-Servers passiert erst in der `docker-compose.yml`.
+Zum lokalen testen ohne Docker sollten die entsprechenden Werte in der `application-dev.properties` gesetzt werden.
 
 # Implementierte Funktionen
 

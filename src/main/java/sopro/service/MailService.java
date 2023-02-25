@@ -1,6 +1,7 @@
 package sopro.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -18,6 +19,9 @@ public class MailService implements MailInterface {
 
     @Autowired
     private JavaMailSender mailSender;
+
+    @Value("${spring.mail.username:trintel@cau.zeppel.eu}")
+    String mailUsername;
 
     /**
      * Construct and send mail.
@@ -38,7 +42,7 @@ public class MailService implements MailInterface {
         email.setTo(recipientAddress);
         email.setSubject(subject);
         email.setText(hello + " " + user.getForename() + ",\r\n\r\n" + message + "\r\n\r\n" + confirmationUrl + "\r\n\r\n" + greetings + " - The Trintel Team");
-        email.setFrom("trintel@cau.zeppel.eu");
+        email.setFrom(mailUsername);
 
         mailSender.send(email);
     }
@@ -62,7 +66,7 @@ public class MailService implements MailInterface {
         email.setTo(recipientAddress);
         email.setSubject(subject);
         email.setText(hello + " " + user.getForename() + ",\r\n\r\n" + message + "\r\n\r\n" + confirmationUrl + "\r\n\r\n" + greetings + " - The Trintel Team");
-        email.setFrom("trintel@cau.zeppel.eu");
+        email.setFrom(mailUsername);
 
         mailSender.send(email);
     }

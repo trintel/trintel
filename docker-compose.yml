@@ -6,8 +6,8 @@ services:
   #   environment:
   #     MYSQL_DATABASE: 'coolDB'
   #     # Password for root access
-  #     MYSQL_ROOT_PASSWORD: 'pw'
-  #   ports:
+  #     MYSQL_ROOT_PASSWORD: 'pw' #only accessable from inside the docker network, so not that critical.
+  #   expose:
   #     # <Port exposed> : < MySQL Port running inside container>
   #     - '3306:3306'
   #     # Where our data will be persisted
@@ -15,7 +15,7 @@ services:
   #     - my-db:/var/lib/mysql
 
   trintel:
-    image: b3zz/trintel:1.4.0
+    image: b3zz/trintel:1.4.2
     # depends_on:
     #   - db
     ports:
@@ -23,29 +23,36 @@ services:
     restart: always
     volumes:
       - trintel-database:/trintel-database
+    environment:
+      - spring.mail.host=smtp.strato.de
+      - spring.mail.port=587
+      - spring.mail.username=trintel@cau.zeppel.eu
+      - spring.mail.password= #mysecurepassword.
+      - spring.mail.properties.mail.smtp.auth=true
+      - spring.mail.properties.mail.smtp.starttls.enable=true
 
   trintel-v2:
-    image: b3zz/trintel:1.4.0
+    image: b3zz/trintel:1.4.2
     ports:
       - '8083:8080'
     restart: always
     volumes:
       - trintel-database-v2:/trintel-database
+    environment:
+      - spring.mail.host=smtp.strato.de
+      - spring.mail.port=587
+      - spring.mail.username=trintel@cau.zeppel.eu
+      - spring.mail.password= #mysecurepassword.
+      - spring.mail.properties.mail.smtp.auth=true
+      - spring.mail.properties.mail.smtp.starttls.enable=true
 
   filebeat:
     image: "docker.elastic.co/beats/filebeat:7.2.0"
     user: root
     volumes:
-      - /root/trintel/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      - ./elastic-stack/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro #TODO: this is a relative path. be careful.
       - /var/lib/docker:/var/lib/docker:ro
       - /var/run/docker.sock:/var/run/docker.sock
-
-#  logstash:
-#    image: docker.elastic.co/logstash/logstash:7.2.0
-#    volumes:
-#      - /root/trintel/pipeline:/usr/share/logstash/pipeline
-#    ports:
-#      - 5044:5044
 
 # Names our volume
 volumes:
