@@ -21,8 +21,8 @@ env:
   spring.mail.port: ${{ vars.MAIL_PORT }}
   spring.mail.username: ${{ vars.MAIL_USERNAME }}
   spring.mail.password: ${{ secrets.MAIL_PASSWORD }}
-  spring.mail.properties.mail.smtp.auth: $ {{ vars.MAIL_SMTP }}
-  spring.mail.properties.mail.smtp.starttls.enable: $ {{ vars.MAIL_SMTP_TLS }}
+  spring.mail.properties.mail.smtp.auth: ${{ vars.MAIL_SMTP }}
+  spring.mail.properties.mail.smtp.starttls.enable: ${{ vars.MAIL_SMTP_TLS }}
 
 jobs:
   build:
@@ -30,11 +30,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Debug
-      run: |
-        echo "repository variable : ${{ vars.MAIL_HOST }}"
-        echo "repository secret : ${{ secrets.MAIL_PASSWORD }}"
-        echo $spring.mail.host
     - uses: actions/checkout@v3
     - name: Set up JDK 11
       uses: actions/setup-java@v3
