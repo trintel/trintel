@@ -6,6 +6,7 @@
       - [Docker Image bauen](#docker-image-bauen)
       - [Docker Image ausführen](#docker-image-ausführen)
       - [Starten mit Docker-Compose](#starten-mit-docker-compose)
+      - [Konfiguration](#konfiguration)
 - [Implementierte Funktionen](#implementierte-funktionen)
   - [Allgemein](#allgemein)
     - [Erweiterbarer Sprachsupport](#erweiterbarer-sprachsupport)
@@ -88,12 +89,20 @@ docker-compose up -d
 
 Hier ist es am einfachsten, das Repository zu clonen und die App mit `./gradlew bootRun` zu starten. Hier als Hinweis: Wir nutzen die Java openjdk 11.
 
-Zum einfacheren Testen haben wir eine spezielle Init Methode für die Datenbank geschrieben, welche die Datenbank initial mit ein paar Dummy Daten befüllt. Die passiert, wenn das Spring Profile "debug" gesetzt ist. 
+Zum einfacheren Testen haben wir eine spezielle Init Methode für die Datenbank geschrieben, welche die Datenbank initial mit ein paar Dummy Daten befüllt. Dies passiert, wenn das Spring Profile "dev" gesetzt ist. 
 
 ```
 ./gradlew bootRun --args='--spring.profiles.active=dev'
 ```
 Eine bestehende Datenbank wird bei erneutem Start des Programms nicht überschrieben.
+
+#### Konfiguration
+
+Alle Werte in den `.properties` Dateien sind im Prinzip nur Defaults und können durch das setzen von Umgebungsvariablen überschrieben werden.
+Dies nutzen wir mit `Docker` bzw. `docker-compose` aus.
+
+Insbesondere die Konfiguration des Mail-Servers passiert erst in der `docker-compose.yml`.
+Zum lokalen testen ohne Docker sollten die entsprechenden Werte in der `application-dev.properties` gesetzt werden.
 
 # Implementierte Funktionen
 
