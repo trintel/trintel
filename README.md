@@ -1,3 +1,10 @@
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/47346598/221367348-29db07e9-33c1-4a5e-93d8-5e2aee32282b.jpeg" width="30%" >
+</p>
+
+
+
 # Trintel
 
 - [Trintel](#trintel)
