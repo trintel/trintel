@@ -47,12 +47,12 @@ public class BackupController {
     public String importBackup(@RequestParam("file") MultipartFile importFile, Model model) {
         TrintelApplication.logger.info("Importing file: " + importFile.getOriginalFilename());
         File file = new File(TrintelApplication.EXPORT_PATH + "/trintelImport.sql");
-        
+
         if (!importFile.getOriginalFilename().contains(".sql")) {
             TrintelApplication.logger.error("Tried to import a non sql file: "+ importFile.getOriginalFilename());
             return "redirect:/home";
         }
-        
+
         try {
             importFile.transferTo(file);
         } catch (IllegalStateException | IOException e) {
