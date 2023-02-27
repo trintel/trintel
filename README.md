@@ -38,7 +38,7 @@
 ### Login Daten
 
 Beim start des Programms werden zwei URLs in den logs ausgegeben. Diese URLs können genutzt werden, um um sich zu registrieren.
-```
+```log
 2023-02-07 10:58:57.989  INFO 1 --- [           main] sopro.TrintelApplication                 : The registration URL for ADMINS is: /signup/3e60eb52-f2c0-4f3d-9d50-ce63e578714b
 2023-02-07 10:58:57.991  INFO 1 --- [           main] sopro.TrintelApplication                 : The registration URL for STUDENTS is: /signup/3bb82933-55b8-4975-b631-3ef322e39dc9
 ```
@@ -52,7 +52,7 @@ Zudem wird in der Konsole ein Link für den Registrierung für Admins geprintet,
 
 In der Deploy-Pipeline wird ein Docker Image erstellt und nach Docker-Hub gepusht, das wir verwenden können.
 Man kann das Image auch lokal bauen mit dem Befehl:
-```
+```sh
 docker build -t trintel:1.0.0
 ```
 Wichtig ist, dass die jars vorhanden sind. Das Projekt muss vorher also einmal mit Gradle gebaut werden.
@@ -91,13 +91,13 @@ Hier ist es am einfachsten, das Repository zu clonen und die App mit `./gradlew 
 
 Zum einfacheren Testen haben wir eine spezielle Init Methode für die Datenbank geschrieben, welche die Datenbank initial mit ein paar Dummy Daten befüllt. Dies passiert, wenn das Spring Profile "dev" gesetzt ist. 
 
-```
+```sh
 ./gradlew bootRun --args='--spring.profiles.active=dev'
 ```
 Eine bestehende Datenbank wird bei erneutem Start des Programms nicht überschrieben.
 
 Wichtig sind hier vor allem die Konfiguration der Mailserver, da das Programm ansonsten nicht Kompiliert.
-```
+```properties
 spring.mail.host=mailin.informatik.uni-kiel.de
 spring.mail.port=587
 spring.mail.username= #stu-Kennung
