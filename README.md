@@ -6,6 +6,7 @@
       - [Docker Image bauen](#docker-image-bauen)
       - [Docker Image ausführen](#docker-image-ausführen)
       - [Starten mit Docker-Compose](#starten-mit-docker-compose)
+      - [Lokal testen ohne Docker](#lokal-testen-ohne-docker)
       - [Konfiguration](#konfiguration)
 - [Implementierte Funktionen](#implementierte-funktionen)
   - [Allgemein](#allgemein)
@@ -84,8 +85,7 @@ Dieser Teil kann mit der `elastic-stack/docker-compose.yml` gestartet werden.
 ```sh
 docker-compose up -d
 ```
-
-**Lokal testen ohne Docker**
+#### Lokal testen ohne Docker
 
 Hier ist es am einfachsten, das Repository zu clonen und die App mit `./gradlew bootRun` zu starten. Hier als Hinweis: Wir nutzen die Java openjdk 11.
 
@@ -95,7 +95,6 @@ Zum einfacheren Testen haben wir eine spezielle Init Methode für die Datenbank 
 ./gradlew bootRun --args='--spring.profiles.active=dev'
 ```
 Eine bestehende Datenbank wird bei erneutem Start des Programms nicht überschrieben.
-
 #### Konfiguration
 
 Alle Werte in den `.properties` Dateien sind im Prinzip nur Defaults und können durch das setzen von Umgebungsvariablen überschrieben werden.
