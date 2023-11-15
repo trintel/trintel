@@ -39,7 +39,7 @@
                 </select>
 
                 <div class="form-floating mb-3">
-                    <input type="text" maxlength="30" class="form-control" id="email"
+                    <input type="text" maxlength="255" class="form-control" id="email"
                         placeholder="mail@example.org" th:field="*{email}">
                     <label for="email" th:text="#{email}"></label>
                 </div>
@@ -57,7 +57,7 @@
                 </div>
 
                 <div class="form-floating mb-3">
-                    <input type="url" maxlength="30" class="form-control" id="floatingHomepage"
+                    <input type="url" maxlength="255" class="form-control" id="floatingHomepage"
                         placeholder="Homepage" th:field="*{homepage}">
                     <label for="floatingHomepage" th:text="#{companyHomepage}"></label>
                 </div>
