@@ -16,7 +16,7 @@ import lombok.Setter;
 
 @Entity
 public class VerificationToken {
-    private static final int EXPIRATION = 60 * 24;
+    private static final int EXPIRATION = 60 * 24 * 2;
 
     @Id
     @Getter

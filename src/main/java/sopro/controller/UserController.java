@@ -22,7 +22,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import sopro.TrintelApplication;
-import sopro.events.OnRegistrationCompleteEvent;
 import sopro.model.User;
 import sopro.model.util.TokenStatus;
 import sopro.repository.UserRepository;
@@ -111,8 +110,8 @@ public class UserController {
         }
 
         try {
-            userService.createUser(user, role);
-        } catch (Exception e) {
+            userService.createUser(user, role, request);
+        } catch (IllegalArgumentException e) { // TODO: throw a more specific exception
             TrintelApplication.logger.error("Email Adresse schon registriert.\n\n" + e);
 
             model.addAttribute("isSignupError", true);
@@ -124,9 +123,6 @@ public class UserController {
             }
         }
 
-        // Publish event for Mail validation.
-        eventPublisher.publishEvent(new OnRegistrationCompleteEvent(user, request.getLocale(),
-                request.getServerName() + ":" + request.getServerPort()));
         return "verify-your-email";
     }
 
@@ -142,12 +138,12 @@ public class UserController {
     @GetMapping("/registrationConfirm")
     public ModelAndView confirmRegistration(final HttpServletRequest request, final ModelMap model,
             @RequestParam("token") final String token) throws UnsupportedEncodingException {
-        final TokenStatus tokenStatus = userService.validateVerificationToken(token);
+        final TokenStatus tokenStatus = userService.validateVerificationToken(token, request);
         if (tokenStatus == TokenStatus.VALID)
             return new ModelAndView("redirect:/login", model); // Success you can now login.
 
-        model.addAttribute("invalidLogin", "Registration token expired.");
-        return new ModelAndView("redirect:/login?error", model); // Bad user, agelaufen.
+        model.addAttribute("invalidLogin", "Registration token expired. Check your email for a new one.");
+        return new ModelAndView("redirect:/login?error", model); // Bad user, expired.
     }
 
     @GetMapping("/user/settings")
