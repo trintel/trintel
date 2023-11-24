@@ -107,12 +107,16 @@ public class AttachedFileService implements AttachedFileInterface {
     }
 
     public ByteArrayOutputStream generatePdfFromTransaction(long transactionId) {
+        //TODO: don't merge pdfs, but zip all documents and send them to the user.
         List<Action> ax = transactionRepository.findById(transactionId).get().getActions();
         List<InputStream> iSs = new ArrayList<>();
         for (int i = 0; i < ax.size(); ++i) {
             ByteArrayInputStream iS;
             if(!ax.get(i).getAttachedFiles().isEmpty()) {
-                iS = new ByteArrayInputStream(ax.get(i).getAttachedFiles().get(0).getData()); // TODO ganze Liste machen wir, wenn wir bezahlt werden.
+                AttachedFile af = ax.get(i).getAttachedFiles().get(0);
+                if (!af.getFileType().equals("application/pdf"))
+                    continue;
+                iS = new ByteArrayInputStream(ax.get(i).getAttachedFiles().get(0).getData());
                 iSs.add(iS);
                 continue;
             }
