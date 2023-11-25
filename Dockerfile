@@ -8,11 +8,9 @@ COPY settings.gradle .
 COPY gradlew .
 COPY gradle ./gradle
 
-RUN ./gradlew --no-daemon --no-tests dependencies
-
 COPY src ./src
 
-RUN ./gradlew --no-daemon build
+RUN ./gradlew --no-daemon -x test build
 
 # Stage 2: Create the final image
 FROM openjdk:11-jre-slim
