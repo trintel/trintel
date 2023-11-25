@@ -5,20 +5,22 @@ filebeat.autodiscover:
       templates:
         - condition:
             contains:
-              docker.container.image: b3zz/trintel
+              docker.container.name: trintel
           config:
             - type: container
-              format: docker
               paths:
-                - /var/lib/docker/containers/${data.docker.container.id}/*.log
+              # this path works only for my local wsl setup
+                - /mnt/docker/version-pack-data/community/docker/containers/${data.docker.container.id}/*.log
+              # this path is for a native linux setup
+              # - /var/lib/docker/containers/${data.docker.container.id}/*.log
 #              exclude_lines: ["^\\s+[\\-`('.|_]"]  # drop asciiart lines
-              processors:
-                - decode_json_fields:
-#                    when.equals:
-#                      docker.container.labels.decode_log_event_to_json_object: "true"
-                    fields: ["message"]
-                    target: ""
-                    overwrite_keys: true
+#               processors:
+#                 - decode_json_fields:
+# #                    when.equals:
+# #                      docker.container.labels.decode_log_event_to_json_object: "true"
+#                     fields: ["message"]
+#                     target: ""
+#                     overwrite_keys: true
 
 processors:
 - add_docker_metadata:
@@ -30,9 +32,16 @@ processors:
 #    overwrite_keys: true
 
 output.logstash:
-  hosts: ["dev.zeppel.eu:5044"]
-  loadbalance: true
+  hosts: ["logstash:5043"]
   ssl.enabled: false
+
+# output.elasticsearch:
+#   hosts: ["elasticsearch:9200"]
+#   index: "filebeat-%{[agent.version]}-%{+yyyy.MM.dd}"
+#   ssl.enabled: false
+
+# setup.template.name: "filebeat"
+# setup.template.pattern: "filebeat-*"
 
 logging.json: true
 logging.metrics.enabled: false
