@@ -15,11 +15,15 @@ services:
   #     - my-db:/var/lib/mysql
 
   trintel:
-    image: b3zz/trintel:1.4.2
+    image: trintel:latest
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: trintel
     # depends_on:
     #   - db
     ports:
-      - '8082:8080'
+      - '8080:8080'
     restart: always
     volumes:
       - trintel-database:/trintel-database
@@ -31,30 +35,59 @@ services:
       - spring.mail.properties.mail.smtp.auth=true
       - spring.mail.properties.mail.smtp.starttls.enable=true
 
-  trintel-v2:
-    image: b3zz/trintel:1.4.2
-    ports:
-      - '8083:8080'
-    restart: always
-    volumes:
-      - trintel-database-v2:/trintel-database
-    environment:
-      - spring.mail.host=smtp.strato.de
-      - spring.mail.port=587
-      - spring.mail.username=trintel@cau.zeppel.eu
-      - spring.mail.password= #mysecurepassword.
-      - spring.mail.properties.mail.smtp.auth=true
-      - spring.mail.properties.mail.smtp.starttls.enable=true
-
   filebeat:
-    image: "docker.elastic.co/beats/filebeat:7.2.0"
+    image: "docker.elastic.co/beats/filebeat:8.11.0"
+    container_name: filebeat
     user: root
+    command: ["filebeat", "-e", "-strict.perms=false", "-d", "publish"]
     volumes:
       - ./elastic-stack/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro #TODO: this is a relative path. be careful.
       - /var/lib/docker:/var/lib/docker:ro
       - /var/run/docker.sock:/var/run/docker.sock
+      - /mnt/docker:/mnt/docker:ro #for wsl
+
+    # Elasticsearch Docker Images: https://www.docker.elastic.co/
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.2.0
+    container_name: elasticsearch
+    environment:
+      - xpack.security.enabled=false
+      - discovery.type=single-node
+    # ulimits:
+    #   memlock:
+    #     soft: -1
+    #     hard: -1
+    #   nofile:
+    #     soft: 65536
+    #     hard: 65536
+    # cap_add:
+    #   - IPC_LOCK
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+      - 9300:9300
+
+  kibana:
+    container_name: kibana
+    image: docker.elastic.co/kibana/kibana:7.2.0
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    ports:
+      - 5601:5601
+    depends_on:
+      - elasticsearch
+
+  logstash:
+      image: docker.elastic.co/logstash/logstash:8.11.0
+      container_name: logstash
+      command: bash -c "bin/logstash-plugin install logstash-filter-multiline && logstash -f /usr/share/logstash/pipeline/logstash.conf" # TODO: this is a workaround for multiline filter. remove when fixed.
+      volumes:
+        - "./elastic-stack/logstash/:/usr/share/logstash/pipeline/:ro" #TODO: this is a relative path. be careful.
+      ports:
+      - 5043:5043
 
 # Names our volume
 volumes:
   trintel-database:
-  trintel-database-v2:
+  elasticsearch-data:
