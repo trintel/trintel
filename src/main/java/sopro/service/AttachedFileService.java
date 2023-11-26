@@ -107,14 +107,18 @@ public class AttachedFileService implements AttachedFileInterface {
     }
 
     public ByteArrayOutputStream generatePdfFromTransaction(long transactionId) {
+        //TODO: don't merge pdfs, but zip all documents and send them to the user.
         List<Action> ax = transactionRepository.findById(transactionId).get().getActions();
         List<InputStream> iSs = new ArrayList<>();
         for (int i = 0; i < ax.size(); ++i) {
             ByteArrayInputStream iS;
             if(!ax.get(i).getAttachedFiles().isEmpty()) {
-                iS = new ByteArrayInputStream(ax.get(i).getAttachedFiles().get(0).getData()); // TODO ganze Liste machen wir, wenn wir bezahlt werden.
-                iSs.add(iS);
-                continue;
+                AttachedFile af = ax.get(i).getAttachedFiles().get(0);
+                if (af.getFileType().equals("application/pdf")) {
+                    iS = new ByteArrayInputStream(ax.get(i).getAttachedFiles().get(0).getData());
+                    iSs.add(iS);
+                    continue;
+                }
             }
             try {
                 iS = new ByteArrayInputStream(buildPdf(ax.get(i).getId()).toByteArray());
@@ -162,11 +166,12 @@ public class AttachedFileService implements AttachedFileInterface {
         // header
 
         //TODO: get from repository!!
-        Image img = Image.getInstance(System.getProperty("user.dir") + "/build/resources/main/static/img/placeholder.jpg");
-
+        Image img;
         try {
             img = Image.getInstance(a.getInitiator().getCompany().getCompanyLogo().getLogo());
-        } catch (Exception e) {
+        } catch (NullPointerException e) { //null if logo is not set.
+            img = Image.getInstance(companyLogoRepository.findByCompany(null).getLogo()); //default logo is matched to null company
+            // img = Image.getInstance(System.getProperty("/app/build/resources/main/static/img/placeholder.jpg"));
 
         }
 
