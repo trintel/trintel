@@ -114,11 +114,11 @@ public class AttachedFileService implements AttachedFileInterface {
             ByteArrayInputStream iS;
             if(!ax.get(i).getAttachedFiles().isEmpty()) {
                 AttachedFile af = ax.get(i).getAttachedFiles().get(0);
-                if (!af.getFileType().equals("application/pdf"))
+                if (af.getFileType().equals("application/pdf")) {
+                    iS = new ByteArrayInputStream(ax.get(i).getAttachedFiles().get(0).getData());
+                    iSs.add(iS);
                     continue;
-                iS = new ByteArrayInputStream(ax.get(i).getAttachedFiles().get(0).getData());
-                iSs.add(iS);
-                continue;
+                }
             }
             try {
                 iS = new ByteArrayInputStream(buildPdf(ax.get(i).getId()).toByteArray());
@@ -166,11 +166,12 @@ public class AttachedFileService implements AttachedFileInterface {
         // header
 
         //TODO: get from repository!!
-        Image img = Image.getInstance(System.getProperty("user.dir") + "/build/resources/main/static/img/placeholder.jpg");
-
+        Image img;
         try {
             img = Image.getInstance(a.getInitiator().getCompany().getCompanyLogo().getLogo());
-        } catch (Exception e) {
+        } catch (NullPointerException e) { //null if logo is not set.
+            img = Image.getInstance(companyLogoRepository.findByCompany(null).getLogo()); //default logo is matched to null company
+            // img = Image.getInstance(System.getProperty("/app/build/resources/main/static/img/placeholder.jpg"));
 
         }
 

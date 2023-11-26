@@ -13,23 +13,17 @@ COPY src ./src
 RUN ./gradlew --no-daemon -x test build
 
 # Stage 2: Create the final image
-FROM openjdk:11-jre-slim
+FROM openjdk:11-jdk-slim
 
 ENV TZ=Europe/Berlin
 
 COPY --from=builder /app/build/libs/trintel-0.0.1-SNAPSHOT.jar /app/trintel.jar
 
+COPY --from=builder /app/build/resources/main/static/img/placeholder.jpg /app/build/resources/main/static/img/placeholder.jpg
+
 EXPOSE 8080
 
-ENTRYPOINT ["java", "-jar", "/app/trintel.jar"]
+EXPOSE 5005
 
-
-# FROM openjdk:11-jre-slim
-# ENV TZ=Europe/Berlin
-
-# COPY build/ /build/
-
-# EXPOSE 8080
-
-# ENTRYPOINT ["java","-jar","/build/libs/trintel-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java", "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005", "-jar", "/app/trintel.jar"]
 

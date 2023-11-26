@@ -24,6 +24,7 @@ services:
     #   - db
     ports:
       - '8080:8080'
+      - '5005:5005' # only for dev. remove for prod.
     restart: always
     volumes:
       - trintel-database:/trintel-database
@@ -34,6 +35,7 @@ services:
       - spring.mail.password= #mysecurepassword.
       - spring.mail.properties.mail.smtp.auth=true
       - spring.mail.properties.mail.smtp.starttls.enable=true
+      - spring.profiles.active=dev # only for dev. remove for prod.
 
   filebeat:
     image: "docker.elastic.co/beats/filebeat:8.11.0"
