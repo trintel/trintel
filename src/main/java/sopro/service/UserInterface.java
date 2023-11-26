@@ -17,11 +17,11 @@ public interface UserInterface {
 
     VerificationToken getVerificationToken(String VerificationToken);
 
-    TokenStatus validateVerificationToken(String token);
+    TokenStatus validateVerificationToken(String token, HttpServletRequest request);
 
     TokenStatus validateResetToken(String token, String password);
 
-    void createUser(User user, String role) throws Exception;
+    void createUser(User user, String role, HttpServletRequest request) throws IllegalArgumentException;
 
     void changePassword(User user, String password);
 

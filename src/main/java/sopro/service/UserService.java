@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import sopro.events.OnPasswordResetEvent;
+import sopro.events.OnRegistrationCompleteEvent;
 import sopro.model.ResetToken;
 import sopro.model.User;
 import sopro.model.VerificationToken;
@@ -110,7 +111,7 @@ public class UserService implements UserInterface {
      * @return String
      */
     @Override
-    public TokenStatus validateVerificationToken(String token) {
+    public TokenStatus validateVerificationToken(String token, HttpServletRequest request) {
         final VerificationToken verificationToken = verificationTokenRepository.findByToken(token);
         if (verificationToken == null) {
             return TokenStatus.INVALID;
@@ -120,6 +121,10 @@ public class UserService implements UserInterface {
         final Calendar cal = Calendar.getInstance();
         if ((verificationToken.getExpiryDate().getTime() - cal.getTime().getTime()) <= 0) {
             verificationTokenRepository.delete(verificationToken);
+
+            // Publish event for Mail validation.
+            eventPublisher.publishEvent(new OnRegistrationCompleteEvent(user, request.getLocale(),
+                request.getServerName() + ":" + request.getServerPort()));
             return TokenStatus.EXPIRED;
         }
 
@@ -156,7 +161,7 @@ public class UserService implements UserInterface {
     }
 
     @Override
-    public void createUser(User user, String role) throws Exception {
+    public void createUser(User user, String role, HttpServletRequest request) throws IllegalArgumentException {
         user.setRole(role.toUpperCase());
 
         // encode the new password for saving in the database
@@ -165,6 +170,10 @@ public class UserService implements UserInterface {
 
         // saves the new user in userRepo
         userRepository.save(user);
+
+        // Publish event for Mail validation.
+        eventPublisher.publishEvent(new OnRegistrationCompleteEvent(user, request.getLocale(),
+            request.getServerName() + ":" + request.getServerPort()));
     }
 
     @Override
