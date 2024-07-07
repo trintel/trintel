@@ -20,6 +20,7 @@ AVIALABLE as long as no offer is accepted-->
                         <i class="bi bi-truck" th:case="${actionTypes.deliveryActionType.id}"></i>
                         <i class="bi bi-receipt-cutoff" th:case="${actionTypes.invoiceActionType.id}"></i>
                         <i class="bi bi-cash-coin" th:case="${actionTypes.paidActionType.id}"></i>
+                        <i class="bi bi-briefcase" th:case="*"></i> <!-- Default icon -->
                     </th:block>
                 </div>
                 <th:block th:switch="${actionTypeID}">
@@ -29,6 +30,7 @@ AVIALABLE as long as no offer is accepted-->
                         <span th:text="#{deliveryTLV}" th:case="${actionTypes.deliveryActionType.id}"></span>
                         <span th:text="#{invoicingTLV}" th:case="${actionTypes.invoiceActionType.id}"></span>
                         <span th:text="#{paidTV}" th:case="${actionTypes.paidActionType.id}"></span>
+                        <span th:text="${actionType.name}" th:case="*"></span>
                     </h1>
                 </th:block>
             </div>
@@ -47,14 +49,10 @@ AVIALABLE as long as no offer is accepted-->
                     </div>
                     <!-- Block: Drop Down menu for user role -->
                     <div class="col-5">
-                        <select name="isBuyer" th:unless="${roleRestricted}" required>
+                        <select name="isBuyer" required>
                             <option value="" th:text="#{role}"></option>
-                            <option th:text="#{buyer}" th:value="true"> </option>
-                            <option th:text="#{seller}" th:value="false"> </option>
-                        </select>
-
-                        <select name="isBuyer" th:if="${roleRestricted}" required disabled>
-                            <option th:text="#{seller}" th:value="false"> </option>
+                            <option th:text="#{buyer}" th:value="true" th:unless="${initiatorType == 'SELLER'}"> </option>
+                            <option th:text="#{seller}" th:value="false" th:unless="${initiatorType == 'BUYER'}"> </option>
                         </select>
                     </div>
                 </div>
