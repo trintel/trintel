@@ -14,7 +14,10 @@
   },
   "customizations": {
     "vscode": {
-      "extensions": ["vscjava.vscode-gradle"]
+      "extensions": [
+        "vscjava.vscode-gradle",
+        "shd101wyy.markdown-preview-enhanced"
+      ]
     }
   }
 
