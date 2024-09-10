@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -64,7 +65,8 @@ public class TransactionController {
     @Autowired
     AttachedFileInterface attachedFileService;
 
-    //TODO: write a service for the transactions, because this controller should not handle that much logic.
+    // TODO: write a service for the transactions, because this controller should
+    // not handle that much logic.
 
     @GetMapping("/transactions")
     public String listTransactions(Model model, @AuthenticationPrincipal User user,
@@ -159,7 +161,7 @@ public class TransactionController {
         List<ActionType> altActionTypes = new ArrayList<ActionType>();
         for (ActionType actionType : altActionTypesIter) {
             if (!actionType.equals(actionTypeService.getInitialActionType())
-                    && !actionType.equals(actionTypeService.getAbortActionType()) && actionType.isStandardAction()) {
+                    && !actionType.equals(actionTypeService.getAbortActionType())) {
                 altActionTypes.add(actionType);
             }
         }
@@ -177,20 +179,19 @@ public class TransactionController {
     public String createTransactionSkipSave(Action action, Transaction transaction, @PathVariable Long companyID,
             @PathVariable Long actionTypeID,
             @AuthenticationPrincipal User user, Model model) {
+        ActionType actionType = actionTypeService.getActionTypeById(actionTypeID);
         model.addAttribute("companyID", companyID);
         model.addAttribute("skip", true);
         model.addAttribute("actionTypeID", actionTypeID);
+        model.addAttribute("actionType", actionType);
         model.addAttribute("actionTypes", actionTypeService);
-        if (actionTypeService.getDeliveryActionType().getId().equals(actionTypeID)
-                || actionTypeService.getInvoiceActionType().getId().equals(actionTypeID)
-                || actionTypeService.getPaidActionType().getId().equals(actionTypeID)) {
-            model.addAttribute("roleRestricted", true);
-        }
+        model.addAttribute("initiatorType", actionType.getInitiatorType().toString());
         return "transaction-addAction";
     }
 
     @PreAuthorize("hasCompany()")
     @PostMapping("/transaction/{companyID}/create/skip/{actionTypeID}")
+    @Transactional
     public String createTransactionSkipAddOffer(Action action, @RequestParam("attachment") MultipartFile[] attachments,
             @RequestParam String product, boolean isBuyer, @PathVariable Long companyID,
             @PathVariable Long actionTypeID, @AuthenticationPrincipal User user,
@@ -204,11 +205,8 @@ public class TransactionController {
             transaction.setBuyer(companyRepository.getById(companyID));
             transaction.setSeller(user.getCompany());
         }
-
-        transactionRepository.save(transaction);
-        if (actionTypeService.getOfferAction().getId().equals(actionTypeID)) {
-            addOffer(action, attachments, transaction.getId(), user, bindingResult, model);
-        } else if (actionTypeService.getAcceptActionType().getId().equals(actionTypeID)) {
+        transaction = transactionRepository.save(transaction);
+        if (actionTypeService.getAcceptActionType().getId().equals(actionTypeID)) {
             transaction.setConfirmed(true);
             createAcceptAction(action, attachments, transaction.getId(), user);
         } else if (actionTypeService.getDeliveryActionType().getId().equals(actionTypeID)) {
@@ -222,6 +220,19 @@ public class TransactionController {
             transaction.setConfirmed(true);
             transaction.setShipped(true);
             createPaidAction(action, transaction.getId(), attachments, user);
+        } else {
+            action.setTransaction(transaction);
+            action.setInitiator(user);
+            action.setActiontype(actionTypeService.getActionTypeById(actionTypeID));
+            action = actionRepository.save(action);
+
+            if (attachments.length > 0) {
+                List<AttachedFile> attachedFiles = attachedFileService.storeFiles(Arrays.asList(attachments), action);
+                action.setAttachedFiles(attachedFiles);
+            }
+            // TODO: die gesamte struktur in
+            // dieser klasse
+            // ist fucked up. Das gehoert alles nicht in den controller
         }
         return "redirect:/transaction/" + transaction.getId();
     }
@@ -490,7 +501,8 @@ public class TransactionController {
     }
 
     @GetMapping("download/attachment/{fileId}")
-    public ResponseEntity<byte[]> downloadAttachement(@PathVariable long fileId, HttpServletResponse response, Model model) {
+    public ResponseEntity<byte[]> downloadAttachement(@PathVariable long fileId, HttpServletResponse response,
+            Model model) {
 
         AttachedFile attachement = attachedFileService.getFile(fileId);
 

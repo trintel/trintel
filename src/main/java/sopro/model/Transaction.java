@@ -22,16 +22,43 @@ import lombok.Setter;
 @Entity
 public class Transaction {
 
-    @Getter @Setter @Id private Long id;
-    @Getter @Setter @OneToMany(mappedBy = "transaction", cascade = CascadeType.REMOVE) List<Action> actions;
-    @Getter @Setter @NotNull @ManyToOne private Company buyer;
-    @Getter @Setter @NotNull @ManyToOne private Company seller;
-    @Getter @Setter @OneToMany(mappedBy = "transaction") List<Rating> ratings;
-    @Getter @Setter private String product;
-    @Getter @Setter private Boolean paid = false;
-    @Getter @Setter private Boolean shipped = false;
-    @Getter @Setter private Boolean confirmed = false;
-    @Getter @Setter private Boolean active = true;
+    @Getter
+    @Setter
+    @Id
+    private Long id;
+    @Getter
+    @Setter
+    @OneToMany(mappedBy = "transaction", cascade = CascadeType.REMOVE)
+    List<Action> actions;
+    @Getter
+    @Setter
+    @NotNull
+    @ManyToOne
+    private Company buyer;
+    @Getter
+    @Setter
+    @NotNull
+    @ManyToOne
+    private Company seller;
+    @Getter
+    @Setter
+    @OneToMany(mappedBy = "transaction")
+    List<Rating> ratings;
+    @Getter
+    @Setter
+    private String product;
+    @Getter
+    @Setter
+    private Boolean paid = false;
+    @Getter
+    @Setter
+    private Boolean shipped = false;
+    @Getter
+    @Setter
+    private Boolean confirmed = false;
+    @Getter
+    @Setter
+    private Boolean active = true;
 
     public Transaction() {
         this.id = IdHandler.generateId();
@@ -88,8 +115,11 @@ public class Transaction {
      */
     public Action getLatestStandardAction() {
         int index = actions.size() - 1;
-        while(!actions.get(index).getActiontype().isStandardAction()) {
+        while (!actions.get(index).getActiontype().isStandardAction()) {
             index--;
+            if (index < 0) {
+                return null;
+            }
         }
         return actions.get(index);
     }
@@ -139,7 +169,9 @@ public class Transaction {
         return m;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override

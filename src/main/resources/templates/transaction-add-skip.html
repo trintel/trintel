@@ -32,6 +32,7 @@
                                                         th:case="${actionTypes.invoiceActionType.id}"></i>
                                                     <i class="bi bi-cash-coin"
                                                         th:case="${actionTypes.paidActionType.id}"></i>
+                                                    <i class="bi bi-briefcase" th:case="*"></i> <!-- Default icon -->
                                                 </th:block>
                                             </div>
                                             <th:block th:switch="${actionType.id}">
@@ -46,6 +47,8 @@
                                                         th:case="${actionTypes.invoiceActionType.id}"></span>
                                                     <span th:text="#{paidTV}"
                                                         th:case="${actionTypes.paidActionType.id}"></span>
+                                                    <span th:text="${actionType.name}"
+                                                        th:case="*"></span>
                                                 </h5>
                                             </th:block>
                                         </div>

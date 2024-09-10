@@ -57,7 +57,6 @@ public class InitDatabaseService {
     @Autowired
     PasswordEncoder passwordEncoder;
 
-
     public void init() {
         // If there is no data, add some initial values for testing the application.
         // ATTENTION: If you change any model (i.e., the data scheme), you most likely
@@ -65,12 +64,13 @@ public class InitDatabaseService {
 
         if (userRepository.count() == 0 && companyRepository.count() == 0) {
 
-            //Create demo Users
-            User admin = new User(true, true, true, true, "admin", "admin", "admin@admin", passwordEncoder.encode("password"), null);
+            // Create demo Users
+            User admin = new User(true, true, true, true, "admin", "admin", "admin@admin",
+                    passwordEncoder.encode("password"), null);
             admin.setRole("ADMIN");
             userRepository.save(admin);
 
-            //Create demo Companies
+            // Create demo Companies
             Company company1 = new Company("[187]Strassenbande");
             Company company2 = new Company("Streber GmbH");
             Company company3 = new Company("7Bags");
@@ -82,26 +82,33 @@ public class InitDatabaseService {
             companyRepository.save(company3);
 
             // Create demo Students
-            User student1 = new User(true, true, true, true,"Windlelus", "Maximilius", "m@m", passwordEncoder.encode("password"), company2);
+            User student1 = new User(true, true, true, true, "Windlelus", "Maximilius", "m@m",
+                    passwordEncoder.encode("password"), company2);
             student1.setRole("STUDENT");
-            User student2 = new User(true, true, true, true,"Speckmann", "Jonas", "j@j", passwordEncoder.encode("password"), company1);
+            User student2 = new User(true, true, true, true, "Speckmann", "Jonas", "j@j",
+                    passwordEncoder.encode("password"), company1);
             student2.setRole("STUDENT");
-            User student3 = new User(true, true, true, true,"Mayo", "Luca", "l@l", passwordEncoder.encode("password"), null);
+            User student3 = new User(true, true, true, true, "Mayo", "Luca", "l@l", passwordEncoder.encode("password"),
+                    null);
             student3.setRole("STUDENT");
-            User student4 = new User(true, true, true, true,"Vielesorgen", "Felix", "f@f", passwordEncoder.encode("password"), company3);
+            User student4 = new User(true, true, true, true, "Vielesorgen", "Felix", "f@f",
+                    passwordEncoder.encode("password"), company3);
             student4.setRole("STUDENT");
             userRepository.save(student1);
             userRepository.save(student2);
             userRepository.save(student3);
             userRepository.save(student4);
 
-            //Create demo Action_types
+            // Create demo Action_types
             ActionType request = new ActionType("Request", "Demo request text.", InitiatorType.BUYER);
             ActionType offer = new ActionType("Offer", "Demo offer text.", InitiatorType.BOTH);
             ActionType accept = new ActionType("Accept", "Demo accept text.", InitiatorType.BOTH);
-            ActionType cancelBuyer = new ActionType("Cancel", "Option to cancel transaction for buyer.", InitiatorType.BOTH);
-            ActionType delivery = new ActionType("Delivery", "Action to kick off delivery of goods to buyer.", InitiatorType.SELLER);
-            ActionType invoicing = new ActionType("Invoicing", "Action to send receipt to buyer.", InitiatorType.SELLER);
+            ActionType cancelBuyer = new ActionType("Cancel", "Option to cancel transaction for buyer.",
+                    InitiatorType.BOTH);
+            ActionType delivery = new ActionType("Delivery", "Action to kick off delivery of goods to buyer.",
+                    InitiatorType.SELLER);
+            ActionType invoicing = new ActionType("Invoicing", "Action to send receipt to buyer.",
+                    InitiatorType.SELLER);
             ActionType paid = new ActionType("Paid", "Action to mark transaction as completed.", InitiatorType.SELLER);
             request.setStandardAction(true);
             offer.setStandardAction(true);
@@ -148,14 +155,19 @@ public class InitDatabaseService {
             transactionRepository.save(transaction2);
             actionRepository.save(trans2Request);
 
-            //save the default companylogo in database
+            // save the default companylogo in database
             // ClassLoader classLoader = getClass().getClassLoader();
-            // URL resource = classLoader.getResource("src/main/ressources/static/img/onlyicon.png");
+            // URL resource =
+            // classLoader.getResource("src/main/ressources/static/img/onlyicon.png");
             // File img = new Imga(resource.toURI());
 
             try {
-                // byte[] defaultImg = Files.readAllBytes(Paths.get("src/main/ressources/static/img/onlyicon.png").normalize().toAbsolutePath());
-                File f = new File ("/app/build/resources/main/static/img/placeholder.jpg");
+                // Correct path for local development
+                File f = new File("./src/main/resources/static/img/placeholder.jpg");
+                if (!f.exists()) {
+                    // Fallback for deployment environment
+                    f = new File("/app/build/resources/main/static/img/placeholder.jpg");
+                }
                 BufferedImage image = ImageIO.read(f);
                 CompanyLogo companyLogo = new CompanyLogo();
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -168,23 +180,27 @@ public class InitDatabaseService {
         }
     }
 
-
     public void deployinit() {
 
         if (userRepository.count() == 0 && companyRepository.count() == 0) {
 
-            //Create demo Users
-            // User admin = new User(true, true, true, true, "admin", "admin", "admin@admin", passwordEncoder.encode("password"), null);
+            // Create demo Users
+            // User admin = new User(true, true, true, true, "admin", "admin",
+            // "admin@admin", passwordEncoder.encode("password"), null);
             // admin.setRole("ADMIN");
             // userRepository.save(admin);
 
-            //Create demo Action_types
-            ActionType request = new ActionType("Request", "Request a product and its amount from a seller.", InitiatorType.BUYER);
+            // Create demo Action_types
+            ActionType request = new ActionType("Request", "Request a product and its amount from a seller.",
+                    InitiatorType.BUYER);
             ActionType offer = new ActionType("Offer", "Make an initial offer or a counter offer.", InitiatorType.BOTH);
             ActionType accept = new ActionType("Accept", "Accept the most recent offer.", InitiatorType.BOTH);
-            ActionType cancelBuyer = new ActionType("Cancel", "Option to cancel transaction for buyer.", InitiatorType.BOTH);
-            ActionType delivery = new ActionType("Delivery", "Action to kick off delivery of goods to buyer.", InitiatorType.SELLER);
-            ActionType invoicing = new ActionType("Invoicing", "Action to send receipt to buyer.", InitiatorType.SELLER);
+            ActionType cancelBuyer = new ActionType("Cancel", "Option to cancel transaction for buyer.",
+                    InitiatorType.BOTH);
+            ActionType delivery = new ActionType("Delivery", "Action to kick off delivery of goods to buyer.",
+                    InitiatorType.SELLER);
+            ActionType invoicing = new ActionType("Invoicing", "Action to send receipt to buyer.",
+                    InitiatorType.SELLER);
             ActionType paid = new ActionType("Paid", "Action to mark transaction as completed.", InitiatorType.SELLER);
             request.setStandardAction(true);
             offer.setStandardAction(true);
@@ -201,14 +217,16 @@ public class InitDatabaseService {
             actionTypeRepository.save(invoicing);
             actionTypeRepository.save(paid);
 
-            //save the default companylogo in database
+            // save the default companylogo in database
             // ClassLoader classLoader = getClass().getClassLoader();
-            // URL resource = classLoader.getResource("src/main/ressources/static/img/onlyicon.png");
+            // URL resource =
+            // classLoader.getResource("src/main/ressources/static/img/onlyicon.png");
             // File img = new Imga(resource.toURI());
 
             try {
-                // byte[] defaultImg = Files.readAllBytes(Paths.get("src/main/ressources/static/img/onlyicon.png").normalize().toAbsolutePath());
-                File f = new File ("/app/build/resources/main/static/img/placeholder.jpg");
+                // byte[] defaultImg =
+                // Files.readAllBytes(Paths.get("src/main/ressources/static/img/onlyicon.png").normalize().toAbsolutePath());
+                File f = new File("/app/build/resources/main/static/img/placeholder.jpg");
                 BufferedImage image = ImageIO.read(f);
                 CompanyLogo companyLogo = new CompanyLogo();
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -226,15 +244,15 @@ public class InitDatabaseService {
      * WARN: all data will be lost.
      */
     public void resetWithAdmin(User admin) {
-        //delete all records.
+        // delete all records.
         companyRepository.deleteAll();
         actionTypeRepository.deleteAll();
         userRepository.deleteAll();
         resetTokenRepository.deleteAll();
         verificationTokenRepository.deleteAll();
-        //execute deploy init.
+        // execute deploy init.
         this.deployinit();
-        //add the current admin
+        // add the current admin
         userRepository.save(admin);
     }
 }
