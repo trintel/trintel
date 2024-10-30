@@ -249,25 +249,9 @@ public class TransactionController {
             transaction.setBuyer(companyRepository.getById(companyID));
             transaction.setSeller(user.getCompany());
         }
+        transaction = transactionRepository.save(transaction);
+        handleAction(action, attachments, transaction.getId(), actionTypeID, user);
 
-        transactionRepository.save(transaction);
-        if (actionTypeService.getOfferAction().getId().equals(actionTypeID)) {
-            addOffer(action, attachments, transaction.getId(), user, bindingResult, model);
-        } else if (actionTypeService.getAcceptActionType().getId().equals(actionTypeID)) {
-            transaction.setConfirmed(true);
-            createAcceptAction(action, attachments, transaction.getId(), user);
-        } else if (actionTypeService.getDeliveryActionType().getId().equals(actionTypeID)) {
-            transaction.setConfirmed(true);
-            createDeliveryAction(action, transaction.getId(), attachments, user);
-        } else if (actionTypeService.getInvoiceActionType().getId().equals(actionTypeID)) {
-            transaction.setConfirmed(true);
-            transaction.setShipped(true);
-            createInvoiceAction(action, transaction.getId(), attachments, user);
-        } else if (actionTypeService.getPaidActionType().getId().equals(actionTypeID)) {
-            transaction.setConfirmed(true);
-            transaction.setShipped(true);
-            createPaidAction(action, transaction.getId(), attachments, user);
-        }
         return "redirect:/transaction/" + transaction.getId();
     }
 
