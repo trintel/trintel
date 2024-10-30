@@ -51,33 +51,8 @@
 				</li>
 				<select name="status" class="mb-3">
 					<option value="" th:text="#{status}"></option>
-					<th:block th:each="actiontype : ${actiontypes}">
-						<div th:switch="${actiontype.name}">
-							<th:block th:case="Request">
-								<option th:text="#{requestTLV}" th:value="${actiontype.id}"> </option>
-							</th:block>
-							<th:block th:case="Offer">
-								<option th:text="#{offerTLV}" th:value="${actiontype.id}"> </option>
-							</th:block>
-							<th:block th:case="Accept">
-								<option th:text="#{acceptTL}" th:value="${actiontype.id}"> </option>
-							</th:block>
-							<th:block th:case="Cancel">
-								<option th:text="#{cancelTL}" th:value="${actiontype.id}" th:selected="${actiontype.id.equals(param.status)}"> </option>
-							</th:block>
-							<th:block th:case="Delivery">
-								<option th:text="#{deliveryTLV}" th:value="${actiontype.id}"> </option>
-							</th:block>
-							<th:block th:case="Invoicing">
-								<option th:text="#{invoicingTLV}" th:value="${actiontype.id}"> </option>
-							</th:block>
-							<th:block th:case="Paid">
-								<option th:text="#{paidTL}" th:value="${actiontype.id}"> </option>
-							</th:block>
-							<th:block th:case="*">
-								<option th:text="${actiontype.name}" th:value="${actiontype.id}"> </option>
-							</th:block>
-						</div>
+					<th:block th:each="actiontype : ${actiontypes}" th:with="resolvedText=${#messages.msgOrNull('actiontype.' + actiontype.name)}">
+						<option th:text="${resolvedText != null ? resolvedText : actiontype.name}" th:value="${actiontype.id}"> </option>
 					</th:block>
 				</select>
 				<div class="form-floating mb-3">
@@ -112,34 +87,12 @@
 							</div>
 						</div>
 						<div class="card-body d-flex align-items-center justify-content-between">
-							<div class="w-100">
+							<div class="w-100" th:with="latestActionType=${transaction.actions[#lists.size(transaction.actions) - 1].actiontype}">
 								<!-- Badges for transaction status -->
-								<div
-									th:switch="${transaction.actions[#lists.size(transaction.actions) - 1].actiontype.name}">
-									<h4 th:case="Request">
-										<div class="badge bg-danger" th:text="#{requestTLV}"></div>
-									</h4>
-									<h4 th:case="Offer">
-										<div class="badge bg-warning" th:text="#{offerTLV}"></div>
-									</h4>
-									<h4 th:case="Accept">
-										<div class="badge bg-success" th:text="#{acceptTL}"></div>
-									</h4>
-									<h4 th:case="Cancel">
-										<div class="badge bg-light text-dark" th:text="#{cancelTL}"></div>
-									</h4>
-									<h4 th:case="Delivery">
-										<div class="badge bg-primary" th:text="#{deliveryTLV}"></div>
-									</h4>
-									<h4 th:case="Invoicing">
-										<div class="badge bg-dark" th:text="#{invoicingTLV}"></div>
-									</h4>
-									<h4 th:case="Paid">
-										<div class="badge bg-primary" th:text="#{paidTL}"></div>
-									</h4>
-									<h4 th:case="*">
-										<div class="badge bg-secondary" th:text="${transaction.getLatestActionName()}">
-										</div>
+								<div th:with="resolvedText=${#messages.msgOrNull('actiontype.' + latestActionType.name)}">
+									<h4>
+										<div class="badge" th:classappend="'bg-' + ${latestActionType.colorClass != null ? latestActionType.colorClass : 'secondary'}"
+											th:text="${resolvedText != null ? resolvedText : latestActionType.name}"/>
 									</h4>
 								</div>
 								<div class="row row-cols-1 row-cols-lg-4 row-cols-md-2 align-items-center">

@@ -78,69 +78,8 @@ public class ActionTypeService {
         actionTypes.addAll(actionTypeRepository.findByInitiatorType(InitiatorType.BOTH));
 
         // If the transaction is empty, all actions are available
-        // TODO: das ist nicht ganz richtig
-        if (transaction.getLatestStandardAction() == null) {
-            return actionTypes;
-        }
-
         // Remove all actionTypes, that are not available
-        for (ActionType actionType : actionTypes.stream().filter(t -> t.isStandardAction())
-                .toArray(ActionType[]::new)) {
-
-            // Add the Offer-Option if: the last action is a Request from the other company
-            // OR: the last action is an Offer
-            if (actionType.getName().equals("Offer")) {
-                if (transaction.getLastAction().getInitiator().getCompany().getId()
-                        .equals(currentUser.getCompany().getId()) && transaction.getLatestActionName().equals("Request")
-                        || transaction.getConfirmed()
-                        || transaction.getBuyer().getId().equals(currentUser.getCompany().getId())) {
-                    if (!transaction.getLatestStandardAction().getActiontype().getName().equals("Offer")) {
-                        actionTypes.remove(actionType);
-                    }
-                    // actionTypes.remove(actionType);
-                }
-            }
-
-            // Add the Accept-Option if: the last action is an Offer from the other company
-            if (actionType.getName().equals("Accept")) {
-                if (transaction.getLatestStandardAction().getInitiator().getCompany().getId()
-                        .equals(currentUser.getCompany().getId())
-                        || !transaction.getLatestStandardAction().getActiontype().getName().equals("Offer")) {
-                    actionTypes.remove(actionType);
-                }
-            }
-
-            // Add the Cancel-Option if: The transaction is not confirmed yet.
-            if (actionType.getName().equals("Cancel")) {
-                if (transaction.getConfirmed()) {
-                    actionTypes.remove(actionType);
-                }
-            }
-
-            // Add the delivery-Option if: the transaction is confirmed
-            if (actionType.getName().equals("Delivery")) {
-                if (!transaction.getConfirmed() || transaction.getShipped()
-                        || transaction.getBuyer().getId().equals(currentUser.getCompany().getId())) {
-                    actionTypes.remove(actionType);
-                }
-            }
-
-            // Add the invoicing-Option if: the transaction is confirmed
-            if (actionType.getName().equals("Invoicing")) {
-                if (!transaction.getConfirmed()
-                        || transaction.getBuyer().getId().equals(currentUser.getCompany().getId())) {
-                    actionTypes.remove(actionType);
-                }
-            }
-
-            // Add the paid-Option if: the transaction is confirmed
-            if (actionType.getName().equals("Paid")) {
-                if (!transaction.getShipped()
-                        || transaction.getBuyer().getId().equals(currentUser.getCompany().getId())) {
-                    actionTypes.remove(actionType);
-                }
-            }
-        }
+        // TODO: check if any logic has to be applied.
 
         return actionTypes;
 

@@ -206,34 +206,8 @@ public class TransactionController {
             transaction.setSeller(user.getCompany());
         }
         transaction = transactionRepository.save(transaction);
-        if (actionTypeService.getAcceptActionType().getId().equals(actionTypeID)) {
-            transaction.setConfirmed(true);
-            createAcceptAction(action, attachments, transaction.getId(), user);
-        } else if (actionTypeService.getDeliveryActionType().getId().equals(actionTypeID)) {
-            transaction.setConfirmed(true);
-            createDeliveryAction(action, transaction.getId(), attachments, user);
-        } else if (actionTypeService.getInvoiceActionType().getId().equals(actionTypeID)) {
-            transaction.setConfirmed(true);
-            transaction.setShipped(true);
-            createInvoiceAction(action, transaction.getId(), attachments, user);
-        } else if (actionTypeService.getPaidActionType().getId().equals(actionTypeID)) {
-            transaction.setConfirmed(true);
-            transaction.setShipped(true);
-            createPaidAction(action, transaction.getId(), attachments, user);
-        } else {
-            action.setTransaction(transaction);
-            action.setInitiator(user);
-            action.setActiontype(actionTypeService.getActionTypeById(actionTypeID));
-            action = actionRepository.save(action);
+        handleAction(action, attachments, transaction.getId(), actionTypeID, user);
 
-            if (attachments.length > 0) {
-                List<AttachedFile> attachedFiles = attachedFileService.storeFiles(Arrays.asList(attachments), action);
-                action.setAttachedFiles(attachedFiles);
-            }
-            // TODO: die gesamte struktur in
-            // dieser klasse
-            // ist fucked up. Das gehoert alles nicht in den controller
-        }
         return "redirect:/transaction/" + transaction.getId();
     }
 
@@ -250,14 +224,6 @@ public class TransactionController {
         model.addAttribute("actiontypes", actionTypes); // only find the available actiontypes for that user.
         model.addAttribute("action", newAction);
         model.addAttribute("actions", actionRepository.findByTransaction(transaction));
-        model.addAttribute("specialActionsAvailable",
-                actionTypes.stream().filter(t -> !t.isStandardAction()).toArray(ActionType[]::new).length > 0); // get
-                                                                                                                // the
-                                                                                                                // info
-                                                                                                                // if
-                                                                                                                // there
-                                                                                                                // are
-                                                                                                                // specialActions.
         model.addAttribute("transactionID", id);
         model.addAttribute("isAlreadyReviewed",
                 ratingRepository.existsByTransactionAndRatingCompany(transaction, user.getCompany()));
@@ -321,119 +287,37 @@ public class TransactionController {
         return "redirect:/transaction/" + transactionID;
     }
 
+    @Transactional
     @PreAuthorize("hasPermission(#transactionID, 'transaction') and hasRole('STUDENT')")
-    @PostMapping("/transaction/{transactionID}/addAction")
-    public String createAction(Action action, MultipartFile[] attachments, @PathVariable Long transactionID,
-            @AuthenticationPrincipal User user,
-            Model model) {
-
+    @PostMapping("/transaction/{transactionID}/action/{actionTypeID}")
+    public String handleAction(Action action, @RequestParam("attachment") MultipartFile[] attachments,
+            @PathVariable Long transactionID, @PathVariable Long actionTypeID,
+            @AuthenticationPrincipal User user) {
         Transaction transaction = transactionRepository.findById(transactionID).get();
+        action.setInitiator(user);
+        action.setTransaction(transaction);
 
-        if (action.getActiontype().getName().equals("ACCEPT")) {
+        // TODO: refactor !!!
+        ActionType actionType = actionTypeService.getActionTypeById(actionTypeID);
+        action.setActiontype(actionType);
+        if (actionType.getName().equals("Accept")) {
             transaction.setConfirmed(true);
-        } else if (action.getActiontype().getName().equals("PAID")) {
+        } else if (actionType.getName().equals("Cancel")) {
+            transaction.setActive(false);
+        } else if (actionType.getName().equals("Delivery")) {
+            transaction.setShipped(true);
+        } else if (actionType.getName().equals("Paid")) {
             transaction.setPaid(true);
+            transaction.setActive(false);
         }
 
-        action.setTransaction(transaction);
-        action.setInitiator(user);
         actionRepository.save(action);
-
+        transactionRepository.save(transaction);
         if (attachments.length > 0) {
             List<AttachedFile> attachedFiles = attachedFileService.storeFiles(Arrays.asList(attachments), action);
             action.setAttachedFiles(attachedFiles);
         }
 
-        return "redirect:/transaction/" + transactionID;
-    }
-
-    @PreAuthorize("hasPermission(#transactionID, 'transaction') and hasRole('STUDENT')")
-    @PostMapping("/transaction/{transactionID}/accept")
-    public String createAcceptAction(Action accept, @RequestParam("attachment") MultipartFile[] attachments,
-            @PathVariable Long transactionID,
-            @AuthenticationPrincipal User user) {
-
-        Transaction transaction = transactionRepository.findById(transactionID).get();
-        transaction.setConfirmed(true);
-        accept.setInitiator(user);
-        accept.setActiontype(actionTypeService.getAcceptActionType());
-        accept.setTransaction(transaction);
-        actionRepository.save(accept);
-        transactionRepository.save(transaction);
-        if (attachments.length > 0) {
-            List<AttachedFile> attachedFiles = attachedFileService.storeFiles(Arrays.asList(attachments), accept);
-            accept.setAttachedFiles(attachedFiles);
-        }
-        return "redirect:/transaction/" + transactionID;
-    }
-
-    @PreAuthorize("hasPermission(#transactionID, 'transaction') and hasRole('STUDENT')")
-    @PostMapping("/transaction/{transactionID}/cancel")
-    public String createCancelAction(String message, @PathVariable Long transactionID,
-            @AuthenticationPrincipal User user) {
-        Transaction transaction = transactionRepository.findById(transactionID).get();
-        Action cancel = new Action(message, actionTypeService.getAbortActionType(), transaction, null); // TODO !!
-        transaction.setActive(false);
-        cancel.setInitiator(user);
-        actionRepository.save(cancel);
-        transactionRepository.save(transaction);
-        return "redirect:/transaction/" + transactionID;
-    }
-
-    @PreAuthorize("hasPermission(#transactionID, 'transaction') and hasRole('STUDENT')")
-    @PostMapping("/transaction/{transactionID}/delivery")
-    public String createDeliveryAction(Action delivery, @PathVariable Long transactionID,
-            @RequestParam("attachment") MultipartFile[] attachments,
-            @AuthenticationPrincipal User user) {
-        Transaction transaction = transactionRepository.findById(transactionID).get();
-        transaction.setShipped(true);
-        delivery.setInitiator(user);
-        delivery.setTransaction(transaction);
-        delivery.setActiontype(actionTypeService.getDeliveryActionType());
-        actionRepository.save(delivery);
-        transactionRepository.save(transaction);
-        if (attachments.length > 0) {
-            List<AttachedFile> attachedFiles = attachedFileService.storeFiles(Arrays.asList(attachments), delivery);
-            delivery.setAttachedFiles(attachedFiles);
-        }
-        return "redirect:/transaction/" + transactionID;
-    }
-
-    @PreAuthorize("hasPermission(#transactionID, 'transaction') and hasRole('STUDENT')")
-    @PostMapping("/transaction/{transactionID}/invoicing")
-    public String createInvoiceAction(Action invoice, @PathVariable Long transactionID,
-            @RequestParam("attachment") MultipartFile[] attachments,
-            @AuthenticationPrincipal User user) {
-        Transaction transaction = transactionRepository.findById(transactionID).get();
-        invoice.setInitiator(user);
-        invoice.setTransaction(transaction);
-        invoice.setActiontype(actionTypeService.getInvoiceActionType());
-        actionRepository.save(invoice);
-        transactionRepository.save(transaction);
-        if (attachments.length > 0) {
-            List<AttachedFile> attachedFiles = attachedFileService.storeFiles(Arrays.asList(attachments), invoice);
-            invoice.setAttachedFiles(attachedFiles);
-        }
-        return "redirect:/transaction/" + transactionID;
-    }
-
-    @PreAuthorize("hasPermission(#transactionID, 'transaction') and hasRole('STUDENT')")
-    @PostMapping("/transaction/{transactionID}/paid")
-    public String createPaidAction(Action payment, @PathVariable Long transactionID,
-            @RequestParam("attachment") MultipartFile[] attachments,
-            @AuthenticationPrincipal User user) {
-        Transaction transaction = transactionRepository.findById(transactionID).get();
-        transaction.setPaid(true);
-        transaction.setActive(false);
-        payment.setInitiator(user);
-        payment.setTransaction(transaction);
-        payment.setActiontype(actionTypeService.getPaidActionType());
-        actionRepository.save(payment);
-        transactionRepository.save(transaction);
-        if (attachments.length > 0) {
-            List<AttachedFile> attachedFiles = attachedFileService.storeFiles(Arrays.asList(attachments), payment);
-            payment.setAttachedFiles(attachedFiles);
-        }
         return "redirect:/transaction/" + transactionID;
     }
 
