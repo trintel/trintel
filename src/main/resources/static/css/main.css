@@ -516,3 +516,12 @@ label.star:hover {
 .form-floating>label {
   color: darkgray;
 }
+
+.icon-picker .d-flex {
+  flex-wrap: wrap;
+}
+
+.icon-picker .btn {
+  flex: 1 0 auto;
+  margin: 0.5rem;
+}
