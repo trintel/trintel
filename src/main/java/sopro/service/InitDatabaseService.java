@@ -1,6 +1,5 @@
 package sopro.service;
 
-import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
