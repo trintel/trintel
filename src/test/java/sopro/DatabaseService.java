@@ -70,10 +70,9 @@ public class DatabaseService {
 
     public void setup() {
 
-
-
         // Create demo Users
-        User admin = new User(true, true, true, true, "admin", "admin", "admin@admin", passwordEncoder.encode("password"), null);
+        User admin = new User(true, true, true, true, "admin", "admin", "admin@admin",
+                passwordEncoder.encode("password"), null);
         admin.setRole("ADMIN");
         userRepository.save(admin);
 
@@ -86,16 +85,20 @@ public class DatabaseService {
         companyRepository.save(company3);
 
         // Create demo Students
-        User student1 = new User(true, true, true, true, "Schniedelus", "Maximilius", "m@m", passwordEncoder.encode("password"), null);
+        User student1 = new User(true, true, true, true, "Schniedelus", "Maximilius", "m@m",
+                passwordEncoder.encode("password"), null);
         student1.setRole("STUDENT");
 
-        User student2 = new User(true, true, true, true, "Speckmann", "Jonas", "j@j", passwordEncoder.encode("password"), company1);
+        User student2 = new User(true, true, true, true, "Speckmann", "Jonas", "j@j",
+                passwordEncoder.encode("password"), company1);
         student2.setRole("STUDENT");
 
-        User student3 = new User(true, true, true, true, "Mayo", "Luca", "l@l", passwordEncoder.encode("password"), company2);
+        User student3 = new User(true, true, true, true, "Mayo", "Luca", "l@l", passwordEncoder.encode("password"),
+                company2);
         student3.setRole("STUDENT");
 
-        User student4 = new User(true, true, true, true, "Vielesorgen", "Felix", "f@f", passwordEncoder.encode("password"), company3);
+        User student4 = new User(true, true, true, true, "Vielesorgen", "Felix", "f@f",
+                passwordEncoder.encode("password"), company3);
         student4.setRole("STUDENT");
 
         userRepository.save(student1);
@@ -107,10 +110,6 @@ public class DatabaseService {
         ActionType request = new ActionType("Request", "Demo request text.", InitiatorType.BUYER);
         ActionType offer = new ActionType("Offer", "Demo offer text.", InitiatorType.SELLER);
         ActionType accept = new ActionType("Accept", "Demo offer text.", InitiatorType.SELLER);
-
-        request.setStandardAction(true);
-        offer.setStandardAction(true);
-        accept.setStandardAction(true);
 
         Transaction transaction1 = new Transaction(company1, company2);
         transaction1.setProduct("Product 1");

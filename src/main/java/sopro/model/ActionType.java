@@ -63,7 +63,7 @@ public class ActionType {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.lang.Object#equals(java.lang.Object)
      */
 

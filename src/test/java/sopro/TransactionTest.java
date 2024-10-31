@@ -80,17 +80,19 @@ public class TransactionTest {
 
     /**
      * Tests if the view with the Transaction listed is shown for the admin.
+     *
      * @throws Exception
      */
     @Test
     @WithUserDetails(value = "admin@admin", userDetailsServiceBeanName = "userDetailsService")
     public void listTransactionsTestAdmin() throws Exception {
         mockMvc.perform(get("/transactions"))
-               .andExpect(view().name("transactions-list"));
+                .andExpect(view().name("transactions-list"));
     }
 
     /**
      * Tests if the view with the Transaction listed is shown for the student.
+     *
      * @throws Exception
      */
     @Disabled("Disabled temporarily.")
@@ -98,84 +100,97 @@ public class TransactionTest {
     @WithUserDetails(value = "j@j", userDetailsServiceBeanName = "userDetailsService")
     public void listTransactionsTestStudent() throws Exception {
         mockMvc.perform(get("/transactions"))
-               .andExpect(view().name("transactions-list"));
+                .andExpect(view().name("transactions-list"));
     }
 
     /**
      * Tests if admin can create transactions for companies of users.
+     *
      * @throws Exception
      */
     @Test
     @WithUserDetails(value = "admin@admin", userDetailsServiceBeanName = "userDetailsService")
     public void createTransactionsTestAdmin() throws Exception {
         mockMvc.perform(get("/transaction/" + userRepository.findByEmail("j@j").getCompany().getId() + "/create"))
-               .andExpect(status().isOk())
-               .andExpect(view().name("error"));
+                .andExpect(status().isOk())
+                .andExpect(view().name("error"));
     }
 
     /**
      * Tests if user can create transactions with his own company.
+     *
      * @throws Exception
      */
     @Test
     @WithUserDetails(value = "j@j", userDetailsServiceBeanName = "userDetailsService")
     public void createTransactionsTestStudent1() throws Exception {
         mockMvc.perform(get("/transaction/" + userRepository.findByEmail("j@j").getCompany().getId() + "/create"))
-               .andExpect(status().isOk())
-               .andExpect(view().name("transaction-add"));
+                .andExpect(status().isOk())
+                .andExpect(view().name("transaction-add"));
     }
 
     /**
      * Tests if user can create transactions.
+     *
      * @throws Exception
      */
     @Test
     @WithUserDetails(value = "j@j", userDetailsServiceBeanName = "userDetailsService")
     public void createTransactionsTestStudent2() throws Exception {
         mockMvc.perform(get("/transaction/" + userRepository.findByEmail("f@f").getCompany().getId() + "/create"))
-               .andExpect(status().isOk())
-               .andExpect(view().name("transaction-add"));
+                .andExpect(status().isOk())
+                .andExpect(view().name("transaction-add"));
     }
 
     /**
      * Tests if student can save transactions.
+     *
      * @throws Exception
      */
     // @Test
-    // @WithUserDetails(value = "j@j", userDetailsServiceBeanName = "userDetailsService")
+    // @WithUserDetails(value = "j@j", userDetailsServiceBeanName =
+    // "userDetailsService")
     // public void saveTransactionsTestStudent() throws Exception {
-    //     //Create Transaction
-    //     ActionType testActionType = new ActionType("TestActionType", "Demo request text.", InitiatorType.BUYER);
-    //     testActionType.setStandardAction(true);
+    // //Create Transaction
+    // ActionType testActionType = new ActionType("TestActionType", "Demo request
+    // text.", InitiatorType.BUYER);
+    // testActionType.setStandardAction(true);
 
-    //     Transaction testTransaction = new Transaction(companyRepository.findById(userRepository.findByEmail("j@j").getCompany().getId()).get(), companyRepository.findById(userRepository.findByEmail("f@f").getCompany().getId()).get());
-    //     testTransaction.setProduct("Product 1");
+    // Transaction testTransaction = new
+    // Transaction(companyRepository.findById(userRepository.findByEmail("j@j").getCompany().getId()).get(),
+    // companyRepository.findById(userRepository.findByEmail("f@f").getCompany().getId()).get());
+    // testTransaction.setProduct("Product 1");
 
-    //     Action testAction = new Action("Test message testAction", testActionType, testTransaction, null);
-    //     testAction.setInitiator(userRepository.findByEmail("j@j"));
+    // Action testAction = new Action("Test message testAction", testActionType,
+    // testTransaction, null);
+    // testAction.setInitiator(userRepository.findByEmail("j@j"));
 
-    //     actionTypeRepository.save(testActionType);
-    //     transactionRepository.save(testTransaction);
+    // actionTypeRepository.save(testActionType);
+    // transactionRepository.save(testTransaction);
 
-    //     Long companyIdSeller = userRepository.findByEmail("f@f").getCompany().getId();
+    // Long companyIdSeller =
+    // userRepository.findByEmail("f@f").getCompany().getId();
 
-    //     mockMvc.perform(post("/transaction/" + companyIdSeller + "/save").flashAttr("action", testAction).with(csrf()))
-    //            .andExpect(status().is3xxRedirection())
-    //            .andExpect(redirectedUrl("/transactions"));
+    // mockMvc.perform(post("/transaction/" + companyIdSeller +
+    // "/save").flashAttr("action", testAction).with(csrf()))
+    // .andExpect(status().is3xxRedirection())
+    // .andExpect(redirectedUrl("/transactions"));
     // }
 
     /**
      * Tests if student can save transactions.
+     *
      * @throws Exception
      */
     @Test
     @WithUserDetails(value = "admin@admin", userDetailsServiceBeanName = "userDetailsService")
     public void saveTransactionsTestAdmin() throws Exception {
-        //Create Transaction
+        // Create Transaction
         ActionType testActionType = new ActionType("TestActionType", "Demo request text.", InitiatorType.BUYER);
-        testActionType.setStandardAction(true);
 
-        Transaction testTransaction = new Transaction(companyRepository.findById(userRepository.findByEmail("j@j").getCompany().getId()).get(), companyRepository.findById(userRepository.findByEmail("f@f").getCompany().getId()).get());
+        Transaction testTransaction = new Transaction(
+                companyRepository.findById(userRepository.findByEmail("j@j").getCompany().getId()).get(),
+                companyRepository.findById(userRepository.findByEmail("f@f").getCompany().getId()).get());
         testTransaction.setProduct("Product 1");
 
         Action testAction = new Action("Test message testAction", testActionType, testTransaction, null);
@@ -187,51 +202,56 @@ public class TransactionTest {
         Long companyIdSeller = userRepository.findByEmail("f@f").getCompany().getId();
 
         mockMvc.perform(post("/transaction/" + companyIdSeller + "/save").flashAttr("action", testAction).with(csrf()))
-               .andExpect(status().isOk())
-               .andExpect(view().name("error"));
+                .andExpect(status().isOk())
+                .andExpect(view().name("error"));
     }
 
-
-
-
-    /**Test before implementation funktioniert auch in der Ausführung nicht
+    /**
+     * Test before implementation funktioniert auch in der Ausführung nicht
      * Tests if user can see the details of a transaction.
+     *
      * @throws Exception
      */
     @Disabled("Disabled temporarily.")
     @Test
     @WithUserDetails(value = "j@j", userDetailsServiceBeanName = "userDetailsService")
     public void transactionDetailTestStudent() throws Exception {
-        Long transactionId = transactionRepository.findByBuyer(userRepository.findByEmail("j@j").getCompany()).get(0).getId();
+        Long transactionId = transactionRepository.findByBuyer(userRepository.findByEmail("j@j").getCompany()).get(0)
+                .getId();
         mockMvc.perform(get("/transaction/" + transactionId))
-               .andExpect(status().isOk())
-               .andExpect(view().name("transaction-view"));
+                .andExpect(status().isOk())
+                .andExpect(view().name("transaction-view"));
 
     }
 
-    /**Test before implementation
+    /**
+     * Test before implementation
      * Tests if admin can see the details of a transaction.
+     *
      * @throws Exception
      */
     @Disabled("Disabled temporarily.")
     @Test
     @WithUserDetails(value = "admin@admin", userDetailsServiceBeanName = "userDetailsService")
     public void transactionDetailTestAdmin() throws Exception {
-        Long transactionId = transactionRepository.findByBuyer(userRepository.findByEmail("j@j").getCompany()).get(0).getId();
+        Long transactionId = transactionRepository.findByBuyer(userRepository.findByEmail("j@j").getCompany()).get(0)
+                .getId();
         mockMvc.perform(get("/transaction/" + transactionId))
-               .andExpect(status().isOk());
+                .andExpect(status().isOk());
 
     }
 
     /**
      * Tests if user can add an action to an transaction.
+     *
      * @throws Exception
      */
     @Disabled("Disabled temporarily.")
     @Test
     @WithUserDetails(value = "j@j", userDetailsServiceBeanName = "userDetailsService")
     public void createActionTestStudent() throws Exception {
-        Transaction transaction = transactionRepository.findByBuyer(userRepository.findByEmail("j@j").getCompany()).get(0);
+        Transaction transaction = transactionRepository.findByBuyer(userRepository.findByEmail("j@j").getCompany())
+                .get(0);
 
         ActionType request = new ActionType("offer", "testText", InitiatorType.BUYER);
         Action actionTest = new Action();
@@ -240,86 +260,99 @@ public class TransactionTest {
         actionTest.setTransaction(transaction);
 
         actionTypeRepository.save(request);
-        //actionRepository.save(actionTest);
+        // actionRepository.save(actionTest);
 
-        mockMvc.perform(post("/transaction/" + transaction.getId() + "/addAction").flashAttr("action", actionTest).with(csrf()))
-               .andExpect(status().is3xxRedirection())
-               .andExpect(redirectedUrl("/transaction/" + transaction.getId()));
+        mockMvc.perform(
+                post("/transaction/" + transaction.getId() + "/addAction").flashAttr("action", actionTest).with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/transaction/" + transaction.getId()));
     }
-
 
     /**
      * Tests if admin can not add an action to an transaction.
+     *
      * @throws Exception
      */
     @Disabled("Disabled temporarily.")
     @Test
     @WithUserDetails(value = "admin@admin", userDetailsServiceBeanName = "userDetailsService")
     public void createActionTestAdmin() throws Exception {
-        Transaction transaction = transactionRepository.findByBuyer(userRepository.findByEmail("j@j").getCompany()).get(0);
+        Transaction transaction = transactionRepository.findByBuyer(userRepository.findByEmail("j@j").getCompany())
+                .get(0);
 
         ActionType request = new ActionType("offer", "testText", InitiatorType.BUYER);
         Action actionTest = new Action("Test message", request, transaction, null);
 
         actionTypeRepository.save(request);
-        //actionRepository.save(actionTest);
+        // actionRepository.save(actionTest);
 
-        mockMvc.perform(post("/transaction/" + transaction.getId() + "/addAction").flashAttr("action", actionTest).with(csrf()))
-               .andExpect(status().isOk())
-               .andExpect(view().name("error"));
+        mockMvc.perform(
+                post("/transaction/" + transaction.getId() + "/addAction").flashAttr("action", actionTest).with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("error"));
     }
-
 
     /**
      * Tests if student can see all actionstypes.
+     *
      * @throws Exception
      */
-    /* @Test
-    @WithUserDetails(value = "j@j", userDetailsServiceBeanName = "userDetailsService")
-    public void showActionTypesTestStudent() throws Exception {
-        mockMvc.perform(get("/actions"))
-               .andExpect(status().isForbidden());
-    }
-
-    /**
+    /*
+     * @Test
+     *
+     * @WithUserDetails(value = "j@j", userDetailsServiceBeanName =
+     * "userDetailsService")
+     * public void showActionTypesTestStudent() throws Exception {
+     * mockMvc.perform(get("/actions"))
+     * .andExpect(status().isForbidden());
+     * }
+     *
+     * /**
      * Tests if admin can see all actionstypes.
+     *
      * @throws Exception
      */
-    /* @Test
-    @WithUserDetails(value = "admin@admin", userDetailsServiceBeanName = "userDetailsService")
-    public void showActionTypesTestAdmin() throws Exception {
-        mockMvc.perform(get("/actions"))
-               .andExpect(status().isOk())
-               .andExpect(view().name("action-list"));
-    } */
+    /*
+     * @Test
+     *
+     * @WithUserDetails(value = "admin@admin", userDetailsServiceBeanName =
+     * "userDetailsService")
+     * public void showActionTypesTestAdmin() throws Exception {
+     * mockMvc.perform(get("/actions"))
+     * .andExpect(status().isOk())
+     * .andExpect(view().name("action-list"));
+     * }
+     */
 
     /**
      * Tests if student can add an actionstype.
+     *
      * @throws Exception
      */
     @Test
     @WithUserDetails(value = "j@j", userDetailsServiceBeanName = "userDetailsService")
     public void addActionTypeTestStudent() throws Exception {
         mockMvc.perform(get("/action/add"))
-               .andExpect(status().isOk())
-               .andExpect(view().name("error"));
+                .andExpect(status().isOk())
+                .andExpect(view().name("error"));
     }
 
     /**
      * Tests if admin can add an actionstype.
+     *
      * @throws Exception
      */
     @Test
     @WithUserDetails(value = "admin@admin", userDetailsServiceBeanName = "userDetailsService")
     public void addActionTypeTestAdmin() throws Exception {
         mockMvc.perform(get("/action/add"))
-               .andExpect(status().isOk())
-               .andExpect(view().name("action-add"));
+                .andExpect(status().isOk())
+                .andExpect(view().name("action-add"));
     }
-
 
     /**
      * Tests if student can not save a new actiontype.
+     *
      * @throws Exception
      */
     @Test
@@ -329,61 +362,69 @@ public class TransactionTest {
         ActionType actionType = new ActionType("neuerTyp", "testTextNeu", InitiatorType.BUYER);
 
         mockMvc.perform(post("/action/save").flashAttr("actionType", actionType).with(csrf()))
-               .andExpect(status().isOk())
-               .andExpect(view().name("error"));
+                .andExpect(status().isOk())
+                .andExpect(view().name("error"));
     }
 
     /**
      * Tests if admin can save a new actiontype.
+     *
      * @throws Exception
      */
-    /* @Test
-    @WithUserDetails(value = "admin@admin", userDetailsServiceBeanName = "userDetailsService")
-    public void saveActionTypeTestAdmin() throws Exception {
+    /*
+     * @Test
+     *
+     * @WithUserDetails(value = "admin@admin", userDetailsServiceBeanName =
+     * "userDetailsService")
+     * public void saveActionTypeTestAdmin() throws Exception {
+     *
+     * ActionType actionType = new ActionType("neuerTyp", "testTextNeu",
+     * InitiatorType.BUYER);
+     *
+     * mockMvc.perform(post("/action/save").flashAttr("actionType",
+     * actionType).with(csrf()))
+     * .andExpect(status().is3xxRedirection())
+     * .andExpect(redirectedUrl("/actions"));
+     * }
+     */
 
-        ActionType actionType = new ActionType("neuerTyp", "testTextNeu", InitiatorType.BUYER);
-
-        mockMvc.perform(post("/action/save").flashAttr("actionType", actionType).with(csrf()))
-               .andExpect(status().is3xxRedirection())
-               .andExpect(redirectedUrl("/actions"));
-    } */
-
-
-   /**
+    /**
      * Tests if student can not edit an actiontype.
+     *
      * @throws Exception
      */
     @Test
     @WithUserDetails(value = "j@j", userDetailsServiceBeanName = "userDetailsService")
     public void editExistingActionTypeTestStudent() throws Exception {
 
-        Iterable<ActionType> actionTypes =  actionTypeRepository.findAll();
+        Iterable<ActionType> actionTypes = actionTypeRepository.findAll();
         long actionTypeId = actionTypes.iterator().next().getId();
 
         mockMvc.perform(get("/action/edit/" + actionTypeId))
-               .andExpect(status().isOk())
-               .andExpect(view().name("error"));
+                .andExpect(status().isOk())
+                .andExpect(view().name("error"));
     }
 
     /**
      * Tests if student can not edit an actiontype.
+     *
      * @throws Exception
      */
     @Test
     @WithUserDetails(value = "admin@admin", userDetailsServiceBeanName = "userDetailsService")
     public void editExistingActionTypeTestAdmin() throws Exception {
 
-        Iterable<ActionType> actionTypes =  actionTypeRepository.findAll();
+        Iterable<ActionType> actionTypes = actionTypeRepository.findAll();
         long actionTypeId = actionTypes.iterator().next().getId();
 
         mockMvc.perform(get("/action/edit/" + actionTypeId))
-               .andExpect(status().isOk())
-               .andExpect(view().name("action-edit"));
+                .andExpect(status().isOk())
+                .andExpect(view().name("action-edit"));
     }
-
 
     /**
      * Tests if student can not edit an actiontype.
+     *
      * @throws Exception
      */
     @Test
@@ -393,12 +434,13 @@ public class TransactionTest {
         actionTypeRepository.save(actionType);
 
         mockMvc.perform(get("/action/edit/" + actionType.getId()))
-               .andExpect(status().isOk())
-               .andExpect(view().name("error"));
+                .andExpect(status().isOk())
+                .andExpect(view().name("error"));
     }
 
     /**
      * Tests if admin can edit an actiontype.
+     *
      * @throws Exception
      */
     @Test
@@ -408,43 +450,48 @@ public class TransactionTest {
         actionTypeRepository.save(actionType);
 
         mockMvc.perform(get("/action/edit/" + actionType.getId()))
-               .andExpect(status().isOk())
-               .andExpect(view().name("action-edit"));
+                .andExpect(status().isOk())
+                .andExpect(view().name("action-edit"));
     }
-
 
     /**
      * Tests if student can not edit and save an actiontype.
+     *
      * @throws Exception
      */
     @Test
     @WithUserDetails(value = "j@j", userDetailsServiceBeanName = "userDetailsService")
     public void saveEditActionTypeTestStudent() throws Exception {
 
-        Iterable<ActionType> actionTypes =  actionTypeRepository.findAll();
+        Iterable<ActionType> actionTypes = actionTypeRepository.findAll();
         ActionType actionType = actionTypes.iterator().next();
         long actionTypeId = actionType.getId();
 
         mockMvc.perform(post("/action/edit/" + actionTypeId).flashAttr("actionType", actionType))
-               .andExpect(status().isForbidden());
+                .andExpect(status().isForbidden());
     }
-
 
     /**
      * Tests if admin can edit and save an actiontype.
+     *
      * @throws Exception
      */
-    /* @Test
-    @WithUserDetails(value = "admin@admin", userDetailsServiceBeanName = "userDetailsService")
-    public void saveEditActionTypeTestAdmin() throws Exception {
-
-        Iterable<ActionType> actionTypes =  actionTypeRepository.findAll();
-        ActionType actionType = actionTypes.iterator().next();
-        long actionTypeId = actionType.getId();
-
-        mockMvc.perform(post("/action/edit/" + actionTypeId).flashAttr("actionType", actionType).with(csrf()))
-               .andExpect(status().is3xxRedirection())
-               .andExpect(redirectedUrl("/actions"));
-    } */
+    /*
+     * @Test
+     *
+     * @WithUserDetails(value = "admin@admin", userDetailsServiceBeanName =
+     * "userDetailsService")
+     * public void saveEditActionTypeTestAdmin() throws Exception {
+     *
+     * Iterable<ActionType> actionTypes = actionTypeRepository.findAll();
+     * ActionType actionType = actionTypes.iterator().next();
+     * long actionTypeId = actionType.getId();
+     *
+     * mockMvc.perform(post("/action/edit/" + actionTypeId).flashAttr("actionType",
+     * actionType).with(csrf()))
+     * .andExpect(status().is3xxRedirection())
+     * .andExpect(redirectedUrl("/actions"));
+     * }
+     */
 
 }
