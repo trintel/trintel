@@ -14,28 +14,16 @@ AVIALABLE as long as no offer is accepted-->
         <main class="form-small">
             <div class="d-flex align-items-center mb-3">
                 <div class="icon-container me-2">
-                    <th:block th:switch="${actionTypeID}">
-                        <i class="bi bi-cart-plus" th:case="${actionTypes.offerAction.id}"></i>
-                        <i class="bi bi-check2-circle" th:case="${actionTypes.acceptActionType.id}"></i>
-                        <i class="bi bi-truck" th:case="${actionTypes.deliveryActionType.id}"></i>
-                        <i class="bi bi-receipt-cutoff" th:case="${actionTypes.invoiceActionType.id}"></i>
-                        <i class="bi bi-cash-coin" th:case="${actionTypes.paidActionType.id}"></i>
-                        <i class="bi bi-briefcase" th:case="*"></i> <!-- Default icon -->
-                    </th:block>
+                    <i class="" th:classappend="${actionType.iconClass != null ? actionType.iconClass : 'fa fa-solid fa-circle'}"></i>
                 </div>
-                <th:block th:switch="${actionTypeID}">
+                <th:block th:with="resolvedText=${#messages.msgOrNull('actionType.' + actionType.name)}">
                     <h1 class="card-title mb-0 text-black">
-                        <span th:text="#{offerTLV}" th:case="${actionTypes.offerAction.id}"></span>
-                        <span th:text="#{acceptTV}" th:case="${actionTypes.acceptActionType.id}"></span>
-                        <span th:text="#{deliveryTLV}" th:case="${actionTypes.deliveryActionType.id}"></span>
-                        <span th:text="#{invoicingTLV}" th:case="${actionTypes.invoiceActionType.id}"></span>
-                        <span th:text="#{paidTV}" th:case="${actionTypes.paidActionType.id}"></span>
-                        <span th:text="${actionType.name}" th:case="*"></span>
+                        <span th:text="${resolvedText != null ? resolvedText : actionType.name}"></span>
                     </h1>
                 </th:block>
             </div>
 
-            <form action="#" th:action="@{'/transaction/' + ${companyID} + '/create/skip/' + ${actionTypeID}}"
+            <form action="#" th:action="@{'/transaction/' + ${companyID} + '/create/' + ${actionTypeID}}"
                 th:object="${action}" method="post" enctype="multipart/form-data">
 
                 <div class="row g-3 mb-3">

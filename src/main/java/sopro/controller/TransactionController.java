@@ -104,21 +104,61 @@ public class TransactionController {
     @GetMapping("/transaction/{companyID}/create")
     public String createTransaction(@PathVariable Long companyID, @AuthenticationPrincipal User user, Model model) {
 
-        // if(user.getCompany().getId() != companyID && user.getRole() != "ADMIN") {
-        // return "redirect:/transactions";
-        // }
-
         Transaction newTransaction = new Transaction();
-        // added by @philo to pre set the seller known by the id to print the name in
-        // the formular
         newTransaction.setSeller(companyRepository.findById(companyID).get());
 
         Action newAction = new Action();
+        // TODO: handle the availability of actiontypes differently.
+        List<ActionType> actionTypes = new ArrayList<>();
+        actionTypeRepository.findAll().forEach(at -> {
+            if (!at.getName().equals("Cancel")) {
+                actionTypes.add(at);
+            }
+        });
+
+        model.addAttribute("actionTypes", actionTypeService);
+        model.addAttribute("altActionTypes", actionTypes);
         model.addAttribute("companyID", companyID);
         model.addAttribute("action", newAction);
         model.addAttribute("transaction", newTransaction);
-        return "transaction-add";
+        return "transaction-add-choose";
+    }
 
+    @PreAuthorize("hasCompany()")
+    @GetMapping("/transaction/{companyID}/create/{actionTypeID}")
+    public String createTransactionSkipSave(Action action, Transaction transaction, @PathVariable Long companyID,
+            @PathVariable Long actionTypeID,
+            @AuthenticationPrincipal User user, Model model) {
+        ActionType actionType = actionTypeService.getActionTypeById(actionTypeID);
+        model.addAttribute("companyID", companyID);
+        model.addAttribute("skip", true);
+        model.addAttribute("actionTypeID", actionTypeID);
+        model.addAttribute("actionType", actionType);
+        model.addAttribute("actionTypes", actionTypeService);
+        model.addAttribute("initiatorType", actionType.getInitiatorType().toString());
+        return "transaction-addAction";
+    }
+
+    @PreAuthorize("hasCompany()")
+    @PostMapping("/transaction/{companyID}/create/{actionTypeID}")
+    @Transactional
+    public String createTransactionSkipAddOffer(Action action, @RequestParam("attachment") MultipartFile[] attachments,
+            @RequestParam String product, boolean isBuyer, @PathVariable Long companyID,
+            @PathVariable Long actionTypeID, @AuthenticationPrincipal User user,
+            BindingResult bindingResult, Model model) {
+        Transaction transaction = new Transaction();
+        transaction.setProduct(product);
+        if (isBuyer) {
+            transaction.setBuyer(user.getCompany());
+            transaction.setSeller(companyRepository.getById(companyID));
+        } else {
+            transaction.setBuyer(companyRepository.getById(companyID));
+            transaction.setSeller(user.getCompany());
+        }
+        transaction = transactionRepository.save(transaction);
+        handleAction(action, attachments, transaction.getId(), actionTypeID, user);
+
+        return "redirect:/transaction/" + transaction.getId();
     }
 
     @PreAuthorize("hasCompany()")
@@ -146,69 +186,6 @@ public class TransactionController {
 
         return "redirect:/transactions";
 
-    }
-
-    @PreAuthorize("hasCompany()")
-    @GetMapping("/transaction/{companyID}/create/skip")
-    public String createTransactionSkip(@PathVariable Long companyID, @AuthenticationPrincipal User user, Model model) {
-
-        Transaction newTransaction = new Transaction();
-        newTransaction.setSeller(companyRepository.findById(companyID).get());
-
-        Action newAction = new Action();
-        Iterable<ActionType> altActionTypesIter = actionTypeRepository.findAll();
-
-        List<ActionType> altActionTypes = new ArrayList<ActionType>();
-        for (ActionType actionType : altActionTypesIter) {
-            if (!actionType.equals(actionTypeService.getInitialActionType())
-                    && !actionType.equals(actionTypeService.getAbortActionType())) {
-                altActionTypes.add(actionType);
-            }
-        }
-        model.addAttribute("actionTypes", actionTypeService);
-        model.addAttribute("altActionTypes", altActionTypes);
-        model.addAttribute("companyID", companyID);
-        model.addAttribute("action", newAction);
-        model.addAttribute("transaction", newTransaction);
-        return "transaction-add-skip";
-
-    }
-
-    @PreAuthorize("hasCompany()")
-    @GetMapping("/transaction/{companyID}/create/skip/{actionTypeID}")
-    public String createTransactionSkipSave(Action action, Transaction transaction, @PathVariable Long companyID,
-            @PathVariable Long actionTypeID,
-            @AuthenticationPrincipal User user, Model model) {
-        ActionType actionType = actionTypeService.getActionTypeById(actionTypeID);
-        model.addAttribute("companyID", companyID);
-        model.addAttribute("skip", true);
-        model.addAttribute("actionTypeID", actionTypeID);
-        model.addAttribute("actionType", actionType);
-        model.addAttribute("actionTypes", actionTypeService);
-        model.addAttribute("initiatorType", actionType.getInitiatorType().toString());
-        return "transaction-addAction";
-    }
-
-    @PreAuthorize("hasCompany()")
-    @PostMapping("/transaction/{companyID}/create/skip/{actionTypeID}")
-    @Transactional
-    public String createTransactionSkipAddOffer(Action action, @RequestParam("attachment") MultipartFile[] attachments,
-            @RequestParam String product, boolean isBuyer, @PathVariable Long companyID,
-            @PathVariable Long actionTypeID, @AuthenticationPrincipal User user,
-            BindingResult bindingResult, Model model) {
-        Transaction transaction = new Transaction();
-        transaction.setProduct(product);
-        if (isBuyer) {
-            transaction.setBuyer(user.getCompany());
-            transaction.setSeller(companyRepository.getById(companyID));
-        } else {
-            transaction.setBuyer(companyRepository.getById(companyID));
-            transaction.setSeller(user.getCompany());
-        }
-        transaction = transactionRepository.save(transaction);
-        handleAction(action, attachments, transaction.getId(), actionTypeID, user);
-
-        return "redirect:/transaction/" + transaction.getId();
     }
 
     @PreAuthorize("hasPermission(#id, 'transaction')")
@@ -298,16 +275,12 @@ public class TransactionController {
         action.setTransaction(transaction);
 
         // TODO: refactor !!!
+        // TODO: Accept and Cancel should be handled in a different way.
         ActionType actionType = actionTypeService.getActionTypeById(actionTypeID);
         action.setActiontype(actionType);
         if (actionType.getName().equals("Accept")) {
             transaction.setConfirmed(true);
         } else if (actionType.getName().equals("Cancel")) {
-            transaction.setActive(false);
-        } else if (actionType.getName().equals("Delivery")) {
-            transaction.setShipped(true);
-        } else if (actionType.getName().equals("Paid")) {
-            transaction.setPaid(true);
             transaction.setActive(false);
         }
 

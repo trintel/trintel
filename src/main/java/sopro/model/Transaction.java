@@ -49,12 +49,6 @@ public class Transaction {
     private String product;
     @Getter
     @Setter
-    private Boolean paid = false;
-    @Getter
-    @Setter
-    private Boolean shipped = false;
-    @Getter
-    @Setter
     private Boolean confirmed = false;
     @Getter
     @Setter
@@ -156,9 +150,7 @@ public class Transaction {
         m.put("seller", this.seller.getId());
         m.put("product", this.product);
         m.put("active", this.active);
-        m.put("shipped", this.shipped);
         m.put("confirmed", this.confirmed);
-        m.put("paid", this.paid);
         return m;
     }
 
@@ -201,11 +193,6 @@ public class Transaction {
                 return false;
         } else if (!id.equals(other.id))
             return false;
-        if (paid == null) {
-            if (other.paid != null)
-                return false;
-        } else if (!paid.equals(other.paid))
-            return false;
         if (product == null) {
             if (other.product != null)
                 return false;
@@ -215,11 +202,6 @@ public class Transaction {
             if (other.seller != null)
                 return false;
         } else if (!seller.equals(other.seller))
-            return false;
-        if (shipped == null) {
-            if (other.shipped != null)
-                return false;
-        } else if (!shipped.equals(other.shipped))
             return false;
         return true;
     }

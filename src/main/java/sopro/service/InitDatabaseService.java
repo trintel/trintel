@@ -102,6 +102,7 @@ public class InitDatabaseService {
 
                         // Create demo Action_types
                         ActionType request = new ActionType("Request", "Demo request text.", InitiatorType.BUYER);
+                        request.setIconClass("bi bi-pencil");
                         ActionType offer = new ActionType("Offer", "Demo offer text.", InitiatorType.BOTH);
                         offer.setIconClass("bi bi-cart-plus");
                         ActionType accept = new ActionType("Accept", "Demo accept text.", InitiatorType.BOTH);
@@ -198,6 +199,7 @@ public class InitDatabaseService {
                         ActionType request = new ActionType("Request",
                                         "Request a product and its amount from a seller.",
                                         InitiatorType.BUYER);
+                        request.setIconClass("bi bi-pencil");
                         ActionType offer = new ActionType("Offer", "Make an initial offer or a counter offer.",
                                         InitiatorType.BOTH);
                         offer.setIconClass("bi bi-cart-plus");

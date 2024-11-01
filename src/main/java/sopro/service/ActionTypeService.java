@@ -23,28 +23,12 @@ public class ActionTypeService {
                                                            // anfänglichen Aktion.
     }
 
-    public ActionType getAcceptActionType() {
-        return actionTypeRepository.findByName("Accept");
-    }
-
     public ActionType getAbortActionType() {
         return actionTypeRepository.findByName("Cancel");
     }
 
     public ActionType getOfferAction() {
         return actionTypeRepository.findByName("Offer");
-    }
-
-    public ActionType getDeliveryActionType() {
-        return actionTypeRepository.findByName("Delivery");
-    }
-
-    public ActionType getInvoiceActionType() {
-        return actionTypeRepository.findByName("Invoicing");
-    }
-
-    public ActionType getPaidActionType() {
-        return actionTypeRepository.findByName("Paid");
     }
 
     public ActionType getActionTypeById(Long id) {
