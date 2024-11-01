@@ -53,6 +53,12 @@ public class Transaction {
     @Getter
     @Setter
     private Boolean active = true;
+    @Getter
+    @Setter
+    private Boolean buyerArchived = false;
+    @Getter
+    @Setter
+    private Boolean sellerArchived = false;
 
     public Transaction() {
         this.id = IdHandler.generateId();

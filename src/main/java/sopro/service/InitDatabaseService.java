@@ -146,7 +146,7 @@ public class InitDatabaseService {
                         actionTypeRepository.save(invoicing);
                         actionTypeRepository.save(paid);
 
-                        transactionRepository.save(transaction1);
+                        transactionRepository.create(transaction1);
                         actionRepository.save(trans1Request);
                         actionRepository.save(trans1Offer);
                         actionRepository.save(trans1Accept);
@@ -157,7 +157,7 @@ public class InitDatabaseService {
                         Action trans2Request = new Action("Test message", request, transaction2, null);
                         trans2Request.setInitiator(student4);
 
-                        transactionRepository.save(transaction2);
+                        transactionRepository.create(transaction2);
                         actionRepository.save(trans2Request);
 
                         // save the default companylogo in database
