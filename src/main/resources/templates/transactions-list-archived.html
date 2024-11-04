@@ -12,21 +12,22 @@
 	<th:block th:fragment="content">
 		<div class="d-lg-flex justify-content-between align-items-end mb-3">
 			<div>
-				<h1 th:text="#{transactions}"></h1>
+				<h1 th:text="#{archivedTransactions}"></h1>
 				<p sec:authorize="hasRole('STUDENT')" class="mb-0" th:text="#{tldescrStudent}"></p>
 				<p sec:authorize="hasRole('ADMIN')" class="mb-0" th:text="#{tldescrAdmin}"></p>
 			</div>
 			<div sec:authorize="hasRole('STUDENT')">
-				<a class="btn btn-secondary btn mb-3 mt-1 mt-lg-0" th:href="@{/transactions/archived}">
+				<a class="btn btn-secondary btn mb-3 mt-1 mt-lg-0" th:href="@{/transactions}">
 					<i class="bi bi-archive"></i>
 					<span th:text="#{archiveNoun}"></span>
-					<i class="bi bi-toggle-off"></i>
+					<i class="bi bi-toggle-on"></i>
 				</a>
 			</div>
 		</div>
 		<div class="d-lg-flex justify-content-between align-items-end mb-3">
+
 			<div class="dropdown">
-				<button class="btn btn-secondary dropdown-toggle mb-3 mt-1" type="button" data-bs-toggle="dropdown"
+				<button class="btn btn-secondary dropdown-toggle mb-3" type="button" data-bs-toggle="dropdown"
 					aria-expanded="false" data-bs-auto-close="false">
 					<i class="bi bi-filter"></i><span th:text="#{sortAndFilter}"></span>
 				</button>
@@ -70,7 +71,7 @@
 					<button type="submit" class="btn btn-primary w-100 mt-3" th:text="#{submit}"></button>
 				</form>
 			</div>
-		
+
 			<div sec:authorize="hasRole('STUDENT')">
 				<a class="btn btn-primary btn mb-3 mt-1 mt-lg-0" th:href="@{/companies}">
 					<i class="bi bi-plus"></i>
@@ -85,16 +86,16 @@
 					<!-- Menu button for archive and delete -->
 					<div class="dropdown position-absolute top-0 end-0 m-2">
 							
-						<i class="bi bi-three-dots-vertical mb-3 mt-1 mx-2" type="button" 
+						<i class="bi bi-three-dots-vertical mb-3 mt-1" type="button" 
 						th:id="'sortDropdownButton-' + ${transaction.id}"
 						data-bs-toggle="dropdown"
 						aria-expanded="false" data-bs-auto-close="false"></i>
 						<ul class="dropdown-menu" th:aria-labelledby="'sortDropdownButton-' + ${transaction.id}">
-							<li sec:authorize="hasRole('STUDENT')">
-								<button class="dropdown-item" type="button" th:onclick="'archiveTransaction(event, ' + ${transaction.id} + ')'" th:text="#{archiveVerb}"></button>
+							<li>
+								<button class="dropdown-item" type="button" th:onclick="'activateTransaction(event, ' + ${transaction.id} + ')'" th:text="#{activateTransaction}"></button>
 							</li>
 							<li>
-								<button class="dropdown-item text-danger" data-bs-toggle="modal" th:data-bs-target="'#modalDelete-' + ${transaction.id}" th:text="#{delete}"></button>
+								<button class="dropdown-item text-danger" data-bs-toggle="modal" th:data-bs-target="'#modalDelete-' + ${transaction.id}" th:text="#{delete}" onclick="event.stopPropagation();event.preventDefault();"></button>
 							</li>
 						</ul>
 					</div>
@@ -104,7 +105,7 @@
 								<div class="modal-header">
 									<div class="d-flex align-items-center align-content-center">
 										<div class="icon-container me-2">
-											<i class="bi bi-trash"></i>
+										<i class="bi bi-trash"></i>
 										</div>
 										<h1 class="modal-title fs-5" id="importModalLabel" th:text="#{deleteTransaction}"></h1>
 									</div>
@@ -118,7 +119,6 @@
 						</div>
 					</div>
 				<a th:href="@{'/transaction/' + ${transaction.id}}" class="text-decoration-none">
-							
 						<!-- Alert marker if opposing company performed last action -->
 						<div sec:authorize="hasRole('STUDENT')">
 							<div
@@ -185,18 +185,18 @@
 			</div>
 		</div>
 		<script>
-			function archiveTransaction(event, transactionId) {
+			function activateTransaction(event, transactionId) {
 				event.stopPropagation(); // Stop the event from propagating to parent elements
 				event.preventDefault(); // Prevent the default action of the link
 				$.ajax({
-					url: '/transaction/archive/' + transactionId,
+					url: '/transaction/activate/' + transactionId,
 					type: 'GET',
 					success: function(result) {
 						location.reload(); // Reload the page to reflect changes
 					},
 					error: function(xhr, status, error) {
 						// Handle error
-						console.log('Error archiving transaction: ' + error);
+						console.log('Error activating transaction: ' + error);
 					}
 				});
 			}

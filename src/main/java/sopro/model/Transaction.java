@@ -42,7 +42,7 @@ public class Transaction {
     private Company seller;
     @Getter
     @Setter
-    @OneToMany(mappedBy = "transaction")
+    @OneToMany(mappedBy = "transaction", cascade = CascadeType.REMOVE)
     List<Rating> ratings;
     @Getter
     @Setter
@@ -53,6 +53,12 @@ public class Transaction {
     @Getter
     @Setter
     private Boolean active = true;
+    @Getter
+    @Setter
+    private Boolean buyerArchived = false;
+    @Getter
+    @Setter
+    private Boolean sellerArchived = false;
 
     public Transaction() {
         this.id = IdHandler.generateId();

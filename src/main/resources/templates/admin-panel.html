@@ -134,13 +134,13 @@
                                 <div class="row row-cols-1 row-cols-lg-2 w-100 align-items-center">
                                     <!-- Transaction name and description -->
                                     <div class="col">
-                                        <div th:with="resolvedText=${#messages.msgOrNull('actiontype.' + actionType.name)}">
+                                        <div th:with="resolvedName=${#messages.msgOrNull('actiontype.' + actionType.name)}, resolvedText=${#messages.msgOrNull('actiontype.' + actionType.name + '.text')}">
                                             <h4>
                                                 <div class="badge" th:classappend="'bg-' + ${actionType.colorClass != null ? actionType.colorClass : 'secondary'}"
-                                                    th:text="${resolvedText != null ? resolvedText : actionType.name}"/>
+                                                    th:text="${resolvedName != null ? resolvedName : actionType.name}"/>
                                             </h4>
                                         </div>
-                                        <p class="card-text text-secondary" th:text="${actionType.text}"></p>
+                                        <p class="card-text text-secondary" th:text="${resolvedText != null ? resolvedText : actionType.text}"></p>
                                     </div>
                                     <!-- Initiator type -->
                                     <div class="col mt-3 mt-lg-0">

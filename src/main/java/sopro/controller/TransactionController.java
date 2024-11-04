@@ -30,12 +30,14 @@ import sopro.model.Action;
 import sopro.model.ActionType;
 import sopro.model.AttachedFile;
 import sopro.model.Company;
+import sopro.model.NonArchivedTransaction;
 import sopro.model.Rating;
 import sopro.model.Transaction;
 import sopro.model.User;
 import sopro.repository.ActionRepository;
 import sopro.repository.ActionTypeRepository;
 import sopro.repository.CompanyRepository;
+import sopro.repository.NonArchivedTransactionRepository;
 import sopro.repository.RatingRepository;
 import sopro.repository.TransactionRepository;
 import sopro.service.ActionTypeService;
@@ -65,6 +67,11 @@ public class TransactionController {
     @Autowired
     AttachedFileInterface attachedFileService;
 
+    @Autowired
+    NonArchivedTransactionRepository nonArchivedTransactionRepository;
+
+    // TODO: write a service for the transactions, because this controller should
+    // not handle that much logic.
     // TODO: write a service for the transactions, because this controller should
     // not handle that much logic.
 
@@ -77,7 +84,7 @@ public class TransactionController {
             transactions = transactionRepository.findAllByBuyerAndSellerName(buyer, seller);
         }
         if (user.getRole().equals("STUDENT")) { // Students can only see transactions, where they are involved
-            transactions = transactionRepository.findOwnByBuyerAndSellerName(buyer, seller, user.getCompany().getId());
+            transactions = transactionRepository.findOwnByBuyerAndSellerName(buyer, seller, user.getCompany());
         }
         if (status != null) {
             transactions = transactions.stream()
@@ -97,6 +104,39 @@ public class TransactionController {
         model.addAttribute("transactions", transactions);
         model.addAttribute("actiontypes", actionTypeRepository.findAll());
         return "transactions-list";
+
+    }
+
+    @GetMapping("/transactions/archived")
+    public String listTransactionsArchived(Model model, @AuthenticationPrincipal User user,
+            @RequestParam(defaultValue = "true") boolean sortByNewest, @RequestParam(required = false) Long status,
+            @RequestParam(defaultValue = "") String buyer, @RequestParam(defaultValue = "") String seller) {
+        List<Transaction> transactions = new ArrayList<>();
+        if (user.getRole().equals("ADMIN")) { // Admins can see all transactions
+            transactions = transactionRepository.findAllByBuyerAndSellerName(buyer, seller);
+        }
+        if (user.getRole().equals("STUDENT")) { // Students can only see transactions, where they are involved
+            transactions = transactionRepository.findOwnByBuyerAndSellerNameArchived(buyer, seller,
+                    user.getCompany());
+        }
+        if (status != null) {
+            transactions = transactions.stream()
+                    .filter(transaction -> transaction.getLastAction().getActiontype().getId().equals(status))
+                    .collect(Collectors.toList());
+        }
+        // Sort transactions.
+        if (sortByNewest) {
+            transactions = transactions.stream().sorted(Comparator.comparing(Transaction::getLatestActionDate)
+                    .thenComparing(Transaction::getLatestActionTime).reversed())
+                    .collect(Collectors.toList());
+        } else {
+            transactions = transactions.stream().sorted(Comparator.comparing(Transaction::getLatestActionDate)
+                    .thenComparing(Transaction::getLatestActionTime))
+                    .collect(Collectors.toList());
+        }
+        model.addAttribute("transactions", transactions);
+        model.addAttribute("actiontypes", actionTypeRepository.findAll());
+        return "transactions-list-archived";
 
     }
 
@@ -161,6 +201,7 @@ public class TransactionController {
         return "redirect:/transaction/" + transaction.getId();
     }
 
+    @Transactional
     @PreAuthorize("hasCompany()")
     @PostMapping("/transaction/{companyID}/save")
     public String createTransaction(Action action, Transaction transaction, @PathVariable Long companyID,
@@ -174,7 +215,7 @@ public class TransactionController {
         // action.setActiontype(actionTypeRepository.findByName("Request"));
         action.setActiontype(actionTypeService.getInitialActionType());
 
-        transactionRepository.save(transaction);
+        transactionRepository.create(transaction);
         actionRepository.save(action);
 
         if (attachments.length > 0) {
@@ -206,6 +247,55 @@ public class TransactionController {
                 ratingRepository.existsByTransactionAndRatingCompany(transaction, user.getCompany()));
         return "transaction-view";
 
+    }
+
+    @Transactional
+    @PreAuthorize("hasPermission(#id, 'transaction')")
+    @GetMapping("/transaction/archive/{id}")
+    public String archiveTransaction(@PathVariable Long id, @AuthenticationPrincipal User user) {
+
+        Transaction transaction = transactionRepository.findById(id).get();
+        NonArchivedTransaction nonArchivedTransaction = nonArchivedTransactionRepository.findByTransactionAndCompany(
+                transaction,
+                user.getCompany());
+
+        nonArchivedTransactionRepository.delete(nonArchivedTransaction);
+        return "redirect:/transactions";
+    }
+
+    @Transactional
+    @PreAuthorize("hasPermission(#id, 'transaction')")
+    @GetMapping("/transaction/activate/{id}")
+    public String activateTransaction(@PathVariable Long id, @AuthenticationPrincipal User user) {
+
+        Transaction transaction = transactionRepository.findById(id).get();
+        NonArchivedTransaction nonArchivedTransaction = new NonArchivedTransaction();
+        nonArchivedTransaction.setTransaction(transaction);
+        nonArchivedTransaction.setCompany(user.getCompany());
+
+        nonArchivedTransactionRepository.save(nonArchivedTransaction);
+        return "redirect:/transactions/archived";
+    }
+
+    @Transactional
+    @PreAuthorize("hasPermission(#id, 'transaction')")
+    @GetMapping("/transaction/delete/{id}")
+    public String deleteTransaction(@PathVariable Long id, @AuthenticationPrincipal User user) {
+
+        Transaction transaction = transactionRepository.findById(id).get();
+
+        List<NonArchivedTransaction> nonArchivedTransactions = nonArchivedTransactionRepository
+                .findByTransaction(transaction);
+
+        nonArchivedTransactions.forEach(nonArchivedTransaction -> {
+            nonArchivedTransactionRepository.delete(nonArchivedTransaction);
+        });
+
+        transactionRepository.delete(transaction);
+
+        // TODO: delete all actions and attached files -> cascade
+
+        return "redirect:/transactions";
     }
 
     // TODO only othorize if user is seller/buyer in resprct to
@@ -240,6 +330,7 @@ public class TransactionController {
         return "transaction-addOffer";
     }
 
+    @Transactional
     @PreAuthorize("hasPermission(#transactionID, 'transaction') and hasRole('STUDENT')")
     @PostMapping("/transaction/{transactionID}/addOffer")
     public String addOffer(Action offer, @RequestParam("attachment") MultipartFile[] attachments,
@@ -285,7 +376,7 @@ public class TransactionController {
         }
 
         actionRepository.save(action);
-        transactionRepository.save(transaction);
+        transactionRepository.create(transaction);
         if (attachments.length > 0) {
             List<AttachedFile> attachedFiles = attachedFileService.storeFiles(Arrays.asList(attachments), action);
             action.setAttachedFiles(attachedFiles);
@@ -294,6 +385,7 @@ public class TransactionController {
         return "redirect:/transaction/" + transactionID;
     }
 
+    @Transactional
     @PreAuthorize("hasPermission(#transactionID, 'transaction') and hasRole('STUDENT')")
     @PostMapping("/transaction/{transactionID}/rate")
     public String rateTransaction(@PathVariable Long transactionID, @AuthenticationPrincipal User user,
