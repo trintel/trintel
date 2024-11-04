@@ -27,7 +27,6 @@ import sopro.repository.UserRepository;
 @ActiveProfiles("tests")
 public class DatabaseTest {
 
-
     @Autowired
     ActionTypeRepository actionTypeRepository;
 
@@ -71,7 +70,6 @@ public class DatabaseTest {
         assertEquals(testUser, testUser2); // .get(): optional<User> in User
     }
 
-
     /**
      * Checks if the created user is assigned to the right company.
      *
@@ -80,7 +78,8 @@ public class DatabaseTest {
     @Test
     public void isUserInCompany() throws Exception {
         Company testCompany = new Company("testCompany");
-        User testUser = new User(true, true, true, true, "testUser", "testUser", "testUser@testUser", "password", testCompany);
+        User testUser = new User(true, true, true, true, "testUser", "testUser", "testUser@testUser", "password",
+                testCompany);
         companyRepository.save(testCompany);
         testUser.setRole("STUDENT");
         userRepository.save(testUser);
@@ -90,6 +89,7 @@ public class DatabaseTest {
 
     /**
      * Tests if the company is saved in database.
+     *
      * @throws Exception
      */
     @Test
@@ -100,9 +100,9 @@ public class DatabaseTest {
         assertEquals(testCompany, companyRepository.findById(testCompany.getId()).get());
     }
 
-
     /**
      * Tests if the transaction is saved in database.
+     *
      * @throws Exception
      */
     @Test
@@ -119,6 +119,7 @@ public class DatabaseTest {
 
     /**
      * Tests if the transaction is related to right companies in database.
+     *
      * @throws Exception
      */
     @Test
@@ -135,9 +136,9 @@ public class DatabaseTest {
         assertEquals(testCompanySeller, transactionRepository.findById(testTransaction.getId()).get().getSeller());
     }
 
-
     /**
      * Tests if the confiormed is saved in the Database.
+     *
      * @throws Exception
      */
     @Test
@@ -154,41 +155,8 @@ public class DatabaseTest {
     }
 
     /**
-     * Tests if the Paid is saved in the Database.
-     * @throws Exception
-     */
-    @Test
-    public void isPaidSetInDatabase() throws Exception {
-        Company testCompanyBuyer = new Company("testCompanyBuyer");
-        companyRepository.save(testCompanyBuyer);
-        Company testCompanySeller = new Company("testCompanySeller");
-        companyRepository.save(testCompanySeller);
-
-        Transaction testTransaction = new Transaction(testCompanyBuyer, testCompanySeller);
-        testTransaction.setPaid(true);
-        transactionRepository.save(testTransaction);
-        assertTrue(transactionRepository.findById(testTransaction.getId()).get().getPaid());
-    }
-
-    /**
-     * Tests if the shipped is saved in the Database of transaction.
-     * @throws Exception
-     */
-    @Test
-    public void isShippedSetInDatabase() throws Exception {
-        Company testCompanyBuyer = new Company("testCompanyBuyer");
-        companyRepository.save(testCompanyBuyer);
-        Company testCompanySeller = new Company("testCompanySeller");
-        companyRepository.save(testCompanySeller);
-
-        Transaction testTransaction = new Transaction(testCompanyBuyer, testCompanySeller);
-        testTransaction.setShipped(true);
-        transactionRepository.save(testTransaction);
-        assertTrue(transactionRepository.findById(testTransaction.getId()).get().getShipped());
-    }
-
-    /**
      * Tests if the actionType is saved in the Repository.
+     *
      * @throws Exception
      */
     @Test
@@ -201,6 +169,7 @@ public class DatabaseTest {
 
     /**
      * Tests if the action is saved in the Repository.
+     *
      * @throws Exception
      */
     @Test
@@ -221,10 +190,7 @@ public class DatabaseTest {
 
         assertEquals(actionTest, actionRepository.findById(actionTest.getId()).get());
     }
-    //test if company logo is saved in repository
-    //test if paid can be set before confirmed
-
-
-
+    // test if company logo is saved in repository
+    // test if paid can be set before confirmed
 
 }

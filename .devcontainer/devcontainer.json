@@ -16,7 +16,8 @@
     "vscode": {
       "extensions": [
         "vscjava.vscode-gradle",
-        "shd101wyy.markdown-preview-enhanced"
+        "shd101wyy.markdown-preview-enhanced",
+        "eamodio.gitlens"
       ]
     }
   }

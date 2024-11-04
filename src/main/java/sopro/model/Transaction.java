@@ -22,16 +22,37 @@ import lombok.Setter;
 @Entity
 public class Transaction {
 
-    @Getter @Setter @Id private Long id;
-    @Getter @Setter @OneToMany(mappedBy = "transaction", cascade = CascadeType.REMOVE) List<Action> actions;
-    @Getter @Setter @NotNull @ManyToOne private Company buyer;
-    @Getter @Setter @NotNull @ManyToOne private Company seller;
-    @Getter @Setter @OneToMany(mappedBy = "transaction") List<Rating> ratings;
-    @Getter @Setter private String product;
-    @Getter @Setter private Boolean paid = false;
-    @Getter @Setter private Boolean shipped = false;
-    @Getter @Setter private Boolean confirmed = false;
-    @Getter @Setter private Boolean active = true;
+    @Getter
+    @Setter
+    @Id
+    private Long id;
+    @Getter
+    @Setter
+    @OneToMany(mappedBy = "transaction", cascade = CascadeType.REMOVE)
+    List<Action> actions;
+    @Getter
+    @Setter
+    @NotNull
+    @ManyToOne
+    private Company buyer;
+    @Getter
+    @Setter
+    @NotNull
+    @ManyToOne
+    private Company seller;
+    @Getter
+    @Setter
+    @OneToMany(mappedBy = "transaction")
+    List<Rating> ratings;
+    @Getter
+    @Setter
+    private String product;
+    @Getter
+    @Setter
+    private Boolean confirmed = false;
+    @Getter
+    @Setter
+    private Boolean active = true;
 
     public Transaction() {
         this.id = IdHandler.generateId();
@@ -82,19 +103,6 @@ public class Transaction {
     }
 
     /**
-     * get the last standard action from this transaction
-     *
-     * @return
-     */
-    public Action getLatestStandardAction() {
-        int index = actions.size() - 1;
-        while(!actions.get(index).getActiontype().isStandardAction()) {
-            index--;
-        }
-        return actions.get(index);
-    }
-
-    /**
      * get the date of the newest action from this transaction
      *
      * @return
@@ -122,6 +130,15 @@ public class Transaction {
     }
 
     /**
+     * get the ActionType of the latest action
+     *
+     * @return
+     */
+    public ActionType getLatestActionType() {
+        return this.getLastAction().getActiontype();
+    }
+
+    /**
      * Returns a map of all fields.
      *
      * @return m map
@@ -133,13 +150,13 @@ public class Transaction {
         m.put("seller", this.seller.getId());
         m.put("product", this.product);
         m.put("active", this.active);
-        m.put("shipped", this.shipped);
         m.put("confirmed", this.confirmed);
-        m.put("paid", this.paid);
         return m;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
@@ -176,11 +193,6 @@ public class Transaction {
                 return false;
         } else if (!id.equals(other.id))
             return false;
-        if (paid == null) {
-            if (other.paid != null)
-                return false;
-        } else if (!paid.equals(other.paid))
-            return false;
         if (product == null) {
             if (other.product != null)
                 return false;
@@ -190,11 +202,6 @@ public class Transaction {
             if (other.seller != null)
                 return false;
         } else if (!seller.equals(other.seller))
-            return false;
-        if (shipped == null) {
-            if (other.shipped != null)
-                return false;
-        } else if (!shipped.equals(other.shipped))
             return false;
         return true;
     }

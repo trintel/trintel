@@ -19,11 +19,8 @@ public class ActionTypeService {
     ActionTypeRepository actionTypeRepository;
 
     public ActionType getInitialActionType() {
-        return actionTypeRepository.findByName("Request");      //TODO dynamisch, falls Anforderung nach abweichender anfänglichen Aktion.
-    }
-
-    public ActionType getAcceptActionType() {
-        return actionTypeRepository.findByName("Accept");
+        return actionTypeRepository.findByName("Request"); // TODO dynamisch, falls Anforderung nach abweichender
+                                                           // anfänglichen Aktion.
     }
 
     public ActionType getAbortActionType() {
@@ -34,89 +31,39 @@ public class ActionTypeService {
         return actionTypeRepository.findByName("Offer");
     }
 
-    public ActionType getDeliveryActionType() {
-        return actionTypeRepository.findByName("Delivery");
-    }
-
-    public ActionType getInvoiceActionType() {
-        return actionTypeRepository.findByName("Invoicing");
-    }
-
-    public ActionType getPaidActionType() {
-        return actionTypeRepository.findByName("Paid");
+    public ActionType getActionTypeById(Long id) {
+        return actionTypeRepository.findById(id).orElse(null); // TODO: check if present
     }
 
     /**
-     * Approach: get all Actions available for initiator Type, then substract the standard-Actions that are not availale.
+     * Approach: get all Actions available for initiator Type, then substract the
+     * standard-Actions that are not availale.
      * Then: custom Action will be, by default, always available.
+     *
      * @param transaction the transaction which is to be edited
      * @param currentUser the user trying to edit.
      * @return a list of all available actiontypes
      */
     public List<ActionType> getAvailableActions(Transaction transaction, User currentUser) {
 
-        if(!transaction.getActive()) {
+        if (!transaction.getActive()) {
             return new ArrayList<>();
         }
 
         InitiatorType initiatorType = InitiatorType.SELLER;
 
-        if(currentUser.getCompany().getId().equals(transaction.getBuyer().getId())) {      //findout if current user is Buyer or seller.
+        if (currentUser.getCompany().getId().equals(transaction.getBuyer().getId())) { // findout if current user is
+                                                                                       // Buyer or seller.
             initiatorType = InitiatorType.BUYER;
         }
 
         List<ActionType> actionTypes = new ArrayList<>();
         actionTypes.addAll(actionTypeRepository.findByInitiatorType(initiatorType));
         actionTypes.addAll(actionTypeRepository.findByInitiatorType(InitiatorType.BOTH));
-        //Remove all actionTypes, that are not available
-        for(ActionType actionType : actionTypes.stream().filter(t -> t.isStandardAction()).toArray(ActionType[] :: new)) {
 
-            //Add the Offer-Option if: the last action is a Request from the other company
-            //                     OR: the last action is an Offer
-            if(actionType.getName().equals("Offer")) {
-                if(transaction.getLastAction().getInitiator().getCompany().getId().equals(currentUser.getCompany().getId()) && transaction.getLatestActionName().equals("Request") || transaction.getConfirmed() ||  transaction.getBuyer().getId().equals(currentUser.getCompany().getId())) {
-                    if(!transaction.getLatestStandardAction().getActiontype().getName().equals("Offer")) {
-                        actionTypes.remove(actionType);
-                    }
-                    // actionTypes.remove(actionType);
-                }
-            }
-
-            //Add the Accept-Option if: the last action is an Offer from the other company
-            if(actionType.getName().equals("Accept")) {
-                if(transaction.getLatestStandardAction().getInitiator().getCompany().getId().equals(currentUser.getCompany().getId()) || !transaction.getLatestStandardAction().getActiontype().getName().equals("Offer")) {
-                    actionTypes.remove(actionType);
-                }
-            }
-
-            //Add the Cancel-Option if: The transaction is not confirmed yet.
-            if(actionType.getName().equals("Cancel")) {
-                if(transaction.getConfirmed()) {
-                    actionTypes.remove(actionType);
-                }
-            }
-
-            //Add the delivery-Option if: the transaction is confirmed
-            if(actionType.getName().equals("Delivery")) {
-                if(!transaction.getConfirmed() || transaction.getShipped() || transaction.getBuyer().getId().equals(currentUser.getCompany().getId())) {
-                    actionTypes.remove(actionType);
-                }
-            }
-
-            //Add the invoicing-Option if: the transaction is confirmed
-            if(actionType.getName().equals("Invoicing")) {
-                if(!transaction.getConfirmed() || transaction.getBuyer().getId().equals(currentUser.getCompany().getId())) {
-                    actionTypes.remove(actionType);
-                }
-            }
-
-            //Add the paid-Option if: the transaction is confirmed
-            if(actionType.getName().equals("Paid")) {
-                if(!transaction.getShipped() || transaction.getBuyer().getId().equals(currentUser.getCompany().getId())) {
-                    actionTypes.remove(actionType);
-                }
-            }
-        }
+        // If the transaction is empty, all actions are available
+        // Remove all actionTypes, that are not available
+        // TODO: check if any logic has to be applied.
 
         return actionTypes;
 
