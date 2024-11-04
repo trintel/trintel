@@ -90,7 +90,7 @@
 						data-bs-toggle="dropdown"
 						aria-expanded="false" data-bs-auto-close="false"></i>
 						<ul class="dropdown-menu" th:aria-labelledby="'sortDropdownButton-' + ${transaction.id}">
-							<li>
+							<li sec:authorize="hasRole('STUDENT')">
 								<button class="dropdown-item" type="button" th:onclick="'archiveTransaction(event, ' + ${transaction.id} + ')'" th:text="#{archiveVerb}"></button>
 							</li>
 							<li>

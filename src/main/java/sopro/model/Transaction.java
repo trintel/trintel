@@ -42,7 +42,7 @@ public class Transaction {
     private Company seller;
     @Getter
     @Setter
-    @OneToMany(mappedBy = "transaction")
+    @OneToMany(mappedBy = "transaction", cascade = CascadeType.REMOVE)
     List<Rating> ratings;
     @Getter
     @Setter
