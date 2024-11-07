@@ -46,4 +46,12 @@ public class ExportImportService implements ExportImportInterface {
         this.jdbc.execute("runscript from '" + pathToScript + "'");
         return true;
     }
+
+    public String exportExcelReport() {
+        File file = new File(TrintelApplication.EXPORT_PATH + "/TrintelStatisticsReport.xls");
+        ExcelExportService excelExportService = new ExcelExportService();
+        excelExportService.export(file);
+
+        return file.getPath();
+    }
 }
