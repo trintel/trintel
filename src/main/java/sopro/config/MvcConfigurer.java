@@ -1,6 +1,7 @@
 package sopro.config;
 
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,11 +12,16 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 
+import sopro.service.VersionService;
+
 /**
  * Needed for Language support.
  */
 @Configuration
 public class MvcConfigurer implements WebMvcConfigurer {
+
+    @Value("${app.version}")
+    private String appVersion;
 
     @Bean("messageSource")
     public MessageSource messageSource() {
@@ -42,5 +48,10 @@ public class MvcConfigurer implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(localeInterceptor());
+    }
+
+    @Bean(name = "versionService")
+    public VersionService versionService() {
+        return () -> appVersion;
     }
 }

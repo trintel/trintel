@@ -5,6 +5,9 @@
 *.pdf
 *.sql
 
+# Is generated on gradle build
+build-info.properties
+
 
 ### h2 Database ###
 *.mv.db
