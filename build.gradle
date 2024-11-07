@@ -1,12 +1,13 @@
 plugins {
 	id 'org.springframework.boot' version '2.6.3'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'com.palantir.git-version' version '0.12.3'
 	id 'java'
     id "com.diffplug.spotless" version "6.3.0"
 }
 
 group = '.'
-version = '0.0.1-SNAPSHOT'
+version = gitVersion()
 sourceCompatibility = '11'
 
 configurations {
@@ -60,6 +61,14 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+task writeVersion {
+    doLast {
+        def versionFile = file("${projectDir}/src/main/resources/build-info.properties")
+        versionFile.text = "app.version=${project.version}"
+    }
+}
+processResources.dependsOn writeVersion
 
 test {
     useJUnitPlatform()
