@@ -103,6 +103,29 @@ public class BackupController {
         return null;
     }
 
+    @GetMapping("/excelReport")
+    public ResponseEntity<byte[]> excelReport(HttpServletResponse response, Model model) {
+
+        String filePath = exportImportService.exportExcelReport();
+
+        try {
+            byte[] contents = Files.readAllBytes(new File(filePath).toPath());
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            String[] soup = filePath.split("/"); // Last part is the filename
+            String filename = soup[soup.length - 1];
+            headers.setContentDispositionFormData("attachment", filename);
+            headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+            ResponseEntity<byte[]> res = new ResponseEntity<>(contents, headers, HttpStatus.OK);
+            TrintelApplication.logger.info("Exporting to " + exportImportService.export());
+            return res;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/reset")
     public String resetDatabase(Model model, @AuthenticationPrincipal User user) {
