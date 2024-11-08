@@ -3,6 +3,9 @@ package sopro.controller;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -24,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import sopro.TrintelApplication;
 import sopro.model.User;
+import sopro.service.ExcelExportInterface;
 import sopro.service.ExportImportInterface;
 import sopro.service.InitDatabaseService;
 
@@ -33,6 +37,9 @@ public class BackupController {
 
     @Autowired
     ExportImportInterface exportImportService;
+
+    @Autowired
+    ExcelExportInterface excelExportService;
 
     @Autowired
     InitDatabaseService initDatabaseService;
@@ -106,23 +113,14 @@ public class BackupController {
     @GetMapping("/excelReport")
     public ResponseEntity<byte[]> excelReport(HttpServletResponse response, Model model) {
 
-        String filePath = exportImportService.exportExcelReport();
-
-        try {
-            byte[] contents = Files.readAllBytes(new File(filePath).toPath());
-
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-            String[] soup = filePath.split("/"); // Last part is the filename
-            String filename = soup[soup.length - 1];
-            headers.setContentDispositionFormData("attachment", filename);
-            headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
-            ResponseEntity<byte[]> res = new ResponseEntity<>(contents, headers, HttpStatus.OK);
-            TrintelApplication.logger.info("Exporting to " + exportImportService.export());
-            return res;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        response.setContentType("application/octet-stream");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        String currentDateTime = dateFormatter.format(new Date());
+         
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=users_" + currentDateTime + ".xlsx";
+        response.setHeader(headerKey, headerValue);
+        excelExportService.excelReport(response);
         return null;
     }
 

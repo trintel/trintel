@@ -1,6 +1,8 @@
 package sopro.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.HttpServletBean;
 
 import sopro.model.Company;
 import sopro.repository.CompanyRepository;
@@ -13,6 +15,10 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
@@ -20,7 +26,8 @@ import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-public class ExcelExportService {
+@Service
+public class ExcelExportService implements ExcelExportInterface {
      
     @Autowired
     UserRepository userRepository;
@@ -44,8 +51,7 @@ public class ExcelExportService {
         cell.setCellStyle(style);
     }
     
-     
-    public void export(File file) {
+    public void excelReport(HttpServletResponse response) {
         XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet sheet = workbook.createSheet("Statistics Report");
          
@@ -63,8 +69,9 @@ public class ExcelExportService {
             createCell(sheet, row, i, columns[i], style);
         }
 
-        ArrayList data = new ArrayList<List>();
+        ArrayList<List<?>> data = new ArrayList<>();
         List<Company> companies = companyRepository.findAll();
+        System.out.println(companies);
     
         data.add(companies.stream().map(c -> statisticsService.getNumberDistinctBuyers(c)).collect(Collectors.toList()));
         data.add(companies.stream().map(c -> statisticsService.getNumberDistinctSellers(c)).collect(Collectors.toList()));
@@ -89,18 +96,14 @@ public class ExcelExportService {
                    
         }
          
-        FileOutputStream outputStream;
         try {
-            outputStream = new FileOutputStream(file);
+            ServletOutputStream outputStream = response.getOutputStream();
             workbook.write(outputStream);
             workbook.close();
-        } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            outputStream.close();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
+            // Handle the exception as needed
         }
-         
     }
 }
