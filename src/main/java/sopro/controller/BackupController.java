@@ -110,7 +110,7 @@ public class BackupController {
         return null;
     }
 
-    @GetMapping("/excelReport")
+    @GetMapping("/excel-report")
     public ResponseEntity<byte[]> excelReport(HttpServletResponse response, Model model) {
 
         response.setContentType("application/octet-stream");
@@ -118,7 +118,7 @@ public class BackupController {
         String currentDateTime = dateFormatter.format(new Date());
          
         String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename=users_" + currentDateTime + ".xlsx";
+        String headerValue = "attachment; filename=Trintel_report_" + currentDateTime + ".xlsx";
         response.setHeader(headerKey, headerValue);
         excelExportService.excelReport(response);
         return null;

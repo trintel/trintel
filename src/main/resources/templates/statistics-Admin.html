@@ -17,6 +17,10 @@
         <!-- Table -->
         <div class="container">
             <h3 class="mb-3" th:text="#{overview}"></h3>
+            <a class="btn btn-secondary" th:href="@{'excel-report'}">
+                <i class="bi bi-box-arrow-down"></i>
+                <span th:text="#{exportToExcel}"></span>
+            </a>
             <div class="table-responsive">
                 <!-- sortTable(column,inputType): the first parameter sets the column to be sorted. 
                     The second argument is 1 for Text input and 2 for numeric input.-->

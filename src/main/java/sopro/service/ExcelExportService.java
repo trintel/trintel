@@ -2,21 +2,16 @@ package sopro.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.HttpServletBean;
 
 import sopro.model.Company;
 import sopro.repository.CompanyRepository;
 import sopro.repository.UserRepository;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.poi.ss.usermodel.Cell;
@@ -59,20 +54,29 @@ public class ExcelExportService implements ExcelExportInterface {
          
         CellStyle style = workbook.createCellStyle();
         XSSFFont font = workbook.createFont();
-        font.setBold(true);
-        font.setFontHeight(16);
+        font.setFontHeight(14);
         style.setFont(font);
 
-        String[] columns = {"Company", "Distinct Buyers", "Distinct Sellers", "Total Transaction Buyer Volume", "Total Transaction Seller Volume", "Number of non confirmed buyer", "Number on non confirmed seller", "Number confirmed"};
+        String[] columns = {
+            "Company", 
+            "Number of distinct buyers", 
+            "Number of distinct sellers", 
+            "Total transaction buyer volume", 
+            "Total transaction seller volume", 
+            "Number of non confirmed buyer", 
+            "Number on non confirmed seller", 
+            "Number confirmed"};
          
+        // Header row
         for (int i = 0; i < columns.length; i++) {
             createCell(sheet, row, i, columns[i], style);
         }
 
-        ArrayList<List<?>> data = new ArrayList<>();
+        List<List<?>> data = new ArrayList<>();
         List<Company> companies = companyRepository.findAll();
         System.out.println(companies);
-    
+
+        data.add(companies.stream().map(c -> c.getName()).collect(Collectors.toList()));
         data.add(companies.stream().map(c -> statisticsService.getNumberDistinctBuyers(c)).collect(Collectors.toList()));
         data.add(companies.stream().map(c -> statisticsService.getNumberDistinctSellers(c)).collect(Collectors.toList()));
         data.add(companies.stream().map(c -> statisticsService.getTotalTransactionBuyerVolume(c)).collect(Collectors.toList()));
@@ -82,20 +86,15 @@ public class ExcelExportService implements ExcelExportInterface {
         data.add(companies.stream().map(c -> statisticsService.getNumberConfirmedTransactions(c)).collect(Collectors.toList()));
         int rowCount = 1;
  
-        font.setFontHeight(14);
-        style.setFont(font);
-                 
-        // for (Company company : companies) {
-        for (int r = 0; r < data.size(); r++) {
-            Row row2 = sheet.createRow(rowCount++);
-            int columnCount = 0;
-             
-            for (Object field : data) { 
-                createCell(sheet, row2, columnCount++, ((ArrayList) field).get(r), style);
+
+        // Data rows
+        for (int r = 0; r < companies.size(); r++) {
+            row = sheet.createRow(rowCount++);
+            for (int c = 0; c < data.size(); c++) {
+                createCell(sheet, row, c, ((List<?>) data.get(c)).get(r).toString(), style);
             }
-                   
         }
-         
+
         try {
             ServletOutputStream outputStream = response.getOutputStream();
             workbook.write(outputStream);
