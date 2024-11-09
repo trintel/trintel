@@ -3,6 +3,9 @@ package sopro.controller;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -24,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import sopro.TrintelApplication;
 import sopro.model.User;
+import sopro.service.ExcelExportInterface;
 import sopro.service.ExportImportInterface;
 import sopro.service.InitDatabaseService;
 
@@ -33,6 +37,9 @@ public class BackupController {
 
     @Autowired
     ExportImportInterface exportImportService;
+
+    @Autowired
+    ExcelExportInterface excelExportService;
 
     @Autowired
     InitDatabaseService initDatabaseService;
@@ -100,6 +107,20 @@ public class BackupController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return null;
+    }
+
+    @GetMapping("/excel-report")
+    public ResponseEntity<byte[]> excelReport(HttpServletResponse response, Model model) {
+
+        response.setContentType("application/octet-stream");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        String currentDateTime = dateFormatter.format(new Date());
+
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=Trintel_report_" + currentDateTime + ".xlsx";
+        response.setHeader(headerKey, headerValue);
+        excelExportService.excelReport(response);
         return null;
     }
 
