@@ -116,7 +116,7 @@ public class BackupController {
         response.setContentType("application/octet-stream");
         DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
         String currentDateTime = dateFormatter.format(new Date());
-         
+
         String headerKey = "Content-Disposition";
         String headerValue = "attachment; filename=Trintel_report_" + currentDateTime + ".xlsx";
         response.setHeader(headerKey, headerValue);

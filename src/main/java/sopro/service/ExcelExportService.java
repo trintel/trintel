@@ -1,14 +1,8 @@
 package sopro.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import sopro.model.Company;
-import sopro.repository.CompanyRepository;
-import sopro.repository.UserRepository;
 import java.io.IOException;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.servlet.ServletOutputStream;
@@ -20,10 +14,16 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import sopro.model.Company;
+import sopro.repository.CompanyRepository;
+import sopro.repository.UserRepository;
 
 @Service
 public class ExcelExportService implements ExcelExportInterface {
-     
+
     @Autowired
     UserRepository userRepository;
 
@@ -45,28 +45,28 @@ public class ExcelExportService implements ExcelExportInterface {
         }
         cell.setCellStyle(style);
     }
-    
+
     public void excelReport(HttpServletResponse response) {
         XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet sheet = workbook.createSheet("Statistics Report");
-         
+
         Row row = sheet.createRow(0);
-         
+
         CellStyle style = workbook.createCellStyle();
         XSSFFont font = workbook.createFont();
         font.setFontHeight(14);
         style.setFont(font);
 
         String[] columns = {
-            "Company", 
-            "Number of distinct buyers", 
-            "Number of distinct sellers", 
-            "Total transaction buyer volume", 
-            "Total transaction seller volume", 
-            "Number of non confirmed buyer", 
-            "Number on non confirmed seller", 
+            "Company",
+            "Number of distinct buyers",
+            "Number of distinct sellers",
+            "Total transaction buyer volume",
+            "Total transaction seller volume",
+            "Number of non confirmed buyer",
+            "Number on non confirmed seller",
             "Number confirmed"};
-         
+
         // Header row
         for (int i = 0; i < columns.length; i++) {
             createCell(sheet, row, i, columns[i], style);
@@ -85,7 +85,7 @@ public class ExcelExportService implements ExcelExportInterface {
         data.add(companies.stream().map(c -> statisticsService.getNumberNonConfirmedTransactionSeller(c)).collect(Collectors.toList()));
         data.add(companies.stream().map(c -> statisticsService.getNumberConfirmedTransactions(c)).collect(Collectors.toList()));
         int rowCount = 1;
- 
+
 
         // Data rows
         for (int r = 0; r < companies.size(); r++) {
