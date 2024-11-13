@@ -71,6 +71,7 @@ public class StatistikTest {
 
     /**
      * Tests if the view with the Statistik is shown for the admin.
+     * 
      * @throws Exception
      */
     @Test
@@ -78,12 +79,13 @@ public class StatistikTest {
     public void listStatistikTestAdmin() throws Exception {
 
         mockMvc.perform(get("/statistics/" + userRepository.findByEmail("j@j").getCompany().getId()))
-               .andExpect(status().isOk())
-               .andExpect(view().name("statistics-Student"));
+                .andExpect(status().isOk())
+                .andExpect(view().name("statistics/statistics-student"));
     }
 
     /**
      * Tests if the view with the Statistik is shown for the student.
+     * 
      * @throws Exception
      */
     @Test
@@ -91,12 +93,13 @@ public class StatistikTest {
     public void listStatistikTestStudent1() throws Exception {
 
         mockMvc.perform(get("/statistics/" + userRepository.findByEmail("j@j").getCompany().getId()))
-               .andExpect(status().isOk())
-               .andExpect(view().name("statistics-Student"));
+                .andExpect(status().isOk())
+                .andExpect(view().name("statistics/statistics-student"));
     }
 
     /**
      * Tests if the student can not see the statistics from other companies.
+     * 
      * @throws Exception
      */
     @Test
@@ -104,38 +107,36 @@ public class StatistikTest {
     public void listStatistikTestStudent2() throws Exception {
 
         mockMvc.perform(get("/statistics/" + userRepository.findByEmail("f@f").getCompany().getId()))
-               .andExpect(status().isOk())
-               .andExpect(view().name("error"));
+                .andExpect(status().isOk())
+                .andExpect(view().name("error"));
     }
 
     /**
      * Tests if the view with the Admin Statistik is shown for the admin.
+     * 
      * @throws Exception
      */
     @Test
     @WithUserDetails(value = "admin@admin", userDetailsServiceBeanName = "userDetailsService")
     public void listAdminStatistikTestAdmin() throws Exception {
 
-        mockMvc.perform(get("/statistics-Admin"))
-               .andExpect(status().isOk())
-               .andExpect(view().name("statistics-Admin"));
+        mockMvc.perform(get("/statistics-admin"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("statistics/statistics-admin"));
     }
-
-
 
     /**
      * Tests if the view with the Admin Statistik is not shown for the student.
+     * 
      * @throws Exception
      */
     @Test
     @WithUserDetails(value = "j@j", userDetailsServiceBeanName = "userDetailsService")
     public void listAdminStatistikTestStudent() throws Exception {
 
-        mockMvc.perform(get("/statistics-Admin"))
-               .andExpect(status().isOk())
-               .andExpect(view().name("error"));
+        mockMvc.perform(get("/statistics-admin"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("error"));
     }
-
-
 
 }

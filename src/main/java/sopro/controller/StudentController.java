@@ -27,7 +27,7 @@ public class StudentController {
     @GetMapping("/students")
     public String listAllStudents(Model model) {
         model.addAttribute("students", userRepository.findByRole("STUDENT")); // list all students
-        return "students-list";
+        return "admin/students-list";
     }
 
     @GetMapping("/student/{id}/reassign")
@@ -44,7 +44,7 @@ public class StudentController {
                                                                                                           // one
         }
         model.addAttribute("studentID", id); // add the student id to the model (for post-request navigation)
-        return "student-reassign";
+        return "admin/student-reassign";
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -68,12 +68,13 @@ public class StudentController {
 
     @GetMapping("/students/search")
     public String searchStudents(@RequestParam String q, Model model) {
-        if(q == null || q.isBlank()) {
+        if (q == null || q.isBlank()) {
             return "redirect:/students";
         }
-        model.addAttribute("students", userRepository.searchByString(q)); // add a list of all students based on the searchstring
+        model.addAttribute("students", userRepository.searchByString(q)); // add a list of all students based on the
+                                                                          // searchstring
         model.addAttribute("searchedStudent", q);
-        return "students-list";
+        return "admin/students-list";
     }
 
 }

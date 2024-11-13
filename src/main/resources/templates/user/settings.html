@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:include="layouts/base-fullscreen :: page">
+
+<head>
+    <th:block th:fragment="title">
+        <title th:text="#{settings}"></title>
+    </th:block>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+<body>
+    <th:block th:fragment="content">
+        <style th:replace="fragments/small-content :: content"></style>
+        <main class="form-small">
+            <h1 th:text="#{settings}"></h1>
+
+            <!-- Alerts -->
+            <p class="alert alert-success" th:if="${param.name}" th:text="#{successNameChange}"></p>
+            <p class="alert alert-success" th:if="${param.password}" th:text="#{successPasswordChange}"></p>
+
+            <!-- Change name -->
+            <form action="#" th:action="@{/user/change-name}" th:object="${user}" method="post">
+                <h5 th:text="#{changeName}"></h5>
+                <div class="d-flex">
+                    <!-- Forename input -->
+                    <div class="form-floating mb-3">
+                        <input type="text" maxlength="50" class="form-control" id="floatingForename" placeholder="forename"
+                            th:field="*{forename}" autofocus>
+                        <label for="floatingInputUsername" th:text="#{forename}"></label>
+                    </div>
+                    <!-- Surname input -->
+                    <div class="form-floating mb-3 ms-3">
+                        <input type="text" maxlength="50" class="form-control" id="floatingSurname" placeholder="surname"
+                            th:field="*{surname}">
+                        <label for="floatingInputSurname" th:text="#{surname}"></label>
+                    </div>
+                </div>
+                <button type="submit" class="w-100 btn btn-lg btn-primary" th:text="#{save}"></button>
+            </form>
+            <hr class="dropdown-divider my-3">
+
+            <!-- Change password -->
+            <form action="#" th:action="@{/user/change-password}" th:object="${user}" method="post">
+                <h5 th:text="#{changePassword}"></h5>
+                <!-- Password input -->
+                <div class="form-floating mb-3">
+                    <input type="password" maxlength="255" class="form-control" id="floatingPassword" placeholder="password"
+                        th:field="*{password}" required>
+                    <label for="floatingPassword" th:text="#{password}"></label>
+                </div>
+                <button type="submit" class="w-100 btn btn-lg btn-primary" th:text="#{save}"></button>
+            </form>
+
+            <!-- Back button -->
+            <a class="w-100 btn btn-lg btn-light mt-3" th:href="@{/home}">
+                <i class="bi bi-arrow-left"></i> <span th:text=" #{back}"></span>
+            </a>
+        </main>
+</body>
+
+</html>

@@ -47,25 +47,6 @@ public class UserController {
     SignupUrlInterface signupUrlService;
 
     /**
-     * GET routing für Index.
-     *
-     * @return page Home
-     */
-    @GetMapping("/home")
-    public String showHome2(@AuthenticationPrincipal User user, Model model) {
-        if (user.getCompany() != null || user.getRole().equals("ADMIN")) { // just go to the home page if a company is
-                                                                           // already selected or the user is admin
-            Optional<User> profile = userRepository.findById(user.getId());
-            if(profile.isPresent()) {
-                model.addAttribute("forename", profile.get().getForename());
-            }
-            return "home";
-        }
-
-        return "redirect:/company/select"; // have students select a company if non is selected
-    }
-
-    /**
      * Returns signup page for admins.
      *
      * @param model
@@ -76,10 +57,13 @@ public class UserController {
         User user = new User();
         if (rndStr.equals(signupUrlService.getAdminSignupUrl())) {
             model.addAttribute("user", user);
-            return "sign-up-admin";
-        } else if (rndStr.equals(signupUrlService.getStudentSignupUrl())){
+            model.addAttribute("admin", true);
+            return "user/sign-up";
+        } else if (rndStr.equals(signupUrlService.getStudentSignupUrl())) {
             model.addAttribute("user", user);
-            return "sign-up-student";
+            model.addAttribute("admin", false);
+
+            return "user/sign-up";
         } else {
             return "redirect:/login";
         }
@@ -115,15 +99,13 @@ public class UserController {
             TrintelApplication.logger.error("Email Adresse schon registriert.\n\n" + e);
 
             model.addAttribute("isSignupError", true);
-            model.addAttribute("signupErrorMsg", messages.getMessage("mailAlreadyExists", null, "Mail already exitst.", request.getLocale()));
-            if (role.equals("admin")) {
-                return "sign-up-admin";
-            } else {
-                return "sign-up-student";
-            }
+            model.addAttribute("signupErrorMsg",
+                    messages.getMessage("mailAlreadyExists", null, "Mail already exitst.", request.getLocale()));
+            model.addAttribute("admin", user.getRole().equals("admin"));
+            return "user/sign-up";
         }
 
-        return "verify-your-email";
+        return "user/verify-email";
     }
 
     /**
@@ -149,7 +131,7 @@ public class UserController {
     @GetMapping("/user/settings")
     public String viewUserDetails(@AuthenticationPrincipal User user, Model model) {
         model.addAttribute("user", userRepository.findById(user.getId()));
-        return "settings";
+        return "user/settings";
     }
 
     @PostMapping("/user/change-password")
@@ -166,11 +148,11 @@ public class UserController {
 
     @GetMapping("/reset-password")
     public String getResetPasswordForm() {
-        return "reset-password";
+        return "user/reset-password";
     }
 
     @PostMapping("/reset-password")
-    public ModelAndView resetPassword(String email, RedirectAttributes ra,  HttpServletRequest request) {
+    public ModelAndView resetPassword(String email, RedirectAttributes ra, HttpServletRequest request) {
         userService.requestPasswordReset(email, request);
         ModelAndView mav = new ModelAndView("redirect:/reset-password?success");
         ra.addFlashAttribute("email", email);
@@ -179,7 +161,7 @@ public class UserController {
 
     @GetMapping("/reset-password/new")
     public String getSetNewPasswordForm() {
-        return "set-new-password";
+        return "user/set-new-password";
     }
 
     @PostMapping("/reset-password/new/{token}")

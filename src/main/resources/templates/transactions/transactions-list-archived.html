@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:include="layouts/base :: page">
+
+<head>
+	<th:block th:fragment="title">
+		<title>Trintel</title>
+	</th:block>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+<body>
+	<th:block th:fragment="content">
+		<div class="d-lg-flex justify-content-between align-items-end mb-3">
+			<div>
+				<h1 th:text="#{archivedTransactions}"></h1>
+				<p sec:authorize="hasRole('STUDENT')" class="mb-0" th:text="#{tldescrStudent}"></p>
+				<p sec:authorize="hasRole('ADMIN')" class="mb-0" th:text="#{tldescrAdmin}"></p>
+			</div>
+			<div sec:authorize="hasRole('STUDENT')">
+				<a class="btn btn-secondary btn mb-3 mt-1 mt-lg-0" th:href="@{/transactions}">
+					<i class="bi bi-archive"></i>
+					<span th:text="#{archiveNoun}"></span>
+					<i class="bi bi-toggle-on"></i>
+				</a>
+			</div>
+		</div>
+		<div class="d-lg-flex justify-content-between align-items-end mb-3">
+
+			<div class="dropdown">
+				<button class="btn btn-secondary dropdown-toggle mb-3" type="button" data-bs-toggle="dropdown"
+					aria-expanded="false" data-bs-auto-close="false">
+					<i class="bi bi-filter"></i><span th:text="#{sortAndFilter}"></span>
+				</button>
+				<form class="dropdown-menu" th:action="@{/transactions/archived}">
+					<li>
+						<h6 class="dropdown-header" th:text="#{sortBy}"></h6>
+					</li>
+					<li>
+						<div class="form-check">
+							<input class="form-check-input" type="radio" name="sortByNewest" id="sortByNewest" value="true"
+								th:checked="${param.sortByNewest == null || param.sortByNewest}">
+							<label class="form-check-label" for="sortByNewest" th:text="#{newestFirst}">
+							</label>
+						</div>
+						<div class="form-check">
+							<input class="form-check-input" type="radio" name="sortByNewest" id="sortByOldest" value="false"
+								th:checked="${param.sortByNewest != null && !param.sortByNewest}">
+							<label class="form-check-label" for="sortByOldest" th:text="#{oldestFirst}">
+							</label>
+						</div>
+					</li>
+					<li>
+						<h6 class="dropdown-header" th:text="#{filter}"></h6>
+					</li>
+					<select name="status" class="mb-3">
+						<option value="" th:text="#{status}"></option>
+						<th:block th:each="actiontype : ${actiontypes}" th:with="resolvedText=${#messages.msgOrNull('actiontype.' + actiontype.name)}">
+							<option th:text="${resolvedText != null ? resolvedText : actiontype.name}" th:value="${actiontype.id}"> </option>
+						</th:block>
+					</select>
+					<div class="form-floating mb-3">
+						<input type="text" class="form-control" id="buyer" placeholder="buyer" name="buyer"
+							th:value="${param.buyer}">
+						<label for="buyer" th:text="#{buyer}"></label>
+					</div>
+					<div class="form-floating">
+						<input type="text" class="form-control" id="seller" placeholder="seller" name="seller"
+							th:value="${param.seller}">
+						<label for="seller" th:text="#{seller}"></label>
+					</div>
+					<button type="submit" class="btn btn-primary w-100 mt-3" th:text="#{submit}"></button>
+				</form>
+			</div>
+
+			<div sec:authorize="hasRole('STUDENT')">
+				<a class="btn btn-primary btn mb-3 mt-1 mt-lg-0" th:href="@{/companies}">
+					<i class="bi bi-plus"></i>
+					<span th:text="#{newTransaction}" />
+				</a>
+			</div>
+		</div>
+		<div th:unless="${transactions.isEmpty()}">
+			<!-- Card for every transaction -->
+			<div th:each="transaction: ${transactions}">
+				<div class="card mb-3">
+					<!-- Menu button for archive and delete -->
+					<div class="dropdown position-absolute top-0 end-0 m-2">
+							
+						<i class="bi bi-three-dots-vertical mb-3 mt-1" type="button" 
+						th:id="'sortDropdownButton-' + ${transaction.id}"
+						data-bs-toggle="dropdown"
+						aria-expanded="false" data-bs-auto-close="false"></i>
+						<ul class="dropdown-menu" th:aria-labelledby="'sortDropdownButton-' + ${transaction.id}">
+							<li>
+								<button class="dropdown-item" type="button" th:onclick="'activateTransaction(event, ' + ${transaction.id} + ')'" th:text="#{activateTransaction}"></button>
+							</li>
+							<li>
+								<button class="dropdown-item text-danger" data-bs-toggle="modal" th:data-bs-target="'#modalDelete-' + ${transaction.id}" th:text="#{delete}" onclick="event.stopPropagation();event.preventDefault();"></button>
+							</li>
+						</ul>
+					</div>
+					<div class="modal fade" th:id="'modalDelete-' + ${transaction.id}" tabindex="-1" aria-hidden="true">
+						<div class="modal-dialog modal-dialog-centered">
+							<div class="modal-content">
+								<div class="modal-header">
+									<div class="d-flex align-items-center align-content-center">
+										<div class="icon-container me-2">
+										<i class="bi bi-trash"></i>
+										</div>
+										<h1 class="modal-title fs-5" id="importModalLabel" th:text="#{deleteTransaction}"></h1>
+									</div>
+								</div>
+								<p class="alert alert-danger mt-3 mb-3 mx-1" th:text="#{deleteTransactionWarning}"></p>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal" th:text="#{cancel}"></button>
+									<a class="btn btn-danger" th:text="#{confirm}" th:href="@{'/transaction/delete/' + ${transaction.id}}"></a>
+								</div>
+							</div>
+						</div>
+					</div>
+				<a th:href="@{'/transaction/' + ${transaction.id}}" class="text-decoration-none">
+						<!-- Alert marker if opposing company performed last action -->
+						<div sec:authorize="hasRole('STUDENT')">
+							<div
+								th:if="${#request.userPrincipal.principal.company.id != transaction.actions[#lists.size(transaction.actions) - 1].initiator.company.id}">
+								<div
+									th:unless="${transaction.actions[#lists.size(transaction.actions) - 1].actiontype.name == 'Paid' or transaction.actions[#lists.size(transaction.actions) - 1].actiontype.name == 'Cancel'}">
+									<span
+										class="position-absolute top-0 start-0 translate-middle p-2 bg-danger border border-light rounded-circle">
+										<span class="visually-hidden">New alerts</span>
+									</span>
+								</div>
+							</div>
+						</div>
+						<div class="card-body d-flex align-items-center justify-content-between">
+							<div class="w-100" th:with="latestActionType=${transaction.actions[#lists.size(transaction.actions) - 1].actiontype}">
+								<!-- Badges for transaction status -->
+								<div th:with="resolvedText=${#messages.msgOrNull('actiontype.' + latestActionType.name)}">
+									<h4>
+										<div class="badge" th:classappend="'bg-' + ${latestActionType.colorClass != null ? latestActionType.colorClass : 'secondary'}"
+											th:text="${resolvedText != null ? resolvedText : latestActionType.name}"/>
+									</h4>
+								</div>
+								<div class="row row-cols-1 row-cols-lg-4 row-cols-md-2 align-items-center">
+									<!-- Card text -->
+									<div class="col" sec:authorize="hasRole('STUDENT')">
+										<span class="card-text text-muted fs-6" th:text="${transaction.buyer.id == #request.userPrincipal.principal.company.id? #messages.msg('buyingFrom') : #messages.msg('sellingTo')}">
+										</span>
+										<span class="card-text text-black">
+											<h5 th:text="${transaction.buyer.id == #request.userPrincipal.principal.company.id ? transaction.seller.name : transaction.buyer.name}"></h5>
+										</span>
+									</div>
+									<div class="col" sec:authorize="hasRole('ADMIN')">
+										<span class="card-text text-muted fs-6" th:text="#{buyer}"></span>
+										<span class="card-text text-black">
+											<h5 th:text="${transaction.buyer.name}"></h5>
+										</span>
+									</div>
+									<div class="col" sec:authorize="hasRole('ADMIN')">
+										<span class="card-text text-muted me-5 fs-6" th:text="#{seller}"></span>
+										<span class="card-text text-black">
+											<h5 th:text="${transaction.seller.name}"></h5>
+										</span>
+									</div>
+									<div class="col">
+										<span class="card-text text-muted fs-6" th:text="#{product}"></span>
+										<span class="card-text text-black">
+											<h5 th:text="${transaction.product}"></h5>
+										</span>
+									</div>
+									<div class="col">
+										<span class="card-text text-muted fs-6" th:text="#{lastUpdate}"></span>
+										<span class="card-text text-black">
+											<h5
+												th:text="${#temporals.format(transaction.actions[#lists.size(transaction.actions) - 1].date, 'dd-MM-yyyy')} + ' ' + ${#temporals.format(transaction.actions[#lists.size(transaction.actions) - 1].time, 'HH:mm')}">
+											</h5>
+										</span>
+									</div>
+								</div>
+							</div>
+							<i class="bi bi-chevron-right text-black ms-3" style="font-size:2rem;"></i>
+						</div>
+					</a>
+				</div>
+			</div>
+		</div>
+		<script>
+			function activateTransaction(event, transactionId) {
+				event.stopPropagation(); // Stop the event from propagating to parent elements
+				event.preventDefault(); // Prevent the default action of the link
+				$.ajax({
+					url: '/transaction/activate/' + transactionId,
+					type: 'GET',
+					success: function(result) {
+						location.reload(); // Reload the page to reflect changes
+					},
+					error: function(xhr, status, error) {
+						// Handle error
+						console.log('Error activating transaction: ' + error);
+					}
+				});
+			}
+		</script>
+	</th:block>
+</body>
+
+</html>

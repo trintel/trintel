@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:include="layouts/base :: page">
+
+<head>
+    <title th:fragment="title" th:text="#{adminPanel}"></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+<body>
+    <th:block th:fragment="content">
+        <h1 th:text="#{adminPanel}"></h1>
+        <div
+            th:with="port=${#httpServletRequest.getServerPort() == 80 ? '' : ':' + #httpServletRequest.getServerPort()}">
+            <div class="row align-items-center mt-4 mt-md-0">
+                <div class="col-md-4">
+                    <h4 th:text="#{inviteLinkStudents}"></h4>
+                    <p class="mb-0" th:text="#{inviteLinkDescrStudents}"></p>
+                </div>
+                <div class="col-md">
+                    <input onclick="this.select()" class="form-control copybtn" placeholder="Input group"
+                        aria-label="Input group" aria-describedby="btnGroupAddon2"
+                        th:value="${#httpServletRequest.getServerName()} + ${port} + '/signup/' + ${signupUrlStudent}"
+                        readonly></input>
+                </div>
+            </div>
+            <hr class="dropdown-divider my-4">
+            <div class="row align-items-center mt-4 mt-md-0">
+                <div class="col-md-4">
+                    <h4 th:text="#{inviteLinkAdmins}"></h4>
+                    <p class="mb-0" th:text="#{inviteLinkDescrAdmins}"></p>
+                </div>
+                <div class="col-md">
+                    <input onclick="this.select()" class="form-control copybtn" placeholder="Input group"
+                        aria-label="Input group" aria-describedby="btnGroupAddon2"
+                        th:value="${#httpServletRequest.getServerName()} + ${port} + '/signup/' + ${signupUrlAdmin}"
+                        readonly></input>
+                </div>
+            </div>
+        </div>
+        <hr class="dropdown-divider my-4">
+        <div class="row align-items-center">
+            <div class="col-md-4">
+                <h4 th:text="#{exIm}"></h4>
+                <p class="mb-0" th:text="#{exImDescr}"></p>
+            </div>
+            <div class="col-md mt-3 mt-md-0">
+                <a class="btn btn-secondary" th:href="@{'/backup/export'}">
+                    <i class="bi bi-box-arrow-down"></i>
+                    <span th:text="#{export}"></span>
+                </a>
+
+                <!-- Import data trigger modal -->
+                <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#importModal">
+                    <i class="bi bi-box-arrow-in-up"></i>
+                    <span th:text="#{import}"></span>
+                </button>
+
+                <!-- Import data Modal -->
+                <div class="modal fade" id="importModal" tabindex="-1" aria-labelledby="importModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <div class="d-flex align-items-center align-content-center">
+                                    <div class="icon-container me-2">
+                                        <i class="bi bi-box-arrow-in-up pt-1"></i>
+                                    </div>
+                                    <h1 class="modal-title fs-5" id="importModalLabel" th:text="#{import}"></h1>
+                                </div>
+                            </div>
+                            <form method="post" th:action="@{/backup/import}" enctype="multipart/form-data">
+                                <div class="modal-body">
+                                    <input class="form-control" type="file" id="formFile" name="file" accept=".sql"
+                                        required>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                        th:text="#{cancel}"></button>
+                                    <button type="submit" class="btn btn-primary" th:text="#{confirm}"></button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reset data trigger modal -->
+                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#resetModal">
+                    <i class="bi bi-bootstrap-reboot"></i>
+                    <span th:text="#{reset}"></span>
+                </button>
+
+                <!-- Reset data Modal -->
+                <div th:replace="fragments/components/danger-modal :: dangerModal(
+                    'resetModal',
+                    'bi bi-bootstrap-reboot',
+                    #{reset},
+                    'Are you sure you want to reset all data?',
+                    '/reset')"></div>
+            </div>
+        </div>
+        <hr class="dropdown-divider my-4">
+
+        <div class="row">
+            <div class="col-md-4">
+                <h4 th:text="#{actions}"></h4>
+                <p class="mb-0" th:text="#{actionsDescr}"></p>
+                <a class="btn btn-primary my-3" th:href="@{/action/add}">
+                    <i class="bi bi-plus-lg"></i>
+                    <span th:text="#{addNewAction}"></span>
+                </a>
+            </div>
+            <div class="col-md">
+                <th:block th:unless="${actionTypes.isEmpty()}">
+                    <th:block th:each="actionType : ${actionTypes}">
+                        <div class="card mb-3">
+                            <!-- Card base -->
+                            <div class="card-body d-lg-flex align-items-center justify-content-between">
+                                <!-- Card content -->
+                                <div class="row row-cols-1 row-cols-lg-2 w-100 align-items-center">
+                                    <!-- Transaction name and description -->
+                                    <div class="col">
+                                        <div th:with="resolvedName=${#messages.msgOrNull('actiontype.' + actionType.name)}, resolvedText=${#messages.msgOrNull('actiontype.' + actionType.name + '.text')}">
+                                            <h4>
+                                                <div class="badge" th:classappend="'bg-' + ${actionType.colorClass != null ? actionType.colorClass : 'secondary'}"
+                                                    th:text="${resolvedName != null ? resolvedName : actionType.name}"/>
+                                            </h4>
+                                        </div>
+                                        <p class="card-text text-secondary" th:text="${resolvedText != null ? resolvedText : actionType.text}"></p>
+                                    </div>
+                                    <!-- Initiator type -->
+                                    <div class="col mt-3 mt-lg-0">
+                                        <span class="card-text text-secondary fs-6" th:text="#{initiator}"></span>
+                                        <th:block
+                                            th:if="${actionType.initiatorType == T(sopro.model.util.InitiatorType).BUYER}">
+                                            <span class="card-text text-black">
+                                                <h5 th:text="#{buyer}"></h5>
+                                            </span>
+                                        </th:block>
+                                        <th:block
+                                            th:if="${actionType.initiatorType == T(sopro.model.util.InitiatorType).SELLER}">
+                                            <span class="card-text text-black">
+                                                <h5 th:text="#{seller}"></h5>
+                                            </span>
+                                        </th:block>
+                                        <th:block
+                                            th:if="${actionType.initiatorType == T(sopro.model.util.InitiatorType).BOTH}">
+                                            <span class="card-text text-black">
+                                                <h5 th:text="#{both}"></h5>
+                                            </span>
+                                        </th:block>
+                                    </div>
+                                </div>
+                                <!-- Buttons -->
+                                <a th:href="@{'/action/edit/' + ${actionType.id}}" class="btn btn-light mt-3 mt-lg-0" style="white-space: nowrap">
+                                    <i class="bi bi-pencil-square"></i> <span th:text="#{edit}" />
+                                </a>
+                            </div>
+                        </div>
+                    </th:block>
+                </th:block>
+            </div>
+        </div>
+        <p th:if="${actionTypes.isEmpty()}" th:text="#{noActionTypes}"></p>
+        <script>
+            $(document).ready(function () {
+                const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+                const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+            });
+        </script>
+    </th:block>
+</body>
+
+</html>

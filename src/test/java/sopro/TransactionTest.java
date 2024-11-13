@@ -87,7 +87,7 @@ public class TransactionTest {
         @WithUserDetails(value = "admin@admin", userDetailsServiceBeanName = "userDetailsService")
         public void listTransactionsTestAdmin() throws Exception {
                 mockMvc.perform(get("/transactions"))
-                                .andExpect(view().name("transactions-list"));
+                                .andExpect(view().name("transactions/transactions-list"));
         }
 
         /**
@@ -100,7 +100,7 @@ public class TransactionTest {
         @WithUserDetails(value = "j@j", userDetailsServiceBeanName = "userDetailsService")
         public void listTransactionsTestStudent() throws Exception {
                 mockMvc.perform(get("/transactions"))
-                                .andExpect(view().name("transactions-list"));
+                                .andExpect(view().name("transactions/transactions-list"));
         }
 
         /**
@@ -227,7 +227,7 @@ public class TransactionTest {
                                 .getId();
                 mockMvc.perform(get("/transaction/" + transactionId))
                                 .andExpect(status().isOk())
-                                .andExpect(view().name("transaction-view"));
+                                .andExpect(view().name("transactions/transaction-info"));
 
         }
 
@@ -359,7 +359,7 @@ public class TransactionTest {
         public void addActionTypeTestAdmin() throws Exception {
                 mockMvc.perform(get("/action/add"))
                                 .andExpect(status().isOk())
-                                .andExpect(view().name("action-add"));
+                                .andExpect(view().name("admin/action-add"));
         }
 
         /**
@@ -431,7 +431,7 @@ public class TransactionTest {
 
                 mockMvc.perform(get("/action/edit/" + actionTypeId))
                                 .andExpect(status().isOk())
-                                .andExpect(view().name("action-edit"));
+                                .andExpect(view().name("admin/action-edit"));
         }
 
         /**
@@ -463,7 +463,7 @@ public class TransactionTest {
 
                 mockMvc.perform(get("/action/edit/" + actionType.getId()))
                                 .andExpect(status().isOk())
-                                .andExpect(view().name("action-edit"));
+                                .andExpect(view().name("admin/action-edit"));
         }
 
         /**

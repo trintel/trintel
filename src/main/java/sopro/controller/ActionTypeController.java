@@ -23,13 +23,12 @@ public class ActionTypeController {
     @Autowired
     ActionTypeRepository actionTypeRepository;
 
-
     @GetMapping("/admin-panel")
     public String showActions(Model model) {
         model.addAttribute("signupUrlStudent", SignupUrlService.STUDENT_SIGNUP_URL);
         model.addAttribute("signupUrlAdmin", SignupUrlService.ADMIN_SIGNUP_URL);
         model.addAttribute("actionTypes", actionTypeRepository.findAll());
-        return "admin-panel";
+        return "admin/admin-panel";
     }
 
     @GetMapping("/action/add")
@@ -37,7 +36,7 @@ public class ActionTypeController {
         ActionType actionType = new ActionType();
         model.addAttribute("actionType", actionType);
         model.addAttribute("initiatorTypes", InitiatorType.values());
-        return "action-add";
+        return "admin/action-add";
 
     }
 
@@ -47,7 +46,7 @@ public class ActionTypeController {
         if (bindingResult.hasErrors()) {
             model.addAttribute("actionType", actionType);
             model.addAttribute("initiatorTypes", InitiatorType.values());
-            return "action-add";
+            return "admin/action-add";
         }
 
         actionTypeRepository.save(actionType);
@@ -59,15 +58,16 @@ public class ActionTypeController {
     public String editActionType(Model model, @PathVariable Long actionTypeID) {
         model.addAttribute("actionType", actionTypeRepository.findById(actionTypeID).get());
         model.addAttribute("initiatorTypes", InitiatorType.values());
-        return "action-edit";
+        return "admin/action-edit";
     }
 
     @PostMapping("action/edit/{actionTypeID}")
-    public String editAction(@Valid ActionType actionType, @PathVariable Long actionTypeID, BindingResult bindingResult, Model model) {
+    public String editAction(@Valid ActionType actionType, @PathVariable Long actionTypeID, BindingResult bindingResult,
+            Model model) {
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("actionType", actionType);
-            return "action-edit";
+            return "admin/action-edit";
         }
         actionType.setId(actionTypeID);
         actionTypeRepository.save(actionType);

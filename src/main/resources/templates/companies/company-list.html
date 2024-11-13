@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:include="layouts/base :: page">
+
+<head>
+	<th:block th:fragment="title">
+		<title>Companies - Trintel</title>
+	</th:block>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+</head>
+
+<body>
+	<th:block th:fragment="content">
+
+		<div class="d-lg-flex justify-content-between align-items-end mb-3">
+			<div>
+				<h1 th:text="#{companies}"></h1>
+				<p class="mb-0" th:text="#{cldescr}" sec:authorize="hasRole('ADMIN')"></p>
+				<p th:text="#{companySelectionText}" th:if="${!@accessEvaluator.hasCompany() && #authorization.expression('hasRole(''STUDENT'')')}"></p>
+			</div>
+			<div sec:authorize="hasRole('ADMIN')">
+				<a class="btn btn-primary btn mt-3 mt-lg-0" th:href="@{companies/add}">
+					<i class="bi bi-plus"></i>
+					<span th:text="#{registerCompany}" />
+				</a>
+			</div>
+		</div>
+
+		<!-- Search -->
+		<form th:object="${company}" th:action="@{/companies}" method="get">
+			<div class="form-floating mb-3 inputandbutton">
+				<input type="search" name="q" class="form-control border-end-0" id="search" placeholder="Search"
+					th:value="${searchedCompany}">
+				<label for="search" th:text="#{search}"></label>
+				<button class="btn btn-outline-secondary border-start-0" type="submit">
+					<i class="bi bi-search"></i>
+				</button>
+			</div>
+		</form>
+
+		<div th:unless="${companies.isEmpty()}">
+			<div class="row row-cols-1 row-cols-xl-2 g-3">
+				<th:block th:each="company : ${companies}">
+					<div th:replace="fragments/components/company-card :: companyCard(${company})"></div>
+				</th:block>
+			</div>
+		</div>
+
+		<p th:if="${companies.isEmpty()}" th:text="#{noCompaniesFound}"></p>
+
+	</th:block>
+</body>
+
+</html>

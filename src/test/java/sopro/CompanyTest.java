@@ -75,7 +75,6 @@ public class CompanyTest {
         databaseService.clearDatabase();
     }
 
-
     // #######################################################################################
     // ----------------------------------- Method Tests ADMIN
     // #######################################################################################
@@ -103,7 +102,7 @@ public class CompanyTest {
     public void listCompaniesTestAdmin() throws Exception {
         mockMvc.perform(get("/companies"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("company-list"));
+                .andExpect(view().name("companies/company-list"));
     }
 
     /**
@@ -116,7 +115,7 @@ public class CompanyTest {
     public void listCompaniesTestStudent() throws Exception {
         mockMvc.perform(get("/companies"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("company-list"));
+                .andExpect(view().name("companies/company-list"));
     }
 
     /**
@@ -220,7 +219,7 @@ public class CompanyTest {
         companyRepository.save(testCompany);
 
         mockMvc.perform(get("/student/" + id + "/reassign"))
-                .andExpect(view().name("student-reassign"));
+                .andExpect(view().name("admin/student-reassign"));
     }
 
     /**
@@ -290,85 +289,6 @@ public class CompanyTest {
     // #######################################################################################
 
     /**
-     * Test before function
-     * Tests if the Admin can not acces the company selection page.
-     *
-     * @throws Exception
-     */
-    @Test
-    @WithUserDetails(value = "admin@admin", userDetailsServiceBeanName = "userDetailsService")
-    public void companySelectTestAdmin() throws Exception {
-        mockMvc.perform(get("/company/select"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("error"));
-    }
-
-        /**
-     * Test before function
-     * Tests if an assigned student can not acces the company selection page.
-     *
-     * @throws Exception
-     */
-    @Test
-    @WithUserDetails(value = "j@j", userDetailsServiceBeanName = "userDetailsService")
-    public void companySelectTestAssignedStudent() throws Exception {
-        mockMvc.perform(get("/company/select"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("error"));
-    }
-
-    /**
-     * Test before function
-     * Tests if the Student can acces the company selection page.
-     *
-     * @throws Exception
-     */
-    @Test
-    @WithUserDetails(value = "m@m", userDetailsServiceBeanName = "userDetailsService")
-    public void companySelectTestStudent() throws Exception {
-        mockMvc.perform(get("/company/select"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("company-select"));
-    }
-
-    /**
-     * Tests if the Admin can not select a company.
-     *
-     * @throws Exception
-     */
-    @Test
-    @WithUserDetails(value = "admin@admin", userDetailsServiceBeanName = "userDetailsService")
-    public void companySelectIdTestAdmin() throws Exception {
-        Company testCompany = new Company(companyName);
-        companyRepository.save(testCompany);
-        long id = testCompany.getId();
-
-        mockMvc.perform(get("/company/select/" + id))
-                .andExpect(status().isOk())
-                .andExpect(view().name("error"));
-
-        companyRepository.delete(testCompany);
-    }
-
-    /**
-     * Tests if the Student can select the company.
-     *
-     * @throws Exception
-     */
-    @Test
-    @WithUserDetails(value = "m@m", userDetailsServiceBeanName = "userDetailsService")
-    public void companySelectIdTestStudent() throws Exception {
-        Company testCompany = new Company(companyName);
-        companyRepository.save(testCompany);
-        long id = testCompany.getId();
-
-        mockMvc.perform(get("/company/select/" + id))
-                .andExpect(status().isOk())
-                .andExpect(view().name("company-view"));
-
-    }
-
-    /**
      * Tests if the Admin can not join a company.
      *
      * @throws Exception
@@ -409,7 +329,7 @@ public class CompanyTest {
 
         mockMvc.perform(get("/company/" + companyId + "/edit"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("company-edit"));
+                .andExpect(view().name("companies/company-edit"));
     }
 
     /**
@@ -422,7 +342,7 @@ public class CompanyTest {
     @WithUserDetails(value = "j@j", userDetailsServiceBeanName = "userDetailsService")
     public void editOwnCompanyStudentTest() throws Exception {
         mockMvc.perform(get("/company/" + (userRepository.findByEmail("j@j").getCompany()).getId() + "/edit"))
-                .andExpect(view().name("company-edit"));
+                .andExpect(view().name("companies/company-edit"));
     }
 
     /**

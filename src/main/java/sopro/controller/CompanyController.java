@@ -54,7 +54,7 @@ public class CompanyController {
     public String addCompany(Model model) {
         Company company = new Company(); // creating a new Company Object to be added to the database
         model.addAttribute("company", company);
-        return "company-create";
+        return "companies/company-create";
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -62,7 +62,7 @@ public class CompanyController {
     public String saveCompany(@Valid Company company, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("company", company);
-            return "company-create";
+            return "companies/company-create";
         }
         companyRepository.save(company); // saves the new Company
         return "redirect:/companies";
@@ -72,10 +72,12 @@ public class CompanyController {
     @PostMapping("/companies/delete/{companyID}")
     public String deleteCompany(@PathVariable Long companyID, Model model) {
 
-        if(companyLogoRepository.findByCompanyId(companyID) != null) {
-            companyLogoRepository.delete(companyLogoRepository.findByCompanyId(companyID));     //company gets deleted because of cascade.remove.
+        if (companyLogoRepository.findByCompanyId(companyID) != null) {
+            companyLogoRepository.delete(companyLogoRepository.findByCompanyId(companyID)); // company gets deleted
+                                                                                            // because of
+                                                                                            // cascade.remove.
         }
-        companyRepository.deleteById(companyID);                                            //if there is no custom logo just delete the company
+        companyRepository.deleteById(companyID); // if there is no custom logo just delete the company
         return "redirect:/companies";
     }
 
@@ -84,39 +86,19 @@ public class CompanyController {
         Company c = companyRepository.findById(companyID).get();
         model.addAttribute("company", c);
         Optional<Double> avg = ratingRepository.getAverageById(companyID);
-        if(avg.isPresent()) {
+        if (avg.isPresent()) {
             DecimalFormat df = new DecimalFormat("#.#");
             model.addAttribute("avgRating", df.format(avg.get()));
             model.addAttribute("starType", Math.round(avg.get()));
         }
         model.addAttribute("country", new Locale("ENGLISH", c.getCountry()).getDisplayCountry(loc));
         model.addAttribute("ratings", ratingRepository.findByRatedCompany(c));
-        return "company-info";
+        return "companies/company-info";
     }
 
     // #########################################################################################
     // ----------------------------------- STUDENT FUNCTIONS
     // #########################################################################################
-
-    @PreAuthorize("!hasCompany() and hasRole('STUDENT')")      //only if the company is not assigned and the user is student
-    @GetMapping("/company/select")
-    public String selectCompany(Model model, @RequestParam(required = false) String q) {
-        // .findByOrderByNameAsc() statt .findAll()
-        if(q == null || q.isBlank()) {
-            model.addAttribute("companies", companyRepository.findByOrderByNameAsc());
-        } else {
-            model.addAttribute("companies", companyRepository.searchByString(q));
-            model.addAttribute("searchedCompany", q);
-        }
-        return "company-select";
-    }
-
-    @PreAuthorize("!hasCompany() and hasRole('STUDENT')")
-    @GetMapping("/company/select/{id}")
-    public String joinCompany(@PathVariable Long id, Model model) {
-        model.addAttribute("company", companyRepository.findById(id).get());
-        return "company-view";
-    }
 
     @PreAuthorize("!hasCompany() and hasRole('STUDENT')")
     @PostMapping("/company/join")
@@ -132,8 +114,8 @@ public class CompanyController {
         return "redirect:/home";
     }
 
-    @PreAuthorize("hasCompany()")   //to prevent NullPointer. Admins not allowed.
-    @GetMapping("/company")
+    @PreAuthorize("hasCompany()") // to prevent NullPointer. Admins not allowed.
+    @GetMapping("/mycompany")
     public String viewOwnCompany(Model model, @AuthenticationPrincipal User user) {
         return "redirect:/companies/" + user.getCompany().getId();
     }
@@ -145,12 +127,12 @@ public class CompanyController {
         Map<String, String> countries = new TreeMap<String, String>();
         Locale locale;
         String[] countryCodes = Locale.getISOCountries();
-        for(String countryCode : countryCodes) {
+        for (String countryCode : countryCodes) {
             locale = new Locale("ENGLISH", countryCode);
             countries.put(countryCode, locale.getDisplayCountry(loc));
         }
         model.addAttribute("countries", countries);
-        return "company-edit";
+        return "companies/company-edit";
     }
 
     @PreAuthorize("hasRole('ADMIN') or isInCompany(#companyID)")
@@ -160,7 +142,7 @@ public class CompanyController {
             throws Exception {
         if (bindingResult.hasErrors()) {
             model.addAttribute("company", company);
-            return "company-edit";
+            return "companies/company-edit";
         }
         company.setId(companyID); // set the id of new Company-Object to the old id
         companyRepository.save(company); // old company get overwritten, since id is primary key
@@ -186,24 +168,26 @@ public class CompanyController {
     // company (reassign)
     // Admins can add new Companies
     // Students see only other companies. can click on one to start transaction.
-    //TODO difference between student and admin refactoring
+    // TODO difference between student and admin refactoring
     @GetMapping("/companies")
-    public String listCompanies(Model model, @RequestParam(required = false) String q, @AuthenticationPrincipal User user) {
-        if (user.getRole().equals("ADMIN")) {
-            if(q == null || q.isBlank()) {
-                model.addAttribute("companies", companyRepository.findAll()); // add a list of all companies to the model
+    public String listCompanies(Model model, @RequestParam(required = false) String q,
+            @AuthenticationPrincipal User user) {
+
+        model.addAttribute("searchedCompany", q);
+
+        if (user.getRole().equals("ADMIN") || user.getCompany() == null) {
+            if (q == null || q.isBlank()) {
+                model.addAttribute("companies", companyRepository.findByOrderByNameAsc());
             } else {
                 model.addAttribute("companies", companyRepository.searchByString(q));
-                model.addAttribute("searchedCompany", q);
             }
         } else {
-            if(q == null || q.isBlank()) {
+            if (q == null || q.isBlank()) {
                 model.addAttribute("companies", companyRepository.findByIdNot(user.getCompany().getId()));
             } else {
                 model.addAttribute("companies", companyRepository.searchByStringNotOwn(q, user.getCompany().getId()));
-                model.addAttribute("searchedCompany", q);
             }
         }
-        return "company-list";
+        return "companies/company-list";
     }
 }
