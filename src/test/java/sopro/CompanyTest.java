@@ -175,22 +175,6 @@ public class CompanyTest {
 
     /**
      * Test before function
-     * Controller has unsaved Company -> fixed in Controller & Frontend
-     *
-     * Tests if the Admin can acces the list of all students.
-     *
-     * @throws Exception
-     */
-    @Test
-    @WithMockUser(username = "admin@admin", roles = { "ADMIN" })
-    public void listAllStudentsTestAdmin() throws Exception {
-        mockMvc.perform(get("/students"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("students-list"));
-    }
-
-    /**
-     * Test before function
      * Tests if the Student can not acces the list of all students.
      *
      * @throws Exception

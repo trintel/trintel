@@ -71,7 +71,7 @@ public class StatistikTest {
 
     /**
      * Tests if the view with the Statistik is shown for the admin.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -85,7 +85,7 @@ public class StatistikTest {
 
     /**
      * Tests if the view with the Statistik is shown for the student.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -99,7 +99,7 @@ public class StatistikTest {
 
     /**
      * Tests if the student can not see the statistics from other companies.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -113,7 +113,7 @@ public class StatistikTest {
 
     /**
      * Tests if the view with the Admin Statistik is shown for the admin.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -127,7 +127,7 @@ public class StatistikTest {
 
     /**
      * Tests if the view with the Admin Statistik is not shown for the student.
-     * 
+     *
      * @throws Exception
      */
     @Test

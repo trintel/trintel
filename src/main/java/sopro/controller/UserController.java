@@ -1,7 +1,6 @@
 package sopro.controller;
 
 import java.io.UnsupportedEncodingException;
-import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;

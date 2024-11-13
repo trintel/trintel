@@ -11,7 +11,7 @@ public class AccessEvaluator {
 
     /**
      * check if the user is assigned to a company.
-     * 
+     *
      * @return
      */
     public boolean hasCompany() {
@@ -22,7 +22,7 @@ public class AccessEvaluator {
 
     /**
      * test if the user is in the company.
-     * 
+     *
      * @param companyID
      * @return
      */

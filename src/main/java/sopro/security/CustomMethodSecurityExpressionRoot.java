@@ -15,7 +15,7 @@ public class CustomMethodSecurityExpressionRoot extends SecurityExpressionRoot
 
     /**
      * test if the user is in the company.
-     * 
+     *
      * @param companyID
      * @return
      */
@@ -29,7 +29,7 @@ public class CustomMethodSecurityExpressionRoot extends SecurityExpressionRoot
 
     /**
      * check if the user is assigned to a company.
-     * 
+     *
      * @return
      */
     public boolean hasCompany() {

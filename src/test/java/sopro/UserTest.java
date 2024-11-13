@@ -24,7 +24,6 @@ import sopro.repository.CompanyRepository;
 import sopro.repository.UserRepository;
 import sopro.service.SignupUrlInterface;
 
-
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
@@ -40,13 +39,11 @@ public class UserTest {
     @Autowired
     CompanyRepository companyRepository;
 
-
     @Autowired
     DatabaseService databaseService;
 
     @Autowired
     SignupUrlInterface signupUrlService;
-
 
     @BeforeTransaction
     void setup() {
@@ -69,8 +66,8 @@ public class UserTest {
         String generatedString = signupUrlService.generateStudentSignupURL();
 
         mockMvc.perform(get("/signup/" + generatedString))
-               .andExpect(status().isOk())
-               .andExpect(view().name("sign-up-student"));
+                .andExpect(status().isOk())
+                .andExpect(view().name("user/sign-up"));
     }
 
     /**
@@ -83,10 +80,9 @@ public class UserTest {
         String generatedString = signupUrlService.generateAdminSignupURL();
 
         mockMvc.perform(get("/signup/" + generatedString))
-               .andExpect(status().isOk())
-               .andExpect(view().name("sign-up-admin"));
+                .andExpect(status().isOk())
+                .andExpect(view().name("user/sign-up"));
     }
-
 
     /**
      * Tests, if the login screen is served on /signup/falseURL.
@@ -98,8 +94,8 @@ public class UserTest {
         String test = "kjsadgusghsfgufhkjsdghushgughdagounadfh";
 
         mockMvc.perform(get("/signup/" + test))
-               .andExpect(status().is3xxRedirection())
-               .andExpect(redirectedUrl("/login"));
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/login"));
     }
 
     /**
@@ -113,7 +109,6 @@ public class UserTest {
                 .perform(get("/login"))
                 .andExpect(status().isOk());
     }
-
 
     /**
      * Test if the Logout of the Admin works and if the admin is redirected to the

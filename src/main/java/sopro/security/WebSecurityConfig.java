@@ -15,7 +15,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     /**
      * add the new UserDetailsService as a Bean, so Spring knows it
-     * 
+     *
      * @return UserDetailsService
      */
     @Bean
@@ -28,7 +28,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      * Password Encoder.
      * add Password Encoder as a bean, so that it can be Autowired in other Classes
      * (e.g. UserController)
-     * 
+     *
      * @return BCryptPasswordEncoder
      */
     @Bean
