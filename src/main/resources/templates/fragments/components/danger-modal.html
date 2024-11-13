@@ -1,0 +1,30 @@
+<!-- fragments/components/danger-modal.html -->
+<div th:fragment="dangerModal(id, icon, title, message, confirmUrl)">
+    <!-- Modal Structure -->
+    <div class="modal fade" th:id="${id}" tabindex="-1" th:aria-labelledby="${id} + '-label'" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="d-flex align-items-center align-content-center">
+                        <div class="icon-container me-2">
+                            <i th:class="${icon}"></i>
+                        </div>
+                        <h1 class="modal-title fs-5" th:id="${id} + '-label'" th:text="${title}">Danger Action</h1>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <!-- Message Text -->
+                    <p th:text="${message}">Are you sure you want to proceed with this dangerous action?</p>
+                </div>
+                <form method="post" th:action="@{${confirmUrl}}" enctype="multipart/form-data">
+                    <div class="modal-footer">
+                        <!-- Cancel Button -->
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" th:text="#{cancel}">Cancel</button>
+                        <!-- Confirm Button -->
+                        <button type="submit" class="btn btn-danger" th:text="#{confirm}">Confirm</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

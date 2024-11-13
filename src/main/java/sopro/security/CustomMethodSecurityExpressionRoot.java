@@ -6,7 +6,8 @@ import org.springframework.security.core.Authentication;
 
 import sopro.model.User;
 
-public class CustomMethodSecurityExpressionRoot extends SecurityExpressionRoot implements MethodSecurityExpressionOperations {
+public class CustomMethodSecurityExpressionRoot extends SecurityExpressionRoot
+        implements MethodSecurityExpressionOperations {
 
     public CustomMethodSecurityExpressionRoot(Authentication authentication) {
         super(authentication);
@@ -14,12 +15,13 @@ public class CustomMethodSecurityExpressionRoot extends SecurityExpressionRoot i
 
     /**
      * test if the user is in the company.
+     *
      * @param companyID
      * @return
      */
     public boolean isInCompany(Long companyID) {
         User user = ((User) this.getPrincipal());
-        if(user.getCompany() == null) {         //TODO maybe create Exception "CompanyNotAssigned "
+        if (user.getCompany() == null) {
             return false;
         }
         return user.getCompany().getId().equals(companyID);
@@ -27,6 +29,7 @@ public class CustomMethodSecurityExpressionRoot extends SecurityExpressionRoot i
 
     /**
      * check if the user is assigned to a company.
+     *
      * @return
      */
     public boolean hasCompany() {

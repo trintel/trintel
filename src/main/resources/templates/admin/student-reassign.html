@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:include="layouts/base-fullscreen :: page">
+
+<head>
+    <title th:fragment="title" th:text="#{reassign}"></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+<body>
+    <th:block th:fragment="content">
+        <style th:replace="fragments/small-content :: content"></style>
+        <main class="form-small">
+            <form action="#" th:action="@{'/student/' + ${studentID} + '/reassign'}" method="post">
+                <h1 class="mb-3" th:text="#{editUser(${student.forename})}"></h1>
+                <!-- Dropdown company chooser -->
+                <div class="custom-select w-100 mb-3">
+                    <select name="companyName" required>
+                        <option value="" th:text="#{reassign1}"></option>
+                        <option th:each="company : ${companies}" th:text="${company.name}"></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="w-100 btn btn-lg btn-primary"><span th:text=" #{submit}"></span>
+                    </button>
+                </div>
+            </form>
+
+            <hr class="my-4">
+
+            <form action="#" th:action="@{'/student/' + ${studentID} + '/deactivate'}" method="post">
+                <div class="form-group">
+                    <button type="button" class="w-100 btn btn-lg btn-danger" data-bs-toggle="modal" data-bs-target="#deleteUserModal">
+                        <i class="bi bi-trash3"></i>
+                        <span th:text="#{deleteUser}"></span>
+                    </button>
+                </div>
+                <div class="modal fade" th:id="deleteUserModal" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                            <div class="d-flex align-items-center align-content-center">
+                                <div class="icon-container me-2">
+                                   <i class="bi bi-trash3"></i>
+                                </div>
+                                <h5 class="modal-title" th:text="#{confirmDeleteUser(${student.forename} + ' ' + ${student.surname})}"></h5>
+                             </div>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <span th:utext="#{confirmDeleteUserText}"></span>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="submit" class="w-100 btn btn-lg btn-danger" th:text="#{confirm}"></button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+            </form>
+            <button class="w-100 btn btn-lg btn-light mt-3" onclick="history.back()">
+                <i class="bi bi-arrow-left"></i> <span th:text=" #{back}"></span>
+            </button>
+        </main>
+    </th:block>
+</body>
+
+</html>

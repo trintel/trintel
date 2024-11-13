@@ -103,7 +103,7 @@ public class TransactionController {
         }
         model.addAttribute("transactions", transactions);
         model.addAttribute("actiontypes", actionTypeRepository.findAll());
-        return "transactions-list";
+        return "transactions/transactions-list";
 
     }
 
@@ -136,7 +136,7 @@ public class TransactionController {
         }
         model.addAttribute("transactions", transactions);
         model.addAttribute("actiontypes", actionTypeRepository.findAll());
-        return "transactions-list-archived";
+        return "transactions/transactions-list-archived";
 
     }
 
@@ -161,7 +161,7 @@ public class TransactionController {
         model.addAttribute("companyID", companyID);
         model.addAttribute("action", newAction);
         model.addAttribute("transaction", newTransaction);
-        return "transaction-add-choose";
+        return "transactions/transaction-add-choose";
     }
 
     @PreAuthorize("hasCompany()")
@@ -176,7 +176,7 @@ public class TransactionController {
         model.addAttribute("actionType", actionType);
         model.addAttribute("actionTypes", actionTypeService);
         model.addAttribute("initiatorType", actionType.getInitiatorType().toString());
-        return "transaction-addAction";
+        return "transactions/transaction-addAction";
     }
 
     @PreAuthorize("hasCompany()")
@@ -245,7 +245,7 @@ public class TransactionController {
         model.addAttribute("transactionID", id);
         model.addAttribute("isAlreadyReviewed",
                 ratingRepository.existsByTransactionAndRatingCompany(transaction, user.getCompany()));
-        return "transaction-view";
+        return "transactions/transaction-info";
 
     }
 
@@ -327,7 +327,7 @@ public class TransactionController {
         model.addAttribute("transactionID", transactionID);
         model.addAttribute("transaction", transaction);
         model.addAttribute("lastAction", transaction.getLastAction());
-        return "transaction-addOffer";
+        return "transactions/transaction-addOffer";
     }
 
     @Transactional
@@ -339,7 +339,7 @@ public class TransactionController {
         if (bindingResult.hasErrors()) {
             model.addAttribute("action", offer);
             model.addAttribute("transactionID", transactionID);
-            return "transaction-addOffer";
+            return "transactions/transaction-addOffer";
         }
 
         offer.setActiontype(actionTypeService.getOfferAction()); // to be sure.

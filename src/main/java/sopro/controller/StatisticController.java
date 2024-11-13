@@ -1,7 +1,5 @@
 package sopro.controller;
 
-
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,50 +33,60 @@ public class StatisticController {
     @GetMapping("/statistics/{companyID}")
     public String showStatistics(Model model, @PathVariable Long companyID) {
 
-        Company company = companyRepository.findById(companyID).get();      //user has to be in the correct company because of preauthorize.
+        Company company = companyRepository.findById(companyID).get(); // user has to be in the correct company because
+                                                                       // of preauthorize.
         model.addAttribute("company", company);
 
-        // model.addAttribute("relativeStatistics", statisticsService.getRelativeStatistics(company));
-
+        // model.addAttribute("relativeStatistics",
+        // statisticsService.getRelativeStatistics(company));
 
         model.addAttribute("numberDistinctBuyers", statisticsService.getNumberDistinctBuyers(company));
         model.addAttribute("numberDistinctSellers", statisticsService.getNumberDistinctSellers(company));
         model.addAttribute("totalTransationBuyerVolume", statisticsService.getTotalTransactionBuyerVolume(company));
         model.addAttribute("totalTransationSellerVolume", statisticsService.getTotalTransactionSellerVolume(company));
         model.addAttribute("numberNonConfirmedBuyer", statisticsService.getNumberNonConfirmedTransactionBuyer(company));
-        model.addAttribute("numberNonConfirmedSeller", statisticsService.getNumberNonConfirmedTransactionSeller(company));
+        model.addAttribute("numberNonConfirmedSeller",
+                statisticsService.getNumberNonConfirmedTransactionSeller(company));
         model.addAttribute("numberConfirmed", statisticsService.getNumberConfirmedTransactions(company));
 
-        return "statistics-Student";
+        return "statistics/statistics-student";
     }
 
-    //Only for debug needs to be created by @backend
+    // Only for debug needs to be created by @backend
     @GetMapping("/statistics")
     public String viewOwnCompany(Model model, @AuthenticationPrincipal User user) {
-        if(user.getRole().equals("ADMIN")) {
-            return "redirect:/statistics-Admin";
+        if (user.getRole().equals("ADMIN")) {
+            return "redirect:/statistics-admin";
         }
         return "redirect:/statistics/" + user.getCompany().getId();
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/statistics-Admin")
+    @GetMapping("/statistics-admin")
     public String showAdminStatistics(Model model) {
 
         List<Company> companies = companyRepository.findAll();
 
         model.addAttribute("companies", companies);
 
-        // List<Long> distinctBuyers = companies.stream().map(c -> statisticsService.getNumberDistinctBuyers(c)).collect(Collectors.toList());
+        // List<Long> distinctBuyers = companies.stream().map(c ->
+        // statisticsService.getNumberDistinctBuyers(c)).collect(Collectors.toList());
 
-        model.addAttribute("numberDistinctBuyers", companies.stream().map(c -> statisticsService.getNumberDistinctBuyers(c)).collect(Collectors.toList()));
-        model.addAttribute("numberDistinctSellers", companies.stream().map(c -> statisticsService.getNumberDistinctSellers(c)).collect(Collectors.toList()));
-        model.addAttribute("totalTransationBuyerVolume", companies.stream().map(c -> statisticsService.getTotalTransactionBuyerVolume(c)).collect(Collectors.toList()));
-        model.addAttribute("totalTransationSellerVolume", companies.stream().map(c -> statisticsService.getTotalTransactionSellerVolume(c)).collect(Collectors.toList()));
-        model.addAttribute("numberNonConfirmedBuyer", companies.stream().map(c -> statisticsService.getNumberNonConfirmedTransactionBuyer(c)).collect(Collectors.toList()));
-        model.addAttribute("numberNonConfirmedSeller", companies.stream().map(c -> statisticsService.getNumberNonConfirmedTransactionSeller(c)).collect(Collectors.toList()));
-        model.addAttribute("numberConfirmed", companies.stream().map(c -> statisticsService.getNumberConfirmedTransactions(c)).collect(Collectors.toList()));
+        model.addAttribute("numberDistinctBuyers",
+                companies.stream().map(c -> statisticsService.getNumberDistinctBuyers(c)).collect(Collectors.toList()));
+        model.addAttribute("numberDistinctSellers", companies.stream()
+                .map(c -> statisticsService.getNumberDistinctSellers(c)).collect(Collectors.toList()));
+        model.addAttribute("totalTransationBuyerVolume", companies.stream()
+                .map(c -> statisticsService.getTotalTransactionBuyerVolume(c)).collect(Collectors.toList()));
+        model.addAttribute("totalTransationSellerVolume", companies.stream()
+                .map(c -> statisticsService.getTotalTransactionSellerVolume(c)).collect(Collectors.toList()));
+        model.addAttribute("numberNonConfirmedBuyer", companies.stream()
+                .map(c -> statisticsService.getNumberNonConfirmedTransactionBuyer(c)).collect(Collectors.toList()));
+        model.addAttribute("numberNonConfirmedSeller", companies.stream()
+                .map(c -> statisticsService.getNumberNonConfirmedTransactionSeller(c)).collect(Collectors.toList()));
+        model.addAttribute("numberConfirmed", companies.stream()
+                .map(c -> statisticsService.getNumberConfirmedTransactions(c)).collect(Collectors.toList()));
 
-        return "statistics-Admin";
+        return "statistics/statistics-admin";
     }
 }

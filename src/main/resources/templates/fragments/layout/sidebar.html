@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<nav th:fragment="sidebar" id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+  <div class="sidebar-sticky px-3">
+    <ul class="nav flex-column" th:with="myCompSelected = ${#httpServletRequest.getRequestURI() == '/companies/' + companyID}">
+      <li class="nav-item">
+        <a th:classappend="${#httpServletRequest.getRequestURI() == '/home' ? 'active':''}" class="nav-link"
+          th:href="@{/home}">
+          <i th:class="${#httpServletRequest.getRequestURI() == '/home' ? 'bi bi-house-fill':'bi bi-house'}"></i>
+          <span th:text="#{home}" />
+        </a>
+      </li>
+      <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+        <a th:classappend="${#httpServletRequest.getRequestURI() == '/admin-panel' ? 'active':''}" class="nav-link"
+          th:href="@{/admin-panel}">
+          <i th:class="${#httpServletRequest.getRequestURI() == '/admin-panel' ? 'bi bi-grid-fill':'bi bi-grid'}"></i>
+          <span th:text="#{adminPanel}" />
+        </a>
+      </li>
+      <li class="nav-item">
+        <a th:classappend="${#httpServletRequest.getRequestURI().startsWith('/companies') && !myCompSelected ? 'active':''}"
+          class="nav-link" th:href="@{/companies}">
+          <i
+            th:class="${#httpServletRequest.getRequestURI().startsWith('/companies') && !myCompSelected ? 'bi bi-briefcase-fill':'bi bi-briefcase'}"></i>
+          <span th:text="#{companies}" />
+        </a>
+      </li>
+      <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+        <a th:classappend="${#httpServletRequest.getRequestURI().startsWith('/students') ? 'active':''}"
+          class="nav-link" th:href="@{/students}">
+          <i
+            th:class="${#httpServletRequest.getRequestURI().startsWith('/students') ? 'bi bi-people-fill':'bi bi-people'}"></i>
+          <span th:text="#{students}" />
+        </a>
+      </li>
+      <li class="nav-item" th:with="companyID = ${#request.userPrincipal.principal.company.id}"
+        sec:authorize="hasRole('STUDENT')" th:if="${@accessEvaluator.hasCompany()}">
+        <a th:classappend="${myCompSelected ? 'active':''}"
+          class="nav-link" th:href="@{${'/companies/' + companyID}}">
+          <i
+            th:class="${myCompSelected ? 'bi bi-briefcase-fill':'bi bi-briefcase'}"></i>
+          <span th:text="#{myCompany}" />
+        </a>
+      </li>
+      <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+        <a th:classappend="${#httpServletRequest.getRequestURI().startsWith('/transaction') ? 'active':''}"
+          class="nav-link" th:href="@{/transactions}">
+          <i
+            th:class="${#httpServletRequest.getRequestURI().startsWith('/transaction') ? 'bi bi-cart-fill':'bi bi-cart'}"></i>
+          <span th:text="#{transactions}" />
+        </a>
+      </li>
+      <li class="nav-item" sec:authorize="hasRole('STUDENT')" th:if="${@accessEvaluator.hasCompany()}"
+        th:with="companyID = ${#request.userPrincipal.principal.company.id}">
+        <a th:classappend="${#httpServletRequest.getRequestURI().startsWith('/transaction') ? 'active':''}"
+          class="nav-link" th:href="@{/transactions}">
+          <i
+            th:class="${#httpServletRequest.getRequestURI().startsWith('/transaction') ? 'bi bi-cart-fill':'bi bi-cart'}"></i>
+          <span th:text="#{transactions}" />
+        </a>
+      </li>
+
+      <li class="nav-item" th:if="${@accessEvaluator.hasCompany() || #authorization.expression('hasRole(''ADMIN'')')}">
+        <a th:classappend="${#httpServletRequest.getRequestURI() == '/statistics' || #httpServletRequest.getRequestURI().startsWith('/statistics') ? 'active':''}"
+          class="nav-link" th:href="@{/statistics}">
+          <i
+            th:class="${#httpServletRequest.getRequestURI() == '/statistics' || #httpServletRequest.getRequestURI().startsWith('/statistics') ? 'bi bi-bar-chart-line-fill':'bi bi-bar-chart-line'}"></i>
+          <span th:text="#{statistics}" />
+        </a>
+      </li>
+
+      <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+        <a class="nav-link" th:href="@{/console}">
+          <i class="bi bi-terminal"></i> H2 Console
+        </a>
+      </li>
+
+
+
+    </ul>
+    <!-- <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+              <span>Andere Links</span>
+            </h6>
+            <ul class="nav flex-column mb-2">
+              hier können noch andere Links eingefügt werden, die nicht zur Nav gehören
+            </ul> -->
+    <ul class="logout-side nav flex-column mb-2" th:with="currentUser=${#httpServletRequest.userPrincipal?.name}">
+      <th:block th:include="fragments/nav-dropdown :: dropdown"></th:block>
+    </ul>
+  <p th:text="${@versionService.getVersion()}" style="position: absolute; bottom: 0; left: 0; padding:10px; font-size: 12px; color: gray;"></p>
+  </div>
+</nav>
+
+</html>

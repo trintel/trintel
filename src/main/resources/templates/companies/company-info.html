@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:include="layouts/base :: page">
+
+<head>
+    <title th:fragment="title" th:text="${company.name}"></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+<body>
+    <th:block th:fragment="content">
+        <div class="d-md-flex justify-content-md-between align-items-md-start gap-4">
+            <div class="col-auto">
+                <div class="companylogo companylogo-lg mb-3 mb-md-0 mx-auto mx-md-0">
+                    <img th:src="@{'/company/logo/' + ${company.id}}" />
+                </div>
+            </div>
+            <div class="col">
+                <a class="btn btn-primary float-end" th:text="#{edit}" th:href="@{/company/{id}/edit(id=${company.id})}" 
+                    th:if="${@accessEvaluator.isInCompany(company.id) || #authorization.expression('hasRole(''ADMIN'')')}"></a>
+                </a>
+                <div class="d-flex flex-column align-items-center align-items-md-start">
+                    <h1 th:text="${company.name}"></h1>
+
+                    <th:block th:unless="${company.getCountry() == null || company.getCountry().isEmpty()}">
+                        <p class="mb-3" th:text="${country}"></p>
+                    </th:block>
+
+                    <th:block th:unless="${company.getHomepage() == null || company.getHomepage().isEmpty()}">
+                        <a class="mb-3" th:href="${company.homepage}" target="_blank">
+                            <i class="bi bi-link-45deg"></i>
+                            <span th:text="${company.homepage}"></span>
+                        </a>
+                    </th:block>
+                </div>
+
+                <th:block th:unless="${company.getEmail() == null || company.getEmail().isEmpty()}">
+                    <h5 th:text="#{email}"></h5>
+                    <p class="mb-3" th:text="${company.email}"></p>
+                </th:block>
+
+                <th:block th:unless="${company.getTelephone() == null || company.getTelephone().isEmpty()}">
+                    <h5 th:text="#{telephone}"></h5>
+                    <p class="mb-3" th:text="${company.telephone}"></p>
+                </th:block>
+                
+                <th:block th:unless="${company.getIban() == null || company.getIban().isEmpty()}">
+                    <h5 th:text="#{iban}"></h5>
+                    <p class="mb-3" th:text="${company.iban}"></p>
+                </th:block>
+
+                <th:block th:unless="${company.getDescription() == null || company.getDescription().isEmpty()}">
+                    <h5 th:text="#{signature}"></h5>
+                    <p class="mb-3" th:utext="${#strings.replace(#strings.escapeXml(company.description),'&#10;','&lt;br&gt;')}"></p>
+                </th:block>
+
+                <h5 th:text="#{members}"></h5>
+                <ul class="list-group mb-3" th:unless="${company.getStudents().isEmpty()}">
+                    <li class="list-group-item" th:text="${student.forename} + ' ' + ${student.surname}"
+                    th:each="student : ${company.getStudents()}"></li>
+                </ul>
+                <p th:if="${company.getStudents().isEmpty()}" th:text="#{noMembers}"></p>
+                <h5 th:text="#{reviews}"></h5>
+                <th:block th:if="${avgRating}">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div class="d-flex align-items-center">
+                            <span th:class="${'star star-checked star-' + starType + '-checked'}"></span>
+                            <span class="fs-4 fw-bold" th:text="${avgRating}"></span>
+                            <span>&nbsp;/ 5</span>
+                        </div>
+                    </div>
+                </th:block>
+
+                <form action="#" th:action="@{/company/join}" method="post" sec:authorize="hasRole('STUDENT')" th:unless="${@accessEvaluator.hasCompany()}">
+                    <input type="hidden" th:value="${company.name}" th:attr="name='companyName'" />
+                    <h5 class="mb-3" th:text="#{members}" th:unless="${company.getStudents().isEmpty()}"></h5>
+                    <ul class="list-group mb-3" th:unless="${company.getStudents().isEmpty()}">
+                        <li class="list-group-item" th:text="${student.forename} + ' ' + ${student.surname}"
+                            th:each="student : ${company.getStudents()}"></li>
+                    </ul>
+                    <p class="alert alert-secondary" role="alert" th:if="${company.getStudents().isEmpty()}"
+                        th:text="#{noMembers}"></p>
+                    <div class="form-group mb-3">
+                        <button type="submit" class="w-100 btn btn-lg btn-primary">
+                            <a th:text="#{join}"></a>
+                        </button>
+                    </div>
+                </form>
+                <div class="row row-cols-1 row-cols-lg-2 row-cols-xl-3 g-3" th:unless="${ratings.isEmpty()}">
+                    <th:block th:each="r : ${ratings}">
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-body d-flex flex-column align-items-start">
+                                    <!-- Card content -->
+                                    <div class="mb-1">
+                                        <span class="star"
+                                            th:classappend="${r.stars == 5 ? 'star-checked star-5-checked' : ''}"></span>
+                                        <span class="star"
+                                            th:classappend="${r.stars == 4 ? 'star-checked star-4-checked' : ''}"></span>
+                                        <span class="star"
+                                            th:classappend="${r.stars == 3 ? 'star-checked star-3-checked' : ''}"></span>
+                                        <span class="star"
+                                            th:classappend="${r.stars == 2 ? 'star-checked star-2-checked' : ''}"></span>
+                                        <span class="star"
+                                            th:classappend="${r.stars == 1 ? 'star-checked star-1-checked' : ''}"></span>
+                                    </div>
+                                    <!-- Company name, logo and description -->
+                                    <div class="col d-flex align-items-center">
+                                        <div class="companylogo companylogo-xs me-2">
+                                            <img th:src="@{'/company/logo/' + ${r.ratingCompany.id}}" />
+                                        </div>
+                                        <div>
+                                            <a th:href="@{'/companies/' + ${r.ratingCompany.id}}"
+                                                class="text-decoration-none text-black"
+                                                th:text="${r.ratingCompany.name}">
+                                            </a>
+                                            <span class="card-text text-secondary">
+                                                <span th:if="${r.transaction.seller.id.equals(company.id)}"
+                                                    th:text="#{bought(${r.transaction.product})}"></span>
+                                                <span th:if="${r.transaction.buyer.id.equals(company.id)}"
+                                                    th:text="#{sold(${r.transaction.product})}"></span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </th:block>
+                </div>
+                <p class="alert alert-secondary" th:if="${ratings.isEmpty()}" th:text="#{noReviews}"></p>
+            </div>
+        </div>
+    </th:block>
+</body>
+
+</html>

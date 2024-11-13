@@ -87,7 +87,7 @@ public class TransactionTest {
         @WithUserDetails(value = "admin@admin", userDetailsServiceBeanName = "userDetailsService")
         public void listTransactionsTestAdmin() throws Exception {
                 mockMvc.perform(get("/transactions"))
-                                .andExpect(view().name("transactions-list"));
+                                .andExpect(view().name("transactions/transactions-list"));
         }
 
         /**
@@ -100,7 +100,7 @@ public class TransactionTest {
         @WithUserDetails(value = "j@j", userDetailsServiceBeanName = "userDetailsService")
         public void listTransactionsTestStudent() throws Exception {
                 mockMvc.perform(get("/transactions"))
-                                .andExpect(view().name("transactions-list"));
+                                .andExpect(view().name("transactions/transactions-list"));
         }
 
         /**
@@ -128,7 +128,7 @@ public class TransactionTest {
                 mockMvc.perform(get(
                                 "/transaction/" + userRepository.findByEmail("j@j").getCompany().getId() + "/create"))
                                 .andExpect(status().isOk())
-                                .andExpect(view().name("transaction-add-choose"));
+                                .andExpect(view().name("transactions/transaction-add-choose"));
         }
 
         /**
@@ -142,43 +142,8 @@ public class TransactionTest {
                 mockMvc.perform(get(
                                 "/transaction/" + userRepository.findByEmail("f@f").getCompany().getId() + "/create"))
                                 .andExpect(status().isOk())
-                                .andExpect(view().name("transaction-add-choose"));
+                                .andExpect(view().name("transactions/transaction-add-choose"));
         }
-
-        /**
-         * Tests if student can save transactions.
-         *
-         * @throws Exception
-         */
-        // @Test
-        // @WithUserDetails(value = "j@j", userDetailsServiceBeanName =
-        // "userDetailsService")
-        // public void saveTransactionsTestStudent() throws Exception {
-        // //Create Transaction
-        // ActionType testActionType = new ActionType("TestActionType", "Demo request
-        // text.", InitiatorType.BUYER);
-        // testActionType.setStandardAction(true);
-
-        // Transaction testTransaction = new
-        // Transaction(companyRepository.findById(userRepository.findByEmail("j@j").getCompany().getId()).get(),
-        // companyRepository.findById(userRepository.findByEmail("f@f").getCompany().getId()).get());
-        // testTransaction.setProduct("Product 1");
-
-        // Action testAction = new Action("Test message testAction", testActionType,
-        // testTransaction, null);
-        // testAction.setInitiator(userRepository.findByEmail("j@j"));
-
-        // actionTypeRepository.save(testActionType);
-        // transactionRepository.save(testTransaction);
-
-        // Long companyIdSeller =
-        // userRepository.findByEmail("f@f").getCompany().getId();
-
-        // mockMvc.perform(post("/transaction/" + companyIdSeller +
-        // "/save").flashAttr("action", testAction).with(csrf()))
-        // .andExpect(status().is3xxRedirection())
-        // .andExpect(redirectedUrl("/transactions"));
-        // }
 
         /**
          * Tests if student can save transactions.
@@ -227,7 +192,7 @@ public class TransactionTest {
                                 .getId();
                 mockMvc.perform(get("/transaction/" + transactionId))
                                 .andExpect(status().isOk())
-                                .andExpect(view().name("transaction-view"));
+                                .andExpect(view().name("transactions/transaction-info"));
 
         }
 
@@ -359,7 +324,7 @@ public class TransactionTest {
         public void addActionTypeTestAdmin() throws Exception {
                 mockMvc.perform(get("/action/add"))
                                 .andExpect(status().isOk())
-                                .andExpect(view().name("action-add"));
+                                .andExpect(view().name("admin/action-add"));
         }
 
         /**
@@ -431,7 +396,7 @@ public class TransactionTest {
 
                 mockMvc.perform(get("/action/edit/" + actionTypeId))
                                 .andExpect(status().isOk())
-                                .andExpect(view().name("action-edit"));
+                                .andExpect(view().name("admin/action-edit"));
         }
 
         /**
@@ -463,7 +428,7 @@ public class TransactionTest {
 
                 mockMvc.perform(get("/action/edit/" + actionType.getId()))
                                 .andExpect(status().isOk())
-                                .andExpect(view().name("action-edit"));
+                                .andExpect(view().name("admin/action-edit"));
         }
 
         /**
