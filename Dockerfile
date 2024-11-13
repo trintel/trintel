@@ -7,6 +7,7 @@ COPY build.gradle .
 COPY settings.gradle .
 COPY gradlew .
 COPY gradle ./gradle
+COPY .git .git
 
 COPY src ./src
 
@@ -17,7 +18,7 @@ FROM openjdk:11-jdk-slim
 
 ENV TZ=Europe/Berlin
 
-COPY --from=builder /app/build/libs/trintel-0.0.1-SNAPSHOT.jar /app/trintel.jar
+COPY --from=builder /app/build/libs/*.jar /app/trintel.jar
 
 COPY --from=builder /app/build/resources/main/static/img/placeholder.jpg /app/build/resources/main/static/img/placeholder.jpg
 
