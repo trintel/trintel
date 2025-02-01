@@ -60,6 +60,11 @@ public class Transaction {
     @Setter
     private Boolean sellerArchived = false;
 
+    @Getter
+    @Setter
+    @OneToMany(mappedBy = "transaction", cascade = CascadeType.REMOVE)
+    private List<NonArchivedTransaction> nonArchivedTransactions;
+
     public Transaction() {
         this.id = IdHandler.generateId();
     }

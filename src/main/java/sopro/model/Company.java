@@ -37,6 +37,7 @@ public class Company {
 
     @Getter @Setter private String homepage;
     @Setter	@JsonIgnore	@OneToMany(mappedBy = "company") private List<User> students;
+    @Getter @Setter	@JsonIgnore	@OneToMany(mappedBy = "company", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE) private List<NonArchivedTransaction> nonArchivedTransactions;
     @Getter @Setter	@JsonIgnore	@OneToMany(mappedBy = "buyer", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE) private List<Transaction> buyingTransactions;
     @Getter @Setter	@JsonIgnore	@OneToMany(mappedBy = "seller", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE) private List<Transaction> sellingTransactions;
     @Getter @Setter	@JsonIgnore	@OneToOne(mappedBy = "company") private CompanyLogo companyLogo;
