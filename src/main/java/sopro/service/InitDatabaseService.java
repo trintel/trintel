@@ -22,6 +22,7 @@ import sopro.repository.ActionRepository;
 import sopro.repository.ActionTypeRepository;
 import sopro.repository.CompanyLogoRepository;
 import sopro.repository.CompanyRepository;
+import sopro.repository.NonArchivedTransactionRepository;
 import sopro.repository.ResetTokenRepository;
 import sopro.repository.TransactionRepository;
 import sopro.repository.UserRepository;
@@ -53,6 +54,9 @@ public class InitDatabaseService {
 
         @Autowired
         VerificationTokenRepository verificationTokenRepository;
+
+        @Autowired
+        NonArchivedTransactionRepository nonArchivedTransactionRepository;
 
         @Autowired
         PasswordEncoder passwordEncoder;
@@ -262,7 +266,9 @@ public class InitDatabaseService {
          * WARN: all data will be lost.
          */
         public void resetWithAdmin(User admin) {
+                // TODO: rework this.
                 // delete all records.
+                nonArchivedTransactionRepository.deleteAll();
                 companyRepository.deleteAll();
                 actionTypeRepository.deleteAll();
                 userRepository.deleteAll();

@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -43,6 +44,7 @@ public class BackupController {
 
     @Autowired
     InitDatabaseService initDatabaseService;
+
     /**
      * Manages the import of backup files and imports those.
      *
@@ -56,7 +58,7 @@ public class BackupController {
         File file = new File(TrintelApplication.EXPORT_PATH + "/trintelImport.sql");
 
         if (!importFile.getOriginalFilename().contains(".sql")) {
-            TrintelApplication.logger.error("Tried to import a non sql file: "+ importFile.getOriginalFilename());
+            TrintelApplication.logger.error("Tried to import a non sql file: " + importFile.getOriginalFilename());
             return "redirect:/home";
         }
 
@@ -126,6 +128,7 @@ public class BackupController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/reset")
+    @Transactional
     public String resetDatabase(Model model, @AuthenticationPrincipal User user) {
         TrintelApplication.logger.info("Resetting Database to Default. Keeping User: " + user.getEmail());
 
